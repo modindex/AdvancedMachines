@@ -1,9 +1,9 @@
-package mcfactory.mod;
+package jaminv.advancedmachines;
 
 import org.apache.logging.log4j.Logger;
 
-import mcfactory.mod.proxy.CommonProxy;
-import mcfactory.mod.util.Reference;
+import jaminv.advancedmachines.proxy.CommonProxy;
+import jaminv.advancedmachines.util.Reference;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -26,16 +26,16 @@ public class Main {
 	@EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog();
-        //proxy.preInit(event);
+        proxy.preInit(event);
     }
 
     @EventHandler
     public void init(FMLInitializationEvent e) {
-        //proxy.init(e);
+        proxy.init(e);
     }
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent e) {
-        //proxy.postInit(e);
+        proxy.postInit(e);
     }
 }
