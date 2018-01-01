@@ -3,12 +3,43 @@ package jaminv.advancedmachines.init;
 import java.util.ArrayList;
 import java.util.List;
 
+import jaminv.advancedmachines.objects.armor.ArmorBase;
 import jaminv.advancedmachines.objects.items.ItemBase;
+import jaminv.advancedmachines.objects.tools.ToolAxe;
+import jaminv.advancedmachines.objects.tools.ToolHoe;
+import jaminv.advancedmachines.objects.tools.ToolPickaxe;
+import jaminv.advancedmachines.objects.tools.ToolShovel;
+import jaminv.advancedmachines.objects.tools.ToolSword;
+import jaminv.advancedmachines.util.Reference;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
+import net.minecraft.item.Item.ToolMaterial;
+import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraftforge.common.util.EnumHelper;
 
 public class ItemInit {
 
 	public static final List<Item> ITEMS = new ArrayList<Item>();
 	
-	public static final Item TITANIUM_INGOT = new ItemBase("ingot_titanium");
+	// Material
+	public static final ToolMaterial TOOL_TITANIUM = EnumHelper.addToolMaterial("tool_titanium", 2, 1561, 7.0F, 2.5F, 12);
+	public static final ArmorMaterial ARMOR_TITANIUM = EnumHelper.addArmorMaterial("armor_titanium", Reference.MODID + ":titanium", 33, new int[] {2, 5, 6, 2}, 9, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 1.0F);
+	
+	// Items
+	public static final Item INGOT_TITANIUM = new ItemBase("ingot_titanium");
+	
+	// Tools
+	public static final Item AXE_TITANIUM = new ToolAxe("axe_titanium", TOOL_TITANIUM);	
+	public static final Item HOE_TITANIUM = new ToolHoe("hoe_titanium", TOOL_TITANIUM);	
+	public static final Item PICKAXE_TITANIUM = new ToolPickaxe("pickaxe_titanium", TOOL_TITANIUM);	
+	public static final Item SHOVEL_TITANIUM = new ToolShovel("shovel_titanium", TOOL_TITANIUM);	
+	public static final Item SWORD_TITANIUM = new ToolSword("sword_titanium", TOOL_TITANIUM);
+/*	
+	// Armor
+	public static final Item HELMET_TITANIUM = new ArmorBase("helmet_titanium", ARMOR_TITANIUM, 1, EntityEquipmentSlot.HEAD);	
+	public static final Item CHESTPLATE_TITANIUM = new ArmorBase("chestplate_titanium", ARMOR_TITANIUM, 1, EntityEquipmentSlot.CHEST);	
+	public static final Item LEGGINGS_TITANIUM = new ArmorBase("leggings_titanium", ARMOR_TITANIUM, 2, EntityEquipmentSlot.LEGS);	
+	public static final Item BOOTS_TITANIUM = new ArmorBase("boots_titanium", ARMOR_TITANIUM, 1, EntityEquipmentSlot.FEET);	*/
+	
 }

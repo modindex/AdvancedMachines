@@ -1,23 +1,20 @@
-package jaminv.advancedmachines.objects.items;
+package jaminv.advancedmachines.objects.tools;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.init.ItemInit;
 import jaminv.advancedmachines.util.IHasModel;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemSpade;
 
-public class ItemBase extends Item implements IHasModel {
+public class ToolShovel extends ItemSpade implements IHasModel {
 
-	public ItemBase(String name, CreativeTabs tab) {
+	public ToolShovel(String name, ToolMaterial material) {
+		super(material);
 		setUnlocalizedName(name);
 		setRegistryName(name);
-		setCreativeTab(tab);
+		setCreativeTab(CreativeTabs.TOOLS);
 		
 		ItemInit.ITEMS.add(this);
-	}
-	
-	public ItemBase(String name) {
-		this(name, CreativeTabs.MATERIALS);
 	}
 
 	@Override

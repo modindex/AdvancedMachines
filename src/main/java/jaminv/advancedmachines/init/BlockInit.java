@@ -13,4 +13,5 @@ public class BlockInit {
 	public static final List<Block> BLOCKS = new ArrayList<Block>();
 	
 	public static final Block BLOCK_TITANIUM = new BlockBase("block_titanium", Material.IRON);
+	public static final Block ORE_TITANIUM = new BlockBase("ore_titanium", Material.ROCK);
 }
