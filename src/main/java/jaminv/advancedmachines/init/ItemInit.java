@@ -10,5 +10,5 @@ public class ItemInit {
 
 	public static final List<Item> ITEMS = new ArrayList<Item>();
 	
-	public static final Item TITANIUM_INGOT = new ItemBase();
+	public static final Item TITANIUM_INGOT = new ItemBase("ingot_titanium");
 }
