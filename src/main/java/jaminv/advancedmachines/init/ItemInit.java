@@ -30,16 +30,16 @@ public class ItemInit {
 	public static final Item INGOT_TITANIUM = new ItemBase("ingot_titanium");
 	
 	// Tools
-	public static final Item AXE_TITANIUM = new ToolAxe("axe_titanium", TOOL_TITANIUM);	
+//	public static final Item AXE_TITANIUM = new ToolAxe("axe_titanium", TOOL_TITANIUM);	
 	public static final Item HOE_TITANIUM = new ToolHoe("hoe_titanium", TOOL_TITANIUM);	
 	public static final Item PICKAXE_TITANIUM = new ToolPickaxe("pickaxe_titanium", TOOL_TITANIUM);	
 	public static final Item SHOVEL_TITANIUM = new ToolShovel("shovel_titanium", TOOL_TITANIUM);	
 	public static final Item SWORD_TITANIUM = new ToolSword("sword_titanium", TOOL_TITANIUM);
-/*	
+	
 	// Armor
 	public static final Item HELMET_TITANIUM = new ArmorBase("helmet_titanium", ARMOR_TITANIUM, 1, EntityEquipmentSlot.HEAD);	
 	public static final Item CHESTPLATE_TITANIUM = new ArmorBase("chestplate_titanium", ARMOR_TITANIUM, 1, EntityEquipmentSlot.CHEST);	
 	public static final Item LEGGINGS_TITANIUM = new ArmorBase("leggings_titanium", ARMOR_TITANIUM, 2, EntityEquipmentSlot.LEGS);	
-	public static final Item BOOTS_TITANIUM = new ArmorBase("boots_titanium", ARMOR_TITANIUM, 1, EntityEquipmentSlot.FEET);	*/
+	public static final Item BOOTS_TITANIUM = new ArmorBase("boots_titanium", ARMOR_TITANIUM, 1, EntityEquipmentSlot.FEET);
 	
 }
