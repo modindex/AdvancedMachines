@@ -1,4 +1,19 @@
 
 item.ingot_titanium.name=Titanium Ingot
 
-tile.block_titanium.name=Titanium Block
+item.axe_titanium.name=Titanium Axe
+item.hoe_titanium.name=Titanium Hoe
+item.pickaxe_titanium.name=Titanium Pickaxe
+item.shovel_titanium.name=Titanium Shovel
+item.sword_titanium.name=Titanium Sword
+
+item.helmet_titanium.name=Titanium Helmet
+item.chestplate_titanium.name=Titanium Chestplate
+item.legging_titanium.name=Titanium Leggings
+item.boots_titanium.name=Titanium Boots
+
+tile.storage_titanium.name=Titanium Block
+tile.storage_copper.name=Copper Block
+
+tile.ore_titanium.name=Titanium Ore
+tile.ore_copper.name=Copper Ore

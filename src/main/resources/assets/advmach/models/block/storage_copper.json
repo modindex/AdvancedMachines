@@ -1,6 +1,6 @@
 {
     "parent": "block/cube_all",
     "textures": {
-        "all": "advmach:blocks/block_titanium"
+        "all": "advmach:blocks/storage_copper"
     }
 }

@@ -2,7 +2,7 @@ package jaminv.advancedmachines.objects.tools;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.init.ItemInit;
-import jaminv.advancedmachines.util.IHasModel;
+import jaminv.advancedmachines.util.interfaces.IHasModel;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemSword;
 
@@ -12,7 +12,7 @@ public class ToolSword extends ItemSword implements IHasModel {
 		super(material);
 		setUnlocalizedName(name);
 		setRegistryName(name);
-		setCreativeTab(CreativeTabs.TOOLS);
+		setCreativeTab(CreativeTabs.COMBAT);
 		
 		ItemInit.ITEMS.add(this);
 	}

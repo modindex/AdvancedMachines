@@ -2,22 +2,18 @@ package jaminv.advancedmachines.objects.items;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.init.ItemInit;
-import jaminv.advancedmachines.util.IHasModel;
+import jaminv.advancedmachines.util.interfaces.IHasModel;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 
 public class ItemBase extends Item implements IHasModel {
 
-	public ItemBase(String name, CreativeTabs tab) {
+	public ItemBase(String name) {
 		setUnlocalizedName(name);
 		setRegistryName(name);
-		setCreativeTab(tab);
+		setCreativeTab(CreativeTabs.MATERIALS);
 		
 		ItemInit.ITEMS.add(this);
-	}
-	
-	public ItemBase(String name) {
-		this(name, CreativeTabs.MATERIALS);
 	}
 
 	@Override

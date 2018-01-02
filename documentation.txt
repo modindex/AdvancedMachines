@@ -1,0 +1,7 @@
+Materials:
+
+Titanium is a very hard metal found deep in the core of the world.  It is very durable and can be used to make great armor.  It is very light, however,
+and can be difficult to sharpen effectively.  Tools made from the metal are generally not very effective, although they will last a long time.
+
+Copper has very high thermal and electrical conductivity, makeing it very useful for electical components.  The metal, however, is very soft and malleable.
+It makes very poor tools and armor. 

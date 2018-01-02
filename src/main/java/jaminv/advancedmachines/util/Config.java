@@ -9,19 +9,26 @@ import net.minecraftforge.common.config.Configuration;
 public class Config {
 	
 	private static final String CATEGORY_GENERAL = "general";
+	private static final String CATEGORY_MATERIAL = "material";
 	private static final String CATEGORY_WORLDGEN = "worldgen";
 	
 	public static boolean doFurnace = true;
 	
-	public static int titaniumStartY = 3;
-	public static int titaniumEndY = 11;
-	public static int titaniumChance = 10;
+	public static boolean doIncludeTitanium = true;
+	public static boolean doIncludeCopper = true;
+	
+	public static boolean doGenerateTitanium = true;
+	public static int titaniumVeinSize = 4;
+	public static int titaniumMinHeight = 0;
+	public static int titaniumMaxHeight = 24;
+	public static int titaniumChance = 2;
 	
 	public static void readConfig() {
 		Configuration cfg = CommonProxy.config;
 		try {
 			cfg.load();
 			initGeneralConfig(cfg);
+			initMaterialConfig(cfg);
 			initWorldGenConfig(cfg);
 		} catch (Exception e) {
 			Main.logger.log(Level.ERROR, "Problem loading config file!",  e);
@@ -37,10 +44,25 @@ public class Config {
 		doFurnace = cfg.getBoolean("doFurnace", CATEGORY_GENERAL, doFurnace, "Include Advanced Furnace Recipes");
 	}
 	
+	private static void initMaterialConfig(Configuration cfg) {
+		cfg.addCustomCategoryComment(CATEGORY_MATERIAL, "Material Configuration\n\n"
+			+ "Disabling a material here will prevent creation of all blocks and items associated with the material.\n"
+			+ "This includes ores, ingots, blocks, dust, etc. It will also disable world generation for those ores.\n\n"
+			+ "This may prevent certain aspects of the mod from working, unless another mod provides an ore dictionary\n"
+			+ "equivalent to the disabled material.");
+		doIncludeTitanium = cfg.getBoolean("doIncludeTitanium", CATEGORY_MATERIAL, doIncludeTitanium, "Set to false to prevent this mod from creating any Titanium blocks or items");
+		doIncludeCopper = cfg.getBoolean("doIncludeCopper", CATEGORY_MATERIAL, doIncludeCopper, "Set to false to prevent this mod from creating any Copper blocks or items");
+	}
+	
 	private static void initWorldGenConfig(Configuration cfg) {
-		cfg.addCustomCategoryComment(CATEGORY_WORLDGEN, "World Gen Configuration");
-		titaniumStartY = cfg.getInt("titaniumStartY", CATEGORY_WORLDGEN, titaniumStartY, 0, 256, "Bottom Y-level for Titanium generation");
-		titaniumEndY = cfg.getInt("titaniumEndY", CATEGORY_WORLDGEN, titaniumEndY, 0, 256, "Top Y-level for Titanium generation");
-		titaniumChance = cfg.getInt("titaniumChance", CATEGORY_WORLDGEN, titaniumChance, 0, 400, "Chance of titanium generation (per chunk)");
+		cfg.addCustomCategoryComment(CATEGORY_WORLDGEN, "World Gen Configuration\n\n"
+			+ "Disable or tweak world ore generation settings for this mod.\n\n"
+			+ "Disabling ore generation for a material may prevent certain aspects of the mod from working, unless\n"
+			+ "another mod provides ore generation for an ore dictionary equivalent to that material.");
+		doGenerateTitanium = cfg.getBoolean("doGenerateTitanium", CATEGORY_WORLDGEN, doGenerateTitanium, "Set to false to prevent Titanium Ore generation in the world");
+		titaniumVeinSize = cfg.getInt("titaniumVeinSize", CATEGORY_WORLDGEN, titaniumVeinSize, 0, 64, "Maximum number of Titanium Ore in a vein");
+		titaniumMinHeight = cfg.getInt("titaniumStartY", CATEGORY_WORLDGEN, titaniumMinHeight, 0, 256, "Bottom Y-level for Titanium Ore generation");
+		titaniumMaxHeight = cfg.getInt("titaniumEndY", CATEGORY_WORLDGEN, titaniumMaxHeight, 0, 256, "Top Y-level for Titanium Ore generation");
+		titaniumChance = cfg.getInt("titaniumChance", CATEGORY_WORLDGEN, titaniumChance, 0, 400, "Number of times per chunk that it will attempt to generate Titanium Ore");
 	}
 }
