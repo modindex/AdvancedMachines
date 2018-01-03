@@ -3,8 +3,10 @@ package jaminv.advancedmachines.util.handlers;
 import jaminv.advancedmachines.init.BlockInit;
 import jaminv.advancedmachines.init.ItemInit;
 import jaminv.advancedmachines.util.interfaces.IHasModel;
+import jaminv.advancedmachines.util.interfaces.IHasTileEntity;
 import jaminv.advancedmachines.world.gen.WorldGenCustomOres;
 import net.minecraft.block.Block;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
@@ -23,6 +25,12 @@ public class RegistryHandler {
 	@SubscribeEvent
 	public static void onBlockRegister(RegistryEvent.Register<Block> event) {
 		event.getRegistry().registerAll(BlockInit.BLOCKS.toArray(new Block[0]));
+		
+		for (Block block : BlockInit.BLOCKS) {
+			if (block instanceof ITileEntityProvider) {
+				GameRegistry.registerTileEntity(((IHasTileEntity)block).getTileEntityClass(), block.getUnlocalizedName());
+			}
+		}
 	}
 	
 	@SubscribeEvent

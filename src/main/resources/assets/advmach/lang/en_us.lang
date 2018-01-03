@@ -17,3 +17,7 @@ tile.storage_copper.name=Copper Block
 
 tile.ore_titanium.name=Titanium Ore
 tile.ore_copper.name=Copper Ore
+
+tile.machine.name=Titanium Machine Frame
+
+message.advmach.counter=Counter: %d
