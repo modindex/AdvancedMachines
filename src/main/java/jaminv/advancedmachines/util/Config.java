@@ -10,6 +10,7 @@ public class Config {
 	
 	private static final String CATEGORY_GENERAL = "general";
 	private static final String CATEGORY_MATERIAL = "material";
+	private static final String CATEGORY_TOOLS = "tools";
 	private static final String CATEGORY_WORLDGEN = "worldgen";
 	
 	public static boolean doFurnace = true;
@@ -17,11 +18,18 @@ public class Config {
 	public static boolean doIncludeTitanium = true;
 	public static boolean doIncludeCopper = true;
 	
+	public static boolean doAddTitaniumTools = true;
+	public static boolean doAddTitaniumArmor = true;
+	public static boolean doAddCopperTools = false;
+	public static boolean doAddCopperArmor = false;
+	
 	public static boolean doGenerateTitanium = true;
 	public static int titaniumVeinSize = 4;
 	public static int titaniumMinHeight = 0;
 	public static int titaniumMaxHeight = 24;
 	public static int titaniumChance = 2;
+	
+	public static boolean doGenerateCopper = false;
 	
 	public static void readConfig() {
 		Configuration cfg = CommonProxy.config;
@@ -29,6 +37,7 @@ public class Config {
 			cfg.load();
 			initGeneralConfig(cfg);
 			initMaterialConfig(cfg);
+			initToolConfig(cfg);
 			initWorldGenConfig(cfg);
 		} catch (Exception e) {
 			Main.logger.log(Level.ERROR, "Problem loading config file!",  e);
@@ -54,6 +63,18 @@ public class Config {
 		doIncludeCopper = cfg.getBoolean("doIncludeCopper", CATEGORY_MATERIAL, doIncludeCopper, "Set to false to prevent this mod from creating any Copper blocks or items");
 	}
 	
+	private static void initToolConfig(Configuration cfg) {
+		cfg.addCustomCategoryComment(CATEGORY_TOOLS, "Tool Configuration\n\n"
+			+ "Disable these options to prevent mod from making various tools and armor available.\n\n"
+			+ "This is seperate from the material config above.  It is impossible to include tools and armor, but\n"
+			+ "not the materials for those tools.  The recipes will not be possible without these materials, however,\n"
+			+ "unless another mod provides an ore dictionary equivalent.");
+		doAddTitaniumTools = cfg.getBoolean("doAddTitaniumTools", CATEGORY_TOOLS, doAddTitaniumTools, "Set to false to disable Titanium tools");
+		doAddTitaniumArmor = cfg.getBoolean("doAddTitaniumArmor", CATEGORY_TOOLS, doAddTitaniumArmor, "Set to false to disable Titanium armor");
+		doAddCopperTools = cfg.getBoolean("doAddCopperTools", CATEGORY_TOOLS, doAddCopperTools, "Set to false to disable Copper tools");
+		doAddCopperArmor = cfg.getBoolean("doAddCopperArmor", CATEGORY_TOOLS, doAddCopperArmor, "Set to false to disable Copper armor");
+	}
+	
 	private static void initWorldGenConfig(Configuration cfg) {
 		cfg.addCustomCategoryComment(CATEGORY_WORLDGEN, "World Gen Configuration\n\n"
 			+ "Disable or tweak world ore generation settings for this mod.\n\n"
@@ -64,5 +85,46 @@ public class Config {
 		titaniumMinHeight = cfg.getInt("titaniumStartY", CATEGORY_WORLDGEN, titaniumMinHeight, 0, 256, "Bottom Y-level for Titanium Ore generation");
 		titaniumMaxHeight = cfg.getInt("titaniumEndY", CATEGORY_WORLDGEN, titaniumMaxHeight, 0, 256, "Top Y-level for Titanium Ore generation");
 		titaniumChance = cfg.getInt("titaniumChance", CATEGORY_WORLDGEN, titaniumChance, 0, 400, "Number of times per chunk that it will attempt to generate Titanium Ore");
+	}
+	
+	private static void initDependentConfigs() {
+		if (doIncludeTitanium == false) {
+			doGenerateTitanium = false;
+		}
+		if (doIncludeCopper == false) {
+			doGenerateCopper = false;
+		}
+	}
+	
+	public static boolean doInclude(String material) {
+		switch (material) {
+		case "titanium": return doIncludeTitanium;
+		case "copper": return doIncludeCopper;
+		}
+		return false;
+	}
+	
+	public static boolean doGenerate(String material) {
+		switch (material) {
+		case "titanium": return doGenerateTitanium;
+		case "copper": return doGenerateCopper;
+		}
+		return false;
+	}
+
+	public static boolean doAddTools(String material) {
+		switch (material) {
+		case "titanium": return doAddTitaniumTools;
+		case "copper": return doAddCopperTools;
+		}
+		return false;
+	}
+	
+	public static boolean doAddArmor(String material) {
+		switch (material) {
+		case "titanium": return doAddTitaniumArmor;
+		case "copper": return doAddCopperArmor;
+		}
+		return false;
 	}
 }

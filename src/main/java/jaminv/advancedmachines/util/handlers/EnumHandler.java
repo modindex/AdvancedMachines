@@ -10,6 +10,7 @@ public class EnumHandler {
 		private static final EnumMaterial[] META_LOOKUP = new EnumMaterial[values().length];
 		private final int meta;
 		private final String name, unlocalizedName;
+		private boolean enable, enableTools, enableOregen;
 		
 		private EnumMaterial(int meta, String name) {
 			this(meta, name, name);

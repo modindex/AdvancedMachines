@@ -6,6 +6,7 @@ import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.init.BlockInit;
 import jaminv.advancedmachines.init.ItemInit;
 import jaminv.advancedmachines.objects.blocks.item.ItemBlockVariants;
+import jaminv.advancedmachines.util.Config;
 import jaminv.advancedmachines.util.handlers.EnumHandler;
 import jaminv.advancedmachines.util.interfaces.IHasModel;
 import jaminv.advancedmachines.util.interfaces.IHasOreDictionary;
@@ -77,7 +78,9 @@ public class BlockMaterial extends Block implements IHasModel, IMetaName, IHasOr
 	@Override
 	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
 		for (EnumHandler.EnumMaterial variant : EnumHandler.EnumMaterial.values()) {
-			items.add(new ItemStack(this, 1, variant.getMeta()));
+			if (Config.doInclude(variant.getName())) {
+				items.add(new ItemStack(this, 1, variant.getMeta()));
+			}
 		}
 	}
 	
@@ -94,15 +97,20 @@ public class BlockMaterial extends Block implements IHasModel, IMetaName, IHasOr
 	@Override
 	public void registerModels() {
 		for (int i = 0; i < EnumHandler.EnumMaterial.values().length; i++) {
-			Main.proxy.registerVariantRenderer(Item.getItemFromBlock(this), i, this.name + "_" + EnumHandler.EnumMaterial.values()[i].getName(), "inventory");
+			String name = EnumHandler.EnumMaterial.values()[i].getName();
+			if (Config.doInclude(name)) {
+				Main.proxy.registerVariantRenderer(Item.getItemFromBlock(this), i, this.name + "_" + name, "inventory");
+			}
 		}
 	}
 
 	@Override
 	public void registerOreDictionary() {
 		for (EnumHandler.EnumMaterial variant : EnumHandler.EnumMaterial.values()) {
-			ItemStack item = new ItemStack(this, 1, variant.getMeta());
-			OreDictionary.registerOre(this.oredictprefix + WordUtils.capitalize(this.getSpecialName(item)), item);
+			if (Config.doInclude(variant.getName())) {
+				ItemStack item = new ItemStack(this, 1, variant.getMeta());
+				OreDictionary.registerOre(this.oredictprefix + WordUtils.capitalize(this.getSpecialName(item)), item);
+			}
 		}
 	}	
 }
