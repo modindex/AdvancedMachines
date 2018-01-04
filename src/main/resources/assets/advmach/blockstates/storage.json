@@ -1,6 +1,7 @@
 {
     "variants": {
         "variant=titanium": { "model": "advmach:storage_titanium" },
-        "variant=copper": { "model": "advmach:storage_copper" }
+        "variant=copper": { "model": "advmach:storage_copper" },
+        "variant=silver": { "model": "advmach:storage_silver" }
     }
 }

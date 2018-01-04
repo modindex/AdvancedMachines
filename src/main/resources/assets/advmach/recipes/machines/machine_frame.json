@@ -1,0 +1,23 @@
+{
+    "type": "forge:ore_shaped",
+    
+    "pattern":
+    [
+        "III",
+        "O O",
+        "IOI"
+    ],
+    
+    "key": {
+        "I": {
+            "type": "forge:ore_dict",
+            "ore": "ingotTitanium"
+        },
+        "O": {
+            "type": "forge:ore_dict",
+            "ore": "obsidian"
+        }
+    },
+    
+    "result": { "item": "advmach:machine", "data": 0 }
+}

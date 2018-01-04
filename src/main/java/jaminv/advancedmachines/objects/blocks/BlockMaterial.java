@@ -35,12 +35,13 @@ public class BlockMaterial extends Block implements IHasModel, IMetaName, IHasOr
 	private String name;
 	private String oredictprefix;
 	
-	public BlockMaterial(String name, Material material) {
+	public BlockMaterial(String name, Material material, float hardness) {
 		super(material);
 		setUnlocalizedName(name);
 		setRegistryName(name);
 		setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
 		setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, EnumHandler.EnumMaterial.TITANIUM));
+		setHardness(hardness);
 		
 		this.name = name;
 		this.oredictprefix = name;
@@ -49,8 +50,8 @@ public class BlockMaterial extends Block implements IHasModel, IMetaName, IHasOr
 		ItemInit.ITEMS.add(new ItemBlockVariants(this).setRegistryName(this.getRegistryName()));
 	}
 	
-	public BlockMaterial(String name, String oredictprefix, Material material) {
-		this(name, material);
+	public BlockMaterial(String name, String oredictprefix, Material material, float hardness) {
+		this(name, material, hardness);
 		this.oredictprefix = oredictprefix;
 	}
 	

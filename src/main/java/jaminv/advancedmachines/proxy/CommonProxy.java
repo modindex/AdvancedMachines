@@ -2,6 +2,7 @@ package jaminv.advancedmachines.proxy;
 
 import java.io.File;
 
+import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.util.Config;
 import jaminv.advancedmachines.util.handlers.OreDictionaryHandler;
 import jaminv.advancedmachines.util.handlers.RegistryHandler;
@@ -11,6 +12,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 @EventBusSubscriber
 public class CommonProxy {
@@ -26,6 +28,7 @@ public class CommonProxy {
 	
 	public void init(FMLInitializationEvent e) {
 		OreDictionaryHandler.registerOreDictionary();
+		NetworkRegistry.INSTANCE.registerGuiHandler(Main.instance, new GuiProxy());
 	}
 
 	public void postInit(FMLPostInitializationEvent e) {

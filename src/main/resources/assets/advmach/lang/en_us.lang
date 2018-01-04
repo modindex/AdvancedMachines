@@ -1,5 +1,11 @@
 
 item.ingot_titanium.name=Titanium Ingot
+item.ingot_copper.name=Copper Ingot
+item.ingot_silver.name=Silver Ingot
+
+item.ingot_pure_gold=Pure Gold Ingot
+item.ingot_pure_silver=Pure Silver Ingot
+item.ingot_pure_copper=Pure Copper Ingot
 
 item.axe_titanium.name=Titanium Axe
 item.hoe_titanium.name=Titanium Hoe
@@ -14,9 +20,11 @@ item.boots_titanium.name=Titanium Boots
 
 tile.storage_titanium.name=Titanium Block
 tile.storage_copper.name=Copper Block
+tile.storage_silver.name=Silver Block
 
 tile.ore_titanium.name=Titanium Ore
 tile.ore_copper.name=Copper Ore
+tile.ore_silver.name=Silver Ore
 
 tile.machine.name=Titanium Machine Frame
 

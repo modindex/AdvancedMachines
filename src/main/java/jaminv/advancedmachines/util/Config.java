@@ -17,6 +17,9 @@ public class Config {
 	
 	public static boolean doIncludeTitanium = true;
 	public static boolean doIncludeCopper = true;
+	public static boolean doIncludeSilver = true;
+	
+	public static boolean doIncludePure = true;
 	
 	public static boolean doAddTitaniumTools = true;
 	public static boolean doAddTitaniumArmor = true;
@@ -61,6 +64,8 @@ public class Config {
 			+ "equivalent to the disabled material.");
 		doIncludeTitanium = cfg.getBoolean("doIncludeTitanium", CATEGORY_MATERIAL, doIncludeTitanium, "Set to false to prevent this mod from creating any Titanium blocks or items");
 		doIncludeCopper = cfg.getBoolean("doIncludeCopper", CATEGORY_MATERIAL, doIncludeCopper, "Set to false to prevent this mod from creating any Copper blocks or items");
+		doIncludeSilver = cfg.getBoolean("doIncludeSilver", CATEGORY_MATERIAL, doIncludeSilver, "Set to false to prevent this mod from creating any Silver blocks or items");
+		doIncludePure = cfg.getBoolean("doIncludePure", CATEGORY_MATERIAL, doIncludePure, "Set to false to disable purified materials (may make advanced recipies impossible)");
 	}
 	
 	private static void initToolConfig(Configuration cfg) {
@@ -100,6 +105,8 @@ public class Config {
 		switch (material) {
 		case "titanium": return doIncludeTitanium;
 		case "copper": return doIncludeCopper;
+		case "silver": return doIncludeSilver;
+		case "pure": return doIncludePure;
 		}
 		return false;
 	}

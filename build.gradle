@@ -10,10 +10,24 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
+repositories {
+    maven { // TOP
+        name 'tterrag maven'
+        url "http://maven.tterrag.com/"
+    }
+    maven { // The repo from which to get waila
+        name "Mobius Repo"
+        url "http://tehnut.info/maven"
+    }    
+    maven {
+        name = "CoFH Maven"
+        url = "http://maven.covers1624.net"
+    }    
+}
 
 version = "0.0.1"
 group = "jaminvMods" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "MCFactory"
+archivesBaseName = "AdvancedMachines"
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 compileJava {
@@ -50,6 +64,9 @@ dependencies {
     // except that these dependencies get remapped to your current MCP mappings
     //deobfCompile 'com.mod-buildcraft:buildcraft:6.0.8:dev'
     //deobfProvided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
+    deobfCompile "mcp.mobius.waila:Hwyla:1.8.18-B32_1.12"
+    deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.19-11"
+    deobfCompile "cofh:RedstoneFlux:1.12-2.0.0.1:universal"
 
     // for more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html

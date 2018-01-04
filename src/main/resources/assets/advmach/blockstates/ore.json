@@ -1,6 +1,7 @@
 {
     "variants": {
         "variant=titanium": { "model": "advmach:ore_titanium" },
-        "variant=copper": { "model": "advmach:ore_copper" }
+        "variant=copper": { "model": "advmach:ore_copper" },
+        "variant=silver": { "model": "advmach:ore_silver" }
     }
 }
