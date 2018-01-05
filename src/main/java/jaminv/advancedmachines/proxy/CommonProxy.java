@@ -3,6 +3,7 @@ package jaminv.advancedmachines.proxy;
 import java.io.File;
 
 import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.init.RecipeInit;
 import jaminv.advancedmachines.util.Config;
 import jaminv.advancedmachines.util.handlers.OreDictionaryHandler;
 import jaminv.advancedmachines.util.handlers.RegistryHandler;
@@ -28,6 +29,8 @@ public class CommonProxy {
 	
 	public void init(FMLInitializationEvent e) {
 		OreDictionaryHandler.registerOreDictionary();
+		RecipeInit.init();
+		
 		NetworkRegistry.INSTANCE.registerGuiHandler(Main.instance, new GuiProxy());
 	}
 
