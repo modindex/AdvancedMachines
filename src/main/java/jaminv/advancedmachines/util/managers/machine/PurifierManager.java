@@ -74,6 +74,11 @@ public class PurifierManager {
 		recipes.put(input, recipe);
 	}
 	
+	/**
+	 * Returns NULL if no recipe available
+	 * @param stack
+	 * @return PurifierRecipe
+	 */
 	public static PurifierRecipe getRecipe(ItemStack stack) {
 		if (stack.isEmpty()) { return null; }
 		RecipeInput item = new RecipeInput(stack);

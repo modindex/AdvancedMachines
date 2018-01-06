@@ -14,6 +14,8 @@ public class Config {
 	private static final String CATEGORY_WORLDGEN = "worldgen";
 	
 	public static boolean doFurnace = true;
+	public static int tickUpdate = 5;
+	public static int processTimeBasic = 200;
 	
 	public static boolean doIncludeTitanium = true;
 	public static boolean doIncludeCopper = true;
@@ -54,6 +56,8 @@ public class Config {
 	private static void initGeneralConfig(Configuration cfg) {
 		cfg.addCustomCategoryComment(CATEGORY_GENERAL, "General Configuration");
 		doFurnace = cfg.getBoolean("doFurnace", CATEGORY_GENERAL, doFurnace, "Include Advanced Furnace Recipes");
+		tickUpdate = cfg.getInt("tickUpdate", CATEGORY_GENERAL, 5, 1, 100, "Machines only run full updates every X ticks");
+		processTimeBasic = cfg.getInt("processTimeBasic", CATEGORY_GENERAL, 200, 0, 10000, "Processing time for machines with no upgrades");
 	}
 	
 	private static void initMaterialConfig(Configuration cfg) {

@@ -15,18 +15,20 @@ public class RecipeInput {
 	private int meta = -1;
 	private int count = -1;
 	
-	RecipeInput(String oredictName, int count) {
+	public static final RecipeInput EMPTY = new RecipeInput(Items.AIR, -1, -1);
+	
+	public RecipeInput(String oredictName, int count) {
 		if(OreDictionary.doesOreNameExist(oredictName)) {
 			oreId = OreDictionary.getOreID(oredictName);
 			this.count = count;
 		}
 	}
 	
-	RecipeInput(String oredictName) {
+	public RecipeInput(String oredictName) {
 		this(oredictName, 1);
 	}
 	
-	RecipeInput(ItemStack stack) {
+	public RecipeInput(ItemStack stack) {
 		item = stack.getItem();
 		meta = Items.DIAMOND.getDamage(stack);
 		
@@ -37,14 +39,14 @@ public class RecipeInput {
 		getOreId();
 	}
 	
-	RecipeInput(Item item, int count, int meta) {
+	public RecipeInput(Item item, int count, int meta) {
 		this.item = item;
 		this.count = count;
 		this.meta = meta;
 		getOreId();
 	}
 	
-	RecipeInput(Item item) {
+	public RecipeInput(Item item) {
 		this(item, 1, 0);
 	}
 	
