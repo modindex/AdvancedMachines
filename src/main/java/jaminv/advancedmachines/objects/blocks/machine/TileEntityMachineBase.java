@@ -1,5 +1,8 @@
 package jaminv.advancedmachines.objects.blocks.machine;
 
+import org.apache.logging.log4j.Level;
+
+import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.util.Config;
 import jaminv.advancedmachines.util.managers.machine.RecipeInput;
 import jaminv.advancedmachines.util.managers.machine.RecipeOutput;
@@ -17,7 +20,7 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 	public int getFirstOutputSlot() { return getInputCount(); }
 	public int getInventorySize() { return getInputCount() + getOutputCount(); }
 	
-	protected ItemStackHandler inventory = new ItemStackHandler(getInputCount() + getOutputCount()) {
+	protected ItemStackHandler inventory = new ItemStackHandler(2) {
 		@Override
 		protected void onContentsChanged(int slot) {
 			TileEntityMachineBase.this.markDirty();
@@ -26,17 +29,20 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 	
 	private int tick;
 	private RecipeInput[] prevInput = new RecipeInput[getInputCount()];
-	
+		
 	@Override
 	public void update() {
 		tick++;
-		if (tick < Config.tickUpdate) { return; }
+		//if (tick < Config.tickUpdate) { return; }
+		
+		Main.logger.log(Level.DEBUG, "tick");
 		
 		RecipeInput[] input = getInput();
 		checkInventoryChanges(input);
 		
 		tick = 0;
 		if (canProcess(input)) {
+			Main.logger.log(Level.DEBUG, "canProcess");
 			process(input);
 		} else {
 			haltProcess();
@@ -46,18 +52,25 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 	protected RecipeInput[] getInput() {
 		RecipeInput[] input = new RecipeInput[getInputCount()];
 		for (int i = 0; i < getInputCount(); i++) {
-			input[i] = new RecipeInput(inventory.getStackInSlot(getFirstInputSlot() + 1));
+			input[i] = new RecipeInput(inventory.getStackInSlot(getFirstInputSlot() + i));
 		}
 		return input;
 	}
 	
 	private void checkInventoryChanges(RecipeInput[] input) {
 		for (int i = 0; i < getInputCount(); i++) {
-			if (prevInput[i] == null || input[i] == null) { haltProcess(); return; }
-			if (prevInput[i] != input[i]) {
+			if (prevInput[i] == null || input[i] == null) {
+				Main.logger.log(Level.DEBUG, "Inventory changed 1");
+				prevInput = input;
+				haltProcess(); return; 
+			}
+			if (!prevInput[i].equals(input[i])) {
+				Main.logger.log(Level.DEBUG, "Inventory changed 2");
+				prevInput = input;
 				haltProcess(); return;
 			}
 		}
+		prevInput = input;
 	}
 	
 	protected boolean removeInput(RecipeInput input) {
@@ -74,7 +87,7 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 	protected boolean outputItem(RecipeOutput output, boolean simulate) {
 		ItemStack item = output.toItemStack();
 		for (int i = getFirstOutputSlot(); i < getOutputCount() + getFirstOutputSlot(); i++) {
-			if (inventory.insertItem(i, item, true) == null) {
+			if (inventory.insertItem(i, item, true).isEmpty()) {
 				if (!simulate) { inventory.insertItem(i, item, false); }
 				return true;
 			}

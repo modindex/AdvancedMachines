@@ -58,8 +58,9 @@ public class PurifierManager {
 			new RecipeOutput("dustNickel").withChance(5),
 			new RecipeOutput("dustSilver").withChance(10) 
 		};
-		addRecipe(new RecipeInput("ingotCopper", 2), 
-			new RecipeOutput(ItemInit.INGOT_PURE, 1, EnumHandler.EnumMaterialPure.COPPER.getMeta(), Config.doIncludePure, "ingotCopperPure"),
+		RecipeInput in = new RecipeInput("ingotCopper", 2);
+		RecipeOutput out = new RecipeOutput(ItemInit.INGOT_PURE, 1, EnumHandler.EnumMaterialPure.COPPER.getMeta(), Config.doIncludePure, "ingotCopperPure");
+		addRecipe(in, out,
 			secondaryCopper,
 			30000
 		);

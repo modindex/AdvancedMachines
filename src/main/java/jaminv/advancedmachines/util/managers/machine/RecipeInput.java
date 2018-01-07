@@ -15,7 +15,7 @@ public class RecipeInput {
 	private int meta = -1;
 	private int count = -1;
 	
-	public static final RecipeInput EMPTY = new RecipeInput(Items.AIR, -1, -1);
+	//public static final RecipeInput EMPTY = new RecipeInput(Items.AIR, -1, -1);
 	
 	public RecipeInput(String oredictName, int count) {
 		if(OreDictionary.doesOreNameExist(oredictName)) {
@@ -47,11 +47,16 @@ public class RecipeInput {
 		getOreId();
 	}
 	
+	public RecipeInput() {
+		this(Items.AIR, -1, -1);
+	}
+	
 	public RecipeInput(Item item) {
 		this(item, 1, 0);
 	}
 	
 	private void getOreId() {
+		if (isEmpty()) { oreId = -1; return; }
 		int[] ids = OreDictionary.getOreIDs(this.toItemStack());
 		if (ids.length == 0) { oreId = -1; return; }
 		oreId = ids[0];

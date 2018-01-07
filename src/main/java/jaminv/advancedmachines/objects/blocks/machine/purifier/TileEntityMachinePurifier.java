@@ -14,7 +14,7 @@ import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 
-public class TileEntityMachinePurifier extends TileEntityMachineBase implements ITickable {
+public class TileEntityMachinePurifier extends TileEntityMachineBase {
 	@Override
 	public int getInputCount() { return 1; }
 	
@@ -22,7 +22,7 @@ public class TileEntityMachinePurifier extends TileEntityMachineBase implements 
 	public int getOutputCount() { return 1;	}
 	
 	private int processTimeRemaining = -1;
-	private RecipeInput lastInput = RecipeInput.EMPTY;
+	private RecipeInput lastInput = new RecipeInput();
 	
 	@Override
 	public boolean isProcessing() {
