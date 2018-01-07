@@ -85,5 +85,24 @@ public class PurifierManager {
 		return recipes.get(item);
 	}
 	
-
+	public static PurifierRecipe getRecipe(RecipeInput input) {
+		if (input == null) { return null; }
+		return recipes.get(input);
+	}
+	
+	/**
+	 * Returns a valid recipe only if the items *and* count match,
+	 * otherwise returns null.
+	 * 
+	 * @param stack
+	 * @return PurifierRecipe
+	 */
+	public static PurifierRecipe getRecipeMatch(RecipeInput input) {
+		if (input.isEmpty()) { return null; }
+		PurifierRecipe recipe = recipes.get(input);
+		if (recipe == null) { return null; }
+		
+		if (!input.doesMatch(recipe.getInput())) { return null; }
+		return recipe;
+	}
 }

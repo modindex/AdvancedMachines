@@ -74,7 +74,7 @@ public class ContainerMachinePurifier extends ContainerMachineBase {
 		ItemStack itemstack1 = slot.getStack();
 		itemstack = itemstack1.copy();
 		
-		if (index < TileEntityMachinePurifier.SIZE) {
+		if (index < te.getInventorySize()) {
 			if (!this.mergeItemStack(itemstack1, 2, this.inventorySlots.size(), true)) {
 				return ItemStack.EMPTY;
 			}

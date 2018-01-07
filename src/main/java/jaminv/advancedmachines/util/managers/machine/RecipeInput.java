@@ -29,6 +29,7 @@ public class RecipeInput {
 	}
 	
 	public RecipeInput(ItemStack stack) {
+		if (stack == null) { return; }
 		item = stack.getItem();
 		meta = Items.DIAMOND.getDamage(stack);
 		
@@ -54,6 +55,10 @@ public class RecipeInput {
 		int[] ids = OreDictionary.getOreIDs(this.toItemStack());
 		if (ids.length == 0) { oreId = -1; return; }
 		oreId = ids[0];
+	}
+	
+	public int getCount() {
+		return count;
 	}
 	
 	public ItemStack toItemStack() {
