@@ -53,10 +53,10 @@ public class PurifierManager {
 
 	public static void init() {
 		RecipeOutput[] secondaryCopper = { 
-			new RecipeOutput("dustIron").withChance(20),
-			new RecipeOutput("dustGold").withChance(10),
+			new RecipeOutput("ingotIron").withChance(20),
+			new RecipeOutput("ingotGold").withChance(10),
 			new RecipeOutput("dustNickel").withChance(5),
-			new RecipeOutput("dustSilver").withChance(10) 
+			new RecipeOutput("ingotSilver").withChance(10) 
 		};
 		RecipeInput in = new RecipeInput("ingotCopper", 2);
 		RecipeOutput out = new RecipeOutput(ItemInit.INGOT_PURE, 1, EnumHandler.EnumMaterialPure.COPPER.getMeta(), Config.doIncludePure, "ingotCopperPure");

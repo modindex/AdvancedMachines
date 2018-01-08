@@ -21,7 +21,17 @@ public class TileEntityMachinePurifier extends TileEntityMachineBase {
 	@Override
 	public int getOutputCount() { return 1;	}
 	
+	@Override
+	public int getSecondaryCount() { return 9; }
+	
 	private int processTimeRemaining = -1;
+	private int totalProcessTime = 0;
+	
+	public float getProcessPercent() {
+		if (totalProcessTime <= 0 || processTimeRemaining <= 0) { return 0.0f; }
+		return ((float)totalProcessTime - processTimeRemaining + Config.tickUpdate) / totalProcessTime;
+	}
+	
 	private RecipeInput lastInput = new RecipeInput();
 	
 	@Override
@@ -33,7 +43,7 @@ public class TileEntityMachinePurifier extends TileEntityMachineBase {
 	public boolean canProcess(RecipeInput[] input) {
 		PurifierRecipe recipe = PurifierManager.getRecipeMatch(input[0]);
 		if (recipe == null) { return false; }
-		
+
 		return outputItem(recipe.getOutput(), true);
 	}
 
@@ -41,11 +51,12 @@ public class TileEntityMachinePurifier extends TileEntityMachineBase {
 	protected void process(RecipeInput[] input) {
 		if (!isProcessing()) {
 			processTimeRemaining = Config.processTimeBasic;
+			totalProcessTime = Config.processTimeBasic;
 			return;
 		}
 
 		processTimeRemaining -= Config.tickUpdate;
-		if (processTimeRemaining <= 0) {
+		if (processTimeRemaining <= 0 && !world.isRemote) {
 			PurifierRecipe recipe = PurifierManager.getRecipe(input[0]);
 			
 			if (!removeInput(recipe.getInput())) {
@@ -61,6 +72,8 @@ public class TileEntityMachinePurifier extends TileEntityMachineBase {
 				haltProcess();
 				return;
 			}
+			
+			outputSecondary(recipe.getSecondary());
 			
 			processTimeRemaining = 0;
 			return;

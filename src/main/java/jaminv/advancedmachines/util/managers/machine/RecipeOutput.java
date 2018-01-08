@@ -90,4 +90,8 @@ public class RecipeOutput {
 		}
 
 	}
+	
+	public int getChance() {
+		return chance;
+	}	
 }

@@ -1,5 +1,7 @@
 package jaminv.advancedmachines.objects.blocks.machine;
 
+import javax.annotation.Nonnull;
+
 import org.apache.logging.log4j.Level;
 
 import jaminv.advancedmachines.Main;
@@ -16,16 +18,36 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 
 	public abstract int getInputCount();
 	public abstract int getOutputCount();
+	public abstract int getSecondaryCount();
 	public int getFirstInputSlot() { return 0; }
 	public int getFirstOutputSlot() { return getInputCount(); }
-	public int getInventorySize() { return getInputCount() + getOutputCount(); }
+	public int getFirstSecondarySlot() { return getInputCount() + getOutputCount(); }
+	public int getInventorySize() { return getInputCount() + getOutputCount() + getSecondaryCount(); }
 	
-	protected ItemStackHandler inventory = new ItemStackHandler(2) {
+	protected ItemStackHandler inventory;
+			
+	protected class ItemStackHandlerBase extends ItemStackHandler {
+		public ItemStackHandlerBase(int size) {
+			super(size);
+		}
+		
 		@Override
 		protected void onContentsChanged(int slot) {
 			TileEntityMachineBase.this.markDirty();
 		}
+		
+	    @Override
+	    @Nonnull
+	    public ItemStack getStackInSlot(int slot)
+	    {
+	    	return super.getStackInSlot(slot);
+	    }		
 	};
+	
+	public TileEntityMachineBase() {
+		super();
+		this.inventory = new ItemStackHandlerBase(getInventorySize());
+	}
 	
 	private int tick;
 	private RecipeInput[] prevInput = new RecipeInput[getInputCount()];
@@ -33,7 +55,7 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 	@Override
 	public void update() {
 		tick++;
-		//if (tick < Config.tickUpdate) { return; }
+		if (tick < Config.tickUpdate) { return; }
 		
 		Main.logger.log(Level.DEBUG, "tick");
 		
@@ -93,6 +115,19 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 			}
 		}
 		return false;
+	}
+	
+	protected void outputSecondary(RecipeOutput[] secondary) {		
+		for (RecipeOutput output : secondary) {
+			if (world.rand.nextInt(100) > output.getChance()) { continue; }
+			ItemStack item = output.toItemStack();
+			for(int slot = getFirstSecondarySlot(); slot < getSecondaryCount() + getFirstSecondarySlot(); slot++) {
+				if (inventory.insertItem(slot, item, true).isEmpty()) {
+					inventory.insertItem(slot, item, false);
+					break;
+				}
+			}
+		}
 	}
 	
 	public abstract boolean isProcessing();
