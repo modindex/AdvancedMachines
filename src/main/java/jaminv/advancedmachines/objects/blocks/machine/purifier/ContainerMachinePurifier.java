@@ -27,8 +27,6 @@ public class ContainerMachinePurifier extends ContainerMachineBase {
 	final int HOTBAR_X_POS = 8;
 	final int HOTBAR_Y_POS = 169;
 	
-	int slotIndex = 0;
-	
 	public ContainerMachinePurifier(IInventory playerInventory, TileEntityMachinePurifier te) {
 		this.te = te;
 		
@@ -38,8 +36,7 @@ public class ContainerMachinePurifier extends ContainerMachineBase {
 	
 	private void addOwnSlots() {
 		IItemHandler itemHandler = this.te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-		int x = 9;
-		int y = 6;
+		int slotIndex = 0;
 
 		addSlotToContainer(new SlotInput(itemHandler, slotIndex, INPUT_X_POS, INPUT_Y_POS));
 		slotIndex++;
@@ -52,25 +49,25 @@ public class ContainerMachinePurifier extends ContainerMachineBase {
 	}
 	
 	private void addPlayerSlots(IInventory playerInventory) {
-		for (int row = 0; row < 9; ++row) {
-			slotIndex++;
-			int x = HOTBAR_X_POS + row * 18;
-			int y = HOTBAR_Y_POS;
-			this.addSlotToContainer(new Slot(playerInventory, slotIndex, x, y));
-		}		
-		
 		for (int row = 0; row < 3; ++row) {
 			for (int col = 0; col < 9; ++col) {
-				slotIndex++;
 				int x = INVENTORY_X_POS + col * SLOT_X_SPACING;
 				int y = INVENTORY_Y_POS + row * SLOT_Y_SPACING;
-				this.addSlotToContainer(new Slot(playerInventory, slotIndex, x, y));
+				this.addSlotToContainer(new Slot(playerInventory, 9 + row * 9 + col, x, y));
 			}
+		}
+
+		for (int row = 0; row < 9; ++row) {
+			int x = HOTBAR_X_POS + row * 18;
+			int y = HOTBAR_Y_POS;
+			this.addSlotToContainer(new Slot(playerInventory, row, x, y));
 		}
 	}
 	
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
+		int slotIndex = 0;
+		
 		ItemStack itemstack = null;
 		Slot slot = this.inventorySlots.get(index);
 		

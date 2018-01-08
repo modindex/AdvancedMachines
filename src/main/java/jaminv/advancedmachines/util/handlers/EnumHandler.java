@@ -125,5 +125,65 @@ public class EnumHandler {
 		public boolean doInclude() {
 			return Config.doInclude("pure");
 		}
+	}
+	
+	public static enum EnumDust implements IStringSerializable, IEnumType {
+		IRON(0, "iron"),
+		GOLD(1, "gold"),
+		TITANIUM(2, "titanium"),
+		COPPER(2, "copper"),
+		SILVER(3, "silver");
+		
+		private static final EnumDust[] META_LOOKUP = new EnumDust[values().length];
+		private final int meta;
+		private final String name, unlocalizedName;
+		
+		private EnumDust(int meta, String name) {
+			this(meta, name, name);
+		}
+		
+		private EnumDust(int meta, String name, String unlocalizedName) {
+			this.meta = meta;
+			this.name = name;
+			this.unlocalizedName = unlocalizedName;
+		}
+		
+		public String getName() {
+			return this.name;
+		}
+		
+		public int getMeta() {
+			return this.meta;
+		}
+		
+		public String getUnlocalizedName() {
+			return this.unlocalizedName;
+		}
+		
+		@Override
+		public String toString() {
+			return this.name;
+		}
+		
+		public static EnumDust byMetadata(int meta) {
+			return META_LOOKUP[meta];
+		}
+		
+		static {
+			for (EnumDust enumtype : values()) {
+				META_LOOKUP[enumtype.getMeta()] = enumtype;
+			}
+		}
+		
+		public boolean doInclude() {
+			return true;
+/*			switch (name) {
+			case "gold":
+			case "iron":
+				return Config.doInclude("vanillaDust");
+			default:
+				return Config.doInclude(name);
+			} */
+		}
 	}	
 }

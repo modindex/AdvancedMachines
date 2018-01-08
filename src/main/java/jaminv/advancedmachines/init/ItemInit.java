@@ -29,7 +29,9 @@ public class ItemInit {
 	
 	// Items
 	public static final Item INGOT = new ItemMaterial("ingot", EnumHandler.EnumMaterial.values());
+	public static final Item DUST = new ItemMaterial("dust", EnumHandler.EnumDust.values());
 	public static final Item INGOT_PURE = new ItemMaterial("ingot_pure", "ingot", "Pure", EnumHandler.EnumMaterialPure.values());
+	public static final Item DUST_PURE = new ItemMaterial("dust_pure", "dust", "Pure", EnumHandler.EnumMaterialPure.values());
 	
 	// Tools
 	public static final Item AXE_TITANIUM = new ToolAxe("axe_titanium", TOOL_TITANIUM, 8.0F, -3.2F);	
