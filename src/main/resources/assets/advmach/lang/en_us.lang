@@ -3,11 +3,13 @@ item.ingot_titanium.name=Titanium Ingot
 item.ingot_copper.name=Copper Ingot
 item.ingot_silver.name=Silver Ingot
 
+item.dust_coal.name=Coal Dust
 item.dust_iron.name=Iron Dust
 item.dust_gold.name=Gold Dust
 item.dust_titanium.name=Titanium Dust
 item.dust_copper.name=Copper Dust
 item.dust_silver.name=Silver Dust
+item.dust_diamond.name=Diamond Dust
 
 item.ingot_pure_gold.name=Pure Gold Ingot
 item.ingot_pure_silver.name=Pure Silver Ingot
@@ -16,6 +18,7 @@ item.ingot_pure_copper.name=Pure Copper Ingot
 item.dust_pure_gold.name=Pure Gold Dust
 item.dust_pure_silver.name=Pure Silver Dust
 item.dust_pure_copper.name=Pure Copper Dust
+item.dust_pure_diamond.name=Refined Carbon
 
 item.axe_titanium.name=Titanium Axe
 item.hoe_titanium.name=Titanium Hoe

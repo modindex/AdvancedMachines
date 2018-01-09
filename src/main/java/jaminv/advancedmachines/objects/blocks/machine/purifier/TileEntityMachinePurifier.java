@@ -5,9 +5,9 @@ import org.apache.logging.log4j.Level;
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
 import jaminv.advancedmachines.util.Config;
-import jaminv.advancedmachines.util.managers.machine.PurifierManager;
-import jaminv.advancedmachines.util.managers.machine.PurifierManager.PurifierRecipe;
-import jaminv.advancedmachines.util.managers.machine.RecipeInput;
+import jaminv.advancedmachines.util.recipe.RecipeInput;
+import jaminv.advancedmachines.util.recipe.machine.PurifierManager;
+import jaminv.advancedmachines.util.recipe.machine.PurifierManager.PurifierRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -41,10 +41,10 @@ public class TileEntityMachinePurifier extends TileEntityMachineBase {
 	
 	@Override
 	public boolean canProcess(RecipeInput[] input) {
-		PurifierRecipe recipe = PurifierManager.getRecipeMatch(input[0]);
+		PurifierRecipe recipe = PurifierManager.getRecipeManager().getRecipeMatch(input);
 		if (recipe == null) { return false; }
 
-		return outputItem(recipe.getOutput(), true);
+		return outputItem(recipe.getOutput(0), true);
 	}
 
 	@Override
@@ -57,16 +57,16 @@ public class TileEntityMachinePurifier extends TileEntityMachineBase {
 
 		processTimeRemaining -= Config.tickUpdate;
 		if (processTimeRemaining <= 0 && !world.isRemote) {
-			PurifierRecipe recipe = PurifierManager.getRecipe(input[0]);
+			PurifierRecipe recipe = PurifierManager.getRecipeManager().getRecipe(input);
 			
-			if (!removeInput(recipe.getInput())) {
+			if (!removeInput(recipe.getInput(0))) {
 				// Some kind of strange error
 				Main.logger.log(Level.ERROR,  "error.machine.process.cannot_input");
 				haltProcess();
 				return;
 			}
 			
-			if (!outputItem(recipe.getOutput(), false)) {
+			if (!outputItem(recipe.getOutput(0), false)) {
 				// Some kind of strange error
 				Main.logger.log(Level.ERROR, "error.machine.process.cannot_output");
 				haltProcess();

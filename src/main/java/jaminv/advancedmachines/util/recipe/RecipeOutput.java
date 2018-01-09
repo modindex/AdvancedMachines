@@ -1,9 +1,11 @@
-package jaminv.advancedmachines.util.managers.machine;
+package jaminv.advancedmachines.util.recipe;
 
+import jaminv.advancedmachines.util.Reference;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 /**
@@ -17,18 +19,20 @@ public class RecipeOutput {
 	private int count = -1;
 	private int chance = 100;
 	
-	RecipeOutput(String oredictName, int count) {
+	public static final RecipeOutput EMPTY = new RecipeOutput(Items.AIR, -1, -1);
+	
+	public RecipeOutput(String oredictName, int count) {
 		if(OreDictionary.doesOreNameExist(oredictName)) {
 			ore = oredictName;
 			this.count = count;
 		}
 	}
 	
-	RecipeOutput(String oredictName) {
+	public RecipeOutput(String oredictName) {
 		this(oredictName, 1);
 	}
 	
-	RecipeOutput(ItemStack stack) {
+	public RecipeOutput(ItemStack stack) {
 		item = stack.getItem();
 		meta = Items.DIAMOND.getDamage(stack);
 		
@@ -37,33 +41,30 @@ public class RecipeOutput {
 		}
 	}
 	
-	RecipeOutput(Item item, int count, int meta) {
+	public RecipeOutput(Item item, int count, int meta) {
 		this.item = item;
 		this.count = count;
 		this.meta = meta;
 	}
 	
-	RecipeOutput(Item item) {
+	public RecipeOutput(Item item) {
 		this.item = item;
 		this.count = 1;
-	}
-	
-	RecipeOutput(Item item, int count, int meta, boolean config, String oredict) {
-		if (config) {
-			this.item = item;
-			this.count = count;
-			this.meta = meta;
-		} else {
-			this.ore = oredict;
-			this.count = count;
-		}
 	}
 	
 	public ItemStack toItemStack() {
 		if (ore != "") {
 			NonNullList<ItemStack> list = OreDictionary.getOres(ore);
 			if (list.size() == 0) { return ItemStack.EMPTY; }
-			ItemStack result = list.get(0).copy();
+			
+			ItemStack toCopy = list.get(0);			
+			for (ItemStack item : list) {
+				if (item.getItem().getRegistryName().getResourceDomain().equals(Reference.MODID)) {
+					toCopy = item;
+					break;
+				}
+			}
+			ItemStack result = toCopy.copy();
 			if (count != -1) { result.setCount(count); }
 			return result;
 		}

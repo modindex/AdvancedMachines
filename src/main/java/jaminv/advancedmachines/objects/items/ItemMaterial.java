@@ -4,6 +4,7 @@ import org.apache.commons.lang3.text.WordUtils;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.init.ItemInit;
+import jaminv.advancedmachines.objects.items.material.MaterialBase;
 import jaminv.advancedmachines.util.interfaces.IEnumType;
 import jaminv.advancedmachines.util.interfaces.IHasModel;
 import jaminv.advancedmachines.util.interfaces.IHasOreDictionary;
@@ -17,9 +18,9 @@ import net.minecraftforge.oredict.OreDictionary;
 public class ItemMaterial extends Item implements IHasModel, IMetaName, IHasOreDictionary {
 
 	protected String name, oredictprefix, oredictsuffix;
-	protected IEnumType[] types;
+	protected MaterialBase[] types;
 
-	public ItemMaterial(String name, IEnumType[] types) {
+	public ItemMaterial(String name, MaterialBase[] types) {
 		setHasSubtypes(true);
 		setMaxDamage(0);
 
@@ -35,7 +36,7 @@ public class ItemMaterial extends Item implements IHasModel, IMetaName, IHasOreD
 		ItemInit.ITEMS.add(this);
 	}
 	
-	public ItemMaterial(String name, String oredictprefix, String oredictsuffix, IEnumType[] types) {
+	public ItemMaterial(String name, String oredictprefix, String oredictsuffix, MaterialBase[] types) {
 		this(name, types);
 		this.oredictprefix = oredictprefix;
 		this.oredictsuffix = oredictsuffix;
@@ -43,8 +44,8 @@ public class ItemMaterial extends Item implements IHasModel, IMetaName, IHasOreD
 
 	@Override
 	public void registerModels() {
-		for (IEnumType type : types) {
-			if (type.doInclude()) {
+		for (MaterialBase type : types) {
+			if (type.doInclude(this.oredictprefix)) {
 				Main.proxy.registerVariantRenderer(this, type.getMeta(), this.name + "_" + type.getName(), "inventory");
 			}
 		}
@@ -52,8 +53,8 @@ public class ItemMaterial extends Item implements IHasModel, IMetaName, IHasOreD
 	
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-		for (IEnumType type : types) {
-			if (type.doInclude()) {
+		for (MaterialBase type : types) {
+			if (type.doInclude(this.oredictprefix)) {
 				items.add(new ItemStack(this, 1, type.getMeta()));
 			}
 		}
@@ -71,8 +72,8 @@ public class ItemMaterial extends Item implements IHasModel, IMetaName, IHasOreD
 	
 	@Override
 	public void registerOreDictionary() {
-		for (IEnumType type : types) {
-			if (type.doInclude()) {
+		for (MaterialBase type : types) {
+			if (type.doInclude(this.oredictprefix)) {
 				ItemStack item = new ItemStack(this, 1, type.getMeta());
 				OreDictionary.registerOre(this.oredictprefix + WordUtils.capitalize(this.getSpecialName(item)) + WordUtils.capitalize(this.oredictsuffix), item);
 			}

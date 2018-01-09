@@ -5,13 +5,15 @@ import java.util.List;
 
 import jaminv.advancedmachines.objects.armor.ArmorBase;
 import jaminv.advancedmachines.objects.items.ItemMaterial;
+import jaminv.advancedmachines.objects.items.material.MaterialDust;
+import jaminv.advancedmachines.objects.items.material.MaterialMod;
+import jaminv.advancedmachines.objects.items.material.MaterialPure;
 import jaminv.advancedmachines.objects.tools.ToolAxe;
 import jaminv.advancedmachines.objects.tools.ToolHoe;
 import jaminv.advancedmachines.objects.tools.ToolPickaxe;
 import jaminv.advancedmachines.objects.tools.ToolShovel;
 import jaminv.advancedmachines.objects.tools.ToolSword;
 import jaminv.advancedmachines.util.Reference;
-import jaminv.advancedmachines.util.handlers.EnumHandler;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -28,10 +30,10 @@ public class ItemInit {
 	public static final ArmorMaterial ARMOR_TITANIUM = EnumHelper.addArmorMaterial("armor_titanium", Reference.MODID + ":titanium", 33, new int[] {3, 6, 8, 3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 2.0F);
 	
 	// Items
-	public static final Item INGOT = new ItemMaterial("ingot", EnumHandler.EnumMaterial.values());
-	public static final Item DUST = new ItemMaterial("dust", EnumHandler.EnumDust.values());
-	public static final Item INGOT_PURE = new ItemMaterial("ingot_pure", "ingot", "Pure", EnumHandler.EnumMaterialPure.values());
-	public static final Item DUST_PURE = new ItemMaterial("dust_pure", "dust", "Pure", EnumHandler.EnumMaterialPure.values());
+	public static final Item INGOT = new ItemMaterial("ingot", MaterialMod.values());
+	public static final Item DUST = new ItemMaterial("dust", MaterialDust.values());
+	public static final Item INGOT_PURE = new ItemMaterial("ingot_pure", "ingot", "Pure", MaterialPure.values());
+	public static final Item DUST_PURE = new ItemMaterial("dust_pure", "dust", "Pure", MaterialPure.values());
 	
 	// Tools
 	public static final Item AXE_TITANIUM = new ToolAxe("axe_titanium", TOOL_TITANIUM, 8.0F, -3.2F);	

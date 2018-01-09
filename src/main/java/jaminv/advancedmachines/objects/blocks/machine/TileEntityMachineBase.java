@@ -6,12 +6,13 @@ import org.apache.logging.log4j.Level;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.util.Config;
-import jaminv.advancedmachines.util.managers.machine.RecipeInput;
-import jaminv.advancedmachines.util.managers.machine.RecipeOutput;
+import jaminv.advancedmachines.util.recipe.RecipeInput;
+import jaminv.advancedmachines.util.recipe.RecipeOutput;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.ItemStackHandler;
 
 public abstract class TileEntityMachineBase extends TileEntity implements ITickable {
@@ -117,7 +118,7 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 		return false;
 	}
 	
-	protected void outputSecondary(RecipeOutput[] secondary) {		
+	protected void outputSecondary(NonNullList<RecipeOutput> secondary) {		
 		for (RecipeOutput output : secondary) {
 			if (world.rand.nextInt(100) > output.getChance()) { continue; }
 			ItemStack item = output.toItemStack();

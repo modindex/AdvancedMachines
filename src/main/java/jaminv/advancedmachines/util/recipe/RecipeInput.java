@@ -1,8 +1,7 @@
-package jaminv.advancedmachines.util.managers.machine;
+package jaminv.advancedmachines.util.recipe;
 
-import org.apache.logging.log4j.Level;
+import java.util.Comparator;
 
-import jaminv.advancedmachines.Main;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -10,17 +9,28 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class RecipeInput {
 	
+	public static class InputCompare implements Comparator<RecipeInput> {
+		@Override
+		public int compare(RecipeInput arg0, RecipeInput arg1) {
+			return arg0.hashCode() - arg1.hashCode();
+		}		
+	}
+	
 	private int oreId = -1;
 	private Item item = Items.AIR;
 	private int meta = -1;
 	private int count = -1;
 	
-	//public static final RecipeInput EMPTY = new RecipeInput(Items.AIR, -1, -1);
+	private boolean invalid = false;
+	
+	public static final RecipeInput EMPTY = new RecipeInput(Items.AIR, -1, -1);
 	
 	public RecipeInput(String oredictName, int count) {
 		if(OreDictionary.doesOreNameExist(oredictName)) {
 			oreId = OreDictionary.getOreID(oredictName);
 			this.count = count;
+		} else {
+			invalid = true;
 		}
 	}
 	
@@ -29,7 +39,7 @@ public class RecipeInput {
 	}
 	
 	public RecipeInput(ItemStack stack) {
-		if (stack == null) { return; }
+		if (stack == null) { invalid = true; return; }
 		item = stack.getItem();
 		meta = Items.DIAMOND.getDamage(stack);
 		
@@ -41,6 +51,7 @@ public class RecipeInput {
 	}
 	
 	public RecipeInput(Item item, int count, int meta) {
+		if (item == null) { invalid = true; return; }
 		this.item = item;
 		this.count = count;
 		this.meta = meta;
@@ -83,6 +94,10 @@ public class RecipeInput {
 	
 	public boolean isEmpty() {
 		return oreId == -1 && item == Items.AIR;
+	}
+	
+	public boolean isInvalid() {
+		return invalid;
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 package jaminv.advancedmachines.objects.blocks.machine.purifier;
 
 import jaminv.advancedmachines.objects.blocks.machine.ContainerMachineBase;
-import jaminv.advancedmachines.util.managers.machine.PurifierManager;
+import jaminv.advancedmachines.util.recipe.machine.PurifierManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -83,7 +83,7 @@ public class ContainerMachinePurifier extends ContainerMachineBase {
 				return ItemStack.EMPTY;
 			}
 		} else {
-			if (PurifierManager.getRecipe(itemstack1) == null) {
+			if (PurifierManager.getRecipeManager().isItemValid(itemstack1, null)) {
 				return ItemStack.EMPTY;
 			}
 			if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
@@ -112,7 +112,7 @@ public class ContainerMachinePurifier extends ContainerMachineBase {
 
 		@Override
 		public boolean isItemValid(ItemStack stack) {
-			return PurifierManager.getRecipe(stack) != null;
+			return PurifierManager.getRecipeManager().isItemValid(stack, null);
 		}
 	}	
 }
