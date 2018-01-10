@@ -7,7 +7,8 @@ import net.minecraft.util.IStringSerializable;
 public class EnumHandler {
 	
 	public static enum EnumGui {
-		PURIFIER(1);
+		PURIFIER(1),
+		ALLOY(2);
 		
 		private final int id;
 		private EnumGui(int id) {

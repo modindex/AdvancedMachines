@@ -6,16 +6,23 @@ import org.apache.logging.log4j.Level;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.util.Config;
+import jaminv.advancedmachines.util.interfaces.IHasGui;
+import jaminv.advancedmachines.util.recipe.IRecipeManager;
+import jaminv.advancedmachines.util.recipe.RecipeBase;
 import jaminv.advancedmachines.util.recipe.RecipeInput;
 import jaminv.advancedmachines.util.recipe.RecipeOutput;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public abstract class TileEntityMachineBase extends TileEntity implements ITickable {
+public abstract class TileEntityMachineBase extends TileEntity implements ITickable, IHasGui {
 
 	public abstract int getInputCount();
 	public abstract int getOutputCount();
@@ -45,9 +52,13 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 	    }		
 	};
 	
-	public TileEntityMachineBase() {
+	private IRecipeManager recipeManager;
+	public IRecipeManager getRecipeManager() { return recipeManager; }
+	
+	public TileEntityMachineBase(IRecipeManager recipeManager) {
 		super();
 		this.inventory = new ItemStackHandlerBase(getInventorySize());
+		this.recipeManager = recipeManager;
 	}
 	
 	private int tick;
@@ -72,6 +83,99 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 		}
 	}
 	
+	private int processTimeRemaining = -1;
+	private int totalProcessTime = 0;
+	
+	public float getProcessPercent() {
+		if (totalProcessTime <= 0 || processTimeRemaining <= 0) { return 0.0f; }
+		return ((float)totalProcessTime - processTimeRemaining + Config.tickUpdate) / totalProcessTime;
+	}
+	
+	private RecipeInput lastInput = new RecipeInput();
+	
+	public boolean isProcessing() {
+		return processTimeRemaining > 0;
+	}
+	
+	public boolean canProcess(RecipeInput[] input) {
+		RecipeBase recipe = recipeManager.getRecipeMatch(input);
+		if (recipe == null) { return false; }
+
+		return outputItem(recipe.getOutput(0), true);
+	}
+
+	protected void process(RecipeInput[] input) {
+		if (!isProcessing()) {
+			processTimeRemaining = Config.processTimeBasic;
+			totalProcessTime = Config.processTimeBasic;
+			return;
+		}
+
+		processTimeRemaining -= Config.tickUpdate;
+		if (processTimeRemaining <= 0 && !world.isRemote) {
+			RecipeBase recipe = recipeManager.getRecipe(input);
+			
+			if (!removeInput(recipe.getInput(0))) {
+				// Some kind of strange error
+				Main.logger.log(Level.ERROR,  "error.machine.process.cannot_input");
+				haltProcess();
+				return;
+			}
+			
+			if (!outputItem(recipe.getOutput(0), false)) {
+				// Some kind of strange error
+				Main.logger.log(Level.ERROR, "error.machine.process.cannot_output");
+				haltProcess();
+				return;
+			}
+			
+			outputSecondary(recipe.getSecondary());
+			
+			processTimeRemaining = 0;
+			return;
+		}
+	}
+	
+	protected void haltProcess() {
+		processTimeRemaining = -1;
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound compound) {
+		super.readFromNBT(compound);
+		if(compound.hasKey("items")) {
+			inventory.deserializeNBT((NBTTagCompound)compound.getTag("items"));
+			processTimeRemaining = compound.getInteger("processTimeRemaining");
+			totalProcessTime = compound.getInteger("totalProcessTime");
+		}
+	}
+	
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+		super.writeToNBT(compound);
+		compound.setTag("items",  inventory.serializeNBT());
+		compound.setInteger("processTimeRemaining", processTimeRemaining);
+		compound.setInteger("totalProcessTime", totalProcessTime);
+		
+		return compound;
+	}
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+			return true;
+		}
+		return super.hasCapability(capability, facing);
+	}
+	
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
+		}
+		return super.getCapability(capability, facing);
+	}	
+	
 	protected RecipeInput[] getInput() {
 		RecipeInput[] input = new RecipeInput[getInputCount()];
 		for (int i = 0; i < getInputCount(); i++) {
@@ -83,12 +187,10 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 	private void checkInventoryChanges(RecipeInput[] input) {
 		for (int i = 0; i < getInputCount(); i++) {
 			if (prevInput[i] == null || input[i] == null) {
-				Main.logger.log(Level.DEBUG, "Inventory changed 1");
 				prevInput = input;
 				haltProcess(); return; 
 			}
 			if (!prevInput[i].equals(input[i])) {
-				Main.logger.log(Level.DEBUG, "Inventory changed 2");
 				prevInput = input;
 				haltProcess(); return;
 			}
@@ -130,11 +232,6 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 			}
 		}
 	}
-	
-	public abstract boolean isProcessing();
-	public abstract boolean canProcess(RecipeInput[] input);
-	protected abstract void process(RecipeInput[] input);
-	protected abstract void haltProcess();
 	
 	public boolean canInteractWith(EntityPlayer playerIn) {
 		return !isInvalid() && playerIn.getDistanceSq(pos.add(0.5D, 0.5D, 0.5D)) <= 64D;

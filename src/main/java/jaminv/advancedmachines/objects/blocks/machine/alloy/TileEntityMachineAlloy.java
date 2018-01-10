@@ -1,11 +1,12 @@
-package jaminv.advancedmachines.objects.blocks.machine.purifier;
+package jaminv.advancedmachines.objects.blocks.machine.alloy;
 
 import org.apache.logging.log4j.Level;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
+import jaminv.advancedmachines.objects.blocks.machine.purifier.ContainerMachinePurifier;
+import jaminv.advancedmachines.objects.blocks.machine.purifier.GuiMachinePurifier;
 import jaminv.advancedmachines.util.Config;
-import jaminv.advancedmachines.util.recipe.IRecipeManager;
 import jaminv.advancedmachines.util.recipe.RecipeInput;
 import jaminv.advancedmachines.util.recipe.machine.PurifierManager;
 import jaminv.advancedmachines.util.recipe.machine.PurifierManager.PurifierRecipe;
@@ -17,8 +18,7 @@ import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 
-public class TileEntityMachinePurifier extends TileEntityMachineBase {
-
+public class TileEntityMachineAlloy extends TileEntityMachineBase {
 	@Override
 	public int getInputCount() { return 1; }
 	
@@ -28,19 +28,17 @@ public class TileEntityMachinePurifier extends TileEntityMachineBase {
 	@Override
 	public int getSecondaryCount() { return 9; }
 	
-	public TileEntityMachinePurifier() {
+	public TileEntityMachineAlloy() {
 		super(PurifierManager.getRecipeManager());
 	}
 
 	@Override
 	public Class<? extends Container> getContainerClass() {
-		return ContainerMachinePurifier.class;
+		return ContainerMachineAlloy.class;
 	}
 
 	@Override
 	public Class<? extends GuiContainer> getGuiClass() {
-		return GuiMachinePurifier.class;
-	}
-
-
+		return GuiMachineAlloy.class;
+	}	
 }

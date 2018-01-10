@@ -15,8 +15,8 @@ import net.minecraft.world.World;
 
 public abstract class BlockMachineBase extends DirectionalBlock implements ITileEntityProvider, IHasTileEntity {
 
-	public BlockMachineBase(String name, Material material) {
-		super(name, material);
+	public BlockMachineBase(String name) {
+		super(name, Material.IRON);
 	}
 	
 	protected int getGuiId() { return -1; }
