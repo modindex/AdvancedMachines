@@ -10,8 +10,6 @@ import jaminv.advancedmachines.util.recipe.RecipeOutput;
 
 public class PurifierManager {
 	
-	private static Map<RecipeInput, PurifierRecipe> recipes = new HashMap<RecipeInput, PurifierRecipe>();
-	
 	public static class PurifierRecipe extends RecipeBase {
 		@Override
 		public int getInputCount() { return 1; }

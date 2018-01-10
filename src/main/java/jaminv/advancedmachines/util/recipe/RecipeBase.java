@@ -32,7 +32,6 @@ public abstract class RecipeBase {
 	
 	public RecipeBase addInput(int index, RecipeInput input) {
 		this.input[index] = input;
-		Arrays.<RecipeInput>sort(input, new RecipeInput.InputCompare());
 		return this;
 	}
 	
@@ -56,6 +55,12 @@ public abstract class RecipeBase {
 	
 	public RecipeInput getInput(int index) {
 		return input[index];
+	}
+	
+	public RecipeInput[] getSortedInput() {
+		RecipeInput[] ret = Arrays.copyOf(input, input.length);
+		Arrays.sort(ret, new RecipeInput.InputCompare());
+		return ret;
 	}
 	
 	public RecipeOutput getOutput(int index) {

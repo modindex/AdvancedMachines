@@ -13,14 +13,41 @@ import net.minecraft.item.ItemStack;
 public abstract class RecipeManagerThreeIngredient<T extends RecipeBase> implements IRecipeManager<T> {  
 	
 	private Map<RecipeInput, HashMap<RecipeInput, HashMap<RecipeInput, T>>> recipes = new HashMap<RecipeInput, HashMap<RecipeInput, HashMap<RecipeInput, T>>>();
+	private Map<RecipeInput, Boolean> validInput = new HashMap<RecipeInput, Boolean>();
 	
 	protected void addRecipe(T recipe) {
-		if (recipe.getInput(0).isEmpty()) { return; }
+		RecipeInput[] input = recipe.getSortedInput();
+		
+		boolean valid = false;
+		for (RecipeInput item : input) {
+			if (item.isInvalid()) { return; }
+			if (!item.isEmpty()) { valid = true; }
+		}
+		if (!valid) { return; }
+		
 		for (int i = 0; i < recipe.getOutputCount(); i++) {
 			if (recipe.getOutput(i).isEmpty()) { return; }
 		}
 		
-		recipes.put(recipe.getInput(0), recipe);
+		HashMap<RecipeInput, HashMap<RecipeInput, T>> second = recipes.get(input[0]);
+		if (second == null) {
+			second = new HashMap<RecipeInput, HashMap<RecipeInput, T>>();
+			recipes.put(input[0], second);
+		}
+		
+		HashMap<RecipeInput, T> third = second.get(input[1]);
+		if (third == null) {
+			third = new HashMap<RecipeInput, T>();
+			second.put(input[1], third);
+		}
+		
+		third.put(input[2], recipe);
+		
+		for (RecipeInput item : input) {
+			if (!item.isEmpty()) {
+				validInput.put(item, true);
+			}
+		}
 	}
 	
 	/**
@@ -29,14 +56,25 @@ public abstract class RecipeManagerThreeIngredient<T extends RecipeBase> impleme
 	 * @return PurifierRecipe
 	 */
 	public T getRecipe(ItemStack[] stack) {
-		if (stack[0].isEmpty()) { return null; }
-		RecipeInput item = new RecipeInput(stack[0]);
-		return recipes.get(item);
+		RecipeInput[] input = new RecipeInput[stack.length];
+		for (int i = 0; i < stack.length; i++) {
+			input[i] = new RecipeInput(stack[i]);
+		}
+		return this.getRecipe(input);		
 	}
 	
 	public T getRecipe(RecipeInput[] input) {
-		if (input == null) { return null; }
-		return recipes.get(input[0]);
+		for (RecipeInput item : input) {
+			if (input == null) { return null; }
+		}
+		
+		HashMap<RecipeInput, HashMap<RecipeInput, T>> second = recipes.get(input[0]);
+		if (second == null) { return null; }
+		
+		HashMap<RecipeInput, T> third = second.get(input[1]);
+		if (third == null) { return null; }
+		
+		return third.get(input[2]);
 	}
 	
 	/**
@@ -47,17 +85,18 @@ public abstract class RecipeManagerThreeIngredient<T extends RecipeBase> impleme
 	 * @return PurifierRecipe
 	 */
 	public T getRecipeMatch(RecipeInput[] input) {
-		if (input[0].isEmpty()) { return null; }
-		T recipe = recipes.get(input[0]);
-		if (recipe == null) { return null; }
+		T recipe = getRecipe(input);
+		if (input == null) { return null; }
 		
-		if (!input[0].doesMatch(recipe.getInput(0))) { return null; }
+		for (int i = 0; i < recipe.getInputCount(); i++) {
+			if (!input[i].doesMatch(recipe.getInput(i))) { return null; }
+		}
 		return recipe;
 	}
 	
 	@Override
 	public boolean isItemValid(ItemStack stack, ItemStack[] other) {
 		if (stack.isEmpty()) { return false; }
-		return recipes.get(new RecipeInput(stack)) != null;
+		return validInput.get(new RecipeInput(stack)) != null;
 	}
 }
