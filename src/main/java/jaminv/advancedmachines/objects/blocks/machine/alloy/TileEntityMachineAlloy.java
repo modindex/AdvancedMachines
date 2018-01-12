@@ -1,26 +1,15 @@
 package jaminv.advancedmachines.objects.blocks.machine.alloy;
 
-import org.apache.logging.log4j.Level;
-
-import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine;
+import jaminv.advancedmachines.objects.blocks.machine.GuiMachine;
 import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
-import jaminv.advancedmachines.objects.blocks.machine.purifier.ContainerMachinePurifier;
-import jaminv.advancedmachines.objects.blocks.machine.purifier.GuiMachinePurifier;
-import jaminv.advancedmachines.util.Config;
-import jaminv.advancedmachines.util.recipe.RecipeInput;
-import jaminv.advancedmachines.util.recipe.machine.PurifierManager;
-import jaminv.advancedmachines.util.recipe.machine.PurifierManager.PurifierRecipe;
+import jaminv.advancedmachines.util.recipe.machine.AlloyManager;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.inventory.Container;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraft.inventory.IInventory;
 
 public class TileEntityMachineAlloy extends TileEntityMachineBase {
 	@Override
-	public int getInputCount() { return 1; }
+	public int getInputCount() { return 3; }
 	
 	@Override
 	public int getOutputCount() { return 1;	}
@@ -28,17 +17,19 @@ public class TileEntityMachineAlloy extends TileEntityMachineBase {
 	@Override
 	public int getSecondaryCount() { return 9; }
 	
+	private final DialogMachineAlloy dialog = new DialogMachineAlloy();
+	
 	public TileEntityMachineAlloy() {
-		super(PurifierManager.getRecipeManager());
+		super(AlloyManager.getRecipeManager());		
 	}
 
 	@Override
-	public Class<? extends Container> getContainerClass() {
-		return ContainerMachineAlloy.class;
+	public ContainerMachine createContainer(IInventory inventory) {
+		return new ContainerMachine(inventory, this, AlloyManager.getRecipeManager(), dialog);
 	}
-
+	
 	@Override
-	public Class<? extends GuiContainer> getGuiClass() {
-		return GuiMachineAlloy.class;
-	}	
+	public GuiContainer createGui(IInventory inventory) {
+		return new GuiMachine(this, createContainer(inventory), dialog);
+	}
 }

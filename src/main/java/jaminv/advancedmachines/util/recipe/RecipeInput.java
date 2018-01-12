@@ -39,7 +39,7 @@ public class RecipeInput {
 	}
 	
 	public RecipeInput(ItemStack stack) {
-		if (stack == null) { invalid = true; return; }
+		if (stack == null || stack.isEmpty()) { invalid = true; return; }
 		item = stack.getItem();
 		meta = Items.DIAMOND.getDamage(stack);
 		

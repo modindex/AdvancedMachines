@@ -1,5 +1,6 @@
 package jaminv.advancedmachines.util.recipe;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,14 +68,16 @@ public abstract class RecipeManagerThreeIngredient<T extends RecipeBase> impleme
 		for (RecipeInput item : input) {
 			if (input == null) { return null; }
 		}
+		RecipeInput[] copy = Arrays.copyOf(input, input.length);
+		Arrays.sort(copy, new RecipeInput.InputCompare());
 		
-		HashMap<RecipeInput, HashMap<RecipeInput, T>> second = recipes.get(input[0]);
+		HashMap<RecipeInput, HashMap<RecipeInput, T>> second = recipes.get(copy[0]);
 		if (second == null) { return null; }
 		
-		HashMap<RecipeInput, T> third = second.get(input[1]);
+		HashMap<RecipeInput, T> third = second.get(copy[1]);
 		if (third == null) { return null; }
 		
-		return third.get(input[2]);
+		return third.get(copy[2]);
 	}
 	
 	/**
@@ -86,10 +89,13 @@ public abstract class RecipeManagerThreeIngredient<T extends RecipeBase> impleme
 	 */
 	public T getRecipeMatch(RecipeInput[] input) {
 		T recipe = getRecipe(input);
-		if (input == null) { return null; }
+		if (recipe == null) { return null; }
+		
+		RecipeInput[] copy = Arrays.copyOf(input, input.length);
+		Arrays.sort(copy, new RecipeInput.InputCompare());		
 		
 		for (int i = 0; i < recipe.getInputCount(); i++) {
-			if (!input[i].doesMatch(recipe.getInput(i))) { return null; }
+			if (!copy[i].doesMatch(recipe.getInput(i))) { return null; }
 		}
 		return recipe;
 	}

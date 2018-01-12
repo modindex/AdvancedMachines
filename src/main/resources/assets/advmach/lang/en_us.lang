@@ -42,4 +42,5 @@ tile.ore_silver.name=Silver Ore
 tile.machine.name=Titanium Machine Frame
 tile.purifier.name=Purification Chamber
 
-message.advmach.counter=Counter: %d
+dialog.common.inventory=Inventory
+dialog.alloy.title=Alloy Forge

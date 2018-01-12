@@ -1,21 +1,12 @@
 package jaminv.advancedmachines.objects.blocks.machine.purifier;
 
-import org.apache.logging.log4j.Level;
-
-import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine;
+import jaminv.advancedmachines.objects.blocks.machine.GuiMachine;
 import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
-import jaminv.advancedmachines.util.Config;
-import jaminv.advancedmachines.util.recipe.IRecipeManager;
-import jaminv.advancedmachines.util.recipe.RecipeInput;
 import jaminv.advancedmachines.util.recipe.machine.PurifierManager;
-import jaminv.advancedmachines.util.recipe.machine.PurifierManager.PurifierRecipe;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraft.inventory.IInventory;
 
 public class TileEntityMachinePurifier extends TileEntityMachineBase {
 
@@ -28,19 +19,19 @@ public class TileEntityMachinePurifier extends TileEntityMachineBase {
 	@Override
 	public int getSecondaryCount() { return 9; }
 	
+	private final DialogMachinePurifier dialog = new DialogMachinePurifier();
+	
 	public TileEntityMachinePurifier() {
-		super(PurifierManager.getRecipeManager());
+		super(PurifierManager.getRecipeManager());		
 	}
 
 	@Override
-	public Class<? extends Container> getContainerClass() {
-		return ContainerMachinePurifier.class;
+	public ContainerMachine createContainer(IInventory inventory) {
+		return new ContainerMachine(inventory, this, PurifierManager.getRecipeManager(), dialog);
 	}
-
+	
 	@Override
-	public Class<? extends GuiContainer> getGuiClass() {
-		return GuiMachinePurifier.class;
+	public GuiContainer createGui(IInventory inventory) {
+		return new GuiMachine(this, createContainer(inventory), dialog);
 	}
-
-
 }

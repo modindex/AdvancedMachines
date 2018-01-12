@@ -19,6 +19,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -33,6 +35,11 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 	public int getInventorySize() { return getInputCount() + getOutputCount() + getSecondaryCount(); }
 	
 	protected ItemStackHandler inventory;
+	public MachineEnergyStorage energy;
+	
+	public float getEnergyPercent() { return (float)energy.getEnergyStored() / energy.getMaxEnergyStored(); }
+	public int getEnergyStored() { return energy.getEnergyStored(); }
+	public int getMaxEnergyStored() { return energy.getMaxEnergyStored(); }
 			
 	protected class ItemStackHandlerBase extends ItemStackHandler {
 		public ItemStackHandlerBase(int size) {
@@ -58,25 +65,24 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 	public TileEntityMachineBase(IRecipeManager recipeManager) {
 		super();
 		this.inventory = new ItemStackHandlerBase(getInventorySize());
+		this.energy = new MachineEnergyStorage(50000, 1);
 		this.recipeManager = recipeManager;
+		this.prevInput = new RecipeInput[getInputCount()];
 	}
 	
 	private int tick;
-	private RecipeInput[] prevInput = new RecipeInput[getInputCount()];
+	private RecipeInput[] prevInput;
 		
 	@Override
 	public void update() {
 		tick++;
 		if (tick < Config.tickUpdate) { return; }
 		
-		Main.logger.log(Level.DEBUG, "tick");
-		
 		RecipeInput[] input = getInput();
 		checkInventoryChanges(input);
 		
 		tick = 0;
 		if (canProcess(input)) {
-			Main.logger.log(Level.DEBUG, "canProcess");
 			process(input);
 		} else {
 			haltProcess();
@@ -115,18 +121,24 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 		if (processTimeRemaining <= 0 && !world.isRemote) {
 			RecipeBase recipe = recipeManager.getRecipe(input);
 			
-			if (!removeInput(recipe.getInput(0))) {
-				// Some kind of strange error
-				Main.logger.log(Level.ERROR,  "error.machine.process.cannot_input");
-				haltProcess();
-				return;
+			for (int i = 0; i < recipe.getInputCount(); i++) {
+				if (recipe.getInput(i).isEmpty()) { continue; }
+				if (!removeInput(recipe.getInput(i))) {
+					// Some kind of strange error
+					Main.logger.log(Level.ERROR,  "error.machine.process.cannot_input");
+					haltProcess();
+					return;
+				}
 			}
 			
-			if (!outputItem(recipe.getOutput(0), false)) {
-				// Some kind of strange error
-				Main.logger.log(Level.ERROR, "error.machine.process.cannot_output");
-				haltProcess();
-				return;
+			for (int i = 0; i < recipe.getOutputCount(); i++) {
+				if (recipe.getOutput(i).isEmpty()) { continue; }
+				if (!outputItem(recipe.getOutput(i), false)) {
+					// Some kind of strange error
+					Main.logger.log(Level.ERROR, "error.machine.process.cannot_output");
+					haltProcess();
+					return;
+				}
 			}
 			
 			outputSecondary(recipe.getSecondary());
@@ -143,17 +155,21 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		if(compound.hasKey("items")) {
+		if (compound.hasKey("items")) {
 			inventory.deserializeNBT((NBTTagCompound)compound.getTag("items"));
-			processTimeRemaining = compound.getInteger("processTimeRemaining");
-			totalProcessTime = compound.getInteger("totalProcessTime");
 		}
+		if (compound.hasKey("energy")) {
+			energy.readFromNBT(compound);
+		}
+		processTimeRemaining = compound.getInteger("processTimeRemaining");
+		totalProcessTime = compound.getInteger("totalProcessTime");
 	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		compound.setTag("items",  inventory.serializeNBT());
+		energy.writeToNBT(compound);
 		compound.setInteger("processTimeRemaining", processTimeRemaining);
 		compound.setInteger("totalProcessTime", totalProcessTime);
 		
@@ -165,6 +181,9 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			return true;
 		}
+		if (capability == CapabilityEnergy.ENERGY) {
+			return true;
+		}
 		return super.hasCapability(capability, facing);
 	}
 	
@@ -172,6 +191,9 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
+		}
+		if (capability == CapabilityEnergy.ENERGY) {
+			return CapabilityEnergy.ENERGY.cast(this.energy);
 		}
 		return super.getCapability(capability, facing);
 	}	
