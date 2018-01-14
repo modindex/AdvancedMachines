@@ -43,4 +43,5 @@ tile.machine.name=Titanium Machine Frame
 tile.purifier.name=Purification Chamber
 
 dialog.common.inventory=Inventory
+dialog.common.energy=%,d / %,d RF
 dialog.alloy.title=Alloy Forge

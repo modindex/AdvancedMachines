@@ -17,7 +17,7 @@ public class TileEntityMachineAlloy extends TileEntityMachineBase {
 	@Override
 	public int getSecondaryCount() { return 9; }
 	
-	private final DialogMachineAlloy dialog = new DialogMachineAlloy();
+	private final DialogMachineAlloy dialog = new DialogMachineAlloy(this);
 	
 	public TileEntityMachineAlloy() {
 		super(AlloyManager.getRecipeManager());		

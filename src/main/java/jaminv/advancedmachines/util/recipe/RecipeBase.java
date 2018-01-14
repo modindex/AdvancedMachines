@@ -71,6 +71,10 @@ public abstract class RecipeBase {
 		return secondary;
 	}
 	
+	public int getEnergy() {
+		return energy;
+	}
+	
 	/* Helpful utility methods */
 	public RecipeBase addInput(int index, String oredictName, int count) { return this.addInput(index, new RecipeInput(oredictName, count)); }
 	public RecipeBase addInput(int index, String oredictName) { return this.addInput(index, new RecipeInput(oredictName)); }

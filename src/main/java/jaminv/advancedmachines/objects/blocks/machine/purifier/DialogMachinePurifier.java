@@ -7,10 +7,12 @@ import jaminv.advancedmachines.objects.blocks.machine.DialogMachineBase.Inventor
 
 public class DialogMachinePurifier extends DialogMachineBase {
 	
-	public DialogMachinePurifier() {
-		super("textures/gui/purifier.png", 24, 0, 176, 195);
+	public DialogMachinePurifier(TileEntityMachinePurifier te) {
+		super("textures/gui/purifier.png", 24, 0, 176, 195, te);
 		setProcessTexture(80, 37, 16, 16, 200, 50);
-		setEnergyTexture(9, 20, 14, 50, 200, 0);		
+		setEnergyTexture(9, 20, 14, 50, 200, 0);	
+		
+		
 	}
 	
 	@Override

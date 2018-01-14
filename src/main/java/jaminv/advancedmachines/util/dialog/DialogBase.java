@@ -1,5 +1,6 @@
 package jaminv.advancedmachines.util.dialog;
 
+import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
 import jaminv.advancedmachines.util.Reference;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -63,9 +64,23 @@ public class DialogBase {
 		}
 	}
 	
+	public class Tooltip {
+		protected final int xpos, ypos, width, height;
+		protected final String text;
+		
+		public Tooltip(int xpos, int ypos, int width, int height, String text) {
+			this.xpos = xpos; this.ypos = ypos;
+			this.width = width; this.height = height;
+			this.text = text;
+		}
+		
+		public String getText() { return I18n.format(text); }
+	}
+	
 	private final ResourceLocation background;
 	private final Texture dialog;
-	private NonNullList<Text> text = NonNullList.<Text>create(); 
+	private NonNullList<Text> text = NonNullList.<Text>create();
+	private NonNullList<Tooltip> tooltip = NonNullList.<Tooltip>create();
 	
 	public DialogBase(String background, int xpos, int ypos, int width, int height) {
 		this.background = new ResourceLocation(Reference.MODID, background);
@@ -78,6 +93,14 @@ public class DialogBase {
 	
 	protected void addText(int xpos, int ypos, String text, int color) {
 		this.text.add(new Text(xpos, ypos, text, color));
+	}
+	
+	protected void addTooltip(int xpos, int ypos, int width, int height, String text) {
+		this.tooltip.add(new Tooltip(xpos, ypos, width, height, text));
+	}
+	
+	protected void addTooltip(Tooltip tip) {
+		this.tooltip.add(tip);
 	}
 	
 	public ResourceLocation getBackground() {
@@ -99,6 +122,16 @@ public class DialogBase {
 	public void drawBackground(GuiScreen gui, int guiLeft, int guiTop) {
 		gui.drawTexturedModalRect(guiLeft, guiTop, dialog.getXPos(), dialog.getYPos(), dialog.getWidth(), dialog.getHeight());
 	}
+	
+	public void drawForeground(GuiScreen gui, int mouseX, int mouseY, int guiLeft, int guiTop) {
+		for (Tooltip tip : tooltip) {
+			if (mouseX >= tip.xpos + guiLeft && mouseX <= tip.xpos + tip.width + guiLeft
+				&& mouseY >= tip.ypos + guiTop && mouseY <= tip.ypos + tip.height + guiTop
+			) {
+				gui.drawHoveringText(tip.getText(), mouseX - guiLeft, mouseY - guiTop);
+			}
+		}
+	}	
 	
 	public void drawText(FontRenderer render, int guiLeft, int guiTop) {
 		for (Text t : text) {

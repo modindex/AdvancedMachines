@@ -65,7 +65,7 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 	public TileEntityMachineBase(IRecipeManager recipeManager) {
 		super();
 		this.inventory = new ItemStackHandlerBase(getInventorySize());
-		this.energy = new MachineEnergyStorage(50000, 1);
+		this.energy = new MachineEnergyStorage(50000, 200);
 		this.recipeManager = recipeManager;
 		this.prevInput = new RecipeInput[getInputCount()];
 	}
@@ -98,6 +98,7 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 	}
 	
 	private RecipeInput lastInput = new RecipeInput();
+	private RecipeBase lastRecipe;
 	
 	public boolean isProcessing() {
 		return processTimeRemaining > 0;
@@ -106,20 +107,29 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 	public boolean canProcess(RecipeInput[] input) {
 		RecipeBase recipe = recipeManager.getRecipeMatch(input);
 		if (recipe == null) { return false; }
-
+		
 		return outputItem(recipe.getOutput(0), true);
 	}
 
 	protected void process(RecipeInput[] input) {
+		if (world.isRemote) { return; }
+		
 		if (!isProcessing()) {
 			processTimeRemaining = Config.processTimeBasic;
 			totalProcessTime = Config.processTimeBasic;
+			lastRecipe = recipeManager.getRecipe(input);
 			return;
+		} else if(lastRecipe == null) {
+			lastRecipe = recipeManager.getRecipe(input);
 		}
 
+		if (energy.getEnergyStored() < (lastRecipe.getEnergy() / totalProcessTime) * Config.tickUpdate) { return; }
+		
 		processTimeRemaining -= Config.tickUpdate;
-		if (processTimeRemaining <= 0 && !world.isRemote) {
-			RecipeBase recipe = recipeManager.getRecipe(input);
+		energy.useEnergy((lastRecipe.getEnergy() / totalProcessTime) * Config.tickUpdate);
+		
+		if (processTimeRemaining <= 0) {
+			RecipeBase recipe = lastRecipe;
 			
 			for (int i = 0; i < recipe.getInputCount(); i++) {
 				if (recipe.getInput(i).isEmpty()) { continue; }
@@ -150,6 +160,30 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 	
 	protected void haltProcess() {
 		processTimeRemaining = -1;
+	}
+	
+	public int getFieldCount() { return 3; }
+	public int getField(int id) {
+		switch(id) {
+		case 0:
+			return processTimeRemaining;
+		case 1:
+			return totalProcessTime;
+		case 2:
+			return energy.getEnergyStored();
+		}
+		return 0;
+	}
+	
+	public void setField(int id, int value) {
+		switch(id) {
+		case 0:
+			processTimeRemaining = value; return;
+		case 1:
+			totalProcessTime = value; return;
+		case 2:
+			energy.setEnergy(value); return;
+		}
 	}
 	
 	@Override

@@ -19,7 +19,7 @@ public class TileEntityMachinePurifier extends TileEntityMachineBase {
 	@Override
 	public int getSecondaryCount() { return 9; }
 	
-	private final DialogMachinePurifier dialog = new DialogMachinePurifier();
+	private final DialogMachinePurifier dialog = new DialogMachinePurifier(this);
 	
 	public TileEntityMachinePurifier() {
 		super(PurifierManager.getRecipeManager());		

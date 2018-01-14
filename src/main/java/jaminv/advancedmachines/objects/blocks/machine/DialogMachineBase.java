@@ -2,12 +2,18 @@ package jaminv.advancedmachines.objects.blocks.machine;
 
 import jaminv.advancedmachines.util.dialog.DialogBase;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
 
 public abstract class DialogMachineBase extends DialogBase {
 	
-	public DialogMachineBase(String background, int xpos, int ypos, int width, int height) {
+	private final TileEntityMachineBase te;
+	
+	public DialogMachineBase(String background, int xpos, int ypos, int width, int height, TileEntityMachineBase te) {
 		super(background, xpos, ypos, width, height);
+		this.te = te;
 	}
+	
+	protected TileEntityMachineBase getTileEntity() { return te; }
 	
 	final protected int SLOT_X_SPACING = 18;
 	final protected int SLOT_Y_SPACING = 18;
@@ -86,12 +92,27 @@ public abstract class DialogMachineBase extends DialogBase {
 			int height = (int)(percent * energy.getHeight());
 			gui.drawTexturedModalRect(
 				guiLeft + energy.getXPos(),
-				guiTop + energy.getYPos(),
+				guiTop + energy.getYPos() + energy.getHeight() - height,
 				energy.getU(),
-				energy.getV(),
+				energy.getV() + energy.getHeight() - height,
 				energy.getWidth(),
 				height
 			);
 		}
-	}	
+	}
+	
+	public class TooltipEnergy extends Tooltip {
+		
+		protected final TileEntityMachineBase te;
+
+		public TooltipEnergy(int xpos, int ypos, int width, int height, TileEntityMachineBase te) {
+			super(xpos, ypos, width, height, "");
+			this.te = te;
+		}
+		
+		@Override
+		public String getText() {
+			return I18n.format("dialog.common.energy", te.getEnergyStored(), te.getMaxEnergyStored());
+		}
+	}
 }

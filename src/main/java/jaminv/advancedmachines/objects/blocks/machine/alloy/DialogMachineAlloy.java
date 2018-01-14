@@ -7,13 +7,15 @@ import jaminv.advancedmachines.objects.blocks.machine.DialogMachineBase.Inventor
 
 public class DialogMachineAlloy extends DialogMachineBase {
 	
-	public DialogMachineAlloy() {
-		super("textures/gui/alloy.png", 24, 0, 176, 166);
+	public DialogMachineAlloy(TileEntityMachineAlloy te) {
+		super("textures/gui/alloy.png", 24, 0, 176, 166, te);
 		setProcessTexture(98, 37, 16, 16, 200, 50);
 		setEnergyTexture(9, 20, 14, 50, 200, 0);
 		
 		addText(8, 8, 160, "dialog.alloy.title", 0x404040);
 		addText(8, 73, "dialog.common.inventory", 0x404040);
+		
+		addTooltip(new TooltipEnergy(9, 20, 14, 50, this.getTileEntity()));
 	}
 	
 	@Override
