@@ -17,7 +17,7 @@ public abstract class DialogMachineBase extends DialogBase {
 	final protected int INVENTORY_ROWS = 3;
 	final protected int INVENTORY_COLS = 9;	
 	final protected int HOTBAR_ROWS = 1;
-	final protected int HOTBAR_COLS = 9;	
+	final protected int HOTBAR_COLS = 9;
 	
 	public class ContainerLayout {
 		protected final int xpos, ypos, xspacing, yspacing, rows, cols;
@@ -38,6 +38,10 @@ public abstract class DialogMachineBase extends DialogBase {
 		public int getYSpacing() { return yspacing; }
 		public int getRows() { return rows; }
 		public int getCols() { return cols; }
+		
+		public Position getPosition(int index) {
+			return new Position(xpos + (index % cols) * xspacing, ypos + (index / cols) * yspacing);
+		}
 	}
 	public class InventoryLayout extends ContainerLayout {
 		public InventoryLayout(int xpos, int ypos) {

@@ -27,7 +27,7 @@ public class RegistryHandler {
 		event.getRegistry().registerAll(BlockInit.BLOCKS.toArray(new Block[0]));
 		
 		for (Block block : BlockInit.BLOCKS) {
-			if (block instanceof ITileEntityProvider) {
+			if (block instanceof IHasTileEntity) {
 				GameRegistry.registerTileEntity(((IHasTileEntity)block).getTileEntityClass(), block.getUnlocalizedName());
 			}
 		}

@@ -40,6 +40,6 @@ public class TileEntityMachinePurifier extends TileEntityMachineBase {
 	
 	@Override
 	public GuiContainer createGui(IInventory inventory) {
-		return new GuiMachine(this, createContainer(inventory), dialog);
+		return new GuiMachinePurifier(this, createContainer(inventory), dialog);
 	}
 }

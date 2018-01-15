@@ -26,10 +26,11 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 
 public class PurifierRecipeCategory extends RecipeCategoryBase<PurifierRecipeCategory.PurifierRecipe> {
-
-	protected static DialogMachinePurifier dialog = new DialogMachinePurifier();
 	
+	protected static DialogMachinePurifier sDialog = new DialogMachinePurifier();
+
 	public PurifierRecipeCategory(IGuiHelper guiHelper) {
+		super(sDialog); 
 		DialogBase.Texture texture = dialog.getJeiTexture();
 		this.background = guiHelper.createDrawable(dialog.getJeiBackground(),
 			texture.getXPos(), texture.getYPos(), texture.getWidth(), texture.getHeight());
@@ -61,7 +62,7 @@ public class PurifierRecipeCategory extends RecipeCategoryBase<PurifierRecipeCat
 		
 		registry.addRecipes(getRecipes(guiHelper), RecipeUids.PURIFIER);
 		
-		DialogBase.Target jeiTarget = dialog.getJeiTarget();
+		DialogBase.Target jeiTarget = sDialog.getJeiTarget();
 		registry.addRecipeClickArea(TileEntityMachinePurifier.GuiMachinePurifier.class,
 			jeiTarget.getXPos(), jeiTarget.getYPos(),
 			jeiTarget.getWidth(), jeiTarget.getHeight(),
@@ -75,65 +76,11 @@ public class PurifierRecipeCategory extends RecipeCategoryBase<PurifierRecipeCat
 		List<PurifierRecipe> recipes = new ArrayList<>();
 		
 		for (PurifierManager.PurifierRecipe recipe : PurifierManager.getRecipeList()) {
-			recipes.add(new PurifierRecipe(recipe, dialog));
+			recipes.add(new PurifierRecipe(recipe, sDialog));
 		}
 		
 		return recipes;
 	}
 
-	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, PurifierRecipe recipe, IIngredients ingredients) {
 
-		List<List<ItemStack>> inputs = ingredients.getInputs(ItemStack.class);
-		List<List<ItemStack>> outputs = ingredients.getOutputs(ItemStack.class);
-		
-		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
-
-		this.displayRecipeSection(guiItemStacks, recipe, dialog.getJeiInputLayout(), inputs, Section.INPUT);
-		this.displayRecipeSection(guiItemStacks, recipe, dialog.getJeiOutputLayout(), outputs, Section.OUTPUT);
-		this.displayRecipeSection(guiItemStacks, recipe, dialog.getJeiSecondaryLayout(), outputs, Section.SECONDARY);
-		
-		int offset = recipe.getInputCount() + recipe.getOutputCount();
-		guiItemStacks.addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
-			if (slotIndex >= offset) {
-				tooltip.add(I18n.format("dialog.common.chance", recipe.getSecondaryChance(slotIndex - offset)));
-			}
-		});
-	}
-	
-	private enum Section { INPUT, OUTPUT, SECONDARY };	
-	protected void displayRecipeSection(IGuiItemStackGroup guiItemStacks, PurifierRecipe recipe, ContainerLayout layout, List<List<ItemStack>> items, Section section) {
-		int x = layout.getXPos();
-		int y = layout.getYPos();
-		int count = 0;
-		
-		int offset = 0, itemOffset = 0, itemCount = 0;
-		boolean input = false; 
-		
-		switch (section) {
-			case INPUT: 
-				offset = 0; itemOffset = 0; input = true; itemCount = recipe.getInputCount(); break;
-			case OUTPUT: 
-				offset = recipe.getInputCount(); itemOffset = 0; input = false; 
-				itemCount = recipe.getOutputCount(); break;
-			case SECONDARY: 
-				offset = recipe.getInputCount() + recipe.getOutputCount(); 
-				itemOffset = recipe.getOutputCount();
-				itemCount = recipe.getSecondaryCount();
-				input = false;
-		}
-		
-		for (int i = 0; i < itemCount; i++) {
-			guiItemStacks.init(i + offset, input, x, y);
-			guiItemStacks.set(i + offset, items.get(i + itemOffset));
-			
-			x += layout.getXSpacing();
-			count++;
-			if (count >= layout.getCols()) {
-				x = layout.getXPos();
-				y += layout.getYSpacing();
-				count = 0;
-			}
-		}
-	}
 }

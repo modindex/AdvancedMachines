@@ -1,33 +1,49 @@
 package jaminv.advancedmachines.objects.items.material;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.apache.commons.lang3.text.WordUtils;
+import com.google.common.base.Optional;
 
-import jaminv.advancedmachines.util.Config;
-import jaminv.advancedmachines.util.handlers.EnumHandler.EnumMaterial;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.util.IStringSerializable;
+import scala.actors.threadpool.Arrays;
 
-public abstract class MaterialBase implements IStringSerializable {
+public abstract class MaterialBase implements Comparable<MaterialBase>, IStringSerializable {
 	
 	public static enum MaterialType {
-		MOD, PURE, DUST
+		MOD, PURE, DUST, MACHINE
 	}
 	
 	public static class MaterialRegistry {
 		private static Map<MaterialType, SortedMap<Integer, MaterialBase>> lookup = new HashMap<MaterialType, SortedMap<Integer, MaterialBase>>();
+		private static Map<MaterialType, Map<String, MaterialBase>> nameLookup = new HashMap<MaterialType, Map<String, MaterialBase>>();
 		
-		private static void registerMaterial(MaterialType type, int meta, MaterialBase mat) {
+		private static void registerMaterial(MaterialType type, String name, int meta, MaterialBase mat) {
 			SortedMap<Integer, MaterialBase> map = lookup.get(type);
 			if (map == null) {
 				map = new TreeMap<Integer, MaterialBase>();
 				lookup.put(type, map);
 			}
-			
 			map.put(meta, mat);
+
+			Map<String, MaterialBase> map2 = nameLookup.get(type);
+			if (map2 == null) {
+				map2 = new HashMap<String, MaterialBase>();
+				nameLookup.put(type, map2);
+			}
+			map2.put(name, mat);					
+		}
+		
+		public static MaterialBase lookupMeta(MaterialType type, int meta) {
+			return lookup.get(type).get(meta);
+		}
+		public static MaterialBase lookupName(MaterialType type, String name) {
+			return nameLookup.get(type).get(name);
 		}
 	}
 	
@@ -49,6 +65,7 @@ public abstract class MaterialBase implements IStringSerializable {
 		return map.get(meta);
 	}
 
+	protected final MaterialType type;
 	private final int meta;
 	private final String name, unlocalizedName;
 	
@@ -57,11 +74,12 @@ public abstract class MaterialBase implements IStringSerializable {
 	}
 	
 	protected MaterialBase(MaterialType type, int meta, String name, String unlocalizedName) {
+		this.type = type;
 		this.meta = meta;
 		this.name = name;
 		this.unlocalizedName = unlocalizedName;
 		
-		MaterialRegistry.registerMaterial(type, meta, this);
+		MaterialRegistry.registerMaterial(type, name, meta, this);
 	}
 	
 	public String getName() {
@@ -82,4 +100,9 @@ public abstract class MaterialBase implements IStringSerializable {
 	}
 	
 	public abstract boolean doInclude(String oredictType);
+	
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof MaterialBase && ((MaterialBase)obj).type == this.type && ((MaterialBase)obj).meta == this.meta;
+	}	
 }

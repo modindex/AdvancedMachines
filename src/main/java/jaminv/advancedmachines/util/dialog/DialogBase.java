@@ -10,6 +10,15 @@ import net.minecraft.util.ResourceLocation;
 
 public class DialogBase {
 	
+	public static class Position {
+		protected final int xpos, ypos;
+		public Position(int xpos, int ypos) {
+			this.xpos = xpos; this.ypos = ypos;
+		}
+		public int getXPos() { return xpos; }
+		public int getYPos() { return ypos; }
+	}
+	
 	public static class Texture {
 		protected final int xpos, ypos, width, height, u, v;
 		

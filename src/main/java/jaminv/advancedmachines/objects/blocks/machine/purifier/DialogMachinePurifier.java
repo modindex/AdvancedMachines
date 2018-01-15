@@ -42,6 +42,6 @@ public class DialogMachinePurifier extends DialogMachineBase {
 	
 	@Override
 	public Target getJeiTarget() {
-		return new DialogBase.Target(80, 37, 16, 16);
+		return new DialogBase.Target(74, 23, 24, 17);
 	}
 }

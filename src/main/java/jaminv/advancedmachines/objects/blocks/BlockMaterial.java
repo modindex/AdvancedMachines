@@ -6,6 +6,8 @@ import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.init.BlockInit;
 import jaminv.advancedmachines.init.ItemInit;
 import jaminv.advancedmachines.objects.blocks.item.ItemBlockVariants;
+import jaminv.advancedmachines.objects.items.material.MaterialBase;
+import jaminv.advancedmachines.objects.items.material.PropertyMaterial;
 import jaminv.advancedmachines.util.Config;
 import jaminv.advancedmachines.util.handlers.EnumHandler;
 import jaminv.advancedmachines.util.interfaces.IHasModel;
@@ -14,7 +16,6 @@ import jaminv.advancedmachines.util.interfaces.IMetaName;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -22,7 +23,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.StringUtils;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
@@ -30,17 +30,23 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class BlockMaterial extends Block implements IHasModel, IMetaName, IHasOreDictionary {
 	
-	public static final PropertyEnum<EnumHandler.EnumMaterial> VARIANT = PropertyEnum.<EnumHandler.EnumMaterial>create("variant", EnumHandler.EnumMaterial.class);
+	//public static final PropertyEnum<EnumHandler.EnumMaterial> VARIANT = PropertyEnum.<EnumHandler.EnumMaterial>create("variant", EnumHandler.EnumMaterial.class);
+	public final PropertyMaterial VARIANT;
+	protected final MaterialBase.MaterialType type;
 	
 	private String name;
 	private String oredictprefix;
 	
-	public BlockMaterial(String name, Material material, float hardness) {
+	public BlockMaterial(String name, MaterialBase.MaterialType type, Material material, float hardness) {
 		super(material);
+		this.type = type;
+		VARIANT = PropertyMaterial.create(type);
+
 		setUnlocalizedName(name);
 		setRegistryName(name);
 		setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
-		setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, EnumHandler.EnumMaterial.TITANIUM));
+		
+		setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, MaterialBase.MaterialRegistry.lookupMeta(type, 0)));
 		setHardness(hardness);
 		
 		this.name = name;
@@ -50,26 +56,26 @@ public class BlockMaterial extends Block implements IHasModel, IMetaName, IHasOr
 		ItemInit.ITEMS.add(new ItemBlockVariants(this).setRegistryName(this.getRegistryName()));
 	}
 	
-	public BlockMaterial(String name, String oredictprefix, Material material, float hardness) {
-		this(name, material, hardness);
+	public BlockMaterial(String name, MaterialBase.MaterialType type, String oredictprefix, Material material, float hardness) {
+		this(name, type, material, hardness);
 		this.oredictprefix = oredictprefix;
 	}
 	
 	@Override
 	public int damageDropped(IBlockState state) {
-		return ((EnumHandler.EnumMaterial)state.getValue(VARIANT)).getMeta();
+		return ((MaterialBase)state.getValue(VARIANT)).getMeta();
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return ((EnumHandler.EnumMaterial)state.getValue(VARIANT)).getMeta();
+		return ((MaterialBase)state.getValue(VARIANT)).getMeta();
 	}
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(VARIANT, EnumHandler.EnumMaterial.byMetadata(meta));
+		return this.getDefaultState().withProperty(VARIANT, MaterialBase.MaterialRegistry.lookupMeta(type, meta));
 	}
-	
+	 
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
 			EntityPlayer player) {

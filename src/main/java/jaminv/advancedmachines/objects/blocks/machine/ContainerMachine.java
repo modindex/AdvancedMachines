@@ -106,13 +106,11 @@ public class ContainerMachine extends Container {
 			}
 		}
 
-		slotIndex = 0;
 		for (int r = 0; r < hotbar.getRows(); r++) {
 			for (int c = 0; c < hotbar.getCols(); c++) {
 				int x = hotbar.xpos + c * hotbar.xspacing;
 				int y = hotbar.ypos + r * hotbar.yspacing;
-				this.addSlotToContainer(new Slot(playerInventory, r, x, y));
-				slotIndex++;
+				this.addSlotToContainer(new Slot(playerInventory, c, x, y));
 			}
 		}
 	}
