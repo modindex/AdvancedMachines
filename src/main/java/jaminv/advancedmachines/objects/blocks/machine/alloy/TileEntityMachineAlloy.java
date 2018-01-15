@@ -1,6 +1,7 @@
 package jaminv.advancedmachines.objects.blocks.machine.alloy;
 
 import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine;
+import jaminv.advancedmachines.objects.blocks.machine.DialogMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.GuiMachine;
 import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
 import jaminv.advancedmachines.util.recipe.machine.AlloyManager;
@@ -19,6 +20,12 @@ public class TileEntityMachineAlloy extends TileEntityMachineBase {
 	
 	private final DialogMachineAlloy dialog = new DialogMachineAlloy(this);
 	
+	public class GuiMachineAlloy extends GuiMachine {
+		public GuiMachineAlloy(TileEntityMachineBase tileEntity, ContainerMachine container, DialogMachineBase dialog) {
+			super(tileEntity, container, dialog);
+		}
+	}
+	
 	public TileEntityMachineAlloy() {
 		super(AlloyManager.getRecipeManager());		
 	}
@@ -30,6 +37,6 @@ public class TileEntityMachineAlloy extends TileEntityMachineBase {
 	
 	@Override
 	public GuiContainer createGui(IInventory inventory) {
-		return new GuiMachine(this, createContainer(inventory), dialog);
+		return new GuiMachineAlloy(this, createContainer(inventory), dialog);
 	}
 }

@@ -1,6 +1,8 @@
 package jaminv.advancedmachines.util.recipe;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -136,5 +138,23 @@ public class RecipeInput {
 		} else {
 			return ret + toItemStack() + ")";
 		}
+	}
+	
+	public List<ItemStack> getItems() {
+		List<ItemStack> ret = new ArrayList<ItemStack>();
+		
+		if (this.isEmpty()) { return ret; }
+		if (oreId == -1) {
+			ret.add(this.toItemStack());
+			return ret;
+		}
+		
+		for (ItemStack ore : OreDictionary.getOres(OreDictionary.getOreName(this.oreId), false)) {
+			ItemStack copy = ore.copy();
+			copy.setCount(this.count);
+			ret.add(copy);
+		}
+		
+		return ret;
 	}
 }

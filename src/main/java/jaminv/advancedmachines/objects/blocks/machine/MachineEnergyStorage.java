@@ -1,10 +1,10 @@
 package jaminv.advancedmachines.objects.blocks.machine;
 
-import net.minecraft.item.ItemStack;
+import mezz.jei.api.JEIPlugin;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.energy.EnergyStorage;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MachineEnergyStorage extends EnergyStorage {
 

@@ -44,4 +44,7 @@ tile.purifier.name=Purification Chamber
 
 dialog.common.inventory=Inventory
 dialog.common.energy=%,d / %,d RF
+dialog.common.chance=Chance: %d%%
+dialog.common.percent=%d%%
+
 dialog.alloy.title=Alloy Forge

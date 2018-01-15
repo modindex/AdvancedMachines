@@ -1,10 +1,8 @@
 package jaminv.advancedmachines.util.recipe.machine;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import jaminv.advancedmachines.util.recipe.RecipeBase;
-import jaminv.advancedmachines.util.recipe.RecipeInput;
 import jaminv.advancedmachines.util.recipe.RecipeManagerSimple;
 import jaminv.advancedmachines.util.recipe.RecipeOutput;
 
@@ -31,6 +29,7 @@ public class PurifierManager {
 	private static PurifierRecipeManager manager = new PurifierRecipeManager();
 	
 	public static PurifierRecipeManager getRecipeManager() { return manager; }
+	public static List<PurifierRecipe> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {
 		manager.addRecipe((PurifierRecipe)new PurifierRecipe(30000)

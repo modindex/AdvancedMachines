@@ -3,17 +3,13 @@ package jaminv.advancedmachines.objects.blocks.machine;
 import jaminv.advancedmachines.util.dialog.DialogBase;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.ResourceLocation;
 
 public abstract class DialogMachineBase extends DialogBase {
 	
-	private final TileEntityMachineBase te;
-	
-	public DialogMachineBase(String background, int xpos, int ypos, int width, int height, TileEntityMachineBase te) {
+	public DialogMachineBase(String background, int xpos, int ypos, int width, int height) {
 		super(background, xpos, ypos, width, height);
-		this.te = te;
 	}
-	
-	protected TileEntityMachineBase getTileEntity() { return te; }
 	
 	final protected int SLOT_X_SPACING = 18;
 	final protected int SLOT_Y_SPACING = 18;
@@ -54,9 +50,9 @@ public abstract class DialogMachineBase extends DialogBase {
 		}
 	}
 	
-	protected abstract ContainerLayout getInputLayout();
-	protected abstract ContainerLayout getOutputLayout();
-	protected abstract ContainerLayout getSecondaryLayout();
+	public abstract ContainerLayout getInputLayout();
+	public abstract ContainerLayout getOutputLayout();
+	public abstract ContainerLayout getSecondaryLayout();
 	protected abstract ContainerLayout getInventoryLayout();
 	protected abstract ContainerLayout getHotbarLayout();	
 	
@@ -114,5 +110,33 @@ public abstract class DialogMachineBase extends DialogBase {
 		public String getText() {
 			return I18n.format("dialog.common.energy", te.getEnergyStored(), te.getMaxEnergyStored());
 		}
+	}
+	
+	public ResourceLocation getJeiBackground() { return this.getBackground(); }
+	public abstract Texture getJeiTexture();
+	public abstract Target getJeiTarget();
+	
+	protected ContainerLayout getJeiOffset(ContainerLayout texture) {
+		Texture dialog = this.getDialogTexture();
+		Texture jei = this.getJeiTexture();
+		
+		return new ContainerLayout(
+			texture.getXPos() + dialog.getXPos() - jei.getXPos() - 1,
+			texture.getYPos() + dialog.getYPos() - jei.getYPos() - 1,
+			texture.getXSpacing(), texture.getYSpacing(),
+			texture.getRows(), texture.getCols()
+		);		
+	}
+	
+	public ContainerLayout getJeiInputLayout() {
+		return getJeiOffset(this.getInputLayout());
+	}
+	
+	public ContainerLayout getJeiOutputLayout() {
+		return getJeiOffset(this.getOutputLayout());
+	}
+	
+	public ContainerLayout getJeiSecondaryLayout() {
+		return getJeiOffset(this.getSecondaryLayout());
 	}
 }

@@ -1,6 +1,7 @@
 package jaminv.advancedmachines.objects.blocks.machine.purifier;
 
 import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine;
+import jaminv.advancedmachines.objects.blocks.machine.DialogMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.GuiMachine;
 import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
 import jaminv.advancedmachines.util.recipe.machine.PurifierManager;
@@ -17,9 +18,16 @@ public class TileEntityMachinePurifier extends TileEntityMachineBase {
 	public int getOutputCount() { return 1;	}
 	
 	@Override
-	public int getSecondaryCount() { return 9; }
+	public int getSecondaryCount() { return 6; }
 	
-	private final DialogMachinePurifier dialog = new DialogMachinePurifier(this);
+	private final DialogMachinePurifier dialog = new DialogMachinePurifier();
+	
+	public static class GuiMachinePurifier extends GuiMachine {
+		public GuiMachinePurifier(TileEntityMachineBase tileEntity, ContainerMachine container,
+				DialogMachineBase dialog) {
+			super(tileEntity, container, dialog);
+		}
+	}
 	
 	public TileEntityMachinePurifier() {
 		super(PurifierManager.getRecipeManager());		

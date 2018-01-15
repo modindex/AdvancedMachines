@@ -1,13 +1,9 @@
 package jaminv.advancedmachines.util.recipe.machine;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import jaminv.advancedmachines.util.recipe.RecipeBase;
-import jaminv.advancedmachines.util.recipe.RecipeInput;
-import jaminv.advancedmachines.util.recipe.RecipeManagerSimple;
 import jaminv.advancedmachines.util.recipe.RecipeManagerThreeIngredient;
-import jaminv.advancedmachines.util.recipe.RecipeOutput;
 
 public class AlloyManager {
 	
@@ -32,6 +28,7 @@ public class AlloyManager {
 	private static AlloyRecipeManager manager = new AlloyRecipeManager();
 	
 	public static AlloyRecipeManager getRecipeManager() { return manager; }
+	public static List<AlloyRecipe> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {
 		manager.addRecipe((AlloyRecipe)new AlloyRecipe(4000)

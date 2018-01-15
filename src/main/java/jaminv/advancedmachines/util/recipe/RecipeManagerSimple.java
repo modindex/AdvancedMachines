@@ -1,13 +1,10 @@
 package jaminv.advancedmachines.util.recipe;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import org.apache.logging.log4j.Level;
-
-import jaminv.advancedmachines.Main;
-import jaminv.advancedmachines.util.recipe.machine.PurifierManager;
-import jaminv.advancedmachines.util.recipe.machine.PurifierManager.PurifierRecipe;
 import net.minecraft.item.ItemStack;
 
 public abstract class RecipeManagerSimple<T extends RecipeBase> implements IRecipeManager<T> {  
@@ -59,5 +56,15 @@ public abstract class RecipeManagerSimple<T extends RecipeBase> implements IReci
 	public boolean isItemValid(ItemStack stack, ItemStack[] other) {
 		if (stack.isEmpty()) { return false; }
 		return recipes.get(new RecipeInput(stack)) != null;
+	}
+	
+	@Override
+	public List<T> getRecipeList() {
+		ArrayList<T> ret = new ArrayList<T>();
+		
+		for (Map.Entry<RecipeInput, T> entry : this.recipes.entrySet()) {
+			ret.add(entry.getValue());
+		}
+		return ret;
 	}
 }

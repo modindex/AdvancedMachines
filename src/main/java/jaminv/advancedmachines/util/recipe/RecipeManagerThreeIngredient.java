@@ -1,7 +1,9 @@
 package jaminv.advancedmachines.util.recipe;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.logging.log4j.Level;
@@ -105,4 +107,18 @@ public abstract class RecipeManagerThreeIngredient<T extends RecipeBase> impleme
 		if (stack.isEmpty()) { return false; }
 		return validInput.get(new RecipeInput(stack)) != null;
 	}
+	
+	@Override
+	public List<T> getRecipeList() {
+		ArrayList<T> ret = new ArrayList<T>();
+		
+		for (Map.Entry<RecipeInput, HashMap<RecipeInput, HashMap<RecipeInput, T>>> level1 : this.recipes.entrySet()) {
+			for (Map.Entry<RecipeInput, HashMap<RecipeInput, T>> level2 : level1.getValue().entrySet()) {
+				for (Map.Entry<RecipeInput, T> entry : level2.getValue().entrySet()) {
+					ret.add(entry.getValue());
+				}
+			}
+		}
+		return ret;
+	}	
 }

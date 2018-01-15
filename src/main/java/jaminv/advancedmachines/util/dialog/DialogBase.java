@@ -10,7 +10,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class DialogBase {
 	
-	public class Texture {
+	public static class Texture {
 		protected final int xpos, ypos, width, height, u, v;
 		
 		public Texture(int xpos, int ypos, int width, int height, int u, int v) {
@@ -64,13 +64,25 @@ public class DialogBase {
 		}
 	}
 	
-	public class Tooltip {
+	public static class Target {
 		protected final int xpos, ypos, width, height;
+		
+		public Target(int xpos, int ypos, int width, int height) {
+			this.xpos = xpos; this.ypos = ypos;
+			this.width = width; this.height = height;
+		}
+		
+		public int getXPos() { return xpos; }
+		public int getYPos() { return ypos; }
+		public int getWidth() { return width; }
+		public int getHeight() { return height; }
+	}
+	
+	public class Tooltip extends Target {
 		protected final String text;
 		
 		public Tooltip(int xpos, int ypos, int width, int height, String text) {
-			this.xpos = xpos; this.ypos = ypos;
-			this.width = width; this.height = height;
+			super(xpos, ypos, width, height);
 			this.text = text;
 		}
 		

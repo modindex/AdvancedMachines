@@ -1,9 +1,7 @@
 package jaminv.advancedmachines.util.recipe;
 
-import org.apache.logging.log4j.Level;
+import java.util.List;
 
-import jaminv.advancedmachines.Main;
-import jaminv.advancedmachines.util.recipe.machine.PurifierManager.PurifierRecipe;
 import net.minecraft.item.ItemStack;
 
 public interface IRecipeManager<T extends RecipeBase> {
@@ -22,4 +20,6 @@ public interface IRecipeManager<T extends RecipeBase> {
 	public T getRecipeMatch(RecipeInput[] input);
 	
 	public boolean isItemValid(ItemStack stack, ItemStack[] other);
+	
+	public List<T> getRecipeList();
 }
