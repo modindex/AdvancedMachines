@@ -22,7 +22,7 @@ public class WorldGenCustomOres implements IWorldGenerator {
 	private WorldGenerator ore_titanium;
 
 	public WorldGenCustomOres() {
-		//ore_titanium = new WorldGenMinable(BlockInit.ORE.getDefaultState().withProperty(BlockInit.ORE.VARIANT, MaterialMod.TITANIUM), Config.titaniumVeinSize, BlockMatcher.forBlock(Blocks.STONE));	
+		ore_titanium = new WorldGenMinable(BlockInit.ORE.getDefaultState().withProperty(BlockInit.ORE.VARIANT, MaterialMod.TITANIUM), Config.titaniumVeinSize, BlockMatcher.forBlock(Blocks.STONE));	
 	}
 	
 	@Override

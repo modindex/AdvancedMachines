@@ -1,5 +1,6 @@
 package jaminv.advancedmachines.objects.items.material;
 
+import jaminv.advancedmachines.objects.items.material.PropertyMaterial;
 import jaminv.advancedmachines.util.Config;
 
 public class MaterialMod extends MaterialBaseOre {
@@ -27,5 +28,5 @@ public class MaterialMod extends MaterialBaseOre {
 	@Override
 	public boolean doInclude(String oredictType) {
 		return Config.doInclude(getName());
-	}		
+	}
 }

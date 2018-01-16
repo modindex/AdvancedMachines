@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "variant=basic": { "model": "advmach:machine_expansion_basic" }
+    }
+}

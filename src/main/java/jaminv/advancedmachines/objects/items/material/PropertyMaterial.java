@@ -2,13 +2,13 @@ package jaminv.advancedmachines.objects.items.material;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.common.base.Optional;
 
 import jaminv.advancedmachines.objects.items.material.MaterialBase.MaterialRegistry;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.util.IStringSerializable;
 import scala.actors.threadpool.Arrays;
 
 public class PropertyMaterial implements IProperty<MaterialBase> {
@@ -49,6 +49,5 @@ public class PropertyMaterial implements IProperty<MaterialBase> {
 	@Override
 	public String getName() {
 		return this.name;
-	}	
-
+	}
 }

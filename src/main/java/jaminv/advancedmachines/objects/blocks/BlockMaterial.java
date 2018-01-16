@@ -8,8 +8,6 @@ import jaminv.advancedmachines.init.ItemInit;
 import jaminv.advancedmachines.objects.blocks.item.ItemBlockVariants;
 import jaminv.advancedmachines.objects.items.material.MaterialBase;
 import jaminv.advancedmachines.objects.items.material.PropertyMaterial;
-import jaminv.advancedmachines.util.Config;
-import jaminv.advancedmachines.util.handlers.EnumHandler;
 import jaminv.advancedmachines.util.interfaces.IHasModel;
 import jaminv.advancedmachines.util.interfaces.IHasOreDictionary;
 import jaminv.advancedmachines.util.interfaces.IMetaName;
@@ -28,11 +26,12 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class BlockMaterial extends Block implements IHasModel, IMetaName, IHasOreDictionary {
+public abstract class BlockMaterial extends Block implements IHasModel, IMetaName, IHasOreDictionary {
 	
-	//public static final PropertyEnum<EnumHandler.EnumMaterial> VARIANT = PropertyEnum.<EnumHandler.EnumMaterial>create("variant", EnumHandler.EnumMaterial.class);
 	public PropertyMaterial VARIANT;
 	protected MaterialBase.MaterialType type;
+	
+	protected abstract PropertyMaterial getVariant();
 	
 	private String name;
 	private String oredictprefix;
@@ -83,8 +82,8 @@ public class BlockMaterial extends Block implements IHasModel, IMetaName, IHasOr
 	
 	@Override
 	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
-		for (EnumHandler.EnumMaterial variant : EnumHandler.EnumMaterial.values()) {
-			if (Config.doInclude(variant.getName())) {
+		for (MaterialBase variant : MaterialBase.values(type)) {
+			if (variant.doInclude(oredictprefix)) {
 				items.add(new ItemStack(this, 1, variant.getMeta()));
 			}
 		}
@@ -92,29 +91,30 @@ public class BlockMaterial extends Block implements IHasModel, IMetaName, IHasOr
 	
 	@Override
 	protected BlockStateContainer createBlockState() {
-		this.VARIANT = PropertyMaterial.create("variant", type);
+		VARIANT = this.getVariant();
 		return new BlockStateContainer(this, new IProperty[] {VARIANT});
 	}
 	
 	@Override
 	public String getSpecialName(ItemStack stack) {
-		return EnumHandler.EnumMaterial.values()[stack.getItemDamage()].getName();
+		return MaterialBase.byMetadata(type, stack.getItemDamage()).getName();
 	}
 	
 	@Override
 	public void registerModels() {
-		for (int i = 0; i < EnumHandler.EnumMaterial.values().length; i++) {
-			String name = EnumHandler.EnumMaterial.values()[i].getName();
-			if (Config.doInclude(name)) {
-				Main.proxy.registerVariantRenderer(Item.getItemFromBlock(this), i, this.name + "_" + name, "inventory");
+		for (MaterialBase variant : MaterialBase.values(type)) {
+			String name = variant.getName();
+			if (variant.doInclude(oredictprefix)) {
+				Main.proxy.registerVariantRenderer(Item.getItemFromBlock(this), variant.getMeta(), this.name + "_" + name, "inventory");
 			}
 		}
 	}
 
 	@Override
 	public void registerOreDictionary() {
-		for (EnumHandler.EnumMaterial variant : EnumHandler.EnumMaterial.values()) {
-			if (Config.doInclude(variant.getName())) {
+		if (oredictprefix == null) { return; }
+		for (MaterialBase variant : MaterialBase.values(type)) {
+			if (variant.doInclude(oredictprefix)) {
 				ItemStack item = new ItemStack(this, 1, variant.getMeta());
 				OreDictionary.registerOre(this.oredictprefix + WordUtils.capitalize(this.getSpecialName(item)), item);
 			}

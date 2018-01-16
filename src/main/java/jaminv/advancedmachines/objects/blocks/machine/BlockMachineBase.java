@@ -5,8 +5,11 @@ import jaminv.advancedmachines.objects.blocks.DirectionalBlock;
 import jaminv.advancedmachines.util.interfaces.IHasTileEntity;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -34,6 +37,5 @@ public abstract class BlockMachineBase extends DirectionalBlock implements ITile
 		}
 		playerIn.openGui(Main.instance, gui_id, worldIn, pos.getX(), pos.getY(), pos.getZ());
 		return true;		
-	}	
-
+	}
 }

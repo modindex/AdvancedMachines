@@ -40,7 +40,9 @@ tile.ore_copper.name=Copper Ore
 tile.ore_silver.name=Silver Ore
 
 tile.machine.name=Titanium Machine Frame
-tile.purifier.name=Purification Chamber
+tile.machine_purifier.name=Purification Chamber
+tile.machine_alloy.name=Alloy Furnace
+tile.machine_expansion_basic.name=Machine Expansion
 
 dialog.common.inventory=Inventory
 dialog.common.energy=%,d / %,d RF
