@@ -9,7 +9,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class MachineEnergyStorage extends EnergyStorage {
 
 	public MachineEnergyStorage(int capacity, int maxTransfer) {
-		super(capacity, maxTransfer);
+		super(capacity, maxTransfer); 
 	}
 	
 	public void setEnergy(int energy) {

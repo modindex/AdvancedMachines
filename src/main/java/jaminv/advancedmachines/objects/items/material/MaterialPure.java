@@ -4,7 +4,7 @@ import jaminv.advancedmachines.util.Config;
 
 public class MaterialPure extends MaterialBase {
 
-	private static MaterialType TYPE = MaterialType.PURE;
+	private static MaterialType TYPE = MaterialType.PURE; 
 	
 	public static final MaterialPure GOLD = new MaterialPure(0, "gold");
 	public static final MaterialPure COPPER = new MaterialPure(1, "copper");

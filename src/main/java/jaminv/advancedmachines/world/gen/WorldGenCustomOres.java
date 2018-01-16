@@ -4,6 +4,7 @@ import java.util.Random;
 
 import jaminv.advancedmachines.init.BlockInit;
 import jaminv.advancedmachines.objects.blocks.BlockMaterial;
+import jaminv.advancedmachines.objects.items.material.MaterialMod;
 import jaminv.advancedmachines.util.Config;
 import jaminv.advancedmachines.util.handlers.EnumHandler;
 import net.minecraft.block.state.pattern.BlockMatcher;
@@ -21,7 +22,7 @@ public class WorldGenCustomOres implements IWorldGenerator {
 	private WorldGenerator ore_titanium;
 
 	public WorldGenCustomOres() {
-		ore_titanium = new WorldGenMinable(BlockInit.ORE.getDefaultState().withProperty(BlockMaterial.VARIANT, EnumHandler.EnumMaterial.TITANIUM), Config.titaniumVeinSize, BlockMatcher.forBlock(Blocks.STONE));	
+		//ore_titanium = new WorldGenMinable(BlockInit.ORE.getDefaultState().withProperty(BlockInit.ORE.VARIANT, MaterialMod.TITANIUM), Config.titaniumVeinSize, BlockMatcher.forBlock(Blocks.STONE));	
 	}
 	
 	@Override

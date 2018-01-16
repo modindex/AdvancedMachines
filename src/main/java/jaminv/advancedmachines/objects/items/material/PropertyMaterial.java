@@ -13,14 +13,16 @@ import scala.actors.threadpool.Arrays;
 
 public class PropertyMaterial implements IProperty<MaterialBase> {
 	
-	MaterialBase.MaterialType type;
+	protected final String name;
+	protected final MaterialBase.MaterialType type;
 	
-	protected PropertyMaterial(MaterialBase.MaterialType type) {
+	protected PropertyMaterial(String name, MaterialBase.MaterialType type) {
+		this.name = name;
 		this.type = type;
 	}
 	
-    public static PropertyMaterial create(MaterialBase.MaterialType type) {
-        return new PropertyMaterial(type);
+    public static PropertyMaterial create(String name, MaterialBase.MaterialType type) {
+        return new PropertyMaterial(name, type);
     }	
 
 	@Override
@@ -46,7 +48,7 @@ public class PropertyMaterial implements IProperty<MaterialBase> {
 
 	@Override
 	public String getName() {
-		return null;
+		return this.name;
 	}	
 
 }

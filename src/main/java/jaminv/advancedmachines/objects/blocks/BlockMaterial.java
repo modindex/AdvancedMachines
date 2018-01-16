@@ -31,8 +31,8 @@ import net.minecraftforge.oredict.OreDictionary;
 public class BlockMaterial extends Block implements IHasModel, IMetaName, IHasOreDictionary {
 	
 	//public static final PropertyEnum<EnumHandler.EnumMaterial> VARIANT = PropertyEnum.<EnumHandler.EnumMaterial>create("variant", EnumHandler.EnumMaterial.class);
-	public final PropertyMaterial VARIANT;
-	protected final MaterialBase.MaterialType type;
+	public PropertyMaterial VARIANT;
+	protected MaterialBase.MaterialType type;
 	
 	private String name;
 	private String oredictprefix;
@@ -40,7 +40,6 @@ public class BlockMaterial extends Block implements IHasModel, IMetaName, IHasOr
 	public BlockMaterial(String name, MaterialBase.MaterialType type, Material material, float hardness) {
 		super(material);
 		this.type = type;
-		VARIANT = PropertyMaterial.create(type);
 
 		setUnlocalizedName(name);
 		setRegistryName(name);
@@ -93,6 +92,7 @@ public class BlockMaterial extends Block implements IHasModel, IMetaName, IHasOr
 	
 	@Override
 	protected BlockStateContainer createBlockState() {
+		this.VARIANT = PropertyMaterial.create("variant", type);
 		return new BlockStateContainer(this, new IProperty[] {VARIANT});
 	}
 	

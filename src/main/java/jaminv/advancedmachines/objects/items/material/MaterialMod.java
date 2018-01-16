@@ -12,7 +12,7 @@ public class MaterialMod extends MaterialBaseOre {
 	
 	public static MaterialBaseOre[] values() {
 		return MaterialBase.values(TYPE, new MaterialBaseOre[0]);
-	}
+	} 
 	
 	public static MaterialBaseOre byMetadata(int meta) {
 		return (MaterialBaseOre)(MaterialBase.byMetadata(TYPE, meta));

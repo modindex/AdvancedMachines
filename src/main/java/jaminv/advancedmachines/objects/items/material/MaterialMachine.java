@@ -13,7 +13,7 @@ public abstract class MaterialMachine extends MaterialBase {
 	};
 	public static final MaterialMachine ALLOY = new MaterialMachine(1, "copper") {
 		public TileEntityMachineBase createNewTileEntity() { return new TileEntityMachineAlloy(); }
-	};
+	}; 
 	
 	public static MaterialBase[] values() {
 		return MaterialBase.values(TYPE, new MaterialBase[0]);

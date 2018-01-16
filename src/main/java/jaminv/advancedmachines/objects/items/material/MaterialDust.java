@@ -24,7 +24,7 @@ public class MaterialDust extends MaterialBase {
 	
 	private MaterialDust(int meta, String name) {
 		super(TYPE, meta, name);
-	}
+	} 
 
 	@Override
 	public boolean doInclude(String oredictType) {
@@ -38,5 +38,5 @@ public class MaterialDust extends MaterialBase {
 		default:
 			return Config.doInclude(getName());
 		}
-	}		
+	}
 }

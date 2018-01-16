@@ -105,4 +105,12 @@ public abstract class MaterialBase implements Comparable<MaterialBase>, IStringS
 	public boolean equals(Object obj) {
 		return obj instanceof MaterialBase && ((MaterialBase)obj).type == this.type && ((MaterialBase)obj).meta == this.meta;
 	}	
+	
+	@Override
+	public int compareTo(MaterialBase o) {
+		if (this.type != o.type) {
+			return this.type.ordinal() - o.type.ordinal();
+		}
+		return this.meta - o.meta;
+	}
 }

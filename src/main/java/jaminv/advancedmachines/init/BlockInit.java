@@ -18,7 +18,7 @@ public class BlockInit {
 	public static final List<Block> BLOCKS = new ArrayList<Block>();
 	
 	public static final BlockMaterial STORAGE = new BlockMaterial("storage", MaterialBase.MaterialType.MOD, "block", Material.IRON, 5.0f);
-	public static final BlockMaterialOre ORE = new BlockMaterialOre("ore", MaterialBase.MaterialType.MOD, Material.ROCK, 3.0f);
+	//public static final BlockMaterialOre ORE = new BlockMaterialOre("ore", MaterialBase.MaterialType.MOD, Material.ROCK, 3.0f);
 	
 	public static final DirectionalBlock BLOCK_MACHINE = new DirectionalBlock("machine", Material.IRON);
 	
