@@ -4,12 +4,12 @@ import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine;
 import jaminv.advancedmachines.objects.blocks.machine.DialogMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.GuiMachine;
 import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
+import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineMultiblock;
 import jaminv.advancedmachines.util.recipe.machine.PurifierManager;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 
-public class TileEntityMachinePurifier extends TileEntityMachineBase {
+public class TileEntityMachinePurifier extends TileEntityMachineMultiblock {
 
 	@Override
 	public int getInputCount() { return 1; }

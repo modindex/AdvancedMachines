@@ -43,6 +43,9 @@ tile.machine.name=Titanium Machine Frame
 tile.machine_purifier.name=Purification Chamber
 tile.machine_alloy.name=Alloy Furnace
 tile.machine_expansion_basic.name=Machine Expansion
+tile.machine_expansion_compressed.name=Compressed Machine Expansion
+tile.machine_expansion_quad.name=Quadratic Machine Expansion
+tile.machine_expansion_impossible.name=Impossible Machine Expansion
 
 dialog.common.inventory=Inventory
 dialog.common.energy=%,d / %,d RF
@@ -50,3 +53,9 @@ dialog.common.chance=Chance: %d%%
 dialog.common.percent=%d%%
 
 dialog.alloy.title=Alloy Forge
+
+message.no_controller=No Machine Controller Found
+message.controller_found=Machine Controller (%s) found at (%d, %d, %d)
+message.multiblock.absent=You may creating a multiblock using this block and several Machine Expansions in a 3x3x4 cuboid
+message.multiblock.incomplete=Multiblock is an incomplete cuboid shape
+message.multiblock.illegal=Block "%s" at (%d, %d, %d) is not a legal for multiblock structure

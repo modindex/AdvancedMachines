@@ -1,13 +1,11 @@
 package jaminv.advancedmachines.objects.blocks.machine.purifier;
 
-import jaminv.advancedmachines.objects.blocks.machine.BlockMachineBase;
+import jaminv.advancedmachines.objects.blocks.machine.BlockMachineMultiblock;
 import jaminv.advancedmachines.util.handlers.EnumHandler;
-import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class BlockMachinePurifier extends BlockMachineBase {
+public class BlockMachinePurifier extends BlockMachineMultiblock {
 
 	public BlockMachinePurifier(String name) {
 		super(name);

@@ -1,5 +1,8 @@
 {
     "variants": {
-        "variant=basic": { "model": "advmach:machine_expansion_basic" }
+        "variant=basic": { "model": "advmach:machine_expansion_basic" },
+        "variant=compressed": { "model": "advmach:machine_expansion_compressed" },
+        "variant=quad": { "model": "advmach:machine_expansion_quad" },
+        "variant=impossible": { "model": "advmach:machine_expansion_impossible" }
     }
 }

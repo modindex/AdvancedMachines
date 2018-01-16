@@ -5,6 +5,7 @@ import javax.annotation.Nonnull;
 import org.apache.logging.log4j.Level;
 
 import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansion;
 import jaminv.advancedmachines.util.Config;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
 import jaminv.advancedmachines.util.recipe.IRecipeManager;
@@ -18,9 +19,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -292,5 +293,5 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 	public boolean canInteractWith(EntityPlayer playerIn) {
 		return !isInvalid() && playerIn.getDistanceSq(pos.add(0.5D, 0.5D, 0.5D)) <= 64D;
 	}
-
+	
 }
