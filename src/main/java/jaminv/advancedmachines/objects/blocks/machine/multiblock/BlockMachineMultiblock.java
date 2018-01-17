@@ -1,6 +1,7 @@
-package jaminv.advancedmachines.objects.blocks.machine;
+package jaminv.advancedmachines.objects.blocks.machine.multiblock;
 
-import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineMultiblock.MultiblockState;
+import jaminv.advancedmachines.objects.blocks.machine.BlockMachineBase;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock.MultiblockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;

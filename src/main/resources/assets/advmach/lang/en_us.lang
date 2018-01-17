@@ -57,5 +57,5 @@ dialog.alloy.title=Alloy Forge
 message.no_controller=No Machine Controller Found
 message.controller_found=Machine Controller (%s) found at (%d, %d, %d)
 message.multiblock.absent=You may creating a multiblock using this block and several Machine Expansions in a 3x3x4 cuboid
-message.multiblock.incomplete=Multiblock is an incomplete cuboid shape
+message.multiblock.connected_machine=Only one machine may be connected to a multiblock. A second machine, "%s" is connected at (%d, %d, %d)
 message.multiblock.illegal=Block "%s" at (%d, %d, %d) is not a legal for multiblock structure

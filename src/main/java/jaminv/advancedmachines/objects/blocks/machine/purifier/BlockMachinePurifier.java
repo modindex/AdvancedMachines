@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.objects.blocks.machine.purifier;
 
-import jaminv.advancedmachines.objects.blocks.machine.BlockMachineMultiblock;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.BlockMachineMultiblock;
 import jaminv.advancedmachines.util.handlers.EnumHandler;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;

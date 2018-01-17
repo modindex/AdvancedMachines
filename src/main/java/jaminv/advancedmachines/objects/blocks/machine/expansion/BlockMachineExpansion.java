@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import jaminv.advancedmachines.objects.blocks.BlockMaterial;
-import jaminv.advancedmachines.objects.blocks.machine.BlockMachineMultiblock;
 import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
-import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineMultiblock;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.BlockMachineMultiblock;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
 import jaminv.advancedmachines.objects.items.material.MaterialBase;
 import jaminv.advancedmachines.objects.items.material.PropertyMaterial;
 import net.minecraft.block.Block;
@@ -37,7 +37,7 @@ public class BlockMachineExpansion extends BlockMaterial {
 			ItemStack stack) {
 		if (worldIn.isRemote) { return; }
 
-		TileEntityMachineBase te = this.findController(worldIn, pos);
+		TileEntityMachineMultiblock te = this.findController(worldIn, pos);
 
 		TextComponentTranslation component;
 		if (te == null) {
