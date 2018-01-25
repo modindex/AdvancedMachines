@@ -1,43 +1,27 @@
 package jaminv.advancedmachines.objects.blocks.machine;
 
+import jaminv.advancedmachines.objects.blocks.inventory.GuiInventory;
 import jaminv.advancedmachines.util.Reference;
 import jaminv.advancedmachines.util.dialog.DialogBase;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiMachine extends GuiContainer {
+public class GuiMachine extends GuiInventory {
 	
-	TileEntityMachineBase te;
-	ContainerMachine container;
-	DialogMachineBase dialog;
+	protected final TileEntityMachineBase te;
+	protected final DialogMachineBase machineDialog;
 	
-	public GuiMachine(TileEntityMachineBase tileEntity, ContainerMachine container, DialogMachineBase dialog) {
-		super(container);
-		xSize = dialog.getWidth();
-		ySize = dialog.getHeight();
-		
+	public GuiMachine(ContainerMachine container, DialogMachineBase dialog, TileEntityMachineBase tileEntity) {
+		super(container, dialog);
 		te = tileEntity;
-		this.dialog = dialog;
+		machineDialog = dialog;
 	}
 	
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
 		mc.getTextureManager().bindTexture(dialog.getBackground());
 		
-		dialog.drawBackground(this, guiLeft, guiTop, te);
-		dialog.drawText(fontRenderer, guiLeft, guiTop);
+		machineDialog.drawBackground(this, guiLeft, guiTop, te);
+		machineDialog.drawText(fontRenderer, guiLeft, guiTop);
 	}
-	
-	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		dialog.drawForeground(this, mouseX, mouseY, guiLeft, guiTop);
-	}
-	
-	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		this.drawDefaultBackground();
-		super.drawScreen(mouseX, mouseY, partialTicks);
-		this.renderHoveredToolTip(mouseX, mouseY);
-	}
-
 }

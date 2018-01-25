@@ -1,4 +1,4 @@
-package jaminv.advancedmachines.objects.items.material;
+package jaminv.advancedmachines.util.material;
 
 import jaminv.advancedmachines.util.Config;
 

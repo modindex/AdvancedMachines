@@ -11,7 +11,7 @@ import net.minecraftforge.oredict.OreDictionary;
 /**
  * Helper class for recipe output where the mod material may be disabled
  */
-public class RecipeOutput {
+public class RecipeOutput implements Cloneable {
 	
 	private String ore = "";
 	private Item item = Items.AIR;
@@ -94,5 +94,16 @@ public class RecipeOutput {
 	
 	public int getChance() {
 		return chance;
+	}
+	
+	public RecipeOutput multiply(int factor) {
+		RecipeOutput ret;
+		try {
+			ret = (RecipeOutput) this.clone();
+		} catch (CloneNotSupportedException e) {
+			return RecipeOutput.EMPTY;
+		}
+		ret.count = ret.count * factor;
+		return ret;
 	}	
 }

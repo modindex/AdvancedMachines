@@ -1,15 +1,4 @@
-package jaminv.advancedmachines.objects.items.material;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
-import org.apache.commons.lang3.text.WordUtils;
-
-import jaminv.advancedmachines.util.Config;
-import jaminv.advancedmachines.util.handlers.EnumHandler.EnumMaterial;
-import net.minecraft.util.IStringSerializable;
+package jaminv.advancedmachines.util.material;
 
 public abstract class MaterialBaseOre extends MaterialBase {
 	

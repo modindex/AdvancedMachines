@@ -22,7 +22,7 @@ public class TileEntityMachineAlloy extends TileEntityMachineBase {
 	
 	public class GuiMachineAlloy extends GuiMachine {
 		public GuiMachineAlloy(TileEntityMachineBase tileEntity, ContainerMachine container, DialogMachineBase dialog) {
-			super(tileEntity, container, dialog);
+			super(container, dialog, tileEntity);
 		}
 	}
 	
@@ -32,7 +32,7 @@ public class TileEntityMachineAlloy extends TileEntityMachineBase {
 
 	@Override
 	public ContainerMachine createContainer(IInventory inventory) {
-		return new ContainerMachine(inventory, this, AlloyManager.getRecipeManager(), dialog);
+		return new ContainerMachine(inventory, this, dialog, AlloyManager.getRecipeManager());
 	}
 	
 	@Override

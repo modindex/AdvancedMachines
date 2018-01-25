@@ -43,6 +43,7 @@ public abstract class RecipeManagerSimple<T extends RecipeBase> implements IReci
 	 * @param stack
 	 * @return PurifierRecipe
 	 */
+	@Override
 	public T getRecipeMatch(RecipeInput[] input) {
 		if (input[0].isEmpty()) { return null; }
 		T recipe = recipes.get(input[0]);
@@ -50,6 +51,18 @@ public abstract class RecipeManagerSimple<T extends RecipeBase> implements IReci
 		
 		if (!input[0].doesMatch(recipe.getInput(0))) { return null; }
 		return recipe;
+	}
+	
+	@Override
+	public int getRecipeQty(T recipe, RecipeInput[] input) {
+		if (input[0].isEmpty()) { return 0; }
+		
+		return input[0].getQty(recipe.getInput(0));
+	}
+	
+	@Override
+	public int getOutputQty(T recipe, ItemStack[] output) {
+		return recipe.getOutputQty(output);
 	}
 	
 	@Override

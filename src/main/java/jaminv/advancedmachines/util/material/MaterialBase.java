@@ -1,4 +1,4 @@
-package jaminv.advancedmachines.objects.items.material;
+package jaminv.advancedmachines.util.material;
 
 import java.util.ArrayList;
 import java.util.Collection;

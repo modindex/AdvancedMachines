@@ -9,7 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class RecipeInput {
+public class RecipeInput implements Cloneable {
 	
 	public static class InputCompare implements Comparator<RecipeInput> {
 		@Override
@@ -24,7 +24,7 @@ public class RecipeInput {
 	private int count = -1;
 	
 	private boolean invalid = false;
-	
+		
 	public static final RecipeInput EMPTY = new RecipeInput(Items.AIR, -1, -1);
 	
 	public RecipeInput(String oredictName, int count) {
@@ -155,6 +155,21 @@ public class RecipeInput {
 			ret.add(copy);
 		}
 		
+		return ret;
+	}
+	
+	public int getQty(RecipeInput expected) {
+		return count / expected.count;
+	}
+	
+	public RecipeInput multiply(int factor) {
+		RecipeInput ret;
+		try {
+			ret = (RecipeInput) this.clone();
+		} catch (CloneNotSupportedException e) {
+			return RecipeInput.EMPTY;
+		}
+		ret.count = ret.count * factor;
 		return ret;
 	}
 }

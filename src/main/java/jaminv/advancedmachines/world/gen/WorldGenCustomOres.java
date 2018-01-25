@@ -3,10 +3,8 @@ package jaminv.advancedmachines.world.gen;
 import java.util.Random;
 
 import jaminv.advancedmachines.init.BlockInit;
-import jaminv.advancedmachines.objects.blocks.BlockMaterial;
-import jaminv.advancedmachines.objects.items.material.MaterialMod;
 import jaminv.advancedmachines.util.Config;
-import jaminv.advancedmachines.util.handlers.EnumHandler;
+import jaminv.advancedmachines.util.material.MaterialMod;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;

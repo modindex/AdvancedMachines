@@ -5,15 +5,15 @@ import java.util.List;
 
 import jaminv.advancedmachines.objects.armor.ArmorBase;
 import jaminv.advancedmachines.objects.items.ItemMaterial;
-import jaminv.advancedmachines.objects.items.material.MaterialDust;
-import jaminv.advancedmachines.objects.items.material.MaterialMod;
-import jaminv.advancedmachines.objects.items.material.MaterialPure;
 import jaminv.advancedmachines.objects.tools.ToolAxe;
 import jaminv.advancedmachines.objects.tools.ToolHoe;
 import jaminv.advancedmachines.objects.tools.ToolPickaxe;
 import jaminv.advancedmachines.objects.tools.ToolShovel;
 import jaminv.advancedmachines.objects.tools.ToolSword;
 import jaminv.advancedmachines.util.Reference;
+import jaminv.advancedmachines.util.material.MaterialDust;
+import jaminv.advancedmachines.util.material.MaterialMod;
+import jaminv.advancedmachines.util.material.MaterialPure;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;

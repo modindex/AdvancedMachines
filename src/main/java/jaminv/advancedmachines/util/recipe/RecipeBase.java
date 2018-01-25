@@ -75,6 +75,29 @@ public abstract class RecipeBase {
 		return energy;
 	}
 	
+	public int getOutputQty(ItemStack[] stacks) {
+		int stack = 0;
+		int min = -1;
+		for (int i = 0; i < this.getOutputCount(); i++) {
+			ItemStack output = this.getOutput(i).toItemStack();
+			int count = 0;
+			do {
+				if (stacks[stack] == null || stacks[stack].isEmpty()) {
+					count = output.getMaxStackSize() / output.getCount(); 
+				} else if (stacks[stack].getItem().equals(output.getItem())) {
+					int left = stacks[stack].getMaxStackSize() - stacks[stack].getCount();
+					count = left / output.getCount();
+				}
+				stack++;
+			} while(count == 0 && stack < stacks.length);
+			
+			if (count == 0) { return 0; }
+
+			if (min == -1 || min > count) { min = count; }
+		}
+		return min;
+	}
+	
 	/* Helpful utility methods */
 	public RecipeBase addInput(int index, String oredictName, int count) { return this.addInput(index, new RecipeInput(oredictName, count)); }
 	public RecipeBase addInput(int index, String oredictName) { return this.addInput(index, new RecipeInput(oredictName)); }

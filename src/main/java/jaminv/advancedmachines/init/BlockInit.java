@@ -10,10 +10,10 @@ import jaminv.advancedmachines.objects.blocks.DirectionalBlock;
 import jaminv.advancedmachines.objects.blocks.machine.alloy.BlockMachineAlloy;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansion;
 import jaminv.advancedmachines.objects.blocks.machine.purifier.BlockMachinePurifier;
-import jaminv.advancedmachines.objects.items.material.MaterialBase;
-import jaminv.advancedmachines.objects.items.material.MaterialExpansion;
-import jaminv.advancedmachines.objects.items.material.MaterialMod;
-import jaminv.advancedmachines.objects.items.material.PropertyMaterial;
+import jaminv.advancedmachines.util.material.MaterialBase;
+import jaminv.advancedmachines.util.material.MaterialExpansion;
+import jaminv.advancedmachines.util.material.MaterialMod;
+import jaminv.advancedmachines.util.material.PropertyMaterial;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 

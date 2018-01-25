@@ -1,11 +1,10 @@
 package jaminv.advancedmachines.objects.blocks.machine;
 
-import javax.annotation.Nonnull;
-
 import org.apache.logging.log4j.Level;
 
 import jaminv.advancedmachines.Main;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansion;
+import jaminv.advancedmachines.objects.blocks.inventory.TileEntityInventory;
+import jaminv.advancedmachines.objects.items.ItemStackHandlerObservable;
 import jaminv.advancedmachines.util.Config;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
 import jaminv.advancedmachines.util.recipe.IRecipeManager;
@@ -19,13 +18,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public abstract class TileEntityMachineBase extends TileEntity implements ITickable, IHasGui {
+public abstract class TileEntityMachineBase extends TileEntityInventory implements ITickable, IHasGui {
 
 	public abstract int getInputCount();
 	public abstract int getOutputCount();
@@ -35,37 +33,17 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 	public int getFirstSecondarySlot() { return getInputCount() + getOutputCount(); }
 	public int getInventorySize() { return getInputCount() + getOutputCount() + getSecondaryCount(); }
 	
-	protected ItemStackHandler inventory;
 	public MachineEnergyStorage energy;
 	
 	public float getEnergyPercent() { return (float)energy.getEnergyStored() / energy.getMaxEnergyStored(); }
 	public int getEnergyStored() { return energy.getEnergyStored(); }
 	public int getMaxEnergyStored() { return energy.getMaxEnergyStored(); }
-			
-	protected class ItemStackHandlerBase extends ItemStackHandler {
-		public ItemStackHandlerBase(int size) {
-			super(size);
-		}
-		
-		@Override
-		protected void onContentsChanged(int slot) {
-			TileEntityMachineBase.this.markDirty();
-		}
-		
-	    @Override
-	    @Nonnull
-	    public ItemStack getStackInSlot(int slot)
-	    {
-	    	return super.getStackInSlot(slot);
-	    }		
-	};
 	
-	private IRecipeManager recipeManager;
+	private final IRecipeManager recipeManager;
 	public IRecipeManager getRecipeManager() { return recipeManager; }
 	
 	public TileEntityMachineBase(IRecipeManager recipeManager) {
 		super();
-		this.inventory = new ItemStackHandlerBase(getInventorySize());
 		this.energy = new MachineEnergyStorage(50000, 200);
 		this.recipeManager = recipeManager;
 		this.prevInput = new RecipeInput[getInputCount()];
@@ -116,47 +94,59 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 		if (world.isRemote) { return; }
 		
 		if (!isProcessing()) {
-			processTimeRemaining = Config.processTimeBasic;
-			totalProcessTime = Config.processTimeBasic;
 			lastRecipe = recipeManager.getRecipe(input);
+			processTimeRemaining = totalProcessTime = beginProcess(lastRecipe, input);
 			return;
 		} else if(lastRecipe == null) {
 			lastRecipe = recipeManager.getRecipe(input);
 		}
 
-		if (energy.getEnergyStored() < (lastRecipe.getEnergy() / totalProcessTime) * Config.tickUpdate) { return; }
-		
+		if (!extractEnergy(lastRecipe, totalProcessTime)) { return; }
 		processTimeRemaining -= Config.tickUpdate;
-		energy.useEnergy((lastRecipe.getEnergy() / totalProcessTime) * Config.tickUpdate);
 		
 		if (processTimeRemaining <= 0) {
 			RecipeBase recipe = lastRecipe;
 			
-			for (int i = 0; i < recipe.getInputCount(); i++) {
-				if (recipe.getInput(i).isEmpty()) { continue; }
-				if (!removeInput(recipe.getInput(i))) {
-					// Some kind of strange error
-					Main.logger.log(Level.ERROR,  "error.machine.process.cannot_input");
-					haltProcess();
-					return;
-				}
-			}
-			
-			for (int i = 0; i < recipe.getOutputCount(); i++) {
-				if (recipe.getOutput(i).isEmpty()) { continue; }
-				if (!outputItem(recipe.getOutput(i), false)) {
-					// Some kind of strange error
-					Main.logger.log(Level.ERROR, "error.machine.process.cannot_output");
-					haltProcess();
-					return;
-				}
-			}
-			
-			outputSecondary(recipe.getSecondary());
+			endProcess(recipe);
 			
 			processTimeRemaining = 0;
 			return;
 		}
+	}
+	
+	protected int beginProcess(RecipeBase recipe, RecipeInput[] input) {
+		return Config.processTimeBasic;
+	}
+	
+	protected boolean extractEnergy(RecipeBase lastRecipe, int totalProcessTime) {
+		if (energy.getEnergyStored() < (lastRecipe.getEnergy() / totalProcessTime) * Config.tickUpdate) { return false; }
+		
+		energy.useEnergy((lastRecipe.getEnergy() / totalProcessTime) * Config.tickUpdate);
+		return true;
+	}
+	
+	protected void endProcess(RecipeBase recipe) {
+		for (int i = 0; i < recipe.getInputCount(); i++) {
+			if (recipe.getInput(i).isEmpty()) { continue; }
+			if (!removeInput(recipe.getInput(i))) {
+				// Some kind of strange error
+				Main.logger.log(Level.ERROR,  "error.machine.process.cannot_input");
+				haltProcess();
+				return;
+			}
+		}
+		
+		for (int i = 0; i < recipe.getOutputCount(); i++) {
+			if (recipe.getOutput(i).isEmpty()) { continue; }
+			if (!outputItem(recipe.getOutput(i), false)) {
+				// Some kind of strange error
+				Main.logger.log(Level.ERROR, "error.machine.process.cannot_output");
+				haltProcess();
+				return;
+			}
+		}
+		
+		outputSecondary(recipe.getSecondary());		
 	}
 	
 	protected void haltProcess() {
@@ -190,9 +180,6 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		if (compound.hasKey("items")) {
-			inventory.deserializeNBT((NBTTagCompound)compound.getTag("items"));
-		}
 		if (compound.hasKey("energy")) {
 			energy.readFromNBT(compound);
 		}
@@ -203,7 +190,6 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
-		compound.setTag("items",  inventory.serializeNBT());
 		energy.writeToNBT(compound);
 		compound.setInteger("processTimeRemaining", processTimeRemaining);
 		compound.setInteger("totalProcessTime", totalProcessTime);
@@ -213,9 +199,6 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-			return true;
-		}
 		if (capability == CapabilityEnergy.ENERGY) {
 			return true;
 		}
@@ -224,9 +207,6 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
-		}
 		if (capability == CapabilityEnergy.ENERGY) {
 			return CapabilityEnergy.ENERGY.cast(this.energy);
 		}
@@ -290,8 +270,13 @@ public abstract class TileEntityMachineBase extends TileEntity implements ITicka
 		}
 	}
 	
-	public boolean canInteractWith(EntityPlayer playerIn) {
-		return !isInvalid() && playerIn.getDistanceSq(pos.add(0.5D, 0.5D, 0.5D)) <= 64D;
+	protected ItemStack[] getOutputStacks() {
+		ItemStack[] ret = new ItemStack[this.getOutputCount()];
+		int stack = 0;
+		for (int i = this.getFirstOutputSlot(); i < this.getOutputCount() + getFirstOutputSlot(); i++) {
+			ret[stack] = inventory.getStackInSlot(i);
+			stack++;
+		}
+		return ret;
 	}
-	
 }

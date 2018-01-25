@@ -1,4 +1,4 @@
-package jaminv.advancedmachines.objects.items.material;
+package jaminv.advancedmachines.util.material;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,7 +7,7 @@ import java.util.Map;
 
 import com.google.common.base.Optional;
 
-import jaminv.advancedmachines.objects.items.material.MaterialBase.MaterialRegistry;
+import jaminv.advancedmachines.util.material.MaterialBase.MaterialRegistry;
 import net.minecraft.block.properties.IProperty;
 import scala.actors.threadpool.Arrays;
 

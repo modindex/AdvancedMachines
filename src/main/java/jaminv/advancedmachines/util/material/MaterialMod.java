@@ -1,7 +1,7 @@
-package jaminv.advancedmachines.objects.items.material;
+package jaminv.advancedmachines.util.material;
 
-import jaminv.advancedmachines.objects.items.material.PropertyMaterial;
 import jaminv.advancedmachines.util.Config;
+import jaminv.advancedmachines.util.material.PropertyMaterial;
 
 public class MaterialMod extends MaterialBaseOre {
 

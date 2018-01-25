@@ -103,6 +103,26 @@ public abstract class RecipeManagerThreeIngredient<T extends RecipeBase> impleme
 	}
 	
 	@Override
+	public int getRecipeQty(T recipe, RecipeInput[] input) {
+		RecipeInput[] copy = Arrays.copyOf(input, input.length);
+		Arrays.sort(copy, new RecipeInput.InputCompare());
+		
+		int min = -1;
+		for (int i = 0; i < recipe.getInputCount(); i++) {
+			int qty = input[i].getQty(recipe.getInput(i));
+			if (min == -1 || qty < min) {
+				min = qty;
+			}
+		}
+		return min;
+	}
+	
+	@Override
+	public int getOutputQty(T recipe, ItemStack[] output) {
+		return recipe.getOutputQty(output);
+	}
+	
+	@Override
 	public boolean isItemValid(ItemStack stack, ItemStack[] other) {
 		if (stack.isEmpty()) { return false; }
 		return validInput.get(new RecipeInput(stack)) != null;

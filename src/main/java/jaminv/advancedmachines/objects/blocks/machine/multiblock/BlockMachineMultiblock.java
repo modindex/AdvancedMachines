@@ -22,16 +22,12 @@ public abstract class BlockMachineMultiblock extends BlockMachineBase {
 			ItemStack stack) {
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 		
-		if (worldIn.isRemote) { return; }
+		//if (worldIn.isRemote) { return; }
 		
 		TileEntity te = worldIn.getTileEntity(pos);
 		if (!(te instanceof TileEntityMachineMultiblock)) { return; }
 		
-		MultiblockState mbstate = ((TileEntityMachineMultiblock)te).scanMultiblock();
-		
-		TextComponentTranslation component = new TextComponentTranslation(mbstate.toString());
-		component.getStyle().setColor(TextFormatting.BLUE);
-		placer.sendMessage(component);
+		((TileEntityMachineMultiblock)te).scanMultiblock();
 	}
 
 }

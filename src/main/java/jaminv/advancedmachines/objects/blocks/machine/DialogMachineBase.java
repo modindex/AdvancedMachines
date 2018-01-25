@@ -1,64 +1,19 @@
 package jaminv.advancedmachines.objects.blocks.machine;
 
-import jaminv.advancedmachines.util.dialog.DialogBase;
+import jaminv.advancedmachines.objects.blocks.inventory.DialogInventory;
+import jaminv.advancedmachines.objects.blocks.inventory.DialogInventory.ContainerLayout;
+import jaminv.advancedmachines.util.dialog.DialogBase.Target;
+import jaminv.advancedmachines.util.dialog.DialogBase.Texture;
+import jaminv.advancedmachines.util.dialog.DialogBase.Tooltip;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 
-public abstract class DialogMachineBase extends DialogBase {
+public abstract class DialogMachineBase extends DialogInventory {
 	
 	public DialogMachineBase(String background, int xpos, int ypos, int width, int height) {
 		super(background, xpos, ypos, width, height);
 	}
-	
-	final protected int SLOT_X_SPACING = 18;
-	final protected int SLOT_Y_SPACING = 18;
-	final protected int BORDER_X_SPACING = 8;
-	final protected int INVENTORY_ROWS = 3;
-	final protected int INVENTORY_COLS = 9;	
-	final protected int HOTBAR_ROWS = 1;
-	final protected int HOTBAR_COLS = 9;
-	
-	public class ContainerLayout {
-		protected final int xpos, ypos, xspacing, yspacing, rows, cols;
-		public ContainerLayout(int xpos, int ypos, int xspacing, int yspacing, int rows, int cols) {
-			this.xpos = xpos; this.ypos = ypos;
-			this.xspacing = xspacing; this.yspacing = yspacing;
-			this.rows = rows; this.cols = cols;
-		}
-		public ContainerLayout(int xpos, int ypos, int rows, int cols) {
-			this(xpos, ypos, SLOT_X_SPACING, SLOT_Y_SPACING, rows, cols);
-		}
-		public ContainerLayout(int xpos, int ypos) {
-			this(xpos, ypos, SLOT_X_SPACING, SLOT_Y_SPACING, 1, 1);
-		}
-		public int getXPos() { return xpos; }
-		public int getYPos() { return ypos; }
-		public int getXSpacing() { return xspacing; }
-		public int getYSpacing() { return yspacing; }
-		public int getRows() { return rows; }
-		public int getCols() { return cols; }
-		
-		public Position getPosition(int index) {
-			return new Position(xpos + (index % cols) * xspacing, ypos + (index / cols) * yspacing);
-		}
-	}
-	public class InventoryLayout extends ContainerLayout {
-		public InventoryLayout(int xpos, int ypos) {
-			super(xpos, ypos, SLOT_X_SPACING, SLOT_Y_SPACING, INVENTORY_ROWS, INVENTORY_COLS);
-		}
-	}
-	public class HotbarLayout extends ContainerLayout {
-		public HotbarLayout(int xpos, int ypos) {
-			super (xpos, ypos, SLOT_X_SPACING, SLOT_Y_SPACING, HOTBAR_ROWS, HOTBAR_COLS);
-		}
-	}
-	
-	public abstract ContainerLayout getInputLayout();
-	public abstract ContainerLayout getOutputLayout();
-	public abstract ContainerLayout getSecondaryLayout();
-	protected abstract ContainerLayout getInventoryLayout();
-	protected abstract ContainerLayout getHotbarLayout();	
 	
 	private Texture process = null;
 	protected void setProcessTexture(int xpos, int ypos, int width, int height, int u, int v) {
@@ -133,14 +88,14 @@ public abstract class DialogMachineBase extends DialogBase {
 	}
 	
 	public ContainerLayout getJeiInputLayout() {
-		return getJeiOffset(this.getInputLayout());
+		return getJeiOffset(this.getLayout(0));
 	}
 	
 	public ContainerLayout getJeiOutputLayout() {
-		return getJeiOffset(this.getOutputLayout());
+		return getJeiOffset(this.getLayout(1));
 	}
 	
 	public ContainerLayout getJeiSecondaryLayout() {
-		return getJeiOffset(this.getSecondaryLayout());
+		return getJeiOffset(this.getLayout(2));
 	}
 }

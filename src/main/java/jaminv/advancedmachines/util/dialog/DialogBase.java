@@ -1,12 +1,19 @@
 package jaminv.advancedmachines.util.dialog;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
 import jaminv.advancedmachines.util.Reference;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.config.GuiUtils;
+import scala.actors.threadpool.Arrays;
 
 public class DialogBase {
 	
@@ -144,12 +151,16 @@ public class DialogBase {
 		gui.drawTexturedModalRect(guiLeft, guiTop, dialog.getXPos(), dialog.getYPos(), dialog.getWidth(), dialog.getHeight());
 	}
 	
-	public void drawForeground(GuiScreen gui, int mouseX, int mouseY, int guiLeft, int guiTop) {
+	public void drawForeground(GuiScreen gui, FontRenderer font, int mouseX, int mouseY, int guiLeft, int guiTop) {
+		Minecraft minecraft = gui.mc;
+		
 		for (Tooltip tip : tooltip) {
 			if (mouseX >= tip.xpos + guiLeft && mouseX <= tip.xpos + tip.width + guiLeft
 				&& mouseY >= tip.ypos + guiTop && mouseY <= tip.ypos + tip.height + guiTop
 			) {
-				gui.drawHoveringText(tip.getText(), mouseX - guiLeft, mouseY - guiTop);
+				ScaledResolution scaled = new ScaledResolution(minecraft);
+				GuiUtils.drawHoveringText(Arrays.asList(tip.getText().split("\\\\n")), mouseX - guiLeft, mouseY - guiTop, scaled.getScaledWidth() - guiLeft, scaled.getScaledHeight() - guiTop, -1, font);
+				//gui.drawHoveringText(tip.getText(), mouseX - guiLeft, mouseY - guiTop);
 			}
 		}
 	}	

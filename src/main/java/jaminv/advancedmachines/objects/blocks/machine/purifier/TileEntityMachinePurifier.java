@@ -20,12 +20,12 @@ public class TileEntityMachinePurifier extends TileEntityMachineMultiblock {
 	@Override
 	public int getSecondaryCount() { return 6; }
 	
-	private final DialogMachinePurifier dialog = new DialogMachinePurifier();
+	private final DialogMachinePurifier dialog = new DialogMachinePurifier(this);
 	
 	public static class GuiMachinePurifier extends GuiMachine {
 		public GuiMachinePurifier(TileEntityMachineBase tileEntity, ContainerMachine container,
 				DialogMachineBase dialog) {
-			super(tileEntity, container, dialog);
+			super(container, dialog, tileEntity);
 		}
 	}
 	
@@ -35,7 +35,7 @@ public class TileEntityMachinePurifier extends TileEntityMachineMultiblock {
 
 	@Override
 	public ContainerMachine createContainer(IInventory inventory) {
-		return new ContainerMachine(inventory, this, PurifierManager.getRecipeManager(), dialog);
+		return new ContainerMachine(inventory, this, dialog, PurifierManager.getRecipeManager());
 	}
 	
 	@Override

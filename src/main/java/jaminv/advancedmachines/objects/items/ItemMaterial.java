@@ -4,11 +4,11 @@ import org.apache.commons.lang3.text.WordUtils;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.init.ItemInit;
-import jaminv.advancedmachines.objects.items.material.MaterialBase;
 import jaminv.advancedmachines.util.interfaces.IEnumType;
 import jaminv.advancedmachines.util.interfaces.IHasModel;
 import jaminv.advancedmachines.util.interfaces.IHasOreDictionary;
 import jaminv.advancedmachines.util.interfaces.IMetaName;
+import jaminv.advancedmachines.util.material.MaterialBase;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

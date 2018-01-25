@@ -5,12 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansion;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.BlockMachineMultiblock;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
-import net.minecraft.block.Block;
-import net.minecraft.tileentity.TileEntity;
+import jaminv.advancedmachines.Main;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -46,7 +42,7 @@ public class BlockHelper {
 			if (minY > pos.getY()) { minY = pos.getY(); }
 			if (maxY < pos.getY()) { maxY = pos.getY(); }
 			if (minZ > pos.getZ()) { minZ = pos.getZ(); }
-			if (minZ < pos.getZ()) { maxZ = pos.getZ(); }
+			if (maxZ < pos.getZ()) { maxZ = pos.getZ(); }
 		}
 		
 		public List<BlockPos> getBlocks() { return blocks; }
@@ -99,5 +95,12 @@ public class BlockHelper {
 		}
 		
 		return true;
-	}	
+	}
+	
+	public static boolean openGui(World world, BlockPos pos, EntityPlayer player, int guiId) {
+		if (guiId <= 0) { return false; }
+		if (world.isRemote) { return true; }
+		player.openGui(Main.instance, guiId, world, pos.getX(), pos.getY(), pos.getZ());
+		return true;		
+	}
 }

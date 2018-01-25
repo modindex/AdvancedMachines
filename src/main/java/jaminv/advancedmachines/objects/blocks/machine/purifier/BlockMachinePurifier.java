@@ -1,7 +1,7 @@
 package jaminv.advancedmachines.objects.blocks.machine.purifier;
 
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.BlockMachineMultiblock;
-import jaminv.advancedmachines.util.handlers.EnumHandler;
+import jaminv.advancedmachines.util.enums.EnumGui;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -11,7 +11,7 @@ public class BlockMachinePurifier extends BlockMachineMultiblock {
 		super(name);
 	}
 	
-	protected int getGuiId() { return EnumHandler.EnumGui.PURIFIER.getId(); }
+	protected int getGuiId() { return EnumGui.PURIFIER.getId(); }
 	
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
