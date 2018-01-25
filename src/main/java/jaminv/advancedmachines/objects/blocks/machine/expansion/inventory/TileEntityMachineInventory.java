@@ -28,8 +28,7 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 	
 	@Override
 	public Container createContainer(IInventory inventory) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ContainerInventory(inventory, this,)
 	}
 	
 	@Override
