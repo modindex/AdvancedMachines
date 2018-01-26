@@ -9,6 +9,7 @@ import jaminv.advancedmachines.objects.blocks.DataBlock;
 import jaminv.advancedmachines.objects.blocks.DirectionalBlock;
 import jaminv.advancedmachines.objects.blocks.machine.alloy.BlockMachineAlloy;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansion;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.BlockMachineInventory;
 import jaminv.advancedmachines.objects.blocks.machine.purifier.BlockMachinePurifier;
 import jaminv.advancedmachines.util.material.MaterialBase;
 import jaminv.advancedmachines.util.material.MaterialExpansion;
@@ -37,6 +38,7 @@ public class BlockInit {
 	public static final BlockMachineAlloy MACHINE_ALLOY = new BlockMachineAlloy("machine_alloy");
 	
 	public static final BlockMachineExpansion MACHINE_EXPANSION = new BlockMachineExpansion("machine_expansion");
+	public static final BlockMachineInventory MACHINE_INVENTORY = new BlockMachineInventory("machine_inventory");
 	
 	public static final DataBlock DATABLOCK = new DataBlock();
 }

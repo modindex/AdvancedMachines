@@ -1,24 +1,32 @@
 package jaminv.advancedmachines.objects.blocks.machine.expansion.inventory;
 
+import javax.annotation.Nullable;
+
+import jaminv.advancedmachines.objects.blocks.inventory.ContainerInventory;
+import jaminv.advancedmachines.objects.blocks.inventory.GuiInventory;
 import jaminv.advancedmachines.objects.blocks.inventory.TileEntityInventory;
-import jaminv.advancedmachines.objects.blocks.machine.MachineEnergyStorage;
-import jaminv.advancedmachines.objects.items.ItemStackHandlerObservable;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
-import jaminv.advancedmachines.util.recipe.RecipeInput;
-import jaminv.advancedmachines.util.recipe.RecipeOutput;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.NonNullList;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.items.CapabilityItemHandler;
 
 public class TileEntityMachineInventory extends TileEntityInventory implements IHasGui {
+	
+	protected EnumFacing facing = EnumFacing.NORTH;
+	protected boolean inputState = true;
+	
+	public void setFacing(EnumFacing facing) {
+		this.facing = facing;
+	}
+	public EnumFacing getFacing() {
+		return facing;
+	}
+	
+	public boolean getInputState() {
+		return inputState;
+	}
 	
 	public final int SIZE = 27;
 	@Override
@@ -26,14 +34,46 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 		return SIZE;
 	}
 	
+	private final DialogMachineInventory dialog = new DialogMachineInventory();
+	
 	@Override
-	public Container createContainer(IInventory inventory) {
-		return new ContainerInventory(inventory, this,)
+	public ContainerInventory createContainer(IInventory inventory) {
+		return new ContainerInventory(inventory, this, dialog);
 	}
 	
 	@Override
 	public GuiContainer createGui(IInventory inventory) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GuiInventory(createContainer(inventory), dialog);
 	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound compound) {
+		super.readFromNBT(compound);
+		if (compound.hasKey("facing")) {
+			facing = EnumFacing.byName(compound.getString("facing"));
+		}
+		if (compound.hasKey("inputState")) {
+			inputState = compound.getBoolean("inputState");
+		}
+	}
+	
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+		super.writeToNBT(compound);
+		compound.setString("facing", facing.getName());
+		compound.setBoolean("inputState", inputState);
+		
+		return compound;
+	}
+	
+    @Nullable
+    public SPacketUpdateTileEntity getUpdatePacket()
+    {
+        return new SPacketUpdateTileEntity(this.pos, 1, this.getUpdateTag());
+    }
+
+    public NBTTagCompound getUpdateTag()
+    {
+        return this.writeToNBT(new NBTTagCompound());
+    }	
 }

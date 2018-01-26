@@ -1,0 +1,36 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "advmach:machine_inventory"
+  },
+  "variants": {
+    "facing": {
+      "north": {},
+      "south": {"y": 180},
+      "east": {"y": 90},
+      "west": {"y": 270},
+      "up": {"x": 270},
+      "down": {"x": 90}
+    },
+    "input": {
+        "false": { 
+            "textures": { 
+                "north": "advmach:blocks/machine_inventory_basic_output"
+            }
+        },
+        "true": {
+            "textures": {
+                "north": "advmach:blocks/machine_inventory_basic_input"
+            }
+        }
+    },
+    "normal": [{}],
+    "inventory": [{}],
+    "variant": {
+        "basic": { "model": "advmach:machine_expansion_basic" },
+        "compressed": { "model": "advmach:machine_expansion_compressed" },
+        "quad": { "model": "advmach:machine_expansion_quad" },
+        "impossible": { "model": "advmach:machine_expansion_impossible" }
+    }
+  }
+}
