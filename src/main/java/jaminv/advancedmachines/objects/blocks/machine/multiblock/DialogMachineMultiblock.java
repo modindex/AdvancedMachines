@@ -1,9 +1,7 @@
 package jaminv.advancedmachines.objects.blocks.machine.multiblock;
 
 import jaminv.advancedmachines.objects.blocks.machine.DialogMachineBase;
-import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
-import jaminv.advancedmachines.util.dialog.DialogBase.Tooltip;
-import net.minecraft.client.resources.I18n;
+import jaminv.advancedmachines.util.dialog.struct.DialogTooltip;
 
 public abstract class DialogMachineMultiblock extends DialogMachineBase {
 
@@ -11,7 +9,7 @@ public abstract class DialogMachineMultiblock extends DialogMachineBase {
 		super(background, xpos, ypos, width, height);
 	}
 
-	public class TooltipMultiblock extends Tooltip {
+	public class TooltipMultiblock extends DialogTooltip {
 		
 		protected final TileEntityMachineMultiblock te;
 

@@ -1,14 +1,14 @@
 package jaminv.advancedmachines.objects.blocks.machine.multiblock;
 
-import java.util.EnumMap;
-import java.util.Map;
-
 import org.apache.logging.log4j.Level;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgrade;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgrade.UpgradeType;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.BlockMachineInventory;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.TileEntityMachineInventory;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockState.MultiblockSimple;
 import jaminv.advancedmachines.util.Config;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import jaminv.advancedmachines.util.helper.BlockHelper.BlockChecker;
@@ -16,88 +16,24 @@ import jaminv.advancedmachines.util.helper.BlockHelper.ScanResult;
 import jaminv.advancedmachines.util.recipe.IRecipeManager;
 import jaminv.advancedmachines.util.recipe.RecipeBase;
 import jaminv.advancedmachines.util.recipe.RecipeInput;
-import jaminv.advancedmachines.util.recipe.RecipeOutput;
 import net.minecraft.block.Block;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 
 public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase {
-	
-	protected static class UpgradeManager {
-		Map<IMachineUpgrade.UpgradeType, Integer> upgrades;
-		
-		protected void reset() {
-			upgrades = new EnumMap<IMachineUpgrade.UpgradeType, Integer>(IMachineUpgrade.UpgradeType.class);
-		}
-		
-		protected void add(IMachineUpgrade.UpgradeType type, int add) {
-			if (upgrades == null) { reset(); }
-			Integer qty = upgrades.get(type);
-			if (qty == null) { qty = 0; }
-			upgrades.put(type, qty + add);
-		}
-		
-		public int get(IMachineUpgrade.UpgradeType type) {
-			if (upgrades == null) { return 0; }
-			Integer qty = upgrades.get(type);
-			if (qty == null) { return 0; }
-			return qty;
-		}
-	}
 
 	public TileEntityMachineMultiblock(IRecipeManager recipeManager) {
 		super(recipeManager);
 	}
 
-	public static abstract class MultiblockState {
-		public abstract String toString();
-	}
-	public static class MultiblockSimple extends MultiblockState {
-		protected final String message;
-		public MultiblockSimple(String message) {
-			this.message = message;
-		}
-		
-		@Override
-		public String toString() {
-			return I18n.format(message);
-		}
-	}
-	public static class MultiblockIllegal extends MultiblockState {
-		protected final String message;
-		protected final String name;
-		protected final BlockPos pos;
-		public MultiblockIllegal(String message, String name, BlockPos pos) {
-			this.message = message;
-			this.name = name;
-			this.pos = pos;
-		}
-		
-		@Override
-		public String toString() {
-			return I18n.format(message, name, pos.getX(), pos.getY(), pos.getZ());
-		}
-	}
+	protected MultiblockState multiblockState = new MultiblockSimple("message.multiblock.absent");
+	public String getMultiblockString() { return multiblockState.toString(); }
 	
-	public static class MultiblockComplete extends MultiblockState {
-		protected UpgradeManager upgrades;
-		public MultiblockComplete(UpgradeManager upgrades) {
-			this.upgrades = upgrades;
-		}
-		
-		@Override
-		public String toString() {
-			return I18n.format("message.multiblock.complete", 
-				upgrades.get(IMachineUpgrade.UpgradeType.MULTIPLY),
-				upgrades.get(IMachineUpgrade.UpgradeType.SPEED)
-			);
-		}		
-	}
-	
+	UpgradeManager upgrades = new UpgradeManager();
+
 	public static class MultiblockChecker extends BlockChecker {
 		@Override
 		public Action checkBlock(World world, BlockPos pos) {
@@ -106,12 +42,7 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 			if (block instanceof BlockMachineMultiblock) { return Action.END; }
 			return Action.SKIP;
 		}
-	}
-	
-	protected MultiblockState multiblockState = new MultiblockSimple("message.multiblock.absent");
-	public String getMultiblockString() { return multiblockState.toString(); }
-	
-	UpgradeManager upgrades = new UpgradeManager();
+	}	
 	
 	public void scanMultiblock() {
 		this.upgrades.reset();
@@ -122,14 +53,14 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 		
 		BlockPos end = result.getEnd();
 		if (end != null) {
-			this.multiblockState = new MultiblockIllegal("message.multiblock.connected_machine", BlockHelper.getBlockName(world, end), end);
+			this.multiblockState = new MultiblockState.MultiblockIllegal("message.multiblock.connected_machine", BlockHelper.getBlockName(world, end), end);
 			return;
 		}
 		
 		BlockPos min = result.getMin(), max = result.getMax();
 		
 		if (pos.equals(min) && pos.equals(max)) {
-			this.multiblockState = new MultiblockSimple("message.multiblock.absent");
+			this.multiblockState = new MultiblockState.MultiblockSimple("message.multiblock.absent");
 			return;
 		}
 		
@@ -143,8 +74,17 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 					if (block instanceof IMachineUpgrade) {
 						IMachineUpgrade upgrade = (IMachineUpgrade)block;
 						this.upgrades.add(upgrade.getUpgradeType(), upgrade.getUpgradeQty(world, check));
+						
+						if (block instanceof BlockMachineInventory) {
+							TileEntity te = world.getTileEntity(check);
+							if (te instanceof TileEntityMachineInventory) {
+								TileEntityMachineInventory inv = (TileEntityMachineInventory)te;
+								if (inv.getInputState()) { upgrades.addInventoryInput(check); }
+								else { upgrades.addInventoryOutput(check); }
+							}
+						}
 					} else {
-						this.multiblockState = new MultiblockIllegal("message.multiblock.illegal", block.getLocalizedName(), check.toImmutable());
+						this.multiblockState = new MultiblockState.MultiblockIllegal("message.multiblock.illegal", block.getLocalizedName(), check.toImmutable());
 						this.upgrades.reset();
 						return;
 					} 
@@ -152,7 +92,24 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 			}
 		}
 		
-		this.multiblockState = new MultiblockComplete(this.upgrades);
+		this.multiblockState = new MultiblockState.MultiblockComplete(this.upgrades);
+		
+		// Tell all the upgrades that they are now part of a multiblock
+		MutableBlockPos upgrade = new MutableBlockPos();
+		for (int x = min.getX(); x <= max.getX(); x++) {
+			for (int y = min.getY(); y <= max.getY(); y++) {
+				for (int z = min.getZ(); z <= max.getZ(); z++) {
+					upgrade.setPos(x, y, z);
+					if (pos.equals(upgrade)) { continue; }
+					Block block = world.getBlockState(check).getBlock();
+					if (block instanceof IMachineUpgrade) { 
+						((IMachineUpgrade) block).setMultiblock(world, upgrade, this.getPos(), new MultiblockBorders(upgrade, min, max));
+					}
+				}
+			}
+		}
+		
+		world.markBlockRangeForRenderUpdate(min, max);
 		return;
 	}
 	
@@ -190,5 +147,20 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 		for (int i = 0; i < qtyProcessing; i++) {
 			outputSecondary(recipe.getSecondary());
 		}
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound compound) {
+		super.readFromNBT(compound);
+		if (compound.hasKey("upgrades")) {
+			upgrades.deserializeNBT(compound.getCompoundTag("upgrades"));
+		}
+	}
+	
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+		super.writeToNBT(compound);
+		compound.setTag("upgrades",  upgrades.serializeNBT());
+		return compound;
 	}
 }

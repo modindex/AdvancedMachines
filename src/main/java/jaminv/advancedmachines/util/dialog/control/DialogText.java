@@ -1,9 +1,10 @@
-package jaminv.advancedmachines.util.dialog.struct;
+package jaminv.advancedmachines.util.dialog.control;
 
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 
-public class DialogText {
+public class DialogText implements IDialogElement {
 	protected final int x, y, w;
 	protected final String text;
 	protected final int color;
@@ -25,13 +26,13 @@ public class DialogText {
 	public String getText() { return text; }
 	public int getColor() { return color; }
 	
-	public void draw(FontRenderer render, int guiLeft, int guiTop) {
-		int xpos = this.x;
+	public void draw(GuiScreen gui, FontRenderer font, int drawX, int drawY) {
+		int x = drawX;
 		String loc = I18n.format(text);
 		if (w != -1) {
-			int strw = render.getStringWidth(loc);
-			xpos += w / 2 - strw / 2;				
+			int strw = font.getStringWidth(loc);
+			x += w / 2 - strw / 2;				
 		}
-		render.drawString(I18n.format(loc), xpos + guiLeft, y + guiTop, color);
+		font.drawString(I18n.format(loc), x, drawY, color);
 	}
 }

@@ -44,7 +44,7 @@ public abstract class BlockMaterial extends Block implements IHasModel, IMetaNam
 		setRegistryName(name);
 		setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
 		
-		setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, MaterialBase.MaterialRegistry.lookupMeta(type, 0)));
+		setDefaultState(this.createDefaultState());
 		setHardness(hardness);
 		
 		this.name = name;
@@ -52,6 +52,10 @@ public abstract class BlockMaterial extends Block implements IHasModel, IMetaNam
 		
 		BlockInit.BLOCKS.add(this);
 		ItemInit.ITEMS.add(new ItemBlockVariants(this).setRegistryName(this.getRegistryName()));
+	}
+	
+	protected IBlockState createDefaultState() {
+		return this.blockState.getBaseState().withProperty(VARIANT, MaterialBase.MaterialRegistry.lookupMeta(type, 0));
 	}
 	
 	public BlockMaterial(String name, MaterialBase.MaterialType type, String oredictprefix, Material material, float hardness) {

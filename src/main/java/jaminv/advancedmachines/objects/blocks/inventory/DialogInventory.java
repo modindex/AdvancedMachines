@@ -3,11 +3,8 @@ package jaminv.advancedmachines.objects.blocks.inventory;
 import java.util.ArrayList;
 import java.util.List;
 
-import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
 import jaminv.advancedmachines.util.dialog.DialogBase;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ResourceLocation;
+import jaminv.advancedmachines.util.dialog.struct.DialogPos;
 
 public abstract class DialogInventory extends DialogBase {
 	
@@ -49,8 +46,8 @@ public abstract class DialogInventory extends DialogBase {
 		public int getRows() { return rows; }
 		public int getCols() { return cols; }
 		
-		public Position getPosition(int index) {
-			return new Position(xpos + (index % cols) * xspacing, ypos + (index / cols) * yspacing);
+		public DialogPos getPosition(int index) {
+			return new DialogPos(xpos + (index % cols) * xspacing, ypos + (index / cols) * yspacing);
 		}
 	}
 	public class InventoryLayout extends ContainerLayout {

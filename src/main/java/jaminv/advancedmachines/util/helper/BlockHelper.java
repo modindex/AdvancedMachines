@@ -103,4 +103,6 @@ public class BlockHelper {
 		player.openGui(Main.instance, guiId, world, pos.getX(), pos.getY(), pos.getZ());
 		return true;		
 	}
+	
+
 }

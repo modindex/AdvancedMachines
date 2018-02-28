@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.gui.GuiScreen;
 
-public class DialogTextureMap<T extends Enum<T>> extends DialogArea {
+public class DialogTextureMap<T> extends DialogArea {
 	public static enum TextureDefault { DEFAULT };
 	
 	public static class DialogTextureMapDefault extends DialogTextureMap<TextureDefault> {
@@ -41,10 +41,10 @@ public class DialogTextureMap<T extends Enum<T>> extends DialogArea {
 		return textures.get(identifier);
 	}
 	
-	public void draw(GuiScreen gui, int guiLeft, int guiTop, T identifier) {
+	public void draw(GuiScreen gui, int drawX, int drawY, T identifier) {
 		DialogTexture texture = textures.get(identifier);
 		if (texture == null) { return; }
 		
-		gui.drawTexturedModalRect(guiLeft + x, guiTop + y, texture.getU(), texture.getV(), w, h);
+		gui.drawTexturedModalRect(drawX, drawY, texture.getU(), texture.getV(), w, h);
 	}
 }

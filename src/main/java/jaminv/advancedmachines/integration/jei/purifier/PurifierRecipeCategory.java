@@ -9,18 +9,13 @@ import jaminv.advancedmachines.init.BlockInit;
 import jaminv.advancedmachines.integration.jei.RecipeCategoryBase;
 import jaminv.advancedmachines.integration.jei.RecipeUids;
 import jaminv.advancedmachines.integration.jei.RecipeWrapperBase;
-import jaminv.advancedmachines.objects.blocks.machine.DialogMachineBase;
-import jaminv.advancedmachines.objects.blocks.machine.DialogMachineBase.ContainerLayout;
 import jaminv.advancedmachines.objects.blocks.machine.purifier.DialogMachinePurifier;
 import jaminv.advancedmachines.objects.blocks.machine.purifier.TileEntityMachinePurifier;
-import jaminv.advancedmachines.util.dialog.DialogBase;
+import jaminv.advancedmachines.util.dialog.struct.DialogArea;
 import jaminv.advancedmachines.util.recipe.machine.PurifierManager;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModRegistry;
-import mezz.jei.api.gui.IGuiItemStackGroup;
-import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -31,9 +26,9 @@ public class PurifierRecipeCategory extends RecipeCategoryBase<PurifierRecipeCat
 
 	public PurifierRecipeCategory(IGuiHelper guiHelper) {
 		super(sDialog); 
-		DialogBase.Texture texture = dialog.getJeiTexture();
+		DialogArea texture = dialog.getJeiTexture();
 		this.background = guiHelper.createDrawable(dialog.getJeiBackground(),
-			texture.getXPos(), texture.getYPos(), texture.getWidth(), texture.getHeight());
+			texture.getX(), texture.getY(), texture.getW(), texture.getH());
 		this.localizedName = I18n.format("tile.purifier.name"); 
 	}
 
@@ -62,10 +57,10 @@ public class PurifierRecipeCategory extends RecipeCategoryBase<PurifierRecipeCat
 		
 		registry.addRecipes(getRecipes(guiHelper), RecipeUids.PURIFIER);
 		
-		DialogBase.Target jeiTarget = sDialog.getJeiTarget();
+		DialogArea jeiTarget = sDialog.getJeiTarget();
 		registry.addRecipeClickArea(TileEntityMachinePurifier.GuiMachinePurifier.class,
-			jeiTarget.getXPos(), jeiTarget.getYPos(),
-			jeiTarget.getWidth(), jeiTarget.getHeight(),
+			jeiTarget.getX(), jeiTarget.getY(),
+			jeiTarget.getW(), jeiTarget.getH(),
 			RecipeUids.PURIFIER
 		);
 		

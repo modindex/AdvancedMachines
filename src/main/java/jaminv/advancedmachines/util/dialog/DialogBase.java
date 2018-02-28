@@ -1,10 +1,12 @@
 package jaminv.advancedmachines.util.dialog;
 
 import jaminv.advancedmachines.util.Reference;
+import jaminv.advancedmachines.util.dialog.control.DialogText;
+import jaminv.advancedmachines.util.dialog.control.IDialogControl;
+import jaminv.advancedmachines.util.dialog.control.IDialogElement;
 import jaminv.advancedmachines.util.dialog.gui.IGuiObservable;
 import jaminv.advancedmachines.util.dialog.gui.IGuiObserver;
 import jaminv.advancedmachines.util.dialog.struct.DialogArea;
-import jaminv.advancedmachines.util.dialog.struct.DialogText;
 import jaminv.advancedmachines.util.dialog.struct.DialogTooltip;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -18,31 +20,30 @@ import scala.actors.threadpool.Arrays;
 public class DialogBase implements IGuiObserver {
 	private final ResourceLocation background;
 	private final DialogArea dialog;
-	private NonNullList<DialogText> text = NonNullList.<DialogText>create();
+	private NonNullList<IDialogElement> elements = NonNullList.<IDialogElement>create();
 	private NonNullList<DialogTooltip> tooltip = NonNullList.<DialogTooltip>create();
 	
-	public DialogBase(IGuiObservable gui, String background, int xpos, int ypos, int width, int height) {
+	public DialogBase(String background, int xpos, int ypos, int width, int height) {
 		this.background = new ResourceLocation(Reference.MODID, background);
 		this.dialog = new DialogArea(xpos, ypos, width, height);
-		gui.addObserver(this);
 	}
 	
-	protected GuiScreen gui;
-	protected FontRenderer font;
-	protected int guiLeft, guiTop;
-	
-	@Override
-	public void init(GuiScreen gui, FontRenderer font, int guiLeft, int guiTop) {
-		this.gui = gui; this.font = font;
-		this.guiLeft = guiLeft; this.guiTop = guiTop;
+	/**
+	 * Add a Dialog Element
+	 * 
+	 * Dialog is not setup to handle overlapping elements
+	 * @param element
+	 */
+	protected void addElement(IDialogElement element) {
+		this.elements.add(element);
 	}
 	
 	protected void addText(int xpos, int ypos, int width, String text, int color) {
-		this.text.add(new DialogText(xpos, ypos, width, text, color));
+		this.elements.add(new DialogText(xpos, ypos, width, text, color));
 	}
 	
 	protected void addText(int xpos, int ypos, String text, int color) {
-		this.text.add(new DialogText(xpos, ypos, text, color));
+		this.elements.add(new DialogText(xpos, ypos, text, color));
 	}
 	
 	protected void addTooltip(int xpos, int ypos, int width, int height, String text) {
@@ -69,12 +70,16 @@ public class DialogBase implements IGuiObserver {
 		return this.dialog;
 	}
 	
-	public void drawBackground(float partialTops, int mouseX, int mouseY) {
+	public void drawBackground(GuiScreen gui, FontRenderer font, int guiLeft, int guiTop, int mouseX, int mouseY) {
+		gui.mc.getTextureManager().bindTexture(this.background);
 		gui.drawTexturedModalRect(guiLeft, guiTop, dialog.getX(), dialog.getY(), dialog.getW(), dialog.getH());
-		this.drawText();
+		
+		for (IDialogElement element : elements) {
+			element.draw(gui, font, guiLeft + element.getX(), guiTop + element.getY());
+		}
 	}
 	
-	public void drawForeground(int mouseX, int mouseY) {
+	public void drawForeground(GuiScreen gui, FontRenderer font, int guiLeft, int guiTop, int mouseX, int mouseY) {
 		Minecraft minecraft = gui.mc;
 		
 		for (DialogTooltip tip : tooltip) {
@@ -88,13 +93,20 @@ public class DialogBase implements IGuiObserver {
 		}
 	}	
 	
-	public void drawText() {
-		for (DialogText t : text) {
-			t.draw(font, guiLeft, guiTop);
-		}
-	}
-
 	@Override
-	public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+	public void mouseClicked(int guiLeft, int guiTop, int mouseX, int mouseY, int mouseButton) {
+		for (IDialogElement element : elements) {
+			if (element instanceof IDialogControl) {
+				IDialogControl control = (IDialogControl)element;
+				if (mouseX >= control.getX() + guiLeft && mouseX <= control.getX() + control.getW() + guiLeft
+					&& mouseY >= control.getY() + guiTop && mouseY <= control.getY() + control.getH() + guiTop) {
+					
+					boolean redraw = control.mouseClicked(mouseX - control.getX() - guiLeft, mouseY - control.getY() - guiTop, mouseButton);
+					//if (redraw) {
+					//	control.draw(gui, font, control.getX() + guiLeft, control.getY() + guiTop);
+					//}
+				}
+			}
+		}
 	}
 }

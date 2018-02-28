@@ -3,8 +3,8 @@ package jaminv.advancedmachines.objects.blocks.machine.expansion.inventory;
 import javax.annotation.Nullable;
 
 import jaminv.advancedmachines.objects.blocks.inventory.ContainerInventory;
-import jaminv.advancedmachines.objects.blocks.inventory.GuiInventory;
 import jaminv.advancedmachines.objects.blocks.inventory.TileEntityInventory;
+import jaminv.advancedmachines.util.dialog.gui.GuiContainerObservable;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.IInventory;
@@ -27,6 +27,10 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 	public boolean getInputState() {
 		return inputState;
 	}
+	public void setInputState(boolean state) {
+		this.inputState = state;
+		world.markBlockRangeForRenderUpdate(this.pos, this.pos);
+	}
 	
 	public final int SIZE = 27;
 	@Override
@@ -34,7 +38,14 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 		return SIZE;
 	}
 	
-	private final DialogMachineInventory dialog = new DialogMachineInventory();
+	private final DialogMachineInventory dialog = new DialogMachineInventory(this);
+	
+	public class GuiMachineInventory extends GuiContainerObservable {
+		public GuiMachineInventory(ContainerInventory container, DialogMachineInventory dialog) {
+			super(container, dialog.getW(), dialog.getH());
+			this.addObserver(dialog);
+		}
+	}
 	
 	@Override
 	public ContainerInventory createContainer(IInventory inventory) {
@@ -43,7 +54,7 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 	
 	@Override
 	public GuiContainer createGui(IInventory inventory) {
-		return new GuiInventory(createContainer(inventory), dialog);
+		return new GuiMachineInventory(createContainer(inventory), dialog);
 	}
 	
 	@Override

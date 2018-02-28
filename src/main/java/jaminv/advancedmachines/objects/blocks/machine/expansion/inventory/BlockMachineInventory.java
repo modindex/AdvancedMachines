@@ -65,7 +65,7 @@ public class BlockMachineInventory extends BlockMachineExpansion implements ITil
 	@Override
 	protected BlockStateContainer createBlockState() {
 		VARIANT = this.getVariant();
-		return new BlockStateContainer(this, new IProperty[] {VARIANT, INPUT, FACING});
+		return new BlockStateContainer(this, new IProperty[] { VARIANT, INPUT, FACING });
 	}
 	
 	@Override

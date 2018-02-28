@@ -3,10 +3,11 @@ package jaminv.advancedmachines.integration.jei;
 import java.util.List;
 
 import jaminv.advancedmachines.integration.jei.purifier.PurifierRecipeCategory.PurifierRecipe;
+import jaminv.advancedmachines.objects.blocks.inventory.DialogInventory.ContainerLayout;
 import jaminv.advancedmachines.objects.blocks.machine.DialogMachineBase;
-import jaminv.advancedmachines.objects.blocks.machine.DialogMachineBase.ContainerLayout;
 import jaminv.advancedmachines.util.Reference;
 import jaminv.advancedmachines.util.dialog.DialogBase;
+import jaminv.advancedmachines.util.dialog.struct.DialogPos;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableStatic;
 import mezz.jei.api.gui.IGuiItemStackGroup;
@@ -82,8 +83,8 @@ public abstract class RecipeCategoryBase<T extends RecipeWrapperBase> implements
 		}
 		
 		for (int i = 0; i < itemCount; i++) {
-			DialogBase.Position pos = layout.getPosition(i); 
-			guiItemStacks.init(i + offset, input, pos.getXPos(), pos.getYPos());
+			DialogPos pos = layout.getPosition(i); 
+			guiItemStacks.init(i + offset, input, pos.getX(), pos.getY());
 			guiItemStacks.set(i + offset, items.get(i + itemOffset));
 		}
 	}	

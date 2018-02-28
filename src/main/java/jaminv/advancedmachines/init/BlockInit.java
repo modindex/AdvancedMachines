@@ -38,7 +38,7 @@ public class BlockInit {
 	public static final BlockMachineAlloy MACHINE_ALLOY = new BlockMachineAlloy("machine_alloy");
 	
 	public static final BlockMachineExpansion MACHINE_EXPANSION = new BlockMachineExpansion("machine_expansion");
-	public static final BlockMachineInventory MACHINE_INVENTORY = new BlockMachineInventory("machine_inventory");
+	//public static final BlockMachineInventory MACHINE_INVENTORY = new BlockMachineInventory("machine_inventory");
 	
 	public static final DataBlock DATABLOCK = new DataBlock();
 }

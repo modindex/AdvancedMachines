@@ -10,15 +10,16 @@ import net.minecraft.inventory.Container;
 
 public class GuiContainerObservable extends GuiContainer implements IGuiObservable {
 
-	public GuiContainerObservable(Container inventorySlotsIn) {
+	public GuiContainerObservable(Container inventorySlotsIn, int width, int height) {
 		super(inventorySlotsIn);
+		xSize = width;
+		ySize = height;
 	}
 
 	private List<IGuiObserver> observers = new ArrayList<>();	
 	@Override
 	public void addObserver(IGuiObserver obv) {
 		this.observers.add(obv);
-		obv.init(this, fontRenderer, guiLeft, guiTop);
 	}
 
 	@Override
@@ -29,7 +30,7 @@ public class GuiContainerObservable extends GuiContainer implements IGuiObservab
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
 		for (IGuiObserver obv : this.observers) {
-			obv.drawBackground(partialTicks, mouseX, mouseY);
+			obv.drawBackground(this, this.fontRenderer, guiLeft, guiTop, mouseX, mouseY);
 		}
 	}
 	
@@ -38,7 +39,7 @@ public class GuiContainerObservable extends GuiContainer implements IGuiObservab
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 		
 		for (IGuiObserver obv : this.observers) {
-			obv.drawForeground(mouseX, mouseY);
+			obv.drawForeground(this, this.fontRenderer, guiLeft, guiTop, mouseX, mouseY);
 		}
 	}
 	
@@ -47,8 +48,14 @@ public class GuiContainerObservable extends GuiContainer implements IGuiObservab
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 		
 		for (IGuiObserver obv : this.observers) {
-			obv.mouseClicked(mouseX, mouseY, mouseButton);
+			obv.mouseClicked(guiLeft, guiTop, mouseX, mouseY, mouseButton);
 		}
 	}
-
+	
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		this.drawDefaultBackground();
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		this.renderHoveredToolTip(mouseX, mouseY);
+	}
 }

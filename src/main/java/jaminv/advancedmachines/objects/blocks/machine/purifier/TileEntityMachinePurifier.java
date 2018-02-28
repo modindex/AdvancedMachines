@@ -2,9 +2,8 @@ package jaminv.advancedmachines.objects.blocks.machine.purifier;
 
 import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine;
 import jaminv.advancedmachines.objects.blocks.machine.DialogMachineBase;
-import jaminv.advancedmachines.objects.blocks.machine.GuiMachine;
-import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
+import jaminv.advancedmachines.util.dialog.gui.GuiContainerObservable;
 import jaminv.advancedmachines.util.recipe.machine.PurifierManager;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.IInventory;
@@ -22,10 +21,10 @@ public class TileEntityMachinePurifier extends TileEntityMachineMultiblock {
 	
 	private final DialogMachinePurifier dialog = new DialogMachinePurifier(this);
 	
-	public static class GuiMachinePurifier extends GuiMachine {
-		public GuiMachinePurifier(TileEntityMachineBase tileEntity, ContainerMachine container,
-				DialogMachineBase dialog) {
-			super(container, dialog, tileEntity);
+	public static class GuiMachinePurifier extends GuiContainerObservable {
+		public GuiMachinePurifier(ContainerMachine container, DialogMachineBase dialog) {
+			super(container, dialog.getW(), dialog.getH());
+			this.addObserver(dialog);
 		}
 	}
 	
@@ -40,6 +39,8 @@ public class TileEntityMachinePurifier extends TileEntityMachineMultiblock {
 	
 	@Override
 	public GuiContainer createGui(IInventory inventory) {
-		return new GuiMachinePurifier(this, createContainer(inventory), dialog);
+		GuiMachinePurifier gui = new GuiMachinePurifier(createContainer(inventory), dialog);
+		gui.addObserver(dialog);
+		return gui;
 	}
 }
