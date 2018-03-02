@@ -18,6 +18,7 @@ import jaminv.advancedmachines.util.recipe.RecipeBase;
 import jaminv.advancedmachines.util.recipe.RecipeInput;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -33,6 +34,7 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 	public String getMultiblockString() { return multiblockState.toString(); }
 	
 	UpgradeManager upgrades = new UpgradeManager();
+	BlockPos multiblockMin = null, multiblockMax = null;
 
 	public static class MultiblockChecker extends BlockChecker {
 		@Override
@@ -45,6 +47,14 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 	}	
 	
 	public void scanMultiblock() {
+		if (multiblockMin != null && multiblockMax != null) {
+			// Reset the multiblock status
+			setMultiblock(multiblockMin, multiblockMax, false);
+			world.markBlockRangeForRenderUpdate(multiblockMin, multiblockMax);
+			
+			multiblockMin = null; multiblockMax = null;
+		}
+		
 		this.upgrades.reset();
 		
 		BlockPos pos = this.getPos();
@@ -93,21 +103,10 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 		}
 		
 		this.multiblockState = new MultiblockState.MultiblockComplete(this.upgrades);
+		multiblockMin = min; multiblockMax = max;
 		
 		// Tell all the upgrades that they are now part of a multiblock
-		MutableBlockPos upgrade = new MutableBlockPos();
-		for (int x = min.getX(); x <= max.getX(); x++) {
-			for (int y = min.getY(); y <= max.getY(); y++) {
-				for (int z = min.getZ(); z <= max.getZ(); z++) {
-					upgrade.setPos(x, y, z);
-					if (pos.equals(upgrade)) { continue; }
-					Block block = world.getBlockState(check).getBlock();
-					if (block instanceof IMachineUpgrade) { 
-						((IMachineUpgrade) block).setMultiblock(world, upgrade, this.getPos(), new MultiblockBorders(upgrade, min, max));
-					}
-				}
-			}
-		}
+		setMultiblock(min, max, true);
 		
 		world.markBlockRangeForRenderUpdate(min, max);
 		return;
@@ -149,18 +148,46 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 		}
 	}
 	
+	protected void setMultiblock(BlockPos min, BlockPos max, boolean isMultiblock) {
+		MutableBlockPos upgrade = new MutableBlockPos();
+		for (int x = min.getX(); x <= max.getX(); x++) {
+			for (int y = min.getY(); y <= max.getY(); y++) {
+				for (int z = min.getZ(); z <= max.getZ(); z++) {
+					upgrade.setPos(x, y, z);
+					if (pos.equals(upgrade)) { continue; }
+					Block block = world.getBlockState(upgrade).getBlock();
+					if (block instanceof IMachineUpgrade) { 
+						MultiblockBorders bord;
+						if (!isMultiblock) { bord = MultiblockBorders.DEFAULT; }
+						else { bord = new MultiblockBorders(world, upgrade, min, max); }
+						
+						((IMachineUpgrade) block).setMultiblock(world, upgrade, this.getPos(), bord);
+					}
+				}
+			}
+		}
+	}
+	
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		if (compound.hasKey("upgrades")) {
 			upgrades.deserializeNBT(compound.getCompoundTag("upgrades"));
 		}
+    	if (compound.hasKey("multiblockMin")) {
+    		multiblockMin = NBTUtil.getPosFromTag(compound.getCompoundTag("multiblockMin"));
+    	}
+    	if (compound.hasKey("multiblockMax")) {
+    		multiblockMax = NBTUtil.getPosFromTag(compound.getCompoundTag("multiblockMax"));
+    	}		
 	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		compound.setTag("upgrades",  upgrades.serializeNBT());
+        if (multiblockMin != null) { compound.setTag("multiblockMin", NBTUtil.createPosTag(multiblockMin)); }
+        if (multiblockMax != null) { compound.setTag("multiblockMax", NBTUtil.createPosTag(multiblockMax)); }
 		return compound;
 	}
 }

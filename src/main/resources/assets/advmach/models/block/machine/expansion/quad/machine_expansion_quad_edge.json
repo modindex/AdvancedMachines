@@ -1,0 +1,8 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "advmach:blocks/machine/expansion/quad/machine_expansion_quad_none",
+        "north": "advmach:blocks/machine/expansion/quad/machine_expansion_quad_top",
+        "up": "advmach:blocks/machine/expansion/quad/machine_expansion_quad_top"
+    }
+}

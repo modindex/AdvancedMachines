@@ -54,6 +54,8 @@ public abstract class BlockMaterial extends Block implements IHasModel, IMetaNam
 		ItemInit.ITEMS.add(new ItemBlockVariants(this).setRegistryName(this.getRegistryName()));
 	}
 	
+	public MaterialBase.MaterialType getMaterialType() { return type; }
+	
 	protected IBlockState createDefaultState() {
 		return this.blockState.getBaseState().withProperty(VARIANT, MaterialBase.MaterialRegistry.lookupMeta(type, 0));
 	}
@@ -102,6 +104,10 @@ public abstract class BlockMaterial extends Block implements IHasModel, IMetaNam
 	@Override
 	public String getSpecialName(ItemStack stack) {
 		return MaterialBase.byMetadata(type, stack.getItemDamage()).getName();
+	}
+	
+	public MaterialBase getVariant(IBlockState state) {
+		return (MaterialBase)state.getValue(VARIANT);
 	}
 	
 	@Override

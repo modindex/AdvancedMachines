@@ -1,0 +1,9 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "advmach:blocks/machine/expansion/impossible/machine_expansion_impossible_none",
+        "north": "advmach:blocks/machine/expansion/impossible/machine_expansion_impossible_top",
+        "south": "advmach:blocks/machine/expansion/impossible/machine_expansion_impossible_top",
+        "up": "advmach:blocks/machine/expansion/impossible/machine_expansion_impossible_left_right"
+    }
+}

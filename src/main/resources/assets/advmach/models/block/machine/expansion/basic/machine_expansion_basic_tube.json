@@ -1,0 +1,10 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "advmach:blocks/machine/expansion/basic/machine_expansion_basic_none",
+        "north": "advmach:blocks/machine/expansion/basic/machine_expansion_basic_top_bottom",
+        "south": "advmach:blocks/machine/expansion/basic/machine_expansion_basic_top_bottom",
+        "up": "advmach:blocks/machine/expansion/basic/machine_expansion_basic_left_right"
+        "down": "advmach:blocks/machine/expansion/basic/machine_expansion_basic_left_right"
+    }
+}
