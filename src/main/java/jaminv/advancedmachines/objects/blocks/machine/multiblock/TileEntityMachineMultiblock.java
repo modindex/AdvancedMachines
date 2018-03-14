@@ -6,6 +6,8 @@ import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgrade;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgrade.UpgradeType;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.energy.BlockMachineEnergy;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.energy.TileEntityMachineEnergy;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.BlockMachineInventory;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.TileEntityMachineInventory;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockState.MultiblockSimple;
@@ -84,15 +86,20 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 					if (block instanceof IMachineUpgrade) {
 						IMachineUpgrade upgrade = (IMachineUpgrade)block;
 						this.upgrades.add(upgrade.getUpgradeType(), upgrade.getUpgradeQty(world, check));
-						
+
+						TileEntity te = world.getTileEntity(check);
 						if (block instanceof BlockMachineInventory) {
-							TileEntity te = world.getTileEntity(check);
 							if (te instanceof TileEntityMachineInventory) {
 								TileEntityMachineInventory inv = (TileEntityMachineInventory)te;
 								if (inv.getInputState()) { upgrades.addInventoryInput(check); }
 								else { upgrades.addInventoryOutput(check); }
 							}
 						}
+						if (block instanceof BlockMachineEnergy) {
+							if (te instanceof TileEntityMachineEnergy) {
+								upgrades.addEnergy(check);
+							}
+						}						
 					} else {
 						this.multiblockState = new MultiblockState.MultiblockIllegal("message.multiblock.illegal", block.getLocalizedName(), check.toImmutable());
 						this.upgrades.reset();
@@ -113,6 +120,19 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 	}
 	
 	protected int qtyProcessing = 0;
+	
+	@Override
+	protected void tickUpdate() {
+		super.tickUpdate();
+		
+		BlockPos energy_pos = upgrades.getEnergy();
+		if (energy_pos != null) {
+			TileEntity te = world.getTileEntity(energy_pos);
+			if (te instanceof TileEntityMachineEnergy) {
+				((TileEntityMachineEnergy)te).transferEnergy(energy);
+			}
+		}
+	}
 	
 	@Override
 	protected int beginProcess(RecipeBase recipe, RecipeInput[] input) {

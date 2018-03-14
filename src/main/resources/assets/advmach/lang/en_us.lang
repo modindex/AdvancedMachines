@@ -55,6 +55,7 @@ dialog.common.input=Input
 dialog.common.output=Output
 
 dialog.alloy.title=Alloy Forge
+dialog.energy.title=Energy
 
 
 message.no_controller=No Machine Controller Found

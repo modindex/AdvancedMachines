@@ -125,9 +125,8 @@ public class BlockMachineExpansion extends BlockMaterial implements IMachineUpgr
 	@Override
 	public void setMultiblock(World world, BlockPos pos, BlockPos parent, MultiblockBorders borders) {
 		TileEntity tileentity = world.getTileEntity(pos);
-		if (tileentity instanceof TileEntityMachineExpansion) {
-			TileEntityMachineExpansion te = (TileEntityMachineExpansion)tileentity;
-			te.setBorders(borders);
+		if (tileentity instanceof IMachineUpgradeTileEntity) {
+			((IMachineUpgradeTileEntity)tileentity).setBorders(borders);
 		}
 	}
 }

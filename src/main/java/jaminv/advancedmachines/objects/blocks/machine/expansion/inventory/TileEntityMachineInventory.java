@@ -4,6 +4,8 @@ import javax.annotation.Nullable;
 
 import jaminv.advancedmachines.objects.blocks.inventory.ContainerInventory;
 import jaminv.advancedmachines.objects.blocks.inventory.TileEntityInventory;
+import jaminv.advancedmachines.objects.blocks.machine.MachineEnergyStorage;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.util.dialog.gui.GuiContainerObservable;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -16,6 +18,7 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 	
 	protected EnumFacing facing = EnumFacing.NORTH;
 	protected boolean inputState = true;
+	protected MultiblockBorders borders = new MultiblockBorders();
 	
 	public void setFacing(EnumFacing facing) {
 		this.facing = facing;
@@ -31,6 +34,14 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 		this.inputState = state;
 		world.markBlockRangeForRenderUpdate(this.pos, this.pos);
 	}
+	
+	public void setBorders(MultiblockBorders borders) {
+		this.borders = borders;
+	}
+	
+	public MultiblockBorders getBorders() {
+		return borders; 
+	}	
 	
 	public final int SIZE = 27;
 	@Override
@@ -66,6 +77,9 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 		if (compound.hasKey("inputState")) {
 			inputState = compound.getBoolean("inputState");
 		}
+		if (compound.hasKey("borders")) {
+			borders.deserializeNBT(compound.getCompoundTag("borders"));
+		}		
 	}
 	
 	@Override
@@ -73,7 +87,7 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 		super.writeToNBT(compound);
 		compound.setString("facing", facing.getName());
 		compound.setBoolean("inputState", inputState);
-		
+		compound.setTag("borders",  borders.serializeNBT());		
 		return compound;
 	}
 	

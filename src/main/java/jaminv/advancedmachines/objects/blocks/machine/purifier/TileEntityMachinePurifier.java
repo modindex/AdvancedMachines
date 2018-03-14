@@ -16,7 +16,7 @@ public class TileEntityMachinePurifier extends TileEntityMachineMultiblock {
 	@Override
 	public int getOutputCount() { return 1;	}
 	
-	@Override
+	@Override 
 	public int getSecondaryCount() { return 6; }
 	
 	private final DialogMachinePurifier dialog = new DialogMachinePurifier(this);

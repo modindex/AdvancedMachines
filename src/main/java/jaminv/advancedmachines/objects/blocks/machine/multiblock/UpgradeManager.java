@@ -3,6 +3,7 @@ package jaminv.advancedmachines.objects.blocks.machine.multiblock;
 import java.util.EnumMap;
 import java.util.Map;
 
+import javax.annotation.Nullable;
 import javax.management.NotificationBroadcaster;
 
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgrade;
@@ -16,7 +17,7 @@ import net.minecraftforge.common.util.INBTSerializable;
 
 public class UpgradeManager implements INBTSerializable<NBTTagCompound> {
 	protected Map<IMachineUpgrade.UpgradeType, Integer> upgrades;
-	protected BlockPos inventoryInput = null, inventoryOutput = null;
+	protected BlockPos inventoryInput = null, inventoryOutput = null, energy = null;
 	
 	protected void reset() {
 		upgrades = new EnumMap<IMachineUpgrade.UpgradeType, Integer>(IMachineUpgrade.UpgradeType.class);
@@ -39,13 +40,22 @@ public class UpgradeManager implements INBTSerializable<NBTTagCompound> {
 	
 	public void addInventoryInput(BlockPos pos) {
 		if (inventoryInput != null) { return; }
-		inventoryInput = pos;
+		inventoryInput = new BlockPos(pos);
 	}
 	
 	public void addInventoryOutput(BlockPos pos) {
 		if (inventoryOutput != null) { return; }
-		inventoryOutput = pos;
+		inventoryOutput = new BlockPos(pos);
 	}
+	
+	public void addEnergy(BlockPos pos) {
+		if (energy != null) { return; }
+		energy = new BlockPos(pos);
+	}
+	
+	@Nullable public BlockPos getInventoryInput() { return inventoryInput; }
+	@Nullable public BlockPos getInventoryOutput() { return inventoryOutput; }
+	@Nullable public BlockPos getEnergy() { return energy; }
 	
     @Override
     public NBTTagCompound serializeNBT()
@@ -71,6 +81,7 @@ public class UpgradeManager implements INBTSerializable<NBTTagCompound> {
         }
         if (inventoryInput != null) { nbt.setTag("inventoryInput", NBTUtil.createPosTag(inventoryInput)); }
         if (inventoryOutput != null) { nbt.setTag("inventoryOutput", NBTUtil.createPosTag(inventoryInput)); }
+        if (energy != null) { nbt.setTag("energy", NBTUtil.createPosTag(energy)); }
         return nbt;
     }
 
@@ -93,6 +104,8 @@ public class UpgradeManager implements INBTSerializable<NBTTagCompound> {
     	if (nbt.hasKey("inventoryOutput")) {
     		inventoryOutput = NBTUtil.getPosFromTag(nbt.getCompoundTag("inventoryOutput"));
     	}
-    	
+    	if (nbt.hasKey("energy")) {
+    		energy = NBTUtil.getPosFromTag(nbt.getCompoundTag("energy"));
+    	}
     }
 }

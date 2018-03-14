@@ -1,3 +1,7 @@
 {
-    "parent": "advmach:block/machine_inventory"
+    "parent": "advmach:block/machine_inventory",
+    "textures": {
+        "all": "advmach:blocks/machine/expansion/basic/all",
+        "north": "advmach:blocks/machine/inventory/input/basic/all"
+    }
 }

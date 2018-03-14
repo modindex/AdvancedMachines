@@ -7,12 +7,13 @@ import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachi
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
-public class TileEntityMachineExpansion extends TileEntity {
+public class TileEntityMachineExpansion extends TileEntity implements IMachineUpgradeTileEntity {
 
 	protected MultiblockBorders borders = new MultiblockBorders();
 	
@@ -48,5 +49,11 @@ public class TileEntityMachineExpansion extends TileEntity {
     public NBTTagCompound getUpdateTag()
     {
         return this.writeToNBT(new NBTTagCompound());
-    }	
+    }
+    
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		super.onDataPacket(net, pkt);
+		handleUpdateTag(pkt.getNbtCompound());
+	}
 }

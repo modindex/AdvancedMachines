@@ -1,5 +1,6 @@
 package jaminv.advancedmachines.util.dialog;
 
+import jaminv.advancedmachines.objects.blocks.machine.dialog.DialogEnergyBar;
 import jaminv.advancedmachines.util.Reference;
 import jaminv.advancedmachines.util.dialog.control.DialogText;
 import jaminv.advancedmachines.util.dialog.control.IDialogControl;

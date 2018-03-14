@@ -23,7 +23,7 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public abstract class TileEntityMachineBase extends TileEntityInventory implements ITickable, IHasGui {
+public abstract class TileEntityMachineBase extends TileEntityInventory implements ITickable, IHasGui, IMachineEnergy {
 
 	public abstract int getInputCount();
 	public abstract int getOutputCount();
@@ -50,12 +50,14 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 	}
 	
 	private int tick;
-	private RecipeInput[] prevInput;
+	private RecipeInput[] prevInput; 
 		
 	@Override
 	public void update() {
 		tick++;
 		if (tick < Config.tickUpdate) { return; }
+		
+		tickUpdate();
 		
 		RecipeInput[] input = getInput();
 		checkInventoryChanges(input);
@@ -67,6 +69,8 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 			haltProcess();
 		}
 	}
+	
+	protected void tickUpdate() { }
 	
 	private int processTimeRemaining = -1;
 	private int totalProcessTime = 0;

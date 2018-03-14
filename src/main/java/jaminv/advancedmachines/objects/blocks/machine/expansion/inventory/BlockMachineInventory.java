@@ -1,6 +1,8 @@
 package jaminv.advancedmachines.objects.blocks.machine.expansion.inventory;
 
 import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansion;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachineExpansion;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.util.enums.EnumGui;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import jaminv.advancedmachines.util.interfaces.IHasTileEntity;
@@ -61,25 +63,31 @@ public class BlockMachineInventory extends BlockMachineExpansion implements ITil
 	public Class<? extends TileEntity> getTileEntityClass() {
 		return TileEntityMachineInventory.class;
 	}
-	
+
 	@Override
 	protected BlockStateContainer createBlockState() {
-		VARIANT = this.getVariant();
-		return new BlockStateContainer(this, new IProperty[] { VARIANT, INPUT, FACING });
+		VARIANT = this.getVariant();		
+		return new BlockStateContainer(this, new IProperty[] { VARIANT, INPUT, FACING, BORDER_TOP, BORDER_BOTTOM, BORDER_NORTH, BORDER_SOUTH, BORDER_EAST, BORDER_WEST });
 	}
 	
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         TileEntity tileentity = worldIn instanceof ChunkCache ? ((ChunkCache)worldIn).getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK) : worldIn.getTileEntity(pos);
+
         EnumFacing facing = EnumFacing.NORTH;
         boolean input = true;
+        MultiblockBorders borders = MultiblockBorders.DEFAULT;
 
         if (tileentity instanceof TileEntityMachineInventory) {
         	TileEntityMachineInventory te = (TileEntityMachineInventory)tileentity;
         	facing = te.getFacing();
         	input = te.getInputState();
+        	borders = te.getBorders();
         }
         
-        return state.withProperty(FACING, facing).withProperty(INPUT, input);
+        return state.withProperty(FACING, facing).withProperty(INPUT, input)
+        	.withProperty(BORDER_TOP, borders.getTop()).withProperty(BORDER_BOTTOM, borders.getBottom())
+        	.withProperty(BORDER_NORTH, borders.getNorth()).withProperty(BORDER_SOUTH, borders.getSouth())
+        	.withProperty(BORDER_EAST, borders.getEast()).withProperty(BORDER_WEST, borders.getWest());
 	}
 }
