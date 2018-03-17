@@ -24,6 +24,10 @@ public class UpgradeManager implements INBTSerializable<NBTTagCompound> {
 		inventoryInput = inventoryOutput = null;
 	}
 	
+	public boolean isValid() {
+		return (upgrades != null && upgrades.size() > 0) || inventoryInput != null || inventoryOutput != null || energy != null;
+	}
+	
 	protected void add(IMachineUpgrade.UpgradeType type, int add) {
 		if (upgrades == null) { reset(); }
 		Integer qty = upgrades.get(type);

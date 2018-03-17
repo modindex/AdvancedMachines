@@ -60,10 +60,14 @@ dialog.energy.title=Energy
 
 message.no_controller=No Machine Controller Found
 message.controller_found=Machine Controller (%s) found at (%d, %d, %d)
+message.multiblock.null=Multiblock invalid. You should never see this message.
 message.multiblock.absent=You may create a multiblock using this block and several Machine Expansions in cuboid shape up to 3x3x4.
 message.multiblock.connected_machine=Only one machine may be connected to a multiblock. A second machine, "%s" is connected at (%d, %d, %d).
 message.multiblock.illegal=Block "%s" at (%d, %d, %d) is not a legal for multiblock structure.
-message.multiblock.complete=Valid Multiblock\n\nMachine Multiplier: %d\nSpeed Upgrades: %d
+message.multiblock.complete=Valid Multiblock\n\nMachine Multiplier: %d\nSpeed Upgrades: %d\n
+message.multiblock.input=\nInventory Input at (%d, %d, %d)
+message.multiblock.output=\nInventory Output at (%d, %d, %d)
+message.multiblock.energy=\nEnergy Input at (%d, %d, %d)
 message.machine_inventory.connected=Connected to %s at (%d, %d, %d)
 message.machine_inventory.not_connected=Not connected to a multiblock
 message.machine_inventory.not_used=Advanced Machine multiblocks only support one input inventory block and one output.\nThis block is not being used. The block "%s" at (%d, %d, %d) is being used instead.

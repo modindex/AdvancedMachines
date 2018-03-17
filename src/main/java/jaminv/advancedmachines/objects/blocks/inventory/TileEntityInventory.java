@@ -34,6 +34,10 @@ public abstract class TileEntityInventory extends TileEntity implements ItemStac
 		this.inventory.addObserver(this);		
 	}
 	
+	public ItemStackHandlerObservable getInventory() {
+		return inventory;
+	}
+	
 	@Override
 	public void onContentsChanged(int slot) {
 		this.markDirty();

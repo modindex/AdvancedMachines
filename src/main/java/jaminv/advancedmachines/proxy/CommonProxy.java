@@ -7,6 +7,8 @@ import org.apache.logging.log4j.Level;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.init.RecipeInit;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.InventoryStateMessage;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.InventoryStateMessage.InventoryStateMessageHandler;
 import jaminv.advancedmachines.util.Config;
 import jaminv.advancedmachines.util.handlers.OreDictionaryHandler;
 import jaminv.advancedmachines.util.handlers.RegistryHandler;
@@ -22,6 +24,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 
 @EventBusSubscriber
 public class CommonProxy {
@@ -32,8 +35,10 @@ public class CommonProxy {
 		config = new Configuration(new File(directory.getPath(), "advancedmachines.cfg"));
 		Config.readConfig();
 		
-		RegistryHandler.otherRegistries();
+		Main.NETWORK.registerMessage(InventoryStateMessageHandler.class, InventoryStateMessage.class, 0, Side.SERVER);
 		
+		RegistryHandler.otherRegistries();
+		 
 		try {
 			BlockstateMaterial expansion = new BlockstateMaterial("machine_expansion", "machine/expansion/", MaterialBase.MaterialType.EXPANSION);
 			expansion.make();

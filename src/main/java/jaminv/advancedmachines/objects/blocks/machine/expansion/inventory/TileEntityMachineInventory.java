@@ -2,9 +2,11 @@ package jaminv.advancedmachines.objects.blocks.machine.expansion.inventory;
 
 import javax.annotation.Nullable;
 
+import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.objects.blocks.inventory.ContainerInventory;
 import jaminv.advancedmachines.objects.blocks.inventory.TileEntityInventory;
 import jaminv.advancedmachines.objects.blocks.machine.MachineEnergyStorage;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansion;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.util.dialog.gui.GuiContainerObservable;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
@@ -32,7 +34,12 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 	}
 	public void setInputState(boolean state) {
 		this.inputState = state;
+		BlockMachineExpansion.scanMultiblock(world, this.getPos());
 		world.markBlockRangeForRenderUpdate(this.pos, this.pos);
+		
+		if (world.isRemote) {
+			Main.NETWORK.sendToServer(new InventoryStateMessage(this.getPos(), state));
+		}
 	}
 	
 	public void setBorders(MultiblockBorders borders) {

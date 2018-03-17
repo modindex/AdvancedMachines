@@ -11,6 +11,7 @@ import jaminv.advancedmachines.objects.blocks.machine.expansion.energy.TileEntit
 import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.BlockMachineInventory;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.TileEntityMachineInventory;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockState.MultiblockSimple;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockState.MultiblockNull;
 import jaminv.advancedmachines.util.Config;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import jaminv.advancedmachines.util.helper.BlockHelper.BlockChecker;
@@ -19,12 +20,15 @@ import jaminv.advancedmachines.util.recipe.IRecipeManager;
 import jaminv.advancedmachines.util.recipe.RecipeBase;
 import jaminv.advancedmachines.util.recipe.RecipeInput;
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 
 public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase {
 
@@ -32,8 +36,13 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 		super(recipeManager);
 	}
 
-	protected MultiblockState multiblockState = new MultiblockSimple("message.multiblock.absent");
-	public String getMultiblockString() { return multiblockState.toString(); }
+	protected MultiblockState multiblockState = new MultiblockNull();
+	public String getMultiblockString() { 
+		if (multiblockState instanceof MultiblockNull) {
+			scanMultiblock();
+		}
+		return multiblockState.toString(); 
+	}
 	
 	UpgradeManager upgrades = new UpgradeManager();
 	BlockPos multiblockMin = null, multiblockMax = null;
@@ -132,6 +141,46 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 				((TileEntityMachineEnergy)te).transferEnergy(energy);
 			}
 		}
+
+		BlockPos input_pos = upgrades.getInventoryInput();
+		if (input_pos != null) {
+			TileEntity te = world.getTileEntity(input_pos);
+			if (te instanceof TileEntityMachineInventory) {
+				moveInput((TileEntityMachineInventory)te);
+			}
+		}
+		
+		BlockPos output_pos = upgrades.getInventoryOutput();
+		if (output_pos != null) {
+			TileEntity te = world.getTileEntity(output_pos);
+			if (te instanceof TileEntityMachineInventory) {
+				moveOutput((TileEntityMachineInventory)te);
+			}
+		}
+	}
+	
+	protected void moveInput(TileEntityMachineInventory te) {
+		ItemStackHandler inv = te.getInventory();
+		
+		for (int i = getFirstInputSlot(); i < getInputCount() + getFirstInputSlot(); i++) {
+			ItemStack item = inventory.getStackInSlot(i);
+			if (item == ItemStack.EMPTY) {
+				for (int d = 0; d < inv.getSlots(); d++) {
+					ItemStack other = inv.getStackInSlot(d);
+					if (other != ItemStack.EMPTY) {
+						inv.extractItem(d, other.getCount(), false);
+						inventory.insertItem(i, other, false);
+						break;
+					}
+				}
+			}
+		}
+	}
+	
+	protected void moveOutput(TileEntityMachineInventory te) {
+		ItemStackHandler inv = te.getInventory();
+		
+		for (int i = this.getFirstOutputSlot(); i < g)
 	}
 	
 	@Override

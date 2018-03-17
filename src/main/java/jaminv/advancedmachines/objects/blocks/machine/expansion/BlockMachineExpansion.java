@@ -101,7 +101,7 @@ public class BlockMachineExpansion extends BlockMaterial implements IMachineUpgr
         	.withProperty(BORDER_EAST, borders.getEast()).withProperty(BORDER_WEST, borders.getWest());
 	}
 	
-	protected void scanMultiblock(World world, BlockPos pos) {
+	public static void scanMultiblock(World world, BlockPos pos) {
 		ScanResult result = BlockHelper.scanBlocks(world, pos, new TileEntityMachineMultiblock.MultiblockChecker());
 		BlockPos end = result.getEnd();
 		if (end == null) { return; }
