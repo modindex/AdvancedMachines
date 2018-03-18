@@ -14,6 +14,7 @@ import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockState
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockState.MultiblockNull;
 import jaminv.advancedmachines.util.Config;
 import jaminv.advancedmachines.util.helper.BlockHelper;
+import jaminv.advancedmachines.util.helper.InventoryHelper;
 import jaminv.advancedmachines.util.helper.BlockHelper.BlockChecker;
 import jaminv.advancedmachines.util.helper.BlockHelper.ScanResult;
 import jaminv.advancedmachines.util.recipe.IRecipeManager;
@@ -174,13 +175,21 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 					}
 				}
 			}
+			
+			
 		}
 	}
 	
 	protected void moveOutput(TileEntityMachineInventory te) {
 		ItemStackHandler inv = te.getInventory();
 		
-		for (int i = this.getFirstOutputSlot(); i < g)
+		for (int i = getFirstOutputSlot(); i < getOutputCount() + getFirstOutputSlot(); i++) {
+			inventory.setStackInSlot(i, InventoryHelper.pushStack(inventory.getStackInSlot(i), inv));
+		}
+		
+		for (int i = getFirstSecondarySlot(); i < getSecondaryCount() + getFirstSecondarySlot(); i++) {
+			inventory.setStackInSlot(i, InventoryHelper.pushStack(inventory.getStackInSlot(i), inv));
+		}
 	}
 	
 	@Override
