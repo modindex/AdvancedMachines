@@ -15,7 +15,6 @@ public class InventoryHelper {
 	 * @return Number of items pushed
 	 */
 	public static ItemStack pushStack(ItemStack stack, ItemStackHandler inv, int startIndex, int endIndex) {
-        boolean flag = false;
         int i = startIndex;
 
         if (stack.isStackable()) {
@@ -24,18 +23,16 @@ public class InventoryHelper {
 
                 ItemStack itemstack = inv.getStackInSlot(i);
 
-                if (InventoryHelper.canStack(stack, itemstack)) {
+                if (!itemstack.isEmpty() && InventoryHelper.canStack(stack, itemstack)) {
                     int j = itemstack.getCount() + stack.getCount();
                     int maxSize = stack.getMaxStackSize();
 
                     if (j <= maxSize) {
                         stack.setCount(0);
                         itemstack.setCount(j);
-                        flag = true;
                     } else if (itemstack.getCount() < maxSize) {
                         stack.shrink(maxSize - itemstack.getCount());
                         itemstack.setCount(maxSize);
-                        flag = true;
                     }
                 }
                 i++;
@@ -51,7 +48,6 @@ public class InventoryHelper {
 
                 if (itemstack.isEmpty()) {
                 	stack = inv.insertItem(i, stack, false);
-                    flag = true;
                     break;
                 }
 
@@ -75,11 +71,13 @@ public class InventoryHelper {
 	 * @return true if items are stackable, false if they are not
 	 */
 	public static boolean canStack(ItemStack source, ItemStack dest) {
-		return !source.isEmpty() 
-			&& source.getItem() == dest.getItem() 
-			&& (!source.getHasSubtypes() || source.getMetadata() == dest.getMetadata()) 
-			&& ItemStack.areItemStackShareTagsEqual(source, dest)
-			&& (dest.isEmpty() || dest.isEmpty());
+		return !source.isEmpty()
+			&& dest.isEmpty() ||
+			( dest.isStackable()
+				&& source.getItem() == dest.getItem() 
+				&& (!source.getHasSubtypes() || source.getMetadata() == dest.getMetadata()) 
+				&& ItemStack.areItemStackShareTagsEqual(source, dest)
+			);
 	}
 	
 }

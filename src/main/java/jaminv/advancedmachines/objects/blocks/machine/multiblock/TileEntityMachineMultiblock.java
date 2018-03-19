@@ -176,7 +176,21 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 				}
 			}
 			
-			
+			for (int d = 0; d < inv.getSlots(); d++) {
+				ItemStack other = inv.getStackInSlot(d);
+				if (InventoryHelper.canStack(item, other)) {
+                    int j = item.getCount() + other.getCount();
+                    int maxSize = item.getMaxStackSize();
+
+                    if (j <= maxSize) {
+                    	inv.extractItem(d, other.getCount(), false);
+                    	inventory.insertItem(i, other, false);
+                    } else if (item.getCount() < maxSize) {
+                        other.shrink(maxSize - item.getCount());
+                        item.setCount(maxSize);
+                    }					
+				}
+			}
 		}
 	}
 	

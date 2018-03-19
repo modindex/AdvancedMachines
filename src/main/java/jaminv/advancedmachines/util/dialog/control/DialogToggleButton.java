@@ -16,6 +16,7 @@ public class DialogToggleButton<T extends DialogToggleButton.IEnumIterable<T>> e
 		state = defaultState;
 	}
 	
+	protected void setState(T state) { this.state = state; }
 	public T getState() { return this.state; }
 	
 	@Override

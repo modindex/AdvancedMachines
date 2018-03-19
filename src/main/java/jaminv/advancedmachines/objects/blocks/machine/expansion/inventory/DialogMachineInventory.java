@@ -4,6 +4,8 @@ import jaminv.advancedmachines.objects.blocks.inventory.DialogInventory;
 import jaminv.advancedmachines.util.dialog.control.DialogToggleButton;
 import jaminv.advancedmachines.util.dialog.control.DialogToggleButton.IEnumIterable;
 import jaminv.advancedmachines.util.dialog.struct.DialogTooltip;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 
 public class DialogMachineInventory extends DialogInventory {
@@ -31,6 +33,7 @@ public class DialogMachineInventory extends DialogInventory {
 	public static class IOToggleButton extends DialogToggleButton<IOState> {
 		protected final TileEntityMachineInventory te;
 		public IOToggleButton(TileEntityMachineInventory te) {
+			// This is created before the NBT data for the tile entity is loaded, so the default is largely irrevelent here and is set later.
 			super(8, 8, 9, 9, IOState.INPUT);
 			this.te = te;
 			this.addTexture(IOState.INPUT, 200, 0);
@@ -40,6 +43,12 @@ public class DialogMachineInventory extends DialogInventory {
 		@Override
 		protected void onStateChanged(IOState newstate) {
 			te.setInputState(newstate.getState());
+		}
+		
+		@Override
+		public void draw(GuiScreen screen, FontRenderer font, int drawX, int drawY) {
+			this.state = te.getInputState() ? IOState.INPUT : IOState.OUTPUT;
+			super.draw(screen, font, drawX, drawY);
 		}
 	}
 	
