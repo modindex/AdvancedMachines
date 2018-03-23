@@ -26,6 +26,14 @@ public class GuiContainerObservable extends GuiContainer implements IGuiObservab
 	public void removeObserver(IGuiObserver obv) {
 		this.observers.remove(obv);
 	}
+	
+	@Override
+	public void initGui() {
+		super.initGui();
+		for (IGuiObserver obv : this.observers) {
+			obv.init(this, this.fontRenderer, guiLeft, guiTop);
+		}
+	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
@@ -50,6 +58,15 @@ public class GuiContainerObservable extends GuiContainer implements IGuiObservab
 		for (IGuiObserver obv : this.observers) {
 			obv.mouseClicked(guiLeft, guiTop, mouseX, mouseY, mouseButton);
 		}
+	}
+	
+	@Override
+	protected void keyTyped(char typedChar, int keyCode) throws IOException {
+		for (IGuiObserver obv : this.observers) {
+			boolean used = obv.keyTyped(typedChar, keyCode);
+			if (used) { return; }
+		}
+		super.keyTyped(typedChar, keyCode);
 	}
 	
 	@Override

@@ -1,9 +1,12 @@
 package jaminv.advancedmachines.objects.blocks.machine.expansion.inventory;
 
 import jaminv.advancedmachines.objects.blocks.inventory.DialogInventory;
+import jaminv.advancedmachines.util.Color;
+import jaminv.advancedmachines.util.dialog.control.DialogTextBox;
 import jaminv.advancedmachines.util.dialog.control.DialogToggleButton;
 import jaminv.advancedmachines.util.dialog.control.DialogToggleButton.IEnumIterable;
 import jaminv.advancedmachines.util.dialog.struct.DialogTooltip;
+import jaminv.advancedmachines.util.enums.EnumComponent;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -34,7 +37,7 @@ public class DialogMachineInventory extends DialogInventory {
 		protected final TileEntityMachineInventory te;
 		public IOToggleButton(TileEntityMachineInventory te) {
 			// This is created before the NBT data for the tile entity is loaded, so the default is largely irrevelent here and is set later.
-			super(8, 8, 9, 9, IOState.INPUT);
+			super(8, 23, 9, 9, IOState.INPUT);
 			this.te = te;
 			this.addTexture(IOState.INPUT, 200, 0);
 			this.addTexture(IOState.OUTPUT, 200, 9);
@@ -55,7 +58,7 @@ public class DialogMachineInventory extends DialogInventory {
 	public static class DialogTooltipInput extends DialogTooltip {
 		protected final IOToggleButton button;
 		public DialogTooltipInput(IOToggleButton button) {
-			super(8, 8, 9, 9, "");
+			super(8, 23, 9, 9, "");
 			this.button = button;
 		}
 		
@@ -66,15 +69,21 @@ public class DialogMachineInventory extends DialogInventory {
 	}
 	
 	public DialogMachineInventory(TileEntityMachineInventory te) {
-		super("textures/gui/machine_inventory.png", 24, 0, 176, 177);
+		super("textures/gui/machine_inventory.png", 24, 0, 176, 185);
 		
-		this.addLayout(new InventoryLayout(8, 30));
+		this.addLayout(new InventoryLayout(8, 38));
 		
 		IOToggleButton button = new IOToggleButton(te);
 		this.addElement(button);
 		this.addTooltip(new DialogTooltipInput(button));
 		
-		this.setInventoryLayout(new InventoryLayout(8, 95));
-		this.setHotbarLayout(new HotbarLayout(8, 153));
+		this.setInventoryLayout(new InventoryLayout(8, 103));
+		this.setHotbarLayout(new HotbarLayout(8, 161));
+		
+		this.addElement(new DialogTextBox(EnumComponent.PRIORITY_MACHINE_INVENTORY.getId(), 133, 22, 36, 11, 4));
+
+		this.addText(8, 6, 162, "tile.machine_inventory.name", Color.DIALOG_TEXT);
+		this.addText(8, 93, "dialog.common.inventory", Color.DIALOG_TEXT);
+		this.addText(92, 24, "dialog.common.priority", Color.DIALOG_TEXT);
 	}
 }

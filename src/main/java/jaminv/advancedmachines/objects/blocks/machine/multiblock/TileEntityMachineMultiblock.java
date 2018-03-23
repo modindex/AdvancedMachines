@@ -162,13 +162,14 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 	
 	protected void moveInput(TileEntityMachineInventory te) {
 		ItemStackHandler inv = te.getInventory();
+		IRecipeManager recipe = this.getRecipeManager();
 		
 		for (int i = getFirstInputSlot(); i < getInputCount() + getFirstInputSlot(); i++) {
 			ItemStack item = inventory.getStackInSlot(i);
 			if (item == ItemStack.EMPTY) {
 				for (int d = 0; d < inv.getSlots(); d++) {
 					ItemStack other = inv.getStackInSlot(d);
-					if (other != ItemStack.EMPTY) {
+					if (other != ItemStack.EMPTY && recipe.isItemValid(other, null)) {
 						inv.extractItem(d, other.getCount(), false);
 						inventory.insertItem(i, other, false);
 						break;
@@ -178,7 +179,7 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 			
 			for (int d = 0; d < inv.getSlots(); d++) {
 				ItemStack other = inv.getStackInSlot(d);
-				if (InventoryHelper.canStack(item, other)) {
+				if (recipe.isItemValid(other, null) && InventoryHelper.canStack(item, other)) {
                     int j = item.getCount() + other.getCount();
                     int maxSize = item.getMaxStackSize();
 

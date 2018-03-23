@@ -4,7 +4,8 @@ public enum EnumGui {
 	PURIFIER(1),
 	ALLOY(2),
 	MACHINE_INVENTORY(10),
-	MACHINE_POWER(11);
+	MACHINE_POWER(11),
+	PRIORITY(101);
 	
 	private final int id;
 	private EnumGui(int id) {

@@ -4,6 +4,7 @@ import jaminv.advancedmachines.objects.blocks.machine.dialog.DialogEnergyBar;
 import jaminv.advancedmachines.util.Reference;
 import jaminv.advancedmachines.util.dialog.control.DialogText;
 import jaminv.advancedmachines.util.dialog.control.IDialogControl;
+import jaminv.advancedmachines.util.dialog.control.IDialogControlAdvanced;
 import jaminv.advancedmachines.util.dialog.control.IDialogElement;
 import jaminv.advancedmachines.util.dialog.gui.IGuiObservable;
 import jaminv.advancedmachines.util.dialog.gui.IGuiObserver;
@@ -71,6 +72,15 @@ public class DialogBase implements IGuiObserver {
 		return this.dialog;
 	}
 	
+	@Override
+	public void init(GuiScreen gui, FontRenderer font, int guiLeft, int guiTop) {
+		for (IDialogElement element : elements) {
+			if (element instanceof IDialogControlAdvanced) {
+				((IDialogControlAdvanced)element).init(gui, font, guiLeft + element.getX(), guiTop + element.getY());
+			}
+		}
+	}
+	
 	public void drawBackground(GuiScreen gui, FontRenderer font, int guiLeft, int guiTop, int mouseX, int mouseY) {
 		gui.mc.getTextureManager().bindTexture(this.background);
 		gui.drawTexturedModalRect(guiLeft, guiTop, dialog.getX(), dialog.getY(), dialog.getW(), dialog.getH());
@@ -109,5 +119,17 @@ public class DialogBase implements IGuiObserver {
 				}
 			}
 		}
+	}
+	
+	@Override
+	public boolean keyTyped(char c, int i) {
+		for (IDialogElement element : elements) {
+			if (element instanceof IDialogControlAdvanced) {
+				boolean used = ((IDialogControlAdvanced)element).keyTyped(c, i);
+				if (used) { return used; }
+			}
+		}
+		
+		return false;
 	}
 }

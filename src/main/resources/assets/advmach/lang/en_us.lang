@@ -46,6 +46,7 @@ tile.machine_expansion_basic.name=Machine Expansion
 tile.machine_expansion_compressed.name=Compressed Machine Expansion
 tile.machine_expansion_quad.name=Quadratic Machine Expansion
 tile.machine_expansion_impossible.name=Impossible Machine Expansion
+tile.machine_inventory.name=Machine Inventory
 
 dialog.common.inventory=Inventory
 dialog.common.energy=%,d / %,d RF
@@ -53,6 +54,7 @@ dialog.common.chance=Chance: %d%%
 dialog.common.percent=%d%%
 dialog.common.input=Input
 dialog.common.output=Output
+dialog.common.priority=Priority
 
 dialog.alloy.title=Alloy Forge
 dialog.energy.title=Energy
