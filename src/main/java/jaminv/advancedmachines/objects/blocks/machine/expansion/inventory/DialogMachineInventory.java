@@ -5,13 +5,15 @@ import jaminv.advancedmachines.util.Color;
 import jaminv.advancedmachines.util.dialog.control.DialogTextBox;
 import jaminv.advancedmachines.util.dialog.control.DialogToggleButton;
 import jaminv.advancedmachines.util.dialog.control.DialogToggleButton.IEnumIterable;
+import jaminv.advancedmachines.util.dialog.control.IDialogElement;
+import jaminv.advancedmachines.util.dialog.control.IElementStateObserver;
 import jaminv.advancedmachines.util.dialog.struct.DialogTooltip;
 import jaminv.advancedmachines.util.enums.EnumComponent;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 
-public class DialogMachineInventory extends DialogInventory {
+public class DialogMachineInventory extends DialogInventory implements IElementStateObserver<String> {
 	
 	public static enum IOState implements IEnumIterable<IOState> {
 		INPUT(true, "dialog.common.input"), OUTPUT(false, "dialog.common.output");
@@ -68,8 +70,11 @@ public class DialogMachineInventory extends DialogInventory {
 		}
 	}
 	
+	TileEntityMachineInventory te;
+	
 	public DialogMachineInventory(TileEntityMachineInventory te) {
 		super("textures/gui/machine_inventory.png", 24, 0, 176, 185);
+		this.te = te;
 		
 		this.addLayout(new InventoryLayout(8, 38));
 		
@@ -80,10 +85,17 @@ public class DialogMachineInventory extends DialogInventory {
 		this.setInventoryLayout(new InventoryLayout(8, 103));
 		this.setHotbarLayout(new HotbarLayout(8, 161));
 		
-		this.addElement(new DialogTextBox(EnumComponent.PRIORITY_MACHINE_INVENTORY.getId(), 133, 22, 36, 11, 4));
+		DialogTextBox pri = new DialogTextBox(EnumComponent.PRIORITY_MACHINE_INVENTORY.getId(), 136, 24, 36, 11, 4);
+		pri.addObserver(this);
+		this.addElement(pri);
 
 		this.addText(8, 6, 162, "tile.machine_inventory.name", Color.DIALOG_TEXT);
 		this.addText(8, 93, "dialog.common.inventory", Color.DIALOG_TEXT);
 		this.addText(92, 24, "dialog.common.priority", Color.DIALOG_TEXT);
+	}
+
+	@Override
+	public void onStateChanged(IDialogElement element, String state) {
+		te.setPriority(Integer.parseInt(state));
 	}
 }

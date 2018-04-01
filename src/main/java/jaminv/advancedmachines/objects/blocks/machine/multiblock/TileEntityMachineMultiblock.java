@@ -6,6 +6,8 @@ import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgrade;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgrade.UpgradeType;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTileEntity;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTool;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.energy.BlockMachineEnergy;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.energy.TileEntityMachineEnergy;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.BlockMachineInventory;
@@ -98,18 +100,9 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 						this.upgrades.add(upgrade.getUpgradeType(), upgrade.getUpgradeQty(world, check));
 
 						TileEntity te = world.getTileEntity(check);
-						if (block instanceof BlockMachineInventory) {
-							if (te instanceof TileEntityMachineInventory) {
-								TileEntityMachineInventory inv = (TileEntityMachineInventory)te;
-								if (inv.getInputState()) { upgrades.addInventoryInput(check); }
-								else { upgrades.addInventoryOutput(check); }
-							}
+						if (te instanceof IMachineUpgradeTool) {
+							upgrades.addTool(check, world);
 						}
-						if (block instanceof BlockMachineEnergy) {
-							if (te instanceof TileEntityMachineEnergy) {
-								upgrades.addEnergy(check);
-							}
-						}						
 					} else {
 						this.multiblockState = new MultiblockState.MultiblockIllegal("message.multiblock.illegal", block.getLocalizedName(), check.toImmutable());
 						this.upgrades.reset();
@@ -135,78 +128,15 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 	protected void tickUpdate() {
 		super.tickUpdate();
 		
-		BlockPos energy_pos = upgrades.getEnergy();
-		if (energy_pos != null) {
-			TileEntity te = world.getTileEntity(energy_pos);
-			if (te instanceof TileEntityMachineEnergy) {
-				((TileEntityMachineEnergy)te).transferEnergy(energy);
-			}
-		}
-
-		BlockPos input_pos = upgrades.getInventoryInput();
-		if (input_pos != null) {
-			TileEntity te = world.getTileEntity(input_pos);
-			if (te instanceof TileEntityMachineInventory) {
-				moveInput((TileEntityMachineInventory)te);
-			}
-		}
-		
-		BlockPos output_pos = upgrades.getInventoryOutput();
-		if (output_pos != null) {
-			TileEntity te = world.getTileEntity(output_pos);
-			if (te instanceof TileEntityMachineInventory) {
-				moveOutput((TileEntityMachineInventory)te);
+		BlockPos[] tools = upgrades.getTools();
+		for (BlockPos tool : tools) {
+			TileEntity te = world.getTileEntity(tool);
+			if (tool instanceof IMachineUpgradeTool) {
+				((IMachineUpgradeTool)tool).tickUpdate(this);
 			}
 		}
 	}
-	
-	protected void moveInput(TileEntityMachineInventory te) {
-		ItemStackHandler inv = te.getInventory();
-		IRecipeManager recipe = this.getRecipeManager();
 		
-		for (int i = getFirstInputSlot(); i < getInputCount() + getFirstInputSlot(); i++) {
-			ItemStack item = inventory.getStackInSlot(i);
-			if (item == ItemStack.EMPTY) {
-				for (int d = 0; d < inv.getSlots(); d++) {
-					ItemStack other = inv.getStackInSlot(d);
-					if (other != ItemStack.EMPTY && recipe.isItemValid(other, null)) {
-						inv.extractItem(d, other.getCount(), false);
-						inventory.insertItem(i, other, false);
-						break;
-					}
-				}
-			}
-			
-			for (int d = 0; d < inv.getSlots(); d++) {
-				ItemStack other = inv.getStackInSlot(d);
-				if (recipe.isItemValid(other, null) && InventoryHelper.canStack(item, other)) {
-                    int j = item.getCount() + other.getCount();
-                    int maxSize = item.getMaxStackSize();
-
-                    if (j <= maxSize) {
-                    	inv.extractItem(d, other.getCount(), false);
-                    	inventory.insertItem(i, other, false);
-                    } else if (item.getCount() < maxSize) {
-                        other.shrink(maxSize - item.getCount());
-                        item.setCount(maxSize);
-                    }					
-				}
-			}
-		}
-	}
-	
-	protected void moveOutput(TileEntityMachineInventory te) {
-		ItemStackHandler inv = te.getInventory();
-		
-		for (int i = getFirstOutputSlot(); i < getOutputCount() + getFirstOutputSlot(); i++) {
-			inventory.setStackInSlot(i, InventoryHelper.pushStack(inventory.getStackInSlot(i), inv));
-		}
-		
-		for (int i = getFirstSecondarySlot(); i < getSecondaryCount() + getFirstSecondarySlot(); i++) {
-			inventory.setStackInSlot(i, InventoryHelper.pushStack(inventory.getStackInSlot(i), inv));
-		}
-	}
-	
 	@Override
 	protected int beginProcess(RecipeBase recipe, RecipeInput[] input) {
 		IRecipeManager mgr = getRecipeManager();

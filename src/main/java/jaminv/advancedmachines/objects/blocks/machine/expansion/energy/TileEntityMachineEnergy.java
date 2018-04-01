@@ -9,8 +9,10 @@ import jaminv.advancedmachines.objects.blocks.machine.DialogMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.IMachineEnergy;
 import jaminv.advancedmachines.objects.blocks.machine.MachineEnergyStorage;
 import jaminv.advancedmachines.objects.blocks.machine.alloy.TileEntityMachineAlloy.GuiMachineAlloy;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTool;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachineExpansion;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
 import jaminv.advancedmachines.util.dialog.container.EmptyContainer;
 import jaminv.advancedmachines.util.dialog.container.IContainerUpdate;
 import jaminv.advancedmachines.util.dialog.container.IContainerUpdate;
@@ -31,7 +33,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 
-public class TileEntityMachineEnergy extends TileEntityMachineExpansion implements IHasGui, IContainerUpdate, IMachineEnergy {
+public class TileEntityMachineEnergy extends TileEntityMachineExpansion implements IHasGui, IContainerUpdate, IMachineEnergy, IMachineUpgradeTool {
 	
 	protected EnumFacing facing = EnumFacing.NORTH;
 	
@@ -72,11 +74,21 @@ public class TileEntityMachineEnergy extends TileEntityMachineExpansion implemen
 		return new GuiMachineEnergy(createContainer(inventory), dialog);
 	}
 	
+	@Override
+	public void tickUpdate(TileEntityMachineMultiblock te) {
+		this.transferEnergy(te.getEnergy());
+	}
+	
 	public void transferEnergy(MachineEnergyStorage storage) {
 		int transfer = Math.min(storage.getMaxEnergyStored() - storage.getEnergyStored(), energy.getEnergyStored());	
 		energy.setEnergy(energy.getEnergyStored() - transfer);
 		storage.setEnergy(storage.getEnergyStored() + transfer);
-	}	
+	}
+	
+	@Override
+	public int getPriority() {
+		return 0;
+	}
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {

@@ -1,5 +1,9 @@
 package jaminv.advancedmachines.util.dialog.control;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jaminv.advancedmachines.util.dialog.gui.IGuiObserver;
 import jaminv.advancedmachines.util.dialog.struct.DialogArea;
 import jaminv.advancedmachines.util.enums.EnumComponent;
 import net.minecraft.client.gui.FontRenderer;
@@ -23,6 +27,7 @@ public class DialogTextBox extends DialogArea implements IDialogControlAdvanced 
 		field = new GuiTextField(id, font, drawX, drawY, this.getW(), this.getH());
 		field.setText(text);
 		field.setMaxStringLength(max);
+		field.setEnableBackgroundDrawing(false);
 	}
 
 	@Override
@@ -42,7 +47,20 @@ public class DialogTextBox extends DialogArea implements IDialogControlAdvanced 
 		if (field.isFocused()) {
 			ret = field.textboxKeyTyped(c, i);
 			text = field.getText();
+			
+			for (IElementStateObserver<String> obv : observers) {
+				obv.onStateChanged(this, text);
+			}
 		}
 		return ret;
+	}
+	
+	private List<IElementStateObserver<String>> observers = new ArrayList<>();	
+	public void addObserver(IElementStateObserver<String> obv) {
+		this.observers.add(obv);
+	}
+
+	public void removeObserver(IElementStateObserver<String> obv) {
+		this.observers.remove(obv);
 	}
 }

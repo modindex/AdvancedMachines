@@ -7,19 +7,27 @@ import jaminv.advancedmachines.objects.blocks.inventory.ContainerInventory;
 import jaminv.advancedmachines.objects.blocks.inventory.TileEntityInventory;
 import jaminv.advancedmachines.objects.blocks.machine.MachineEnergyStorage;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansion;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTileEntity;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTool;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
 import jaminv.advancedmachines.util.dialog.gui.GuiContainerObservable;
+import jaminv.advancedmachines.util.helper.InventoryHelper;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
+import jaminv.advancedmachines.util.recipe.IRecipeManager;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineInventory extends TileEntityInventory implements IHasGui {
+public class TileEntityMachineInventory extends TileEntityInventory implements IHasGui, IMachineUpgradeTool {
 	
 	protected EnumFacing facing = EnumFacing.NORTH;
 	protected boolean inputState = true;
+	protected int priority = 0;
 	protected MultiblockBorders borders = new MultiblockBorders();
 	
 	public void setFacing(EnumFacing facing) {
@@ -38,9 +46,79 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 		world.markBlockRangeForRenderUpdate(this.pos, this.pos);
 		
 		if (world.isRemote) {
-			Main.NETWORK.sendToServer(new InventoryStateMessage(this.getPos(), state));
+			Main.NETWORK.sendToServer(new InventoryStateMessage(this.getPos(), state, priority));
 		}
 	}
+	
+	public void setPriority(int priority) {
+		this.priority = priority;
+				
+		if (world.isRemote) {
+			Main.NETWORK.sendToServer(new InventoryStateMessage(this.getPos(), inputState, priority));
+		}
+	}
+	
+	@Override
+	public int getPriority() {
+		return priority;
+	}
+	
+	@Override
+	public void tickUpdate(TileEntityMachineMultiblock te) {
+		if (inputState) {
+			moveInput(te);
+		} else {
+			moveOutput(te);
+		}
+	}
+	
+	protected void moveInput(TileEntityMachineMultiblock te) {
+		ItemStackHandler inv = te.getInventory();
+		IRecipeManager recipe = te.getRecipeManager();
+		
+		for (int i = te.getFirstInputSlot(); i < te.getInputCount() + te.getFirstInputSlot(); i++) {
+			ItemStack item = inv.getStackInSlot(i);
+			if (item == ItemStack.EMPTY) {
+				for (int d = 0; d < inventory.getSlots(); d++) {
+					ItemStack other = inventory.getStackInSlot(d);
+					if (other != ItemStack.EMPTY && recipe.isItemValid(other, null)) {
+						inventory.extractItem(d, other.getCount(), false);
+						inv.insertItem(i, other, false);
+						break;
+					}
+				}
+			}
+			
+			for (int d = 0; d < inventory.getSlots(); d++) {
+				ItemStack other = inventory.getStackInSlot(d);
+				if (recipe.isItemValid(other, null) && InventoryHelper.canStack(item, other)) {
+                    int j = item.getCount() + other.getCount();
+                    int maxSize = item.getMaxStackSize();
+
+                    if (j <= maxSize) {
+                    	inventory.extractItem(d, other.getCount(), false);
+                    	inv.insertItem(i, other, false);
+                    } else if (item.getCount() < maxSize) {
+                        other.shrink(maxSize - item.getCount());
+                        item.setCount(maxSize);
+                    }					
+				}
+			}
+		}
+	}
+	
+	protected void moveOutput(TileEntityMachineMultiblock te) {
+		ItemStackHandler inv = te.getInventory();
+		
+		for (int i = te.getFirstOutputSlot(); i < te.getOutputCount() + te.getFirstOutputSlot(); i++) {
+			inv.setStackInSlot(i, InventoryHelper.pushStack(inv.getStackInSlot(i), inventory));
+		}
+		
+		for (int i = te.getFirstSecondarySlot(); i < te.getSecondaryCount() + te.getFirstSecondarySlot(); i++) {
+			inv.setStackInSlot(i, InventoryHelper.pushStack(inv.getStackInSlot(i), inventory));
+		}
+	}
+	
 	
 	public void setBorders(MultiblockBorders borders) {
 		this.borders = borders;
@@ -84,6 +162,9 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 		if (compound.hasKey("inputState")) {
 			inputState = compound.getBoolean("inputState");
 		}
+		if (compound.hasKey("priority")) {
+			priority = compound.getInteger("priority");
+		}
 		if (compound.hasKey("borders")) {
 			borders.deserializeNBT(compound.getCompoundTag("borders"));
 		}		
@@ -94,6 +175,7 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 		super.writeToNBT(compound);
 		compound.setString("facing", facing.getName());
 		compound.setBoolean("inputState", inputState);
+		compound.setInteger("priority", priority);
 		compound.setTag("borders",  borders.serializeNBT());		
 		return compound;
 	}

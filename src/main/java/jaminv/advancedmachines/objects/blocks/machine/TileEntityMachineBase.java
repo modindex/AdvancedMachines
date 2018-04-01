@@ -38,6 +38,7 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 	public float getEnergyPercent() { return (float)energy.getEnergyStored() / energy.getMaxEnergyStored(); }
 	public int getEnergyStored() { return energy.getEnergyStored(); }
 	public int getMaxEnergyStored() { return energy.getMaxEnergyStored(); }
+	public MachineEnergyStorage getEnergy() { return energy; }
 	
 	private final IRecipeManager recipeManager;
 	public IRecipeManager getRecipeManager() { return recipeManager; }

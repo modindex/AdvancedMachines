@@ -15,22 +15,26 @@ public class InventoryStateMessage implements IMessage {
 
 	  private BlockPos pos;
 	  private boolean state;
+	  private int priority;
 	  
-	  public InventoryStateMessage(BlockPos pos, boolean state) {
+	  public InventoryStateMessage(BlockPos pos, boolean state, int priority) {
 		  this.pos = pos;
 		  this.state = state;
+		  this.priority = priority;
 	  }
 
 	  @Override 
 	  public void toBytes(ByteBuf buf) {
 		  buf.writeLong(pos.toLong());
 		  buf.writeBoolean(state);
+		  buf.writeInt(priority);
 	  }
 
 	  @Override
 	  public void fromBytes(ByteBuf buf) {
 		  pos = BlockPos.fromLong(buf.readLong());
 		  state = buf.readBoolean();
+		  priority = buf.readInt();
 	  }
 	  
 	  public static class InventoryStateMessageHandler implements IMessageHandler<InventoryStateMessage, IMessage> {
@@ -42,6 +46,7 @@ public class InventoryStateMessage implements IMessage {
 			  
 			  BlockPos pos = message.pos;
 			  boolean state = message.state;
+			  int priority = message.priority;
 			  
 			  if (!world.isBlockLoaded(pos)) { return null; }
 			  
@@ -49,6 +54,7 @@ public class InventoryStateMessage implements IMessage {
 				  TileEntity te = world.getTileEntity(pos);
 				  if (te instanceof TileEntityMachineInventory) {
 					  ((TileEntityMachineInventory)te).setInputState(state);
+					  ((TileEntityMachineInventory)te).setPriority(priority);
 				  }
 			  });
 			  return null;

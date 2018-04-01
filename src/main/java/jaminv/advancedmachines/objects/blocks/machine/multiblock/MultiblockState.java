@@ -56,18 +56,6 @@ public abstract class MultiblockState {
 				upgrades.get(IMachineUpgrade.UpgradeType.MULTIPLY),
 				upgrades.get(IMachineUpgrade.UpgradeType.SPEED)
 			);
-			BlockPos input = upgrades.getInventoryInput();
-			if (input != null) {
-				ret += I18n.format("message.multiblock.input", input.getX(), input.getY(), input.getZ());
-			}
-			BlockPos output = upgrades.getInventoryOutput();
-			if (output != null) {
-				ret += I18n.format("message.multiblock.output", output.getX(), output.getY(), output.getZ());
-			}
-			BlockPos energy = upgrades.getEnergy();
-			if (energy != null) {
-				ret += I18n.format("message.multiblock.energy", energy.getX(), energy.getY(), energy.getZ());
-			}
 			
 			return ret;
 		}		
