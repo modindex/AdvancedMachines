@@ -8,6 +8,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 public abstract class BlockMachineMultiblock extends BlockMachineBase {
@@ -21,12 +22,19 @@ public abstract class BlockMachineMultiblock extends BlockMachineBase {
 			ItemStack stack) {
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 		
-		//if (worldIn.isRemote) { return; }
-		
+		scanMultiblock(worldIn, pos, false);
+	}
+
+	@Override
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+		scanMultiblock(worldIn, pos, true);
+		super.breakBlock(worldIn, pos, state);
+	}
+	
+	protected void scanMultiblock(World worldIn, BlockPos pos, boolean destroy) {
 		TileEntity te = worldIn.getTileEntity(pos);
 		if (!(te instanceof TileEntityMachineMultiblock)) { return; }
 		
-		((TileEntityMachineMultiblock)te).scanMultiblock();
+		((TileEntityMachineMultiblock)te).scanMultiblock(destroy);		
 	}
-
 }

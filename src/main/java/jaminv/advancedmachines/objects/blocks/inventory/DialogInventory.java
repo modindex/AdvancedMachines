@@ -5,6 +5,8 @@ import java.util.List;
 
 import jaminv.advancedmachines.util.dialog.DialogBase;
 import jaminv.advancedmachines.util.dialog.struct.DialogPos;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
 public abstract class DialogInventory extends DialogBase {
 	
@@ -45,6 +47,10 @@ public abstract class DialogInventory extends DialogBase {
 		public int getYSpacing() { return yspacing; }
 		public int getRows() { return rows; }
 		public int getCols() { return cols; }
+		
+		public SlotItemHandler createSlot(IItemHandler itemHandler, int slotIndex, int x, int y) {
+			return new SlotItemHandler(itemHandler, slotIndex, x, y);
+		}
 		
 		public DialogPos getPosition(int index) {
 			return new DialogPos(xpos + (index % cols) * xspacing, ypos + (index / cols) * yspacing);

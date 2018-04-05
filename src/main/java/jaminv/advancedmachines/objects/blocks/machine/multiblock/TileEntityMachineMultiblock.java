@@ -11,6 +11,7 @@ import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeT
 import jaminv.advancedmachines.objects.blocks.machine.expansion.energy.BlockMachineEnergy;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.energy.TileEntityMachineEnergy;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.BlockMachineInventory;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.InventoryStateMessage;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.TileEntityMachineInventory;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockState.MultiblockSimple;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockState.MultiblockNull;
@@ -47,8 +48,8 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 		return multiblockState.toString(); 
 	}
 	
-	UpgradeManager upgrades = new UpgradeManager();
-	BlockPos multiblockMin = null, multiblockMax = null;
+	protected UpgradeManager upgrades = new UpgradeManager();
+	protected BlockPos multiblockMin = null, multiblockMax = null;
 
 	public static class MultiblockChecker extends BlockChecker {
 		@Override
@@ -61,15 +62,28 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 	}	
 	
 	public void scanMultiblock() {
+		scanMultiblock(false);
+	}
+	
+	protected void reset() {
 		if (multiblockMin != null && multiblockMax != null) {
-			// Reset the multiblock status
-			setMultiblock(multiblockMin, multiblockMax, false);
+			setMultiblock(multiblockMin, multiblockMax, false, world, this.getPos());
 			world.markBlockRangeForRenderUpdate(multiblockMin, multiblockMax);
 			
 			multiblockMin = null; multiblockMax = null;
 		}
 		
 		this.upgrades.reset();
+	}
+	
+	public void scanMultiblock(boolean destroy) { 
+		if (destroy) {
+			Main.NETWORK.sendToAll(new MultiblockUpdateMessage(this.getPos(), multiblockMin, multiblockMax));
+		}
+		
+		this.reset();		
+		
+		if (destroy) { return; }
 		
 		BlockPos pos = this.getPos();
 		
@@ -101,6 +115,7 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 
 						TileEntity te = world.getTileEntity(check);
 						if (te instanceof IMachineUpgradeTool) {
+							((IMachineUpgradeTool)te).setParent(pos);
 							upgrades.addTool(check, world);
 						}
 					} else {
@@ -116,7 +131,7 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 		multiblockMin = min; multiblockMax = max;
 		
 		// Tell all the upgrades that they are now part of a multiblock
-		setMultiblock(min, max, true);
+		setMultiblock(min, max, true, world, this.getPos());
 		
 		world.markBlockRangeForRenderUpdate(min, max);
 		return;
@@ -131,10 +146,14 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 		BlockPos[] tools = upgrades.getTools();
 		for (BlockPos tool : tools) {
 			TileEntity te = world.getTileEntity(tool);
-			if (tool instanceof IMachineUpgradeTool) {
-				((IMachineUpgradeTool)tool).tickUpdate(this);
+			if (te instanceof IMachineUpgradeTool) {
+				((IMachineUpgradeTool)te).tickUpdate(this);
 			}
 		}
+	}
+	
+	public void sortTools() {
+		upgrades.sortTools(world);
 	}
 		
 	@Override
@@ -171,7 +190,7 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 		}
 	}
 	
-	protected void setMultiblock(BlockPos min, BlockPos max, boolean isMultiblock) {
+	public static void setMultiblock(BlockPos min, BlockPos max, boolean isMultiblock, World world, BlockPos pos) {
 		MutableBlockPos upgrade = new MutableBlockPos();
 		for (int x = min.getX(); x <= max.getX(); x++) {
 			for (int y = min.getY(); y <= max.getY(); y++) {
@@ -181,10 +200,16 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 					Block block = world.getBlockState(upgrade).getBlock();
 					if (block instanceof IMachineUpgrade) { 
 						MultiblockBorders bord;
-						if (!isMultiblock) { bord = MultiblockBorders.DEFAULT; }
-						else { bord = new MultiblockBorders(world, upgrade, min, max); }
+						if (!isMultiblock) { 
+							bord = MultiblockBorders.DEFAULT;
+							
+							TileEntity te = world.getTileEntity(upgrade);
+							if (te instanceof IMachineUpgradeTool) {
+								((IMachineUpgradeTool)te).setParent(null);
+							}
+						} else { bord = new MultiblockBorders(world, upgrade, min, max); }
 						
-						((IMachineUpgrade) block).setMultiblock(world, upgrade, this.getPos(), bord);
+						((IMachineUpgrade) block).setMultiblock(world, upgrade, pos, bord);
 					}
 				}
 			}

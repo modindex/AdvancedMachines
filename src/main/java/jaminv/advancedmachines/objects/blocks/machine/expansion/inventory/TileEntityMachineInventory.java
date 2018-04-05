@@ -19,8 +19,11 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntityMachineInventory extends TileEntityInventory implements IHasGui, IMachineUpgradeTool {
@@ -29,6 +32,7 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 	protected boolean inputState = true;
 	protected int priority = 0;
 	protected MultiblockBorders borders = new MultiblockBorders();
+	protected BlockPos parent = null;
 	
 	public void setFacing(EnumFacing facing) {
 		this.facing = facing;
@@ -56,7 +60,18 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 		if (world.isRemote) {
 			Main.NETWORK.sendToServer(new InventoryStateMessage(this.getPos(), inputState, priority));
 		}
+		
+		if (parent == null) { return; }
+		TileEntity te = world.getTileEntity(parent);
+		if (te instanceof TileEntityMachineMultiblock) {
+			((TileEntityMachineMultiblock)te).sortTools();
+		}
 	}
+	
+	@Override
+	public void setParent(BlockPos pos) {
+		parent = pos;		
+	}	
 	
 	@Override
 	public int getPriority() {
@@ -167,7 +182,10 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 		}
 		if (compound.hasKey("borders")) {
 			borders.deserializeNBT(compound.getCompoundTag("borders"));
-		}		
+		}
+		if (compound.hasKey("parent")) {
+			parent = NBTUtil.getPosFromTag(compound.getCompoundTag("parent"));
+		}
 	}
 	
 	@Override
@@ -176,7 +194,10 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 		compound.setString("facing", facing.getName());
 		compound.setBoolean("inputState", inputState);
 		compound.setInteger("priority", priority);
-		compound.setTag("borders",  borders.serializeNBT());		
+		compound.setTag("borders",  borders.serializeNBT());	
+		if (parent != null) {
+			compound.setTag("parent", NBTUtil.createPosTag(parent));
+		}
 		return compound;
 	}
 	

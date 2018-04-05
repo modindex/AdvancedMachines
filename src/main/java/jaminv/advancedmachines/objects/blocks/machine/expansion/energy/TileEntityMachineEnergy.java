@@ -30,12 +30,14 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 
 public class TileEntityMachineEnergy extends TileEntityMachineExpansion implements IHasGui, IContainerUpdate, IMachineEnergy, IMachineUpgradeTool {
 	
 	protected EnumFacing facing = EnumFacing.NORTH;
+	protected BlockPos parent;
 	
 	public void setFacing(EnumFacing facing) {
 		this.facing = facing;
@@ -83,6 +85,11 @@ public class TileEntityMachineEnergy extends TileEntityMachineExpansion implemen
 		int transfer = Math.min(storage.getMaxEnergyStored() - storage.getEnergyStored(), energy.getEnergyStored());	
 		energy.setEnergy(energy.getEnergyStored() - transfer);
 		storage.setEnergy(storage.getEnergyStored() + transfer);
+	}
+	
+	@Override
+	public void setParent(BlockPos pos) {
+		parent = pos;
 	}
 	
 	@Override

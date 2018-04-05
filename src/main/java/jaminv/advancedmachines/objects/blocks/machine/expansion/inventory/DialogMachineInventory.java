@@ -71,6 +71,7 @@ public class DialogMachineInventory extends DialogInventory implements IElementS
 	}
 	
 	TileEntityMachineInventory te;
+	DialogTextBox priority;
 	
 	public DialogMachineInventory(TileEntityMachineInventory te) {
 		super("textures/gui/machine_inventory.png", 24, 0, 176, 185);
@@ -85,9 +86,11 @@ public class DialogMachineInventory extends DialogInventory implements IElementS
 		this.setInventoryLayout(new InventoryLayout(8, 103));
 		this.setHotbarLayout(new HotbarLayout(8, 161));
 		
-		DialogTextBox pri = new DialogTextBox(EnumComponent.PRIORITY_MACHINE_INVENTORY.getId(), 136, 24, 36, 11, 4);
-		pri.addObserver(this);
-		this.addElement(pri);
+		priority = new DialogTextBox(EnumComponent.PRIORITY_MACHINE_INVENTORY.getId(), 136, 24, 36, 11, 4);
+		priority.setPattern("[0-9]");
+		priority.addObserver(this);
+		priority.setText(String.valueOf(te.getPriority()));
+		this.addElement(priority);
 
 		this.addText(8, 6, 162, "tile.machine_inventory.name", Color.DIALOG_TEXT);
 		this.addText(8, 93, "dialog.common.inventory", Color.DIALOG_TEXT);
@@ -96,6 +99,16 @@ public class DialogMachineInventory extends DialogInventory implements IElementS
 
 	@Override
 	public void onStateChanged(IDialogElement element, String state) {
-		te.setPriority(Integer.parseInt(state));
+		try {
+			te.setPriority(Integer.parseInt(state));
+		} catch (NumberFormatException e) {
+			te.setPriority(0);
+		}
+	}
+	
+	@Override
+	public void init(GuiScreen gui, FontRenderer font, int guiLeft, int guiTop) {
+		priority.setText(String.valueOf(te.getPriority()));
+		super.init(gui, font, guiLeft, guiTop);
 	}
 }

@@ -9,6 +9,8 @@ import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.init.RecipeInit;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.InventoryStateMessage;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.InventoryStateMessage.InventoryStateMessageHandler;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockUpdateMessage;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockUpdateMessage.MultiblockUpdateMessageHandler;
 import jaminv.advancedmachines.util.Config;
 import jaminv.advancedmachines.util.handlers.OreDictionaryHandler;
 import jaminv.advancedmachines.util.handlers.RegistryHandler;
@@ -36,6 +38,7 @@ public class CommonProxy {
 		Config.readConfig();
 		
 		Main.NETWORK.registerMessage(InventoryStateMessageHandler.class, InventoryStateMessage.class, 0, Side.SERVER);
+		Main.NETWORK.registerMessage(MultiblockUpdateMessageHandler.class, MultiblockUpdateMessage.class, 1, Side.CLIENT);
 		
 		RegistryHandler.otherRegistries();
 		 

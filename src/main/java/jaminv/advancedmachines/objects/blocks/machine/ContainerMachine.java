@@ -17,7 +17,7 @@ import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerMachine extends ContainerInventory {
 	
-	public class SlotOutput extends SlotItemHandler {
+	public static class SlotOutput extends SlotItemHandler {
 
 		public SlotOutput(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
 			super(itemHandler, index, xPosition, yPosition);
@@ -26,7 +26,20 @@ public class ContainerMachine extends ContainerInventory {
 		@Override
 		public boolean isItemValid(ItemStack stack) {
 			return false;
-		}		
+		}
+	}
+	
+	public static class SlotInput extends SlotItemHandler {
+		IRecipeManager recipe;
+		public SlotInput(IRecipeManager recipe, IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+			super(itemHandler, index, xPosition, yPosition);
+			this.recipe = recipe;
+		}
+		
+		@Override
+		public boolean isItemValid(ItemStack stack) {
+			return recipe.isItemValid(stack, null);
+		}
 	}
 	
 	private final IRecipeManager recipeManager;
@@ -57,7 +70,7 @@ public class ContainerMachine extends ContainerInventory {
 				return ItemStack.EMPTY;
 			}
 		} else {
-			if (recipeManager.isItemValid(itemstack1, null)) {
+			if (!recipeManager.isItemValid(itemstack1, null)) {
 				return ItemStack.EMPTY;
 			}
 			if (!this.mergeItemStack(itemstack1, 0, machineTe.getInputCount(), false)) {

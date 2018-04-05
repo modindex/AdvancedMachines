@@ -7,15 +7,16 @@ import jaminv.advancedmachines.objects.blocks.machine.multiblock.DialogMachineMu
 import jaminv.advancedmachines.util.dialog.DialogBase;
 import jaminv.advancedmachines.util.dialog.struct.DialogArea;
 import jaminv.advancedmachines.util.dialog.struct.DialogTexture;
+import jaminv.advancedmachines.util.recipe.machine.PurifierManager;
 
 public class DialogMachinePurifier extends DialogMachineMultiblock {
 	
 	public DialogMachinePurifier() {
 		super("textures/gui/purifier.png", 24, 0, 176, 195);
 		
-		this.addLayout(53, 23);			// Input
-		this.addLayout(107, 23);		// Output
-		this.addLayout(35, 55, 1, 6); 	// Secondary
+		this.addLayout(new InputLayout(PurifierManager.getRecipeManager(), 53, 23));
+		this.addLayout(new OutputLayout(107, 23));			// Output
+		this.addLayout(new OutputLayout(35, 55, 1, 6)); 	// Secondary
 		
 		this.setInventoryLayout(new InventoryLayout(8, 84));
 		this.setHotbarLayout(new HotbarLayout(8, 142));

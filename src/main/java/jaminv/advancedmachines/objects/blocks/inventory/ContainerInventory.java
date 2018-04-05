@@ -29,12 +29,12 @@ public class ContainerInventory extends Container {
 		addPlayerSlots(playerInventory);
 	}
 	
-	protected SlotItemHandler createSlot(IItemHandler itemHandler, int slotIndex, int x, int y, int group) {
+	public static SlotItemHandler createSlot(IItemHandler itemHandler, int slotIndex, int x, int y) {
 		return new SlotItemHandler(itemHandler, slotIndex, x, y);
 	}
 	
 	private void addOwnSlots() {
-		IItemHandler itemHandler = this.te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+		IItemHandler itemHandler = this.te.getInventory();
 		int slotIndex = 0;
 		
 		ContainerLayout[] layouts = dialog.getLayouts();
@@ -45,7 +45,7 @@ public class ContainerInventory extends Container {
 				for (int c = 0; c < layout.getCols(); c++) {
 					int x = layout.xpos + c * layout.xspacing;
 					int y = layout.ypos + r * layout.yspacing;
-					addSlotToContainer(this.createSlot(itemHandler, slotIndex, x, y, i));
+					addSlotToContainer(layout.createSlot(itemHandler, slotIndex, x, y));
 					slotIndex++;
 				}
 			}

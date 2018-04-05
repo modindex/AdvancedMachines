@@ -15,11 +15,20 @@ public class DialogTextBox extends DialogArea implements IDialogControlAdvanced 
 	protected int id, max;
 	protected GuiTextField field = null;
 	protected String text = "";
+	protected String pattern = ".";
 	
 	public DialogTextBox(int id, int x, int y, int w, int h, int max) {
 		super(x, y, w, h);
 		this.id = id;
 		this.max = max;
+	}
+	
+	public void setText(String text) {
+		this.text = text;
+	}
+	
+	public void setPattern(String pattern) {
+		this.pattern = pattern;
 	}
 	
 	@Override
@@ -45,6 +54,11 @@ public class DialogTextBox extends DialogArea implements IDialogControlAdvanced 
 	public boolean keyTyped(char c, int i) {
 		boolean ret = false;
 		if (field.isFocused()) {
+			//String s = String.valueOf(c);
+			//if (s != "" && !s.matches(pattern)) {
+			//	return false;
+			//}
+			
 			ret = field.textboxKeyTyped(c, i);
 			text = field.getText();
 			

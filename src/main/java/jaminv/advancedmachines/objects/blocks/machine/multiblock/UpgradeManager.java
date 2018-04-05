@@ -38,11 +38,11 @@ public class UpgradeManager implements INBTSerializable<NBTTagCompound> {
 		@Override
 		public int compare(BlockPos arg0, BlockPos arg1) {
 			TileEntity te0 = world.getTileEntity(arg0);
-			if (!(te0 instanceof IMachineUpgradeTool)) { return -1; }
+			if (!(te0 instanceof IMachineUpgradeTool)) { return 1; }
 			TileEntity te1 = world.getTileEntity(arg1);
-			if (!(te1 instanceof IMachineUpgradeTool)) { return 1; }
+			if (!(te1 instanceof IMachineUpgradeTool)) { return -1; }
 			
-			return ((IMachineUpgradeTool)te0).getPriority() - ((IMachineUpgradeTool)te1).getPriority();
+			return ((IMachineUpgradeTool)te1).getPriority() - ((IMachineUpgradeTool)te0).getPriority();
 		}		
 	}	
 	
@@ -71,7 +71,7 @@ public class UpgradeManager implements INBTSerializable<NBTTagCompound> {
 	
 	public void addTool(BlockPos pos, World world) {
 		if (tools == null) { tools = new ArrayList<BlockPos>(); }
-		tools.add(pos);
+		tools.add(new BlockPos(pos));
 		sortTools(world);
 	}
 	
