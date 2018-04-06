@@ -7,40 +7,24 @@ import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.Dialog
 import jaminv.advancedmachines.util.dialog.control.DialogToggleButton;
 import jaminv.advancedmachines.util.dialog.control.DialogToggleButton.IEnumIterable;
 import jaminv.advancedmachines.util.dialog.struct.DialogTooltip;
+import jaminv.advancedmachines.util.interfaces.IRedstoneControlled;
+import jaminv.advancedmachines.util.interfaces.IRedstoneControlled.RedstoneState;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 
-public class RedstoneToggleButton extends DialogToggleButton<RedstoneToggleButton.RedstoneState> {
-	public static enum RedstoneState implements IEnumIterable<RedstoneState> {
-		IGNORE(0, "dialog.common.redstone.ignore"), ACTIVE(1, "dialog.common.redstone.active"), INACTIVE(2, "dialog.common.redstone.inactive");
-		private static RedstoneState[] vals = values();
-		
-		private final int value;
-		private final String name;
-		private RedstoneState(int value, String name) {
-			this.value = value;
-			this.name = name;
-		}
-		
-		public int getState() { return value; }
-		public String getName() { return name; }
-		
-		@Override
-		public RedstoneState next() {
-			return vals[(this.ordinal() + 1) % vals.length];
-		}
-	}
+public class RedstoneToggleButton extends DialogToggleButton<RedstoneState> {
+
 	
-	protected final TileEntityMachineBase te;
+	protected final IRedstoneControlled te;
 		
-	public RedstoneToggleButton(TileEntityMachineBase te, int x, int y, int w, int h) {
+	public RedstoneToggleButton(IRedstoneControlled te, int x, int y, int w, int h) {
 		// This is created before the NBT data for the tile entity is loaded, so the default is largely irrevelent here and is set later.
 		super(x, y, w, h, RedstoneState.IGNORE);
 		this.te = te;
 	}
 	
-	public RedstoneToggleButton(TileEntityMachineBase te) {
+	public RedstoneToggleButton(IRedstoneControlled te) {
 		this(te, 153, 22, 14, 14);
 		this.addDefaultTextures();
 	}

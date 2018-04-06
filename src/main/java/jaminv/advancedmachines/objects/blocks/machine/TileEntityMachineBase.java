@@ -4,10 +4,13 @@ import org.apache.logging.log4j.Level;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.objects.blocks.inventory.TileEntityInventory;
-import jaminv.advancedmachines.objects.blocks.machine.dialog.RedstoneToggleButton.RedstoneState;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansion;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.InventoryStateMessage;
 import jaminv.advancedmachines.objects.items.ItemStackHandlerObservable;
 import jaminv.advancedmachines.util.Config;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
+import jaminv.advancedmachines.util.interfaces.IRedstoneControlled;
+import jaminv.advancedmachines.util.message.RedstoneStateMessage;
 import jaminv.advancedmachines.util.recipe.IRecipeManager;
 import jaminv.advancedmachines.util.recipe.RecipeBase;
 import jaminv.advancedmachines.util.recipe.RecipeInput;
@@ -24,7 +27,7 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public abstract class TileEntityMachineBase extends TileEntityInventory implements ITickable, IHasGui, IMachineEnergy {
+public abstract class TileEntityMachineBase extends TileEntityInventory implements ITickable, IHasGui, IMachineEnergy, IRedstoneControlled {
 
 	public abstract int getInputCount();
 	public abstract int getOutputCount();
@@ -52,6 +55,10 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 	}
 	public void setRedstoneState(RedstoneState state) {
 		this.redstoneState = state;
+		
+		if (world.isRemote) {
+			Main.NETWORK.sendToServer(new RedstoneStateMessage(this.getPos(), state));
+		}
 	}
 	
 	public TileEntityMachineBase(IRecipeManager recipeManager) {
@@ -100,6 +107,7 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 	}
 	
 	public boolean canProcess(RecipeInput[] input) {
+		
 		RecipeBase recipe = recipeManager.getRecipeMatch(input);
 		if (recipe == null) { return false; }
 		
@@ -108,6 +116,11 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 
 	protected void process(RecipeInput[] input) {
 		if (world.isRemote) { return; }
+		
+		if ((redstoneState == RedstoneState.ACTIVE && redstone == false)
+			|| (redstoneState == RedstoneState.INACTIVE && redstone == true)) {
+			return;
+		}
 		
 		if (!isProcessing()) {
 			lastRecipe = recipeManager.getRecipe(input);

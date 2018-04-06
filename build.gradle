@@ -75,7 +75,7 @@ dependencies {
     //deobfCompile 'com.mod-buildcraft:buildcraft:6.0.8:dev'
     //deobfProvided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
     deobfCompile "mcp.mobius.waila:Hwyla:${hwyla_version}_1.12"
-    deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.19-11"
+    deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.22-13"
     deobfCompile "cofh:RedstoneFlux:1.12-${rf_version}:universal"
     
     // compile against the JEI API but do not include it at runtime

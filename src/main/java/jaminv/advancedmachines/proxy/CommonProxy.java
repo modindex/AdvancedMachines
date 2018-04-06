@@ -15,6 +15,8 @@ import jaminv.advancedmachines.util.Config;
 import jaminv.advancedmachines.util.handlers.OreDictionaryHandler;
 import jaminv.advancedmachines.util.handlers.RegistryHandler;
 import jaminv.advancedmachines.util.material.MaterialBase;
+import jaminv.advancedmachines.util.message.RedstoneStateMessage;
+import jaminv.advancedmachines.util.message.RedstoneStateMessage.RedstoneStateMessageHandler;
 import jaminv.advancedmachines.util.models.BlockstateInventory;
 import jaminv.advancedmachines.util.models.BlockstateMaker;
 import jaminv.advancedmachines.util.models.BlockstateMaterial;
@@ -30,6 +32,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 @EventBusSubscriber
 public class CommonProxy {
+	private static final Class RedstoneStateMessage = null;
 	public static Configuration config;
 	
 	public void preInit(FMLPreInitializationEvent e) {
@@ -37,8 +40,10 @@ public class CommonProxy {
 		config = new Configuration(new File(directory.getPath(), "advancedmachines.cfg"));
 		Config.readConfig();
 		
-		Main.NETWORK.registerMessage(InventoryStateMessageHandler.class, InventoryStateMessage.class, 0, Side.SERVER);
-		Main.NETWORK.registerMessage(MultiblockUpdateMessageHandler.class, MultiblockUpdateMessage.class, 1, Side.CLIENT);
+		int discriminator = 0;
+		Main.NETWORK.registerMessage(InventoryStateMessageHandler.class, InventoryStateMessage.class, discriminator++, Side.SERVER);
+		Main.NETWORK.registerMessage(MultiblockUpdateMessageHandler.class, MultiblockUpdateMessage.class, discriminator++, Side.CLIENT);
+		Main.NETWORK.registerMessage(RedstoneStateMessageHandler.class, RedstoneStateMessage.class, discriminator++, Side.SERVER);
 		
 		RegistryHandler.otherRegistries();
 		 

@@ -8,6 +8,7 @@ import jaminv.advancedmachines.objects.blocks.machine.multiblock.DialogMachineMu
 import jaminv.advancedmachines.util.dialog.DialogBase;
 import jaminv.advancedmachines.util.dialog.struct.DialogArea;
 import jaminv.advancedmachines.util.dialog.struct.DialogTexture;
+import jaminv.advancedmachines.util.interfaces.IRedstoneControlled;
 import jaminv.advancedmachines.util.recipe.machine.PurifierManager;
 
 public class DialogMachinePurifier extends DialogMachineMultiblock {
@@ -28,7 +29,7 @@ public class DialogMachinePurifier extends DialogMachineMultiblock {
 		this();
 		this.addElement(new DialogProcessBar(te, 74, 23, 24, 17, 200, 50));
 		this.addElement(new DialogEnergyBar(te, 9, 20, 14, 50, 200, 0));
-		this.addElement(new RedstoneToggleButton(te));
+		this.addElement(new RedstoneToggleButton((IRedstoneControlled)te));
 		
 		this.addTooltip(new DialogTooltipEnergy(9, 20, 14, 50, te));
 		this.addTooltip(new TooltipMultiblock(158, 7, 11, 11, te));
