@@ -15,6 +15,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public abstract class BlockMachineBase extends DirectionalBlock implements ITileEntityProvider, IHasTileEntity {
@@ -30,5 +31,14 @@ public abstract class BlockMachineBase extends DirectionalBlock implements ITile
 			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		
 		return BlockHelper.openGui(worldIn, pos, playerIn, getGuiId());
+	}
+	
+	@Override
+	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+		TileEntity te = world.getTileEntity(pos);
+		if (te instanceof TileEntityMachineBase) {
+			((TileEntityMachineBase)te).checkRedstone();
+		}
+		super.onNeighborChange(world, pos, neighbor);
 	}
 }

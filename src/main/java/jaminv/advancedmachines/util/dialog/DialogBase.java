@@ -102,7 +102,19 @@ public class DialogBase implements IGuiObserver {
 				//gui.drawHoveringText(tip.getText(), mouseX - guiLeft, mouseY - guiTop);
 			}
 		}
-	}	
+		
+		for (IDialogElement element : elements) {
+			if (mouseX >= element.getX() + guiLeft && mouseX <= element.getX() + element.getW() + guiLeft
+					&& mouseY >= element.getY() + guiTop && mouseY <= element.getY() + element.getH() + guiTop
+				) {
+				String str = element.getTooltip(mouseX, mouseY);
+				if (str != null && str != "") {
+					ScaledResolution scaled = new ScaledResolution(minecraft);
+					GuiUtils.drawHoveringText(Arrays.asList(str.split("\\\\n")), mouseX - guiLeft, mouseY - guiTop, scaled.getScaledWidth() - guiLeft, scaled.getScaledHeight() - guiTop, -1, font);
+				}
+			}
+		}
+	}
 	
 	@Override
 	public void mouseClicked(int guiLeft, int guiTop, int mouseX, int mouseY, int mouseButton) {

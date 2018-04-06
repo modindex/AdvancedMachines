@@ -3,6 +3,7 @@ package jaminv.advancedmachines.objects.blocks.machine.dialog;
 import jaminv.advancedmachines.objects.blocks.machine.IMachineEnergy;
 import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
 import jaminv.advancedmachines.util.dialog.control.DialogProgressBar;
+import net.minecraft.client.resources.I18n;
 
 public class DialogEnergyBar extends DialogProgressBar {
 
@@ -22,5 +23,9 @@ public class DialogEnergyBar extends DialogProgressBar {
 	protected float getPercent() {
 		return te.getEnergyPercent();
 	}
-
+	
+	@Override
+	public String getTooltip(int mouseX, int mouseY) {
+		return I18n.format("dialog.common.energy", te.getEnergyStored(), te.getMaxEnergyStored());
+	}	
 }

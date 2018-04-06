@@ -42,4 +42,9 @@ public abstract class DialogProgressBar extends DialogTextureMapDefault implemen
 		
 		gui.drawTexturedModalRect(drawX, y, texture.getU(), v, w, h);
 	}
+	
+	@Override
+	public String getTooltip(int mouseX, int mouseY) {
+		return null;
+	}
 }

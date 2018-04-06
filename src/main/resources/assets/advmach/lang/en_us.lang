@@ -55,6 +55,9 @@ dialog.common.percent=%d%%
 dialog.common.input=Input
 dialog.common.output=Output
 dialog.common.priority=Priority
+dialog.common.redstone.ignore=Redstone Mode: Ignored
+dialog.common.redstone.active=Redstone Mode: Active with signal
+dialog.common.redstone.inactive=Redstone Mode: Active without signal
 
 dialog.alloy.title=Alloy Forge
 dialog.energy.title=Energy

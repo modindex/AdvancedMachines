@@ -23,6 +23,7 @@ public class DialogText implements IDialogElement {
 	public int getX() { return x; }
 	public int getY() { return y; }
 	public int getW() { return w; }
+	public int getH() { return 0; }
 	public String getText() { return text; }
 	public int getColor() { return color; }
 	
@@ -34,5 +35,10 @@ public class DialogText implements IDialogElement {
 			x += w / 2 - strw / 2;				
 		}
 		font.drawString(I18n.format(loc), x, drawY, color);
+	}
+
+	@Override
+	public String getTooltip(int mouseX, int mouseY) {
+		return null;
 	}
 }

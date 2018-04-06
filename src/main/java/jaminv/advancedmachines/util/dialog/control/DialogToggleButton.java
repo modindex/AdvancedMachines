@@ -32,4 +32,9 @@ public class DialogToggleButton<T extends DialogToggleButton.IEnumIterable<T>> e
 	}
 	
 	protected void onStateChanged(T newstate) {	}
+
+	@Override
+	public String getTooltip(int mouseX, int mouseY) {
+		return null;
+	}
 }

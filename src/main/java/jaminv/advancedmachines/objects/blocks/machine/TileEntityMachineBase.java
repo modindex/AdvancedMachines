@@ -4,6 +4,7 @@ import org.apache.logging.log4j.Level;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.objects.blocks.inventory.TileEntityInventory;
+import jaminv.advancedmachines.objects.blocks.machine.dialog.RedstoneToggleButton.RedstoneState;
 import jaminv.advancedmachines.objects.items.ItemStackHandlerObservable;
 import jaminv.advancedmachines.util.Config;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
@@ -33,7 +34,7 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 	public int getFirstSecondarySlot() { return getInputCount() + getOutputCount(); }
 	public int getInventorySize() { return getInputCount() + getOutputCount() + getSecondaryCount(); }
 	
-	public MachineEnergyStorage energy;
+	protected MachineEnergyStorage energy;
 	
 	public float getEnergyPercent() { return (float)energy.getEnergyStored() / energy.getMaxEnergyStored(); }
 	public int getEnergyStored() { return energy.getEnergyStored(); }
@@ -42,6 +43,16 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 	
 	private final IRecipeManager recipeManager;
 	public IRecipeManager getRecipeManager() { return recipeManager; }
+	
+	protected boolean redstone;
+	protected RedstoneState redstoneState = RedstoneState.IGNORE;
+	
+	public RedstoneState getRedstoneState() {
+		return redstoneState;
+	}
+	public void setRedstoneState(RedstoneState state) {
+		this.redstoneState = state;
+	}
 	
 	public TileEntityMachineBase(IRecipeManager recipeManager) {
 		super();
@@ -286,5 +297,9 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 			stack++;
 		}
 		return ret;
+	}
+	
+	public void checkRedstone() {
+		redstone = world.isBlockPowered(pos);
 	}
 }

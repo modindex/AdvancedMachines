@@ -4,9 +4,6 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 
 public interface IDialogControl extends IDialogElement {
-	public int getW();
-	public int getH();
-	
 	/**
 	 * Mouse Click Event
 	 * 

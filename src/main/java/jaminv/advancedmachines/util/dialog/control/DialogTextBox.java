@@ -77,4 +77,9 @@ public class DialogTextBox extends DialogArea implements IDialogControlAdvanced 
 	public void removeObserver(IElementStateObserver<String> obv) {
 		this.observers.remove(obv);
 	}
+
+	@Override
+	public String getTooltip(int mouseX, int mouseY) {
+		return null;
+	}
 }
