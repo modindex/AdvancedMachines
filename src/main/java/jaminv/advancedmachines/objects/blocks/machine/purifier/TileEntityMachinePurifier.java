@@ -39,8 +39,6 @@ public class TileEntityMachinePurifier extends TileEntityMachineMultiblock {
 	
 	@Override
 	public GuiContainer createGui(IInventory inventory) {
-		GuiMachinePurifier gui = new GuiMachinePurifier(createContainer(inventory), dialog);
-		gui.addObserver(dialog);
-		return gui;
+		return new GuiMachinePurifier(createContainer(inventory), dialog);
 	}
 }

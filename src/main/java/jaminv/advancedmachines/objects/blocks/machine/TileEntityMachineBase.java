@@ -5,29 +5,38 @@ import org.apache.logging.log4j.Level;
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.objects.blocks.inventory.TileEntityInventory;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansion;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTileEntity;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.InventoryStateMessage;
 import jaminv.advancedmachines.objects.items.ItemStackHandlerObservable;
 import jaminv.advancedmachines.util.Config;
+import jaminv.advancedmachines.util.interfaces.ICanProcess;
+import jaminv.advancedmachines.util.interfaces.IDirectional;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
 import jaminv.advancedmachines.util.interfaces.IRedstoneControlled;
+import jaminv.advancedmachines.util.message.ProcessingStateMessage;
 import jaminv.advancedmachines.util.message.RedstoneStateMessage;
 import jaminv.advancedmachines.util.recipe.IRecipeManager;
 import jaminv.advancedmachines.util.recipe.RecipeBase;
 import jaminv.advancedmachines.util.recipe.RecipeInput;
 import jaminv.advancedmachines.util.recipe.RecipeOutput;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public abstract class TileEntityMachineBase extends TileEntityInventory implements ITickable, IHasGui, IMachineEnergy, IRedstoneControlled {
+public abstract class TileEntityMachineBase extends TileEntityInventory implements ITickable, IHasGui, IMachineEnergy, IRedstoneControlled, IDirectional, ICanProcess {
 
 	public abstract int getInputCount();
 	public abstract int getOutputCount();
@@ -36,6 +45,11 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 	public int getFirstOutputSlot() { return getInputCount(); }
 	public int getFirstSecondarySlot() { return getInputCount() + getOutputCount(); }
 	public int getInventorySize() { return getInputCount() + getOutputCount() + getSecondaryCount(); }
+	
+	protected EnumFacing facing = EnumFacing.NORTH;
+	
+	public void setFacing(EnumFacing facing) { this.facing = facing; }
+	public EnumFacing getFacing() { return facing; }
 	
 	protected MachineEnergyStorage energy;
 	
@@ -61,6 +75,17 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 		}
 	}
 	
+	public boolean isRedstoneActive() {
+		return redstoneState == RedstoneState.IGNORE
+			|| (redstoneState == RedstoneState.ACTIVE && redstone == true)
+			|| (redstoneState == RedstoneState.INACTIVE && redstone == false);
+	}
+	
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
+	}	
+	
 	public TileEntityMachineBase(IRecipeManager recipeManager) {
 		super();
 		this.energy = new MachineEnergyStorage(50000, 200);
@@ -75,7 +100,10 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 	public void update() {
 		tick++;
 		if (tick < Config.tickUpdate) { return; }
+
+		boolean oldProcess = this.isProcessing();
 		
+		checkRedstone();
 		tickUpdate();
 		
 		RecipeInput[] input = getInput();
@@ -86,6 +114,13 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 			process(input);
 		} else {
 			haltProcess();
+		}
+		
+		if (world.isRemote) { return; }
+		
+		boolean newProcess = this.isProcessing();
+		if (newProcess != oldProcess) {
+			Main.NETWORK.sendToAll(new ProcessingStateMessage(pos, newProcess));
 		}
 	}
 	
@@ -103,7 +138,13 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 	private RecipeBase lastRecipe;
 	
 	public boolean isProcessing() {
-		return processTimeRemaining > 0;
+		return world.isRemote ? processingState : processTimeRemaining > 0 && this.isRedstoneActive();
+	}
+	
+	protected boolean processingState = false;
+	public void setProcessingState(boolean state) {
+		this.processingState = state;
+		world.markBlockRangeForRenderUpdate(pos, pos);
 	}
 	
 	public boolean canProcess(RecipeInput[] input) {
@@ -117,10 +158,7 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 	protected void process(RecipeInput[] input) {
 		if (world.isRemote) { return; }
 		
-		if ((redstoneState == RedstoneState.ACTIVE && redstone == false)
-			|| (redstoneState == RedstoneState.INACTIVE && redstone == true)) {
-			return;
-		}
+		if (!this.isRedstoneActive()) { return; }
 		
 		if (!isProcessing()) {
 			lastRecipe = recipeManager.getRecipe(input);
@@ -182,7 +220,7 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 		processTimeRemaining = -1;
 	}
 	
-	public int getFieldCount() { return 3; }
+	public int getFieldCount() { return 4; }
 	public int getField(int id) {
 		switch(id) {
 		case 0:
@@ -191,6 +229,8 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 			return totalProcessTime;
 		case 2:
 			return energy.getEnergyStored();
+		case 3:
+			return redstoneState.getValue();
 		}
 		return 0;
 	}
@@ -203,26 +243,44 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 			totalProcessTime = value; return;
 		case 2:
 			energy.setEnergy(value); return;
+		case 3:
+			redstoneState = RedstoneState.fromValue(value);
 		}
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
+		if (compound.hasKey("facing")) {
+			facing = EnumFacing.byName(compound.getString("facing"));
+		}		
+		
 		if (compound.hasKey("energy")) {
 			energy.readFromNBT(compound);
 		}
 		processTimeRemaining = compound.getInteger("processTimeRemaining");
 		totalProcessTime = compound.getInteger("totalProcessTime");
+		processingState = processTimeRemaining > 0;
+		
+		if (compound.hasKey("redstone")) {
+			redstone = compound.getBoolean("redstone");
+		}
+		if (compound.hasKey("redstoneState")) {
+			redstoneState = RedstoneState.fromValue(compound.getInteger("redstoneState"));
+		}
+		
+		this.prevInput = this.getInput();
 	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
+		compound.setString("facing", facing.getName());
 		energy.writeToNBT(compound);
 		compound.setInteger("processTimeRemaining", processTimeRemaining);
 		compound.setInteger("totalProcessTime", totalProcessTime);
-		
+		compound.setBoolean("redstone", redstone);
+		compound.setInteger("redstoneState", redstoneState.getValue());
 		return compound;
 	}
 
@@ -315,4 +373,8 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 	public void checkRedstone() {
 		redstone = world.isBlockPowered(pos);
 	}
+	
+    public NBTTagCompound getUpdateTag() {
+        return this.writeToNBT(new NBTTagCompound());
+    }
 }

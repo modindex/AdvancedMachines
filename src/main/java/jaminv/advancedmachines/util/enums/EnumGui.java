@@ -3,6 +3,7 @@ package jaminv.advancedmachines.util.enums;
 public enum EnumGui {
 	PURIFIER(1),
 	ALLOY(2),
+	FURNACE(3),
 	MACHINE_INVENTORY(10),
 	MACHINE_POWER(11),
 	PRIORITY(101);

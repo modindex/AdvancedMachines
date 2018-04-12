@@ -21,6 +21,8 @@ import jaminv.advancedmachines.util.models.BlockstateInventory;
 import jaminv.advancedmachines.util.models.BlockstateMaker;
 import jaminv.advancedmachines.util.models.BlockstateMaterial;
 import jaminv.advancedmachines.util.models.BlockstateMaterialFace;
+import jaminv.advancedmachines.util.models.BlockstateMachine;
+import jaminv.advancedmachines.util.models.ModelRegistry;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -40,26 +42,7 @@ public class CommonProxy {
 		config = new Configuration(new File(directory.getPath(), "advancedmachines.cfg"));
 		Config.readConfig();
 		
-		int discriminator = 0;
-		Main.NETWORK.registerMessage(InventoryStateMessageHandler.class, InventoryStateMessage.class, discriminator++, Side.SERVER);
-		Main.NETWORK.registerMessage(MultiblockUpdateMessageHandler.class, MultiblockUpdateMessage.class, discriminator++, Side.CLIENT);
-		Main.NETWORK.registerMessage(RedstoneStateMessageHandler.class, RedstoneStateMessage.class, discriminator++, Side.SERVER);
-		
 		RegistryHandler.otherRegistries();
-		 
-		try {
-			BlockstateMaterial expansion = new BlockstateMaterial("machine_expansion", "machine/expansion/", MaterialBase.MaterialType.EXPANSION);
-			expansion.make();
-			
-			BlockstateInventory inventory = new BlockstateInventory("machine_inventory", "machine/expansion/", "machine/inventory/input/", "machine/inventory/output/", MaterialBase.MaterialType.EXPANSION);
-			inventory.make();
-			
-			BlockstateMaterialFace energy = new BlockstateMaterialFace("machine_energy", "machine/expansion/", "machine/energy/", MaterialBase.MaterialType.EXPANSION);
-			energy.make();
-		} catch (IOException e1) {
-			Main.logger.log(Level.ERROR, "Error creating model file", e.toString());
-			e1.printStackTrace();
-		}
 	}
 	
 	public void init(FMLInitializationEvent e) {

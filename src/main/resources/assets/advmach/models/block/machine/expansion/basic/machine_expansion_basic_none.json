@@ -1,6 +1,0 @@
-{
-    "parent": "block/cube_all",
-    "textures": {
-        "all": "advmach:blocks/machine/expansion/basic/machine_expansion_basic_none"
-    }
-}

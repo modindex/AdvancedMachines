@@ -16,6 +16,7 @@ public class Config {
 	public static boolean doFurnace = true;
 	public static int tickUpdate = 5;
 	public static int processTimeBasic = 200;
+	public static int defaultFurnaceEnergy = 2000;
 	
 	public static boolean doIncludeTitanium = true;
 	public static boolean doIncludeCopper = true;
@@ -60,6 +61,7 @@ public class Config {
 		doFurnace = cfg.getBoolean("doFurnace", CATEGORY_GENERAL, doFurnace, "Include Advanced Furnace Recipes");
 		tickUpdate = cfg.getInt("tickUpdate", CATEGORY_GENERAL, 5, 1, 100, "Machines only run full updates every X ticks");
 		processTimeBasic = cfg.getInt("processTimeBasic", CATEGORY_GENERAL, 200, 0, 10000, "Processing time for machines with no upgrades");
+		defaultFurnaceEnergy = cfg.getInt("defaultFurnaceEnergy", CATEGORY_GENERAL, 2000, 0, 100000, "Default energy for standard furnace recipes");
 	}
 	
 	private static void initMaterialConfig(Configuration cfg) {

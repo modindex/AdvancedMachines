@@ -47,6 +47,7 @@ tile.machine_expansion_compressed.name=Compressed Machine Expansion
 tile.machine_expansion_quad.name=Quadratic Machine Expansion
 tile.machine_expansion_impossible.name=Impossible Machine Expansion
 tile.machine_inventory.name=Machine Inventory
+tile.machine_redstone.name=Machine Redstone Controller
 
 dialog.common.inventory=Inventory
 dialog.common.energy=%,d / %,d RF
@@ -60,8 +61,9 @@ dialog.common.redstone.active=Redstone Mode: Active with signal
 dialog.common.redstone.inactive=Redstone Mode: Active without signal
 
 dialog.alloy.title=Alloy Forge
+dialog.purifier.title=Purification Chamber
+dialog.furnace.title=Advanced Furnace
 dialog.energy.title=Energy
-
 
 message.no_controller=No Machine Controller Found
 message.controller_found=Machine Controller (%s) found at (%d, %d, %d)

@@ -20,6 +20,7 @@ import jaminv.advancedmachines.util.helper.BlockHelper;
 import jaminv.advancedmachines.util.helper.InventoryHelper;
 import jaminv.advancedmachines.util.helper.BlockHelper.BlockChecker;
 import jaminv.advancedmachines.util.helper.BlockHelper.ScanResult;
+import jaminv.advancedmachines.util.interfaces.IRedstoneControlled.RedstoneState;
 import jaminv.advancedmachines.util.recipe.IRecipeManager;
 import jaminv.advancedmachines.util.recipe.RecipeBase;
 import jaminv.advancedmachines.util.recipe.RecipeInput;
@@ -34,11 +35,21 @@ import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase {
+public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase implements IMachineUpgradeTileEntity {
 
 	public TileEntityMachineMultiblock(IRecipeManager recipeManager) {
 		super(recipeManager);
 	}
+	
+	protected MultiblockBorders borders = new MultiblockBorders();
+	
+	public void setBorders(MultiblockBorders borders) {
+		this.borders = borders;
+	}
+	
+	public MultiblockBorders getBorders() {
+		return borders; 
+	}	
 
 	protected MultiblockState multiblockState = new MultiblockNull();
 	public String getMultiblockString() { 
@@ -55,8 +66,8 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 		@Override
 		public Action checkBlock(World world, BlockPos pos) {
 			Block block = world.getBlockState(pos).getBlock();
-			if (block instanceof IMachineUpgrade) { return Action.SCAN; }
 			if (block instanceof BlockMachineMultiblock) { return Action.END; }
+			if (block instanceof IMachineUpgrade) { return Action.SCAN; }
 			return Action.SKIP;
 		}
 	}	
@@ -138,6 +149,7 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 	}
 	
 	protected int qtyProcessing = 0;
+	public int getQtyProcessing() { return qtyProcessing; }
 	
 	@Override
 	protected void tickUpdate() {
@@ -154,6 +166,12 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 	
 	public void sortTools() {
 		upgrades.sortTools(world);
+	}
+	
+	public void setRedstone(boolean redstone) {
+		if (redstone) {
+			this.redstone = true;
+		}
 	}
 		
 	@Override
@@ -190,13 +208,19 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 		}
 	}
 	
+	@Override
+	protected void haltProcess() {
+		super.haltProcess();
+		qtyProcessing = 0;
+	}
+	
 	public static void setMultiblock(BlockPos min, BlockPos max, boolean isMultiblock, World world, BlockPos pos) {
 		MutableBlockPos upgrade = new MutableBlockPos();
 		for (int x = min.getX(); x <= max.getX(); x++) {
 			for (int y = min.getY(); y <= max.getY(); y++) {
 				for (int z = min.getZ(); z <= max.getZ(); z++) {
 					upgrade.setPos(x, y, z);
-					if (pos.equals(upgrade)) { continue; }
+					//if (pos.equals(upgrade)) { continue; }
 					Block block = world.getBlockState(upgrade).getBlock();
 					if (block instanceof IMachineUpgrade) { 
 						MultiblockBorders bord;
@@ -219,6 +243,9 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
+		if (compound.hasKey("borders")) {
+			borders.deserializeNBT(compound.getCompoundTag("borders"));
+		}		
 		if (compound.hasKey("upgrades")) {
 			upgrades.deserializeNBT(compound.getCompoundTag("upgrades"));
 		}
@@ -233,9 +260,27 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
+		compound.setTag("borders",  borders.serializeNBT());		
 		compound.setTag("upgrades",  upgrades.serializeNBT());
         if (multiblockMin != null) { compound.setTag("multiblockMin", NBTUtil.createPosTag(multiblockMin)); }
         if (multiblockMax != null) { compound.setTag("multiblockMax", NBTUtil.createPosTag(multiblockMax)); }
 		return compound;
 	}
+	
+	public int getFieldCount() { return super.getFieldCount() + 1; }
+	public int getField(int id) {
+		int s = super.getFieldCount();
+		if (id == s) { 
+			return qtyProcessing;
+		}
+		return super.getField(id);
+	}
+	
+	public void setField(int id, int value) {
+		int s = super.getFieldCount();
+		if (id == s) {
+			qtyProcessing = value; return;
+		}
+		super.setField(id, value);
+	}	
 }

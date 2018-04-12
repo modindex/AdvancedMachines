@@ -6,10 +6,21 @@ import java.util.List;
 import java.util.Map;
 
 import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTileEntity;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.redstone.TileEntityMachineRedstone;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
+import jaminv.advancedmachines.util.interfaces.IDirectional;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ChunkCache;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 
 public class BlockHelper {
 	
@@ -21,6 +32,28 @@ public class BlockHelper {
 	
 	public static String getBlockName(World world, BlockPos pos) {
 		return world.getBlockState(pos).getBlock().getLocalizedName();
+	}
+	
+	public static EnumFacing setDirectional(World worldIn, BlockPos pos, EntityLivingBase placer) {
+		EnumFacing ret = EnumFacing.getDirectionFromEntityLiving(pos, placer);
+		
+		TileEntity te = worldIn.getTileEntity(pos);
+		if (te != null && te instanceof IDirectional) {
+			((IDirectional)te).setFacing(ret);
+		}
+		
+		return ret;
+	}
+	
+	public static void setBorders(World world, BlockPos pos, MultiblockBorders borders) {
+		TileEntity tileentity = world.getTileEntity(pos);
+		if (tileentity instanceof IMachineUpgradeTileEntity) {
+			((IMachineUpgradeTileEntity)tileentity).setBorders(borders);
+		}
+	}
+	
+	public static TileEntity getTileEntity(IBlockAccess worldIn, BlockPos pos) {
+        return worldIn instanceof ChunkCache ? ((ChunkCache)worldIn).getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK) : worldIn.getTileEntity(pos);
 	}
 	
 	public static class ScanResult {

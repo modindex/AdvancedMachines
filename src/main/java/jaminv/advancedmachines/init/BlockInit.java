@@ -11,6 +11,8 @@ import jaminv.advancedmachines.objects.blocks.machine.alloy.BlockMachineAlloy;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansion;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.energy.BlockMachineEnergy;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.BlockMachineInventory;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.redstone.BlockMachineRedstone;
+import jaminv.advancedmachines.objects.blocks.machine.instance.furnace.BlockMachineFurnace;
 import jaminv.advancedmachines.objects.blocks.machine.purifier.BlockMachinePurifier;
 import jaminv.advancedmachines.util.material.MaterialBase;
 import jaminv.advancedmachines.util.material.MaterialExpansion;
@@ -37,10 +39,12 @@ public class BlockInit {
 	
 	public static final BlockMachinePurifier MACHINE_PURIFIER = new BlockMachinePurifier("machine_purifier");
 	public static final BlockMachineAlloy MACHINE_ALLOY = new BlockMachineAlloy("machine_alloy");
+	public static final BlockMachineFurnace MACHINE_FURNACE = new BlockMachineFurnace("machine_furnace");
 	
 	public static final BlockMachineExpansion MACHINE_EXPANSION = new BlockMachineExpansion("machine_expansion");
 	public static final BlockMachineInventory MACHINE_INVENTORY = new BlockMachineInventory("machine_inventory");
 	public static final BlockMachineEnergy MACHINE_ENERGY = new BlockMachineEnergy("machine_energy");
+	public static final BlockMachineRedstone MACHINE_REDSTONE = new BlockMachineRedstone("machine_redstone");
 	
 	public static final DataBlock DATABLOCK = new DataBlock();
 }

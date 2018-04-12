@@ -24,6 +24,7 @@ public class DialogBase implements IGuiObserver {
 	private final DialogArea dialog;
 	private NonNullList<IDialogElement> elements = NonNullList.<IDialogElement>create();
 	private NonNullList<DialogTooltip> tooltip = NonNullList.<DialogTooltip>create();
+	private NonNullList<DialogText> text = NonNullList.<DialogText>create();
 	
 	public DialogBase(String background, int xpos, int ypos, int width, int height) {
 		this.background = new ResourceLocation(Reference.MODID, background);
@@ -37,15 +38,23 @@ public class DialogBase implements IGuiObserver {
 	 * @param element
 	 */
 	protected void addElement(IDialogElement element) {
-		this.elements.add(element);
+		if (element instanceof DialogText) {
+			this.text.add((DialogText)element);
+		} else {
+			this.elements.add(element);
+		}
 	}
 	
 	protected void addText(int xpos, int ypos, int width, String text, int color) {
-		this.elements.add(new DialogText(xpos, ypos, width, text, color));
+		this.text.add(new DialogText(xpos, ypos, width, text, color));
 	}
 	
 	protected void addText(int xpos, int ypos, String text, int color) {
-		this.elements.add(new DialogText(xpos, ypos, text, color));
+		this.text.add(new DialogText(xpos, ypos, text, color));
+	}
+	
+	protected void addText(DialogText text) {
+		this.text.add(text);
 	}
 	
 	protected void addTooltip(int xpos, int ypos, int width, int height, String text) {
@@ -88,11 +97,15 @@ public class DialogBase implements IGuiObserver {
 		for (IDialogElement element : elements) {
 			element.draw(gui, font, guiLeft + element.getX(), guiTop + element.getY());
 		}
+		
+		for (DialogText t : text) {
+			t.draw(gui, font, guiLeft + t.getX(), guiTop + t.getY());
+		}
 	}
 	
 	public void drawForeground(GuiScreen gui, FontRenderer font, int guiLeft, int guiTop, int mouseX, int mouseY) {
 		Minecraft minecraft = gui.mc;
-		
+
 		for (DialogTooltip tip : tooltip) {
 			if (mouseX >= tip.getX() + guiLeft && mouseX <= tip.getX() + tip.getW() + guiLeft
 				&& mouseY >= tip.getY() + guiTop && mouseY <= tip.getY() + tip.getH() + guiTop

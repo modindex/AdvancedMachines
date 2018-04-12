@@ -4,6 +4,8 @@ import jaminv.advancedmachines.init.BlockInit;
 import jaminv.advancedmachines.init.ItemInit;
 import jaminv.advancedmachines.util.interfaces.IHasModel;
 import jaminv.advancedmachines.util.interfaces.IHasTileEntity;
+import jaminv.advancedmachines.util.message.MessageRegistry;
+import jaminv.advancedmachines.util.models.ModelRegistry;
 import jaminv.advancedmachines.world.gen.WorldGenCustomOres;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
@@ -49,6 +51,10 @@ public class RegistryHandler {
 	}
 	
 	public static void otherRegistries() {
+		MessageRegistry.register();
+
 		GameRegistry.registerWorldGenerator(new WorldGenCustomOres(), 0);
+		
+		ModelRegistry.build();		
 	}
 }

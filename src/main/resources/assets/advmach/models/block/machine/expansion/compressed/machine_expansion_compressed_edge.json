@@ -1,8 +1,0 @@
-{
-    "parent": "block/cube_all",
-    "textures": {
-        "all": "advmach:blocks/machine/expansion/compressed/machine_expansion_compressed_none",
-        "north": "advmach:blocks/machine/expansion/compressed/machine_expansion_compressed_top",
-        "up": "advmach:blocks/machine/expansion/compressed/machine_expansion_compressed_top"
-    }
-}

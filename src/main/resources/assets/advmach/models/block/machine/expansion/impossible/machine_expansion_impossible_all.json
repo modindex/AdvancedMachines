@@ -1,6 +1,0 @@
-{
-    "parent": "block/cube_all",
-    "textures": {
-        "all": "advmach:blocks/machine/expansion/impossible/machine_expansion_impossible_all"
-    }
-}

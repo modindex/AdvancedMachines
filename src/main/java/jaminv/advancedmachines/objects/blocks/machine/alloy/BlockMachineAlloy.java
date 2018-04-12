@@ -2,6 +2,7 @@ package jaminv.advancedmachines.objects.blocks.machine.alloy;
 
 import jaminv.advancedmachines.objects.blocks.machine.BlockMachineBase;
 import jaminv.advancedmachines.util.enums.EnumGui;
+import jaminv.advancedmachines.util.material.MaterialBase.MaterialType;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
