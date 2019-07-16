@@ -12,7 +12,8 @@ public interface IMachineUpgrade {
 
 	public static enum UpgradeType { 
 		MULTIPLY(0, "multiply", "machine.upgrade.multiply"),
-		SPEED(1, "speed", "machine.upgrade.speed");
+		SPEED(1, "speed", "machine.upgrade.speed"),
+		PRODUCTIVITY(2, "productivity", "machine.upgrade.productivity");
 		
 		private final int id;
 		private final String unlocalizedName;

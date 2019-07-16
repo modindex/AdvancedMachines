@@ -1,14 +1,18 @@
-package jaminv.advancedmachines.objects.blocks.machine.alloy;
+package jaminv.advancedmachines.objects.blocks.machine.instance.alloy;
 
 import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine;
 import jaminv.advancedmachines.objects.blocks.machine.DialogMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
+import jaminv.advancedmachines.objects.blocks.machine.instance.purifier.DialogMachinePurifier;
+import jaminv.advancedmachines.objects.blocks.machine.instance.purifier.TileEntityMachinePurifier.GuiMachinePurifier;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
 import jaminv.advancedmachines.util.dialog.gui.GuiContainerObservable;
 import jaminv.advancedmachines.util.recipe.machine.AlloyManager;
+import jaminv.advancedmachines.util.recipe.machine.PurifierManager;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.IInventory;
 
-public class TileEntityMachineAlloy extends TileEntityMachineBase {
+public class TileEntityMachineAlloy extends TileEntityMachineMultiblock {
 	@Override
 	public int getInputCount() { return 3; }
 	

@@ -303,7 +303,7 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 		return super.getCapability(capability, facing);
 	}	
 	
-	protected RecipeInput[] getInput() {
+	public RecipeInput[] getInput() {
 		RecipeInput[] input = new RecipeInput[getInputCount()];
 		for (int i = 0; i < getInputCount(); i++) {
 			input[i] = new RecipeInput(inventory.getStackInSlot(getFirstInputSlot() + i));

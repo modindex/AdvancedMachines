@@ -13,6 +13,7 @@ public class MaterialDust extends MaterialBase {
 	public static final MaterialDust COPPER = new MaterialDust(4, "copper");
 	public static final MaterialDust SILVER = new MaterialDust(5, "silver");
 	public static final MaterialDust DIAMOND = new MaterialDust(6, "diamond");
+	public static final MaterialDust ENDER = new MaterialDust(7, "ender");		
 	
 	public static MaterialBase[] values() {
 		return MaterialBase.values(TYPE);
@@ -28,15 +29,6 @@ public class MaterialDust extends MaterialBase {
 
 	@Override
 	public boolean doInclude(String oredictType) {
-		switch (getName()) {
-		case "gold":
-		case "iron":
-		case "coal":
-			return Config.doInclude("vanillaDust");
-		case "diamond":
-			return Config.doInclude("diamondDust");
-		default:
-			return Config.doInclude(getName());
-		}
+		return Config.doInclude("dust_" + getName());
 	}
 }

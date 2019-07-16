@@ -27,6 +27,6 @@ public class MaterialMod extends MaterialBaseOre {
 
 	@Override
 	public boolean doInclude(String oredictType) {
-		return Config.doInclude(getName());
+		return Config.doInclude("material_" + getName());		
 	}
 }

@@ -40,14 +40,45 @@ tile.ore_copper.name=Copper Ore
 tile.ore_silver.name=Silver Ore
 
 tile.machine.name=Titanium Machine Frame
-tile.machine_purifier.name=Purification Chamber
-tile.machine_alloy.name=Alloy Furnace
+
+tile.machine_furnace_basic.name=Advanced Furnace
+tile.machine_furnace_compressed.name=Compressed Furnace
+tile.machine_furnace_quad.name=Quadratic Furnace
+tile.machine_furnace_impossible.name=Impossible Furnace
+tile.machine_purifier_basic.name=Purification Chamber
+tile.machine_purifier_compressed.name=Compressed Purification Chamber
+tile.machine_purifier_quad.name=Quadratic Purification Chamber
+tile.machine_purifier_impossible.name=Impossible Purification Chamber
+tile.machine_grinder_basic.name=Advanced Grinder
+tile.machine_grinder_compressed.name=Compressed Grinder
+tile.machine_grinder_quad.name=Quadratic Grinder
+tile.machine_grinder_impossible.name=Impossible Grinder
+tile.machine_alloy_basic.name=Alloy Furnace
+tile.machine_alloy_compressed.name=Compressed Alloy Furnace
+tile.machine_alloy_quad.name=Quadratic Alloy Furnace
+tile.machine_alloy_impossible.name=Impossible Alloy Furnace
+
 tile.machine_expansion_basic.name=Machine Expansion
 tile.machine_expansion_compressed.name=Compressed Machine Expansion
 tile.machine_expansion_quad.name=Quadratic Machine Expansion
 tile.machine_expansion_impossible.name=Impossible Machine Expansion
-tile.machine_inventory.name=Machine Inventory
-tile.machine_redstone.name=Machine Redstone Controller
+tile.machine_speed_basic.name=Machine Speed Upgrade
+tile.machine_speed_compressed.name=Compressed Machine Speed Upgrade
+tile.machine_speed_quad.name=Quadratic Machine Speed Upgrade
+tile.machine_speed_impossible.name=Impossible Machine Speed Upgrade
+
+tile.machine_inventory_basic.name=Machine Inventory
+tile.machine_inventory_compressed.name=Compressed Machine Inventory
+tile.machine_inventory_quad.name=Quadratic Machine Inventory
+tile.machine_inventory_impossible.name=Impossible Machine Inventory
+tile.machine_energy_basic.name=Machine Energy Controller
+tile.machine_energy_compressed.name=Compressed Machine Energy Controller
+tile.machine_energy_quad.name=Quadratic Machine Energy Controller
+tile.machine_energy_impossible=Impossible Machine Energy Controller
+tile.machine_redstone_basic.name=Machine Redstone Controller
+tile.machine_redstone_compressed.name=Compressed Machine Redstone Controller
+tile.machine_redstone_quad.name=Quadratic Machine Redstone Controller
+tile.machine_redstone_impossible.name=Impossible Machine Redstone Controller
 
 dialog.common.inventory=Inventory
 dialog.common.energy=%,d / %,d RF
@@ -62,8 +93,10 @@ dialog.common.redstone.inactive=Redstone Mode: Active without signal
 
 dialog.alloy.title=Alloy Forge
 dialog.purifier.title=Purification Chamber
+dialog.grinder.title=Advanced Grinder
 dialog.furnace.title=Advanced Furnace
 dialog.energy.title=Energy
+dialog.machine_inventory.title=Machine Inventory
 
 message.no_controller=No Machine Controller Found
 message.controller_found=Machine Controller (%s) found at (%d, %d, %d)
@@ -71,7 +104,7 @@ message.multiblock.null=Multiblock invalid. You should never see this message.
 message.multiblock.absent=You may create a multiblock using this block and several Machine Expansions in cuboid shape up to 3x3x4.
 message.multiblock.connected_machine=Only one machine may be connected to a multiblock. A second machine, "%s" is connected at (%d, %d, %d).
 message.multiblock.illegal=Block "%s" at (%d, %d, %d) is not a legal for multiblock structure.
-message.multiblock.complete=Valid Multiblock\n\nMachine Multiplier: %d\nSpeed Upgrades: %d\n
+message.multiblock.complete=Valid Multiblock\n\nMachine Multiplier: %d\nSpeed Upgrades: %d\nProductivity Upgrades: %d\n
 message.multiblock.input=\nInventory Input at (%d, %d, %d)
 message.multiblock.output=\nInventory Output at (%d, %d, %d)
 message.multiblock.energy=\nEnergy Input at (%d, %d, %d)

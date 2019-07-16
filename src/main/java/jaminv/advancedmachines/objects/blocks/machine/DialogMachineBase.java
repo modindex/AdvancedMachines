@@ -48,7 +48,7 @@ public abstract class DialogMachineBase extends DialogInventory {
 	}
 	
 	public DialogMachineBase(String background, int xpos, int ypos, int width, int height) {
-		super(background, xpos, ypos, width, height);
+		super(background, xpos, ypos, width, height); 
 	}
 	
 	public ResourceLocation getJeiBackground() { return this.getBackground(); }

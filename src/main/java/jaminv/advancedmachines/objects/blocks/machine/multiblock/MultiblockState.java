@@ -54,7 +54,8 @@ public abstract class MultiblockState {
 		public String toString() {
 			String ret = I18n.format("message.multiblock.complete", 
 				upgrades.get(IMachineUpgrade.UpgradeType.MULTIPLY),
-				upgrades.get(IMachineUpgrade.UpgradeType.SPEED)
+				upgrades.get(IMachineUpgrade.UpgradeType.SPEED),
+				upgrades.get(IMachineUpgrade.UpgradeType.PRODUCTIVITY)
 			);
 			
 			return ret;

@@ -66,7 +66,7 @@ public abstract class RecipeManagerSimple<T extends RecipeBase> implements IReci
 	}
 	
 	@Override
-	public boolean isItemValid(ItemStack stack, ItemStack[] other) {
+	public boolean isItemValid(ItemStack stack, RecipeInput[] other) {
 		if (stack.isEmpty()) { return false; }
 		return recipes.get(new RecipeInput(stack)) != null;
 	}

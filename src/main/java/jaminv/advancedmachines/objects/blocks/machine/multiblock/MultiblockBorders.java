@@ -35,22 +35,42 @@ public class MultiblockBorders implements INBTSerializable<NBTTagCompound> {
 			
 			for (EnumFacing facing : EnumFacing.VALUES) {
 				Block check = world.getBlockState(pos.offset(facing)).getBlock();
-				if (check instanceof BlockMaterial && ((BlockMaterial)check).getMaterialType() == MaterialType.EXPANSION) {
+				boolean border = false;
+				
+				 if (check instanceof BlockMaterial && ((BlockMaterial)check).getMaterialType() == MaterialType.EXPANSION) {
 					if (((BlockMaterial)check).getVariant(world.getBlockState(pos.offset(facing))) != variant) {
-						switch (facing) {
-						case UP:
-							top = true; break;
-						case DOWN:
-							bottom = true; break;
-						case NORTH:
-							north = true; break;
-						case SOUTH:
-							south = true; break;
-						case WEST:
-							west = true; break;
-						case EAST:
-							east = true; break;							
-						}
+						border = true;
+					}
+				}				
+				
+				
+				if (check instanceof IMachineUpgrade && !(current instanceof IMachineUpgrade)) {
+					if (((IMachineUpgrade)check).getUpgradeType() != IMachineUpgrade.UpgradeType.MULTIPLY) { border = true; }
+				}
+				
+				if (current instanceof IMachineUpgrade && !(check instanceof IMachineUpgrade)) {
+					if (((IMachineUpgrade)current).getUpgradeType() != IMachineUpgrade.UpgradeType.MULTIPLY) { border = true; }
+				}
+				
+				if (check instanceof IMachineUpgrade && current instanceof IMachineUpgrade) {
+					if (((IMachineUpgrade)current).getUpgradeType() != ((IMachineUpgrade)check).getUpgradeType()) { border = true; }
+				}
+				
+					
+				if (border) {		
+					switch (facing) {
+					case UP:
+						top = true; break;
+					case DOWN:
+						bottom = true; break;
+					case NORTH:
+						north = true; break;
+					case SOUTH:
+						south = true; break;
+					case WEST:
+						west = true; break;
+					case EAST:
+						east = true; break;							
 					}
 				}
 			}

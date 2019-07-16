@@ -42,5 +42,11 @@ public class AlloyManager {
 			.addInput(1, "dustCoal", 4)
 			.setOutput("ingotSteel")
 		);
+		
+		manager.addRecipe((AlloyRecipe)new AlloyRecipe(8000)
+			.addInput(0, "ingotTitanium")
+			.addInput(1, "dustDiamondPure")
+			.setOutput("ingotTitaniumCarbide")
+		);
 	}
 }

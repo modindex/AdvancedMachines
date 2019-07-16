@@ -14,12 +14,12 @@ public class InventoryHelper {
 	 * @param inv
 	 * @return Number of items pushed
 	 */
-	public static ItemStack pushStack(ItemStack stack, ItemStackHandler inv, int startIndex, int endIndex) {
+	public static ItemStack pushStack(ItemStack stack, ItemStackHandler inv, int startIndex, int endIndex, boolean insert) {
         int i = startIndex;
 
         if (stack.isStackable()) {
             while (!stack.isEmpty()) {
-                if (i >= endIndex) { break; }
+                if (i > endIndex) { break; }
 
                 ItemStack itemstack = inv.getStackInSlot(i);
 
@@ -39,7 +39,7 @@ public class InventoryHelper {
             }
         }
 
-        if (!stack.isEmpty()) {
+        if (!stack.isEmpty() && insert) {
             i = startIndex;
             while (true) {
         		if (i >= endIndex) { break; }
@@ -58,9 +58,18 @@ public class InventoryHelper {
         return stack;		
 	}
 	
-	public static ItemStack pushStack(ItemStack stack, ItemStackHandler inv) {
-		return InventoryHelper.pushStack(stack, inv, 0, inv.getSlots());
+	public static ItemStack pushStack(ItemStack stack, ItemStackHandler inv, int startIndex, int endIndex) {
+		return InventoryHelper.pushStack(stack, inv, startIndex, endIndex, true);
 	}
+
+	public static ItemStack pushStack(ItemStack stack, ItemStackHandler inv, boolean insert) {
+		return InventoryHelper.pushStack(stack, inv, 0, inv.getSlots()-1, insert);
+	}
+
+	public static ItemStack pushStack(ItemStack stack, ItemStackHandler inv) {
+		return InventoryHelper.pushStack(stack, inv, 0, inv.getSlots()-1, true);
+	}
+	
 	
 	/**
 	 * Determines if two items can be stacked together

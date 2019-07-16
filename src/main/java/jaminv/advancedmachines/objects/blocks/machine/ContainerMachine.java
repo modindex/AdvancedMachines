@@ -1,6 +1,7 @@
 package jaminv.advancedmachines.objects.blocks.machine;
 
 import jaminv.advancedmachines.objects.blocks.inventory.ContainerInventory;
+import jaminv.advancedmachines.util.helper.InventoryHelper;
 import jaminv.advancedmachines.util.recipe.IRecipeManager;
 import jaminv.advancedmachines.util.recipe.machine.PurifierManager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -70,7 +71,9 @@ public class ContainerMachine extends ContainerInventory {
 				return ItemStack.EMPTY;
 			}
 		} else {
-			if (!recipeManager.isItemValid(itemstack1, null)) {
+			itemstack1 = InventoryHelper.pushStack(itemstack1, machineTe.getInventory(), machineTe.getFirstInputSlot(), machineTe.getInputCount() + machineTe.getFirstInputSlot(), false);
+			
+			if (!recipeManager.isItemValid(itemstack1, machineTe.getInput())) {
 				return ItemStack.EMPTY;
 			}
 			if (!this.mergeItemStack(itemstack1, 0, machineTe.getInputCount(), false)) {

@@ -1,5 +1,5 @@
 {
-    "parent": "advmach:block/machine_inventory",
+    "parent": "advmach:block/machine_energy",
     "textures": {
         "all": "advmach:blocks/machine/expansion/basic/all",
         "north": "advmach:blocks/machine/energy/basic/all"

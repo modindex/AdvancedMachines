@@ -1,4 +1,4 @@
-package jaminv.advancedmachines.integration.jei.purifier;
+package jaminv.advancedmachines.integration.jei.category;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +9,10 @@ import jaminv.advancedmachines.init.BlockInit;
 import jaminv.advancedmachines.integration.jei.RecipeCategoryBase;
 import jaminv.advancedmachines.integration.jei.RecipeUids;
 import jaminv.advancedmachines.integration.jei.RecipeWrapperBase;
-import jaminv.advancedmachines.objects.blocks.machine.purifier.DialogMachinePurifier;
-import jaminv.advancedmachines.objects.blocks.machine.purifier.TileEntityMachinePurifier;
+import jaminv.advancedmachines.objects.blocks.machine.instance.purifier.DialogMachinePurifier;
+import jaminv.advancedmachines.objects.blocks.machine.instance.purifier.TileEntityMachinePurifier;
 import jaminv.advancedmachines.util.dialog.struct.DialogArea;
+import jaminv.advancedmachines.util.material.MaterialExpansion;
 import jaminv.advancedmachines.util.recipe.machine.PurifierManager;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
@@ -29,7 +30,7 @@ public class PurifierRecipeCategory extends RecipeCategoryBase<PurifierRecipeCat
 		DialogArea texture = dialog.getJeiTexture();
 		this.background = guiHelper.createDrawable(dialog.getJeiBackground(),
 			texture.getX(), texture.getY(), texture.getW(), texture.getH());
-		this.localizedName = I18n.format("tile.purifier.name"); 
+		this.localizedName = I18n.format("dialog.purifier.title"); 
 	}
 
 	public static class PurifierRecipe extends RecipeWrapperBase<PurifierManager.PurifierRecipe> {
@@ -64,7 +65,10 @@ public class PurifierRecipeCategory extends RecipeCategoryBase<PurifierRecipeCat
 			RecipeUids.PURIFIER
 		);
 		
-		registry.addRecipeCatalyst(new ItemStack(BlockInit.MACHINE_PURIFIER), RecipeUids.PURIFIER);
+		registry.addRecipeCatalyst(new ItemStack(BlockInit.MACHINE_PURIFIER, 1, MaterialExpansion.BASIC.getMeta()), RecipeUids.PURIFIER);
+		registry.addRecipeCatalyst(new ItemStack(BlockInit.MACHINE_PURIFIER, 1, MaterialExpansion.COMPRESSED.getMeta()), RecipeUids.PURIFIER);
+		registry.addRecipeCatalyst(new ItemStack(BlockInit.MACHINE_PURIFIER, 1, MaterialExpansion.QUAD.getMeta()), RecipeUids.PURIFIER);
+		registry.addRecipeCatalyst(new ItemStack(BlockInit.MACHINE_PURIFIER, 1, MaterialExpansion.IMPOSSIBLE.getMeta()), RecipeUids.PURIFIER);
 	}
 	
 	public static List<PurifierRecipe> getRecipes(IGuiHelper guiHelper) {

@@ -15,6 +15,7 @@ import jaminv.advancedmachines.util.dialog.gui.GuiContainerObservable;
 import jaminv.advancedmachines.util.helper.InventoryHelper;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
 import jaminv.advancedmachines.util.recipe.IRecipeManager;
+import jaminv.advancedmachines.util.recipe.RecipeInput;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -88,15 +89,20 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 	}
 	
 	protected void moveInput(TileEntityMachineMultiblock te) {
-		ItemStackHandler inv = te.getInventory();
+ 		ItemStackHandler inv = te.getInventory();
 		IRecipeManager recipe = te.getRecipeManager();
+
+		ItemStack[] input = new ItemStack[te.getInputCount()];
+		for (int i = te.getFirstInputSlot(); i < te.getInputCount() + te.getFirstInputSlot(); i++) {
+			input[i - te.getFirstInputSlot()] = inv.getStackInSlot(i);
+		}
 		
 		for (int i = te.getFirstInputSlot(); i < te.getInputCount() + te.getFirstInputSlot(); i++) {
 			ItemStack item = inv.getStackInSlot(i);
-			if (item == ItemStack.EMPTY) {
+			if (item.isEmpty()) {
 				for (int d = 0; d < inventory.getSlots(); d++) {
 					ItemStack other = inventory.getStackInSlot(d);
-					if (other != ItemStack.EMPTY && recipe.isItemValid(other, null)) {
+					if (!other.isEmpty() && recipe.isItemValid(other, te.getInput())) {
 						inventory.extractItem(d, other.getCount(), false);
 						inv.insertItem(i, other, false);
 						break;
@@ -105,19 +111,8 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 			}
 			
 			for (int d = 0; d < inventory.getSlots(); d++) {
-				ItemStack other = inventory.getStackInSlot(d);
-				if (recipe.isItemValid(other, null) && InventoryHelper.canStack(item, other)) {
-                    int j = item.getCount() + other.getCount();
-                    int maxSize = item.getMaxStackSize();
-
-                    if (j <= maxSize) {
-                    	inventory.extractItem(d, other.getCount(), false);
-                    	inv.insertItem(i, other, false);
-                    } else if (item.getCount() < maxSize) {
-                        other.shrink(maxSize - item.getCount());
-                        item.setCount(maxSize);
-                    }					
-				}
+				ItemStack other = inventory.getStackInSlot(d);				
+				other = InventoryHelper.pushStack(other, inv, i, i, false);
 			}
 		}
 	}

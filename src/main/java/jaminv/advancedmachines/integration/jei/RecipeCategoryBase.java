@@ -2,7 +2,7 @@ package jaminv.advancedmachines.integration.jei;
 
 import java.util.List;
 
-import jaminv.advancedmachines.integration.jei.purifier.PurifierRecipeCategory.PurifierRecipe;
+import jaminv.advancedmachines.integration.jei.category.PurifierRecipeCategory.PurifierRecipe;
 import jaminv.advancedmachines.objects.blocks.inventory.DialogInventory.ContainerLayout;
 import jaminv.advancedmachines.objects.blocks.machine.DialogMachineBase;
 import jaminv.advancedmachines.util.Reference;

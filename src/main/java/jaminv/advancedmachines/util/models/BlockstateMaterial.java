@@ -1,12 +1,14 @@
 package jaminv.advancedmachines.util.models;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
 import jaminv.advancedmachines.util.material.MaterialBase;
 import jaminv.advancedmachines.util.material.MaterialBase.MaterialType;
+import jaminv.advancedmachines.util.models.BlockstateMaker.Properties;
 
-public class BlockstateMaterial extends BlockstateMaker {
+public class BlockstateMaterial extends BlockstateMaker implements IItemTextureProvider {
 
 	protected MaterialType type;
 	
@@ -16,6 +18,16 @@ public class BlockstateMaterial extends BlockstateMaker {
 			super(prop);
 			this.variant = variant;
 		}
+	}
+	
+	@Override
+	public void makeItems() throws IOException {
+		BlockStateHelper.makeVariantItems(name, type, this);
+	}	
+	
+	@Override
+	public String getItemTextures(MaterialBase variant) {
+		return "        \"all\": \"advmach:blocks/" + getTextureFolder("north", new MaterialProperties(new Properties(true, true, true, true, true, true), variant)) + "all\"\r\n";
 	}
 	
 	public BlockstateMaterial(String name, String folder, MaterialType type) {

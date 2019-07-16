@@ -1,4 +1,4 @@
-package jaminv.advancedmachines.objects.blocks.machine.purifier;
+package jaminv.advancedmachines.objects.blocks.machine.instance.purifier;
 
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.BlockMachineMultiblock;
 import jaminv.advancedmachines.util.enums.EnumGui;

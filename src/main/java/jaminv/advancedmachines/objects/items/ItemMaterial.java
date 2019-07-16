@@ -36,6 +36,11 @@ public class ItemMaterial extends Item implements IHasModel, IMetaName, IHasOreD
 		ItemInit.ITEMS.add(this);
 	}
 	
+	public ItemMaterial(String name, String oredictprefix, MaterialBase[] types) {
+		this(name, types);
+		this.oredictprefix = oredictprefix;
+	}
+	
 	public ItemMaterial(String name, String oredictprefix, String oredictsuffix, MaterialBase[] types) {
 		this(name, types);
 		this.oredictprefix = oredictprefix;
@@ -75,7 +80,7 @@ public class ItemMaterial extends Item implements IHasModel, IMetaName, IHasOreD
 		for (MaterialBase type : types) {
 			if (type.doInclude(this.oredictprefix)) {
 				ItemStack item = new ItemStack(this, 1, type.getMeta());
-				OreDictionary.registerOre(this.oredictprefix + WordUtils.capitalize(this.getSpecialName(item)) + WordUtils.capitalize(this.oredictsuffix), item);
+				OreDictionary.registerOre(this.oredictprefix + (WordUtils.capitalize(this.getSpecialName(item), '_')).replace("_", "") + WordUtils.capitalize(this.oredictsuffix), item);
 			}
 		}
 	}

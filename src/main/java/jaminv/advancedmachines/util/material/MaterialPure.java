@@ -26,6 +26,6 @@ public class MaterialPure extends MaterialBase {
 	@Override
 	public boolean doInclude(String oreDictType) {
 		if (oreDictType == "ingot" && getName() == "diamond") { return false; }
-		return Config.doInclude("pure");
+		return Config.doInclude("pure_" + getName());		
 	}		
 }

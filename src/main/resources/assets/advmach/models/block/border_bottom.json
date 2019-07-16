@@ -1,0 +1,9 @@
+{
+    "parent": "block/cube",
+	"textures": {
+	    "east": "advmach:blocks/machine/border/down",
+	    "north": "advmach:blocks/machine/border/down",
+	    "south": "advmach:blocks/machine/border/down",
+	    "west": "advmach:blocks/machine/border/down"
+	}
+}

@@ -2,6 +2,9 @@ package jaminv.advancedmachines.util;
 
 import org.apache.logging.log4j.Level;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.proxy.CommonProxy;
 import net.minecraftforge.common.config.Configuration;
@@ -15,16 +18,21 @@ public class Config {
 	
 	public static boolean doFurnace = true;
 	public static int tickUpdate = 5;
-	public static int processTimeBasic = 200;
-	public static int defaultFurnaceEnergy = 2000;
+	public static int processTimeBasic = 100;
+	public static int defaultFurnaceEnergy = 1400;
+	public static int defaultGrinderEnergy = 2000;
+	public static int defaultGrinderOreEnergy = 4000;
+	public static int defaultPurifierEnergy = 30000;
 	
-	public static boolean doIncludeTitanium = true;
-	public static boolean doIncludeCopper = true;
-	public static boolean doIncludeSilver = true;
+	public static String[] excludeMaterials = { "example1", "example2" };
+	public static String[] excludePure = new String[0];
+	public static String[] excludeDust = new String[0];
+	public static String[] excludeAlloy = new String[0];
 	
-	public static boolean doIncludePure = true;
-	public static boolean doIncludeVanillaDust = true;
-	public static boolean doIncludeDiamondDust = true;
+	public static Map<String, Boolean> doExclude = new HashMap<String, Boolean>();
+	
+	public static boolean detectAndRemoveTF = true;
+	public static boolean detectAndRemoveAE2 = true;
 	
 	public static boolean doAddTitaniumTools = true;
 	public static boolean doAddTitaniumArmor = true;
@@ -59,23 +67,44 @@ public class Config {
 	private static void initGeneralConfig(Configuration cfg) {
 		cfg.addCustomCategoryComment(CATEGORY_GENERAL, "General Configuration");
 		doFurnace = cfg.getBoolean("doFurnace", CATEGORY_GENERAL, doFurnace, "Include Advanced Furnace Recipes");
-		tickUpdate = cfg.getInt("tickUpdate", CATEGORY_GENERAL, 5, 1, 100, "Machines only run full updates every X ticks");
-		processTimeBasic = cfg.getInt("processTimeBasic", CATEGORY_GENERAL, 200, 0, 10000, "Processing time for machines with no upgrades");
-		defaultFurnaceEnergy = cfg.getInt("defaultFurnaceEnergy", CATEGORY_GENERAL, 2000, 0, 100000, "Default energy for standard furnace recipes");
+		tickUpdate = cfg.getInt("tickUpdate", CATEGORY_GENERAL, tickUpdate, 1, 100, "Machines only run full updates every X ticks");
+		processTimeBasic = cfg.getInt("processTimeBasic", CATEGORY_GENERAL, processTimeBasic, 0, 10000, "Processing time for machines with no upgrades");
+		defaultFurnaceEnergy = cfg.getInt("defaultFurnaceEnergy", CATEGORY_GENERAL, defaultFurnaceEnergy, 0, 100000, "Default energy for standard furnace recipes");
+		defaultGrinderEnergy = cfg.getInt("defaultGrinderEnergy", CATEGORY_GENERAL, defaultGrinderEnergy, 0, 100000, "Default energy for standard grinder recipes");
+		defaultGrinderOreEnergy = cfg.getInt("defaultGrinderOreEnergy", CATEGORY_GENERAL, defaultGrinderOreEnergy, 0, 100000, "Default energy for standard grinder ore recipes");
+		defaultPurifierEnergy = cfg.getInt("defaultPurifierEnergy", CATEGORY_GENERAL, defaultPurifierEnergy, 0, 100000, "Default energy for standard purifier recipes");
 	}
 	
 	private static void initMaterialConfig(Configuration cfg) {
 		cfg.addCustomCategoryComment(CATEGORY_MATERIAL, "Material Configuration\n\n"
 			+ "Disabling a material here will prevent creation of all blocks and items associated with the material.\n"
 			+ "This includes ores, ingots, blocks, dust, etc. It will also disable world generation for those ores.\n\n"
-			+ "This may prevent certain aspects of the mod from working, unless another mod provides an ore dictionary\n"
-			+ "equivalent to the disabled material.");
-		doIncludeTitanium = cfg.getBoolean("doIncludeTitanium", CATEGORY_MATERIAL, doIncludeTitanium, "Set to false to prevent this mod from creating any Titanium blocks or items");
-		doIncludeCopper = cfg.getBoolean("doIncludeCopper", CATEGORY_MATERIAL, doIncludeCopper, "Set to false to prevent this mod from creating any Copper blocks or items");
-		doIncludeSilver = cfg.getBoolean("doIncludeSilver", CATEGORY_MATERIAL, doIncludeSilver, "Set to false to prevent this mod from creating any Silver blocks or items");
-		doIncludePure = cfg.getBoolean("doIncludePure", CATEGORY_MATERIAL, doIncludePure, "Set to false to disable purified materials (may make advanced recipies impossible)");
-		doIncludeVanillaDust = cfg.getBoolean("doIncludeVanillaDust", CATEGORY_MATERIAL, doIncludeVanillaDust, "Set to false to disable vanilla dust (gold and silver)");
-		doIncludeDiamondDust = cfg.getBoolean("doIncludeDiamondDust", CATEGORY_MATERIAL, doIncludeDiamondDust, "Set to false to disable diamond dust (may make advanced recipes impossible)");
+			+ "This mod will attempt to use the ore dictionary for any recipes that include these materials;\n"
+			+ "If no equivilent material is found, the recipe will not be available.\n"
+			+ "This may make some items unavailable if a material is removed and these is no ore dictionary equivalent.\n\n"
+			+ "This is intended to be used primarily when another mod provides the same material and you don't want duplicates.");
+		
+		// TODO: Detect and Remove
+		detectAndRemoveTF = cfg.getBoolean("detectAndRemoveTF", CATEGORY_MATERIAL, detectAndRemoveTF, "Check for the existence of Thermal Foundation and remove all materials that coincide with it.\nNOT YET WORKING.");
+		detectAndRemoveAE2 = cfg.getBoolean("detectAndRemoveAE2", CATEGORY_MATERIAL, detectAndRemoveTF, "Check for the existence of Applied Energestics 2 and remove all materials that coincide with it (basically just ender dust).\nNOT YET WORKING.");
+		
+		excludeMaterials = cfg.getStringList("excludeMaterials", CATEGORY_MATERIAL, excludeMaterials, "List of materials to exclude.\nValid options are 'titanium', 'copper', 'silver'.\n");
+		excludePure = cfg.getStringList("excludePure", CATEGORY_MATERIAL, excludeMaterials, "List of pure ingots and dusts to exclude.\nValid options are 'gold', 'copper', 'silver', 'diamond', 'ender'.\n");
+		excludeDust = cfg.getStringList("excludeDust", CATEGORY_MATERIAL, excludeMaterials, "List of dusts to exclude.\nValid options are 'coal', 'iron', 'gold', 'copper', 'silver', 'diamond', 'ender'.\n");
+		excludeAlloy = cfg.getStringList("excludeAlloy", CATEGORY_MATERIAL, excludeMaterials, "List of alloys to exclude.\nValid options are 'titanium_carbide', 'titanium_endite'.\n");
+		
+		for (String mat : excludeMaterials) {
+			doExclude.put("material_" + mat, true);
+		}
+		for (String pure : excludePure) {
+			doExclude.put("pure_" + pure, true);
+		}
+		for (String dust : excludeDust) {
+			doExclude.put("dust_" + dust, true);
+		}
+		for (String alloy : excludeAlloy) {
+			doExclude.put("alloy_" + alloy, true);
+		}
 	}
 	
 	private static void initToolConfig(Configuration cfg) {
@@ -103,24 +132,19 @@ public class Config {
 	}
 	
 	private static void initDependentConfigs() {
-		if (doIncludeTitanium == false) {
+		if (!doInclude("material_titanium")) {
 			doGenerateTitanium = false;
 		}
-		if (doIncludeCopper == false) {
+		if (!doInclude("material_copper")) {
 			doGenerateCopper = false;
 		}
 	}
 	
 	public static boolean doInclude(String material) {
-		switch (material) {
-		case "titanium": return doIncludeTitanium;
-		case "copper": return doIncludeCopper;
-		case "silver": return doIncludeSilver;
-		case "pure": return doIncludePure;
-		case "vanillaDust": return doIncludeVanillaDust;
-		case "diamondDust": return doIncludeDiamondDust;
-		}
-		return false;
+		Boolean ex = doExclude.get(material);
+		if (ex == null) { return true; }
+		if (ex == true) { return false; }
+		return true;
 	}
 	
 	public static boolean doGenerate(String material) {

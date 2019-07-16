@@ -1,3 +1,6 @@
 {
-    "parent": "advmach:block/machine_expansion_quad"
+    "parent": "advmach:block/machine_expansion",
+    "textures": {
+        "all": "advmach:blocks/machine/expansion/quad/all"
+    }    
 }

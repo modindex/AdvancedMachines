@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.logging.log4j.Level;
 
 import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.util.helper.ItemHelper;
 import jaminv.advancedmachines.util.recipe.machine.PurifierManager;
 import jaminv.advancedmachines.util.recipe.machine.PurifierManager.PurifierRecipe;
 import net.minecraft.item.ItemStack;
@@ -16,7 +17,7 @@ import net.minecraft.item.ItemStack;
 public abstract class RecipeManagerThreeIngredient<T extends RecipeBase> implements IRecipeManager<T> {  
 	
 	private Map<RecipeInput, HashMap<RecipeInput, HashMap<RecipeInput, T>>> recipes = new HashMap<RecipeInput, HashMap<RecipeInput, HashMap<RecipeInput, T>>>();
-	private Map<RecipeInput, Boolean> validInput = new HashMap<RecipeInput, Boolean>();
+	private Map<RecipeInput, ArrayList<T>> validInput = new HashMap<RecipeInput, ArrayList<T>>();
 	
 	protected void addRecipe(T recipe) {
 		RecipeInput[] input = recipe.getSortedInput();
@@ -48,7 +49,14 @@ public abstract class RecipeManagerThreeIngredient<T extends RecipeBase> impleme
 		
 		for (RecipeInput item : input) {
 			if (!item.isEmpty()) {
-				validInput.put(item, true);
+				ArrayList<T> recipelist = validInput.get(item);
+				if (recipelist == null) {
+					recipelist = new ArrayList<T>();
+					recipelist.add(recipe);
+					validInput.put(item, recipelist);
+				} else {
+					recipelist.add(recipe);
+				}
 			}
 		}
 	}
@@ -107,9 +115,12 @@ public abstract class RecipeManagerThreeIngredient<T extends RecipeBase> impleme
 		RecipeInput[] copy = Arrays.copyOf(input, input.length);
 		Arrays.sort(copy, new RecipeInput.InputCompare());
 		
+		RecipeInput[] rinput = recipe.getSortedInput();
+		
 		int min = -1;
 		for (int i = 0; i < recipe.getInputCount(); i++) {
-			int qty = input[i].getQty(recipe.getInput(i));
+			if (copy[i].isEmpty()) { continue; }
+			int qty = copy[i].getQty(rinput[i]);
 			if (min == -1 || qty < min) {
 				min = qty;
 			}
@@ -123,9 +134,71 @@ public abstract class RecipeManagerThreeIngredient<T extends RecipeBase> impleme
 	}
 	
 	@Override
-	public boolean isItemValid(ItemStack stack, ItemStack[] other) {
+	public boolean isItemValid(ItemStack stack, RecipeInput[] other) {
 		if (stack.isEmpty()) { return false; }
-		return validInput.get(new RecipeInput(stack)) != null;
+		RecipeInput item = new RecipeInput(stack);
+		
+		if (other == null) {
+			return validInput.get(item) != null;
+		}
+		
+		int empty = 0;
+		// First just check to see if it stacks with the current contents
+		for (int i = 0; i < other.length; i++) {
+			if (other[i].isEmpty()) { empty++; continue; }			
+			
+			if(other[i].equals(item)) {
+				// There's no good way to handle two of the same ingredient in a recipe, and there should be no reason to do so
+				// TODO: Prevent two of the same ingredient in a recipe
+				
+				// Inventory managers need to separately manage whether the current item can stack with existing items.
+				// If the current item is already in the input inventory, we just reject it
+				return false;
+			}
+		}
+		if (empty == 0) { return false; }
+		empty--; // The current ingredient
+		
+		ArrayList<T> recipelist = validInput.get(item);
+		if (recipelist == null) {
+			// Ingredient isn't valid at all
+			return false;
+		}
+		
+		for (int i = 0; i < recipelist.size(); i++) {
+			T recipe = recipelist.get(i);
+			
+			// Not found tracks the number of recipe ingredients that weren't found
+			int notfound = 0;
+			// Ingredients tracks the input ingredients to ensure that they are all part of the recipe
+			boolean[] ingredient = new boolean[other.length];
+			Arrays.fill(ingredient, false);
+			
+			for (int j = 0; j < recipe.getInputCount(); j++) {
+				RecipeInput input = recipe.getInput(j);
+				if (input.isEmpty()) { continue; }
+				
+				boolean found = false;
+				
+				for (int k = 0; k < other.length; k++) {
+					if (other[k].equals(item)) { found = true; break;}
+					if (other[k].isEmpty()) { ingredient[k] = true; continue; }
+					
+					if (input.equals(other[k])) { ingredient[k] = true; found = true; break; }
+				}
+				
+				if (!found) { 
+					notfound++; 
+					if (notfound > empty) { break; }
+				}
+			}
+			
+			for (int j = 0; j < ingredient.length; j++) {
+				if (ingredient[j] == false) { notfound = empty + 1; }
+			}
+			if (notfound <= empty) { return true; }
+		}
+		return false;		
 	}
 	
 	@Override

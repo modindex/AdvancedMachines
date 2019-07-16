@@ -5,9 +5,11 @@ import java.io.IOException;
 
 import jaminv.advancedmachines.util.material.MaterialBase;
 import jaminv.advancedmachines.util.material.MaterialBase.MaterialType;
+import jaminv.advancedmachines.util.models.BlockstateMaker.Properties;
+import jaminv.advancedmachines.util.models.BlockstateMaterialFace.MaterialFaceProperties;
 import net.minecraft.util.EnumFacing;
 
-public class BlockstateMachine extends BlockstateMaker {
+public class BlockstateMachine extends BlockstateMaker implements IItemTextureProvider {
 
 	protected MaterialType type;
 	protected String inactive, active;
@@ -30,6 +32,18 @@ public class BlockstateMachine extends BlockstateMaker {
 		this.inactive = inactive;
 		this.active = active;
 	}
+	
+	@Override
+	public void makeItems() throws IOException {
+		BlockStateHelper.makeVariantItems(name, type, this);
+	}	
+	
+	@Override
+	public String getItemTextures(MaterialBase variant) {
+		InventoryProperties prop = new InventoryProperties(new Properties(true, true, true, true, true, true), variant, EnumFacing.NORTH, false);
+		return "        \"all\": \"advmach:blocks/" + getTextureFolder("up", prop) + "all\",\r\n" +
+				"        \"north\": \"advmach:blocks/" + getTextureFolder("north", prop) + "all\"\r\n";
+	}	
 	
 	@Override
 	protected String makeProperties(Properties prop, boolean first) throws IOException {

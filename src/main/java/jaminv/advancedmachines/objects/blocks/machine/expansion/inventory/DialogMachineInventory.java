@@ -92,7 +92,7 @@ public class DialogMachineInventory extends DialogInventory implements IElementS
 		priority.setText(String.valueOf(te.getPriority()));
 		this.addElement(priority);
 
-		this.addText(8, 6, 162, "tile.machine_inventory.name", Color.DIALOG_TEXT);
+		this.addText(8, 6, 162, "dialog.machine_inventory.title", Color.DIALOG_TEXT);
 		this.addText(8, 93, "dialog.common.inventory", Color.DIALOG_TEXT);
 		this.addText(92, 24, "dialog.common.priority", Color.DIALOG_TEXT);
 	}

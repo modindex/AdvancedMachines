@@ -38,8 +38,6 @@ public class BlockMachineRedstone extends BlockMachineExpansion implements ITile
 		super(name);
 	}
 	
-	protected int getGuiId() { return EnumGui.MACHINE_POWER.getId(); }
-	
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
 			ItemStack stack) {

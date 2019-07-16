@@ -2,10 +2,10 @@ package jaminv.advancedmachines.objects.blocks.machine.expansion.energy;
 
 import jaminv.advancedmachines.objects.blocks.inventory.DialogInventory;
 import jaminv.advancedmachines.objects.blocks.machine.DialogMachineBase;
-import jaminv.advancedmachines.objects.blocks.machine.alloy.TileEntityMachineAlloy;
 import jaminv.advancedmachines.objects.blocks.machine.dialog.DialogEnergyBar;
 import jaminv.advancedmachines.objects.blocks.machine.dialog.DialogProcessBar;
 import jaminv.advancedmachines.objects.blocks.machine.dialog.DialogTooltipEnergy;
+import jaminv.advancedmachines.objects.blocks.machine.instance.alloy.TileEntityMachineAlloy;
 import jaminv.advancedmachines.util.dialog.DialogBase;
 import jaminv.advancedmachines.util.dialog.control.DialogToggleButton;
 import jaminv.advancedmachines.util.dialog.control.DialogToggleButton.IEnumIterable;

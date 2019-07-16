@@ -1,10 +1,12 @@
 package jaminv.advancedmachines.proxy;
 
+import jaminv.advancedmachines.client.BakedModelLoader;
 import jaminv.advancedmachines.util.Reference;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -14,6 +16,8 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void preInit(FMLPreInitializationEvent e) {
 		super.preInit(e);
+		
+		ModelLoaderRegistry.registerLoader(new BakedModelLoader());
 	}
 	
 	@Override

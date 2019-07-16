@@ -1,6 +1,8 @@
 package jaminv.advancedmachines.integration.jei;
 
-import jaminv.advancedmachines.integration.jei.purifier.PurifierRecipeCategory;
+import jaminv.advancedmachines.integration.jei.category.AlloyRecipeCategory;
+import jaminv.advancedmachines.integration.jei.category.GrinderRecipeCategory;
+import jaminv.advancedmachines.integration.jei.category.PurifierRecipeCategory;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
@@ -16,11 +18,15 @@ public class JEI implements IModPlugin {
 	@Override
 	public void registerCategories(IRecipeCategoryRegistration registry) {
 		PurifierRecipeCategory.register(registry);
+		AlloyRecipeCategory.register(registry);
+		GrinderRecipeCategory.register(registry);
 	}
 
 	@Override
 	public void register(IModRegistry registry) {
 		PurifierRecipeCategory.initialize(registry);
+		AlloyRecipeCategory.initialize(registry);
+		GrinderRecipeCategory.initialize(registry);
 	}
 	
 }

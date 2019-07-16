@@ -32,7 +32,15 @@ public interface IRecipeManager<T extends RecipeBase> {
 	
 	public int getOutputQty(T recipe, ItemStack[] output);
 	
-	public boolean isItemValid(ItemStack stack, ItemStack[] other);
+	/**
+	 * Returns -1 if invalid
+	 * 
+	 * @param stack
+	 * @param other
+	 * @param slot
+	 * @return
+	 */
+	public boolean isItemValid(ItemStack stack, RecipeInput[] other);
 	
 	public List<T> getRecipeList();
 }

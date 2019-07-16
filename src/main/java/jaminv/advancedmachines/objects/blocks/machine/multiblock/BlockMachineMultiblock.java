@@ -1,5 +1,7 @@
 package jaminv.advancedmachines.objects.blocks.machine.multiblock;
 
+import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.client.BakedModelMultiblock;
 import jaminv.advancedmachines.objects.blocks.machine.BlockMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTileEntity;
@@ -12,9 +14,13 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -24,6 +30,7 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.client.model.ModelLoader;
 
 public abstract class BlockMachineMultiblock extends BlockMachineBase {
 	
@@ -51,6 +58,9 @@ public abstract class BlockMachineMultiblock extends BlockMachineBase {
 		scanMultiblock(worldIn, pos, true);
 		super.breakBlock(worldIn, pos, state);
 	}
+	
+	@Override
+	public BlockRenderLayer getBlockLayer() { return BlockRenderLayer.CUTOUT; }
 	
 	protected void scanMultiblock(World worldIn, BlockPos pos, boolean destroy) {
 		TileEntity te = worldIn.getTileEntity(pos);
@@ -99,5 +109,7 @@ public abstract class BlockMachineMultiblock extends BlockMachineBase {
 	@Override
 	public void setMultiblock(World world, BlockPos pos, BlockPos parent, MultiblockBorders borders) {
 		BlockHelper.setBorders(world, pos, borders);
-	}	
+	}
+	
+	
 }

@@ -11,6 +11,7 @@ import jaminv.advancedmachines.objects.tools.ToolPickaxe;
 import jaminv.advancedmachines.objects.tools.ToolShovel;
 import jaminv.advancedmachines.objects.tools.ToolSword;
 import jaminv.advancedmachines.util.Reference;
+import jaminv.advancedmachines.util.material.MaterialAlloy;
 import jaminv.advancedmachines.util.material.MaterialDust;
 import jaminv.advancedmachines.util.material.MaterialMod;
 import jaminv.advancedmachines.util.material.MaterialPure;
@@ -34,6 +35,8 @@ public class ItemInit {
 	public static final Item DUST = new ItemMaterial("dust", MaterialDust.values());
 	public static final Item INGOT_PURE = new ItemMaterial("ingot_pure", "ingot", "Pure", MaterialPure.values());
 	public static final Item DUST_PURE = new ItemMaterial("dust_pure", "dust", "Pure", MaterialPure.values());
+	public static final Item INGOT_ALLOY = new ItemMaterial("alloy", "ingot", MaterialAlloy.values());
+	//public static final Item DUST_ALLOY = new ItemMaterial("dust_alloy", "dust", MaterialAlloy.values());
 	
 	// Tools
 	public static final Item AXE_TITANIUM = new ToolAxe("axe_titanium", TOOL_TITANIUM, 8.0F, -3.2F);	
