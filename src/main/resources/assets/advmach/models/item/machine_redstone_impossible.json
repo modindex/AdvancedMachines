@@ -1,0 +1,7 @@
+{
+    "parent": "advmach:block/machine_redstone",
+    "textures": {
+        "all": "advmach:blocks/machine/expansion/impossible/all",
+        "north": "advmach:blocks/machine/redstone/inactive/impossible/all"
+    }
+}

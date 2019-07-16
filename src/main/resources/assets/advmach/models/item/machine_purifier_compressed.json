@@ -1,0 +1,7 @@
+{
+    "parent": "advmach:block/machine_purifier",
+    "textures": {
+        "all": "advmach:blocks/machine/expansion/compressed/all",
+        "north": "advmach:blocks/machine/instance/purifier/inactive/compressed/all"
+    }
+}

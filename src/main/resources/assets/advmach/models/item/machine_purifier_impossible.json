@@ -1,0 +1,7 @@
+{
+    "parent": "advmach:block/machine_purifier",
+    "textures": {
+        "all": "advmach:blocks/machine/expansion/impossible/all",
+        "north": "advmach:blocks/machine/instance/purifier/inactive/impossible/all"
+    }
+}

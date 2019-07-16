@@ -1,0 +1,7 @@
+{
+    "parent": "advmach:block/machine_inventory",
+    "textures": {
+        "all": "advmach:blocks/machine/expansion/impossible/all",
+        "north": "advmach:blocks/machine/inventory/input/impossible/all"
+    }
+}

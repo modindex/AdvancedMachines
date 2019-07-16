@@ -1,0 +1,6 @@
+{
+    "parent": "advmach:block/machine_productivity",
+    "textures": {
+        "all": "advmach:blocks/machine/productivity/impossible/all"
+    }
+}

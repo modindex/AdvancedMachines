@@ -1,0 +1,6 @@
+{
+    "parent": "advmach:block/machine_speed",
+    "textures": {
+        "all": "advmach:blocks/machine/speed/compressed/all"
+    }
+}

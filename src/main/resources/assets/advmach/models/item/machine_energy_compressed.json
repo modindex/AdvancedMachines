@@ -1,0 +1,7 @@
+{
+    "parent": "advmach:block/machine_energy",
+    "textures": {
+        "all": "advmach:blocks/machine/expansion/compressed/all",
+        "north": "advmach:blocks/machine/energy/compressed/all"
+    }
+}

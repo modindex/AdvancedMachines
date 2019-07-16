@@ -1,0 +1,7 @@
+{
+    "parent": "advmach:block/machine_grinder",
+    "textures": {
+        "all": "advmach:blocks/machine/expansion/basic/all",
+        "north": "advmach:blocks/machine/instance/grinder/inactive/basic/all"
+    }
+}
