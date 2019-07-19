@@ -27,6 +27,5 @@ public class JEI implements IModPlugin {
 		PurifierRecipeCategory.initialize(registry);
 		AlloyRecipeCategory.initialize(registry);
 		GrinderRecipeCategory.initialize(registry);
-	}
-	
+	}	
 }

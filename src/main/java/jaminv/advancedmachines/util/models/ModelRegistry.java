@@ -9,7 +9,8 @@ import jaminv.advancedmachines.util.material.MaterialBase;
 
 public class ModelRegistry {
 	public static void build() {
-		/*
+		// These are intentionally commented out. They only need to be run once to create the blockstate files.
+		
 		try {
 			BlockstateMaterial productivity = new BlockstateMaterial("machine_productivity", "machine/productivity/", MaterialBase.MaterialType.EXPANSION);
 			productivity.make();
@@ -44,6 +45,6 @@ public class ModelRegistry {
 			Main.logger.log(Level.ERROR, "Error creating model file", e.toString());
 			e.printStackTrace();
 		}
-		*/
+		
 	}
 }

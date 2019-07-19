@@ -10,12 +10,15 @@ public abstract class RecipeBase {
 	public abstract int getInputCount();
 	public abstract int getOutputCount();
 	
+	private String recipeid;
+	
 	private RecipeInput[] input;
 	private RecipeOutput[] output;
 	private NonNullList<RecipeOutput> secondary;
 	private int energy;
 	
-	public RecipeBase(int energy) {
+	public RecipeBase(String id, int energy) {
+		this.recipeid = id;
 		this.input = new RecipeInput[getInputCount()];
 		this.output = new RecipeOutput[getOutputCount()];
 		this.secondary = NonNullList.<RecipeOutput>create();
@@ -29,6 +32,8 @@ public abstract class RecipeBase {
 		
 		this.energy = energy;
 	}
+	
+	public String getRecipeId() { return recipeid; }
 	
 	public RecipeBase addInput(int index, RecipeInput input) {
 		this.input[index] = input;
@@ -49,6 +54,7 @@ public abstract class RecipeBase {
 	}
 	
 	public RecipeBase addSecondary(RecipeOutput output) {
+		if (output == null) { return this; }
 		this.secondary.add(output);
 		return this;
 	}

@@ -1,0 +1,49 @@
+{
+    "dustCoal": {
+        "input": { "item": "minecraft:coal" },
+        "output": { "ore": "dustCoal" },
+        "secondary": { "ore": "dustSulfur", "chance": 15 },
+        "energy_percent": 50
+    },
+    "dustCharcoal" : {
+        "input": { "item": "minecraft:coal", "meta": 1 },
+        "output": { "ore": "dustCharcoal" },
+        "energy_percent": 50
+    },
+    "grindCobble": {
+        "input": { "ore": "cobblestone" },
+        "output" : { "item": "minecraft:gravel" },
+        "secondary": { "ore": "sand", "chance": 15 }
+    },
+    "bonemeal": {
+        "input" : { "item": "minecraft:bone" },
+        "output" : { "item": "minecraft:dye", "meta": 15, "count": 6 },
+        "energy_percent": 75
+    },
+    "grindGravel": {
+        "input": { "item": "minecraft:gravel" },
+        "output": { "item": "minecraft:sand" },
+        "secondary": { "item": "minecraft:flint", "chance": 15 }
+    },
+    "grindNetherrack": {
+        "input": { "item": "minecraft:netherrack" },
+        "output": { "item": "minecraft:gravel" },
+        "secondary": { "ore": "dustSulfur", "chance": 15 }
+    },
+    "grindStone": { 
+        "input": { "item": "minecraft:stone" },
+        "output": { "item": "minecraft:cobblestone" },
+        "energy_percent": 25
+    },
+    "grindStoneBrick": {
+        "input": { "item": "minecraft:stonebrick" },
+        "output": { "item": "minecraft:stonebrick", "meta": 2 },
+        "energy_percent": 25
+    },
+    "grindBlaze": {
+        "input": { "ore": "rodBlaze" },
+        "output": { "ore": "dustBlaze", "count": 4 },
+        "secondary": { "ore": "dustSulfur", "chance": 50 },
+        "energy_percent": 75
+    } 
+}

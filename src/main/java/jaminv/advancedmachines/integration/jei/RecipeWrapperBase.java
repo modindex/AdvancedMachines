@@ -1,17 +1,19 @@
 package jaminv.advancedmachines.integration.jei;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import jaminv.advancedmachines.integration.jei.element.JeiElement;
 import jaminv.advancedmachines.objects.blocks.machine.DialogMachineBase;
-import jaminv.advancedmachines.util.dialog.DialogBase;
 import jaminv.advancedmachines.util.recipe.RecipeBase;
-import jaminv.advancedmachines.util.recipe.RecipeInput;
+import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+import scala.actors.threadpool.Arrays;
 
 public class RecipeWrapperBase<T extends RecipeBase> implements IRecipeWrapper {
 
@@ -19,9 +21,11 @@ public class RecipeWrapperBase<T extends RecipeBase> implements IRecipeWrapper {
 	protected final DialogMachineBase dialog;
 	
 	protected List<List<ItemStack>> inputs;
-	protected List<ItemStack> outputs;	
+	protected List<ItemStack> outputs;
 	
-	public RecipeWrapperBase(T recipe, DialogMachineBase dialog) {
+	public String getRecipeId() { return recipe.getRecipeId(); }
+	
+	public RecipeWrapperBase(IGuiHelper guiHelper, T recipe, DialogMachineBase dialog) {
 		this.recipe = recipe;
 		this.dialog = dialog;
 		
@@ -38,6 +42,10 @@ public class RecipeWrapperBase<T extends RecipeBase> implements IRecipeWrapper {
 		
 		for (int i = 0; i < recipe.getSecondary().size(); i++) {
 			this.outputs.add(recipe.getSecondary().get(i).toItemStack());
+		}
+		
+		for (JeiElement element : dialog.getJeiElements()) {
+			element.init(guiHelper, dialog.getJeiBackground());
 		}
 	}
 	
@@ -57,6 +65,10 @@ public class RecipeWrapperBase<T extends RecipeBase> implements IRecipeWrapper {
 	
 	@Override
 	public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
+		for (JeiElement element : dialog.getJeiElements()) {
+			element.draw(minecraft, -dialog.getJeiAdjustX(), -dialog.getJeiAdjustY());
+		}
+		
 		DialogMachineBase.ContainerLayout layout = dialog.getJeiSecondaryLayout();
 		int x = layout.getXPos();
 		int y = layout.getYPos();
@@ -65,8 +77,21 @@ public class RecipeWrapperBase<T extends RecipeBase> implements IRecipeWrapper {
 		for (int i = 0; i < recipe.getSecondary().size(); i++) {
 			String percent = I18n.format("dialog.common.percent", getSecondaryChance(i));
 			int width = minecraft.fontRenderer.getStringWidth(percent);
+		
+			int tx, ty;
 			
-			minecraft.fontRenderer.drawString(percent, x + 9 - width/2, y-8, 0x808080);
+			switch (dialog.getDrawSecondaryChancePos()) {
+			case ABOVE:
+				tx = x + 9 - width/2;
+				ty = y - 8;
+				break;
+			case LEFT:
+			default:
+				tx = x - (width + 2);
+				ty = y + 6;
+			}
+			
+			minecraft.fontRenderer.drawString(percent, tx, ty, 0x808080);
 			
 			x += layout.getXSpacing();
 			count++;
@@ -77,4 +102,22 @@ public class RecipeWrapperBase<T extends RecipeBase> implements IRecipeWrapper {
 			}
 		}
 	}
+	
+	@Override
+	public List<String> getTooltipStrings(int mouseX, int mouseY) {
+		for (JeiElement element : dialog.getJeiElements()) {
+			int x = element.getX() - dialog.getJeiAdjustX();
+			int y = element.getY() - dialog.getJeiAdjustY();		
+			
+			if (mouseX >= x && mouseX <= x + element.getW()
+				&& mouseY >= y && mouseY <= y + element.getH()
+			) {
+				String tip = element.getTooltip(recipe);
+				if (tip != null) {
+					return Arrays.asList(tip.split("\\\\n"));
+				}				
+			}		
+		}
+		return Collections.emptyList();
+	}	
 }

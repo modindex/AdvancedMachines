@@ -16,7 +16,8 @@ import scala.actors.threadpool.Arrays;
 public abstract class MaterialBase implements Comparable<MaterialBase>, IStringSerializable {
 	
 	public static enum MaterialType {
-		MOD, PURE, DUST, ALLOY, EXPANSION
+		MOD, PURE, DUST, ALLOY, EXPANSION, GEAR, CIRCUIT
+		, INGREDIENT
 	}
 	
 	public static class MaterialRegistry {

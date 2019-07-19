@@ -3,6 +3,7 @@ package jaminv.advancedmachines.util.handlers;
 import jaminv.advancedmachines.init.BlockInit;
 import jaminv.advancedmachines.init.ItemInit;
 import jaminv.advancedmachines.util.interfaces.IHasOreDictionary;
+import jaminv.advancedmachines.util.parser.DataParser;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 
@@ -20,6 +21,8 @@ public class OreDictionaryHandler {
 				((IHasOreDictionary)block).registerOreDictionary();
 			}
 		}
+		
+		DataParser.addFolder("data/ore_dictionary", new FileHandlerOreDictionary()); 
 	}
 
 }

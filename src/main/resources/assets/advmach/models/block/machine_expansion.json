@@ -1,6 +1,2 @@
 {
-    "parent": "block/cube_all",
-    "textures": {
-        "all": "advmach:blocks/machine/expansion/basic/all"
-    }    
-}
+    "parent": "block/cube_all"}

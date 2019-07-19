@@ -8,7 +8,7 @@ import jaminv.advancedmachines.objects.blocks.machine.instance.purifier.TileEnti
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
 import jaminv.advancedmachines.util.dialog.gui.GuiContainerObservable;
 import jaminv.advancedmachines.util.recipe.machine.AlloyManager;
-import jaminv.advancedmachines.util.recipe.machine.PurifierManager;
+import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.IInventory;
 

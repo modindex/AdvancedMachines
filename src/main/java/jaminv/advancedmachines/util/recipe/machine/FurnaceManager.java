@@ -3,15 +3,13 @@ package jaminv.advancedmachines.util.recipe.machine;
 import java.util.List;
 import java.util.Map;
 
-import jaminv.advancedmachines.util.Config;
+import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.helper.ItemHelper;
 import jaminv.advancedmachines.util.recipe.RecipeBase;
 import jaminv.advancedmachines.util.recipe.RecipeManagerSimple;
-import jaminv.advancedmachines.util.recipe.RecipeOutput;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class FurnaceManager {
 	
@@ -22,8 +20,8 @@ public class FurnaceManager {
 		@Override
 		public int getOutputCount() { return 1; }
 		
-		public FurnaceRecipe(int energy) {
-			super(energy);
+		public FurnaceRecipe(String id, int energy) {
+			super(id, energy);
 		}
 	}
 	
@@ -48,7 +46,7 @@ public class FurnaceManager {
 			if (output.isEmpty()) {
 				continue;
 			}
-			int energy = Config.defaultFurnaceEnergy;
+			int energy = ModConfig.general.defaultFurnaceEnergy;
 			
 			if (output.getItem() instanceof ItemFood) {
 				energy /= 2;
@@ -57,7 +55,7 @@ public class FurnaceManager {
 				energy *= 14/20.0f;
 			}
 			
-			manager.addRecipe((FurnaceRecipe)new FurnaceRecipe(energy).setInput(key).setOutput(output));
+			manager.addRecipe((FurnaceRecipe)new FurnaceRecipe("smelting_list." + key.getItem().getUnlocalizedName(), energy).setInput(key).setOutput(output));
 		}
 	}
 }

@@ -3,7 +3,7 @@ package jaminv.advancedmachines.world.gen;
 import java.util.Random;
 
 import jaminv.advancedmachines.init.BlockInit;
-import jaminv.advancedmachines.util.Config;
+import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.material.MaterialMod;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.init.Blocks;
@@ -20,7 +20,7 @@ public class WorldGenCustomOres implements IWorldGenerator {
 	private WorldGenerator ore_titanium;
 
 	public WorldGenCustomOres() {
-		ore_titanium = new WorldGenMinable(BlockInit.ORE.getDefaultState().withProperty(BlockInit.ORE.VARIANT, MaterialMod.TITANIUM), Config.titaniumVeinSize, BlockMatcher.forBlock(Blocks.STONE));	
+		ore_titanium = new WorldGenMinable(BlockInit.ORE.getDefaultState().withProperty(BlockInit.ORE.VARIANT, MaterialMod.TITANIUM), ModConfig.worldgen.titaniumVeinSize, BlockMatcher.forBlock(Blocks.STONE));	
 	}
 	
 	@Override
@@ -29,8 +29,8 @@ public class WorldGenCustomOres implements IWorldGenerator {
 
 		switch(world.provider.getDimension()) {
 			case 0:
-				if (Config.doGenerateTitanium) {
-					runGenerator(ore_titanium, world, random, chunkX, chunkZ, Config.titaniumChance, Config.titaniumMinHeight, Config.titaniumMaxHeight);
+				if (ModConfig.worldgen.doGenerateTitanium) {
+					runGenerator(ore_titanium, world, random, chunkX, chunkZ, ModConfig.worldgen.titaniumChance, ModConfig.worldgen.titaniumMinHeight, ModConfig.worldgen.titaniumMaxHeight);
 				}
 				break;
 		}		

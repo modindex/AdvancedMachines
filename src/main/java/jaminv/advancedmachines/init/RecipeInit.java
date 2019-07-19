@@ -2,8 +2,9 @@ package jaminv.advancedmachines.init;
 
 import jaminv.advancedmachines.util.recipe.machine.AlloyManager;
 import jaminv.advancedmachines.util.recipe.machine.FurnaceManager;
-import jaminv.advancedmachines.util.recipe.machine.GrinderManager;
-import jaminv.advancedmachines.util.recipe.machine.PurifierManager;
+import jaminv.advancedmachines.util.recipe.machine.grinder.GrinderManager;
+import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager;
+import scala.tools.nsc.ast.parser.Parsers.Parser;
 
 public class RecipeInit {
 	public static void init() {

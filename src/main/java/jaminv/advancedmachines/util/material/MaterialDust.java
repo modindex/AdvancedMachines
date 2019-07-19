@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.util.material;
 
-import jaminv.advancedmachines.util.Config;
+import jaminv.advancedmachines.util.ModConfig;
 
 public class MaterialDust extends MaterialBase {
 
@@ -29,6 +29,6 @@ public class MaterialDust extends MaterialBase {
 
 	@Override
 	public boolean doInclude(String oredictType) {
-		return Config.doInclude("dust_" + getName());
+		return ModConfig.material.doInclude("dust_" + getName());
 	}
 }

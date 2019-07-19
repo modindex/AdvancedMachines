@@ -12,7 +12,7 @@ import jaminv.advancedmachines.util.dialog.struct.DialogArea;
 import jaminv.advancedmachines.util.dialog.struct.DialogTexture;
 import jaminv.advancedmachines.util.interfaces.IRedstoneControlled;
 import jaminv.advancedmachines.util.recipe.machine.FurnaceManager;
-import jaminv.advancedmachines.util.recipe.machine.PurifierManager;
+import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager;
 
 public class DialogMachineFurnace extends DialogMachineMultiblock {
 	

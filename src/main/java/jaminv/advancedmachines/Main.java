@@ -1,6 +1,12 @@
 package jaminv.advancedmachines;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.config.Configurator;
+import org.apache.logging.log4j.core.config.builder.api.AppenderComponentBuilder;
+import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilder;
+import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilderFactory;
+import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
 
 import jaminv.advancedmachines.proxy.CommonProxy;
 import jaminv.advancedmachines.util.Reference;
@@ -30,6 +36,20 @@ public class Main {
 	@EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog();
+        
+/*        ConfigurationBuilder<BuiltConfiguration> builder = ConfigurationBuilderFactory.newConfigurationBuilder();
+        builder.setStatusLevel(Level.ALL);
+        builder.setConfigurationName(Reference.MODID + ".parser");
+        AppenderComponentBuilder appenderBuilder = builder.newAppender("parser", "File")
+        	.addAttribute("fileName",  "logs/" + Reference.FILENAME + ".parser.log")
+        	.addAttribute("append",  true);
+        builder.add(appenderBuilder);
+        builder.add(builder.newLogger(Reference.MODID + ".parser", Level.TRACE)
+        	.add(builder.newAppenderRef("parser"))
+        	.addAttribute("additivity", false));
+        Configurator.initialize(builder.build()); */
+        
+        //LogManager.getLogger();
         proxy.preInit(event);
     }
 

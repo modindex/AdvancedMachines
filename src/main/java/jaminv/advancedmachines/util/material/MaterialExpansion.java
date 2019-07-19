@@ -1,8 +1,5 @@
 package jaminv.advancedmachines.util.material;
 
-import jaminv.advancedmachines.util.Config;
-import jaminv.advancedmachines.util.material.PropertyMaterial;
-
 public class MaterialExpansion extends MaterialBase {
 
 	private static MaterialType TYPE = MaterialType.EXPANSION;

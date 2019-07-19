@@ -15,9 +15,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class ItemMaterial extends Item implements IHasModel, IMetaName, IHasOreDictionary {
+public class ItemMaterial extends Item implements IHasModel, IMetaName {
 
-	protected String name, oredictprefix, oredictsuffix;
+	protected String name;
 	protected MaterialBase[] types;
 
 	public ItemMaterial(String name, MaterialBase[] types) {
@@ -29,28 +29,19 @@ public class ItemMaterial extends Item implements IHasModel, IMetaName, IHasOreD
 		setCreativeTab(CreativeTabs.MATERIALS);
 		
 		this.name = name;
-		this.oredictprefix = name;
-		this.oredictsuffix = "";
 		this.types = types;
 		
 		ItemInit.ITEMS.add(this);
 	}
 	
-	public ItemMaterial(String name, String oredictprefix, MaterialBase[] types) {
-		this(name, types);
-		this.oredictprefix = oredictprefix;
+	protected boolean doInclude(MaterialBase type) {
+		return type.doInclude("");
 	}
 	
-	public ItemMaterial(String name, String oredictprefix, String oredictsuffix, MaterialBase[] types) {
-		this(name, types);
-		this.oredictprefix = oredictprefix;
-		this.oredictsuffix = oredictsuffix;
-	}
-
 	@Override
 	public void registerModels() {
 		for (MaterialBase type : types) {
-			if (type.doInclude(this.oredictprefix)) {
+			if (doInclude(type)) {
 				Main.proxy.registerVariantRenderer(this, type.getMeta(), this.name + "_" + type.getName(), "inventory");
 			}
 		}
@@ -59,7 +50,7 @@ public class ItemMaterial extends Item implements IHasModel, IMetaName, IHasOreD
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
 		for (MaterialBase type : types) {
-			if (type.doInclude(this.oredictprefix)) {
+			if (doInclude(type)) {
 				items.add(new ItemStack(this, 1, type.getMeta()));
 			}
 		}
@@ -73,16 +64,6 @@ public class ItemMaterial extends Item implements IHasModel, IMetaName, IHasOreD
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		return super.getUnlocalizedName() + "_" + ((IMetaName)this).getSpecialName(stack);
-	}
-	
-	@Override
-	public void registerOreDictionary() {
-		for (MaterialBase type : types) {
-			if (type.doInclude(this.oredictprefix)) {
-				ItemStack item = new ItemStack(this, 1, type.getMeta());
-				OreDictionary.registerOre(this.oredictprefix + (WordUtils.capitalize(this.getSpecialName(item), '_')).replace("_", "") + WordUtils.capitalize(this.oredictsuffix), item);
-			}
-		}
 	}
 
 	@Override

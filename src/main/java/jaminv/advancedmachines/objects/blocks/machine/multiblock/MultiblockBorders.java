@@ -43,7 +43,6 @@ public class MultiblockBorders implements INBTSerializable<NBTTagCompound> {
 					}
 				}				
 				
-				
 				if (check instanceof IMachineUpgrade && !(current instanceof IMachineUpgrade)) {
 					if (((IMachineUpgrade)check).getUpgradeType() != IMachineUpgrade.UpgradeType.MULTIPLY) { border = true; }
 				}
@@ -54,8 +53,7 @@ public class MultiblockBorders implements INBTSerializable<NBTTagCompound> {
 				
 				if (check instanceof IMachineUpgrade && current instanceof IMachineUpgrade) {
 					if (((IMachineUpgrade)current).getUpgradeType() != ((IMachineUpgrade)check).getUpgradeType()) { border = true; }
-				}
-				
+				}				
 					
 				if (border) {		
 					switch (facing) {

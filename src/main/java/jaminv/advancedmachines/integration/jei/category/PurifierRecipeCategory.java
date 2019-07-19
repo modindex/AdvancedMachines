@@ -1,4 +1,4 @@
-package jaminv.advancedmachines.integration.jei.category;
+package jaminv.advancedmachines .integration.jei.category;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import jaminv.advancedmachines.objects.blocks.machine.instance.purifier.DialogMa
 import jaminv.advancedmachines.objects.blocks.machine.instance.purifier.TileEntityMachinePurifier;
 import jaminv.advancedmachines.util.dialog.struct.DialogArea;
 import jaminv.advancedmachines.util.material.MaterialExpansion;
-import jaminv.advancedmachines.util.recipe.machine.PurifierManager;
+import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModRegistry;
@@ -34,8 +34,8 @@ public class PurifierRecipeCategory extends RecipeCategoryBase<PurifierRecipeCat
 	}
 
 	public static class PurifierRecipe extends RecipeWrapperBase<PurifierManager.PurifierRecipe> {
-		public PurifierRecipe(PurifierManager.PurifierRecipe recipe, DialogMachinePurifier dialog) {
-			super(recipe, dialog);
+		public PurifierRecipe(IGuiHelper guiHelper, PurifierManager.PurifierRecipe recipe, DialogMachinePurifier dialog) {
+			super(guiHelper, recipe, dialog);
 		}
 	}
 	
@@ -75,7 +75,7 @@ public class PurifierRecipeCategory extends RecipeCategoryBase<PurifierRecipeCat
 		List<PurifierRecipe> recipes = new ArrayList<>();
 		
 		for (PurifierManager.PurifierRecipe recipe : PurifierManager.getRecipeList()) {
-			recipes.add(new PurifierRecipe(recipe, sDialog));
+			recipes.add(new PurifierRecipe(guiHelper, recipe, sDialog));
 		}
 		
 		return recipes;

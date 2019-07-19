@@ -10,8 +10,8 @@ import org.apache.logging.log4j.Level;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.util.helper.ItemHelper;
-import jaminv.advancedmachines.util.recipe.machine.PurifierManager;
-import jaminv.advancedmachines.util.recipe.machine.PurifierManager.PurifierRecipe;
+import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager;
+import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager.PurifierRecipe;
 import net.minecraft.item.ItemStack;
 
 public abstract class RecipeManagerThreeIngredient<T extends RecipeBase> implements IRecipeManager<T> {  
@@ -105,7 +105,7 @@ public abstract class RecipeManagerThreeIngredient<T extends RecipeBase> impleme
 		Arrays.sort(copy, new RecipeInput.InputCompare());		
 		
 		for (int i = 0; i < recipe.getInputCount(); i++) {
-			if (!copy[i].doesMatch(recipe.getInput(i))) { return null; }
+			if (!copy[i].isValidWithCountFor(recipe.getInput(i))) { return null; } 
 		}
 		return recipe;
 	}

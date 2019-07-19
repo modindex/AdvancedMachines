@@ -3,19 +3,23 @@
     
     "pattern":
     [
-        "III",
-        "O O",
-        "IOI"
+        "SSS",
+        "SIS",
+        "TTT"
     ],
     
     "key": {
+        "S": {
+            "type": "forge:ore_dict",
+            "ore": "ingotSilver"
+        },
         "I": {
             "type": "forge:ore_dict",
-            "ore": "ingotTitanium"
+            "ore": "gearIron"
         },
-        "O": {
+        "T": {
             "type": "forge:ore_dict",
-            "ore": "obsidian"
+            "ore": "ingotTitanium"
         }
     },
     

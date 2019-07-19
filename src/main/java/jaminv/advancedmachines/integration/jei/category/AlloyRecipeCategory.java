@@ -16,7 +16,7 @@ import jaminv.advancedmachines.objects.blocks.machine.instance.purifier.TileEnti
 import jaminv.advancedmachines.util.dialog.struct.DialogArea;
 import jaminv.advancedmachines.util.material.MaterialExpansion;
 import jaminv.advancedmachines.util.recipe.machine.AlloyManager;
-import jaminv.advancedmachines.util.recipe.machine.PurifierManager;
+import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModRegistry;
@@ -37,8 +37,8 @@ public class AlloyRecipeCategory extends RecipeCategoryBase<AlloyRecipeCategory.
 	}
 
 	public static class AlloyRecipe extends RecipeWrapperBase<AlloyManager.AlloyRecipe> {
-		public AlloyRecipe(AlloyManager.AlloyRecipe recipe, DialogMachineAlloy dialog) {
-			super(recipe, dialog);
+		public AlloyRecipe(IGuiHelper guiHelper, AlloyManager.AlloyRecipe recipe, DialogMachineAlloy dialog) {
+			super(guiHelper, recipe, dialog); 
 		}
 	}
 	
@@ -78,7 +78,7 @@ public class AlloyRecipeCategory extends RecipeCategoryBase<AlloyRecipeCategory.
 		List<AlloyRecipe> recipes = new ArrayList<>();
 		
 		for (AlloyManager.AlloyRecipe recipe : AlloyManager.getRecipeList()) {
-			recipes.add(new AlloyRecipe(recipe, sDialog));
+			recipes.add(new AlloyRecipe(guiHelper, recipe, sDialog));
 		}
 		
 		return recipes;

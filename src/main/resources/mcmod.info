@@ -1,16 +1,14 @@
-[
-{
-  "modid": "examplemod",
-  "name": "Example Mod",
-  "description": "Example placeholder mod.",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
+[{
+  "modid": "advmach",
+  "name": "Advanced Machines",
+  "description": "Advanced processing machines that scale well into the late game in server-friendly ways.",
+  "version": "0.0.1",
+  "mcversion": "1.12.2",
   "url": "",
   "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
+  "authorList": ["Jamin VanderBerg"],
+  "credits": "Forge and FML, for making everything possible. McJty for your great tutorials (and general awesomeness). Team CoFH for making great mods that I learned a lot from.",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
-}
-]
+}]

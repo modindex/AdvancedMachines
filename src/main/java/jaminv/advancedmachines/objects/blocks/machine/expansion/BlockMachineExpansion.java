@@ -1,6 +1,5 @@
 package jaminv.advancedmachines.objects.blocks.machine.expansion;
 
-import jaminv.advancedmachines.client.BakedModelMultiblock;
 import jaminv.advancedmachines.objects.blocks.BlockMaterial;
 import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.TileEntityMachineInventory;
@@ -136,24 +135,4 @@ public class BlockMachineExpansion extends BlockMaterial implements IMachineUpgr
 			((IMachineUpgradeTileEntity)tileentity).setBorders(borders);
 		}
 	}
-	
-	@Override
-	public void registerModels() {
-		super.registerModels();
-		
-		StateMapperBase ignoreState = new StateMapperBase() {
-			@Override
-			protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
-				return BakedModelMultiblock.BAKED_MODEL_MULTIBLOCK;
-			}
-		};
-		ModelLoader.setCustomStateMapper(this, ignoreState);
-	}	
-	
-	@Override
-    @SideOnly(Side.CLIENT)
-    public BlockRenderLayer getBlockLayer()
-    {
-        return BlockRenderLayer.TRANSLUCENT;
-    }
-}
+} 

@@ -2,7 +2,7 @@ package jaminv.advancedmachines.objects.blocks.inventory;
 
 import jaminv.advancedmachines.objects.blocks.inventory.DialogInventory.ContainerLayout;
 import jaminv.advancedmachines.util.recipe.IRecipeManager;
-import jaminv.advancedmachines.util.recipe.machine.PurifierManager;
+import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;

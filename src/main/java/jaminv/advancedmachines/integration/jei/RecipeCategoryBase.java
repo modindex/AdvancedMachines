@@ -2,11 +2,10 @@ package jaminv.advancedmachines.integration.jei;
 
 import java.util.List;
 
-import jaminv.advancedmachines.integration.jei.category.PurifierRecipeCategory.PurifierRecipe;
 import jaminv.advancedmachines.objects.blocks.inventory.DialogInventory.ContainerLayout;
 import jaminv.advancedmachines.objects.blocks.machine.DialogMachineBase;
+import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.Reference;
-import jaminv.advancedmachines.util.dialog.DialogBase;
 import jaminv.advancedmachines.util.dialog.struct.DialogPos;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableStatic;
@@ -60,6 +59,11 @@ public abstract class RecipeCategoryBase<T extends RecipeWrapperBase> implements
 		guiItemStacks.addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
 			if (slotIndex >= offset) {
 				tooltip.add(I18n.format("dialog.common.chance", recipe.getSecondaryChance(slotIndex - offset)));
+			}
+			if (slotIndex == recipe.getInputCount()) {
+				if (ModConfig.recipe.showRecipeIds)  {
+					tooltip.add(I18n.format("dialog.jei.recipe_id", recipe.getRecipeId()));
+				}
 			}
 		});
 	}

@@ -1,0 +1,7 @@
+{
+    "ore_dictionary": [
+        { "item": "minecraft:blaze_rod", "ore": "rodBlaze" },
+        { "item": "minecraft:blaze_powder", "ore": "dustBlaze" }
+    ]
+}
+   

@@ -1,0 +1,35 @@
+{
+    "grindWood": {
+        "input": { "ore": "logWood" },
+        "output": { "ore": "dustWood", "count": 8 },
+        "energy_percent": 50
+    },
+    "grindPlank": {
+        "input": { "ore": "plankWood" },
+        "output": { "ore": "dustWood", "count": 2 },
+        "energy_percent": 25
+    },
+    "dustObsidian": {
+        "input": { "item": "minecraft:obsidian" },
+        "output": { "ore": "dustObsidian", "count": 4 },
+        "energy_percent": 150
+    },
+    "grindBlizz": {
+        "input": { "ore": "rodBlizz" },
+        "output": { "ore": "dustBlizz", "count": 4 },
+        "secondary": { "item": "minecraft:snowball", "chance": 50 },
+        "energy_percent": 75
+    },
+    "grindBlitz": {
+        "input": { "ore": "rodBlitz" },
+        "output": { "ore": "dustBlitz", "count": 4 },
+        "secondary": { "ore": "dustSaltpeter", "chance": 50 },
+        "energy_percent": 75
+    },
+    "grindBasalz": {
+        "input": { "ore": "rodBasalz" },
+        "output": { "ore": "dustBasalz", "count": 4 },
+        "secondary": { "ore": "dustObsidian", "chance": 50 },
+        "energy_percent": 75
+    }
+}

@@ -49,7 +49,7 @@ public abstract class RecipeManagerSimple<T extends RecipeBase> implements IReci
 		T recipe = recipes.get(input[0]);
 		if (recipe == null) { return null; }
 		
-		if (!input[0].doesMatch(recipe.getInput(0))) { return null; }
+		if (!input[0].isValidWithCountFor(recipe.getInput(0))) { return null; } 
 		return recipe;
 	}
 	

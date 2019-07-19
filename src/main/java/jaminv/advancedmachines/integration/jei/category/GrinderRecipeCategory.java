@@ -9,13 +9,14 @@ import jaminv.advancedmachines.init.BlockInit;
 import jaminv.advancedmachines.integration.jei.RecipeCategoryBase;
 import jaminv.advancedmachines.integration.jei.RecipeUids;
 import jaminv.advancedmachines.integration.jei.RecipeWrapperBase;
+import jaminv.advancedmachines.objects.blocks.machine.instance.grinder.DialogMachineGrinder;
 import jaminv.advancedmachines.objects.blocks.machine.instance.grinder.TileEntityMachineGrinder;
 import jaminv.advancedmachines.objects.blocks.machine.instance.purifier.DialogMachinePurifier;
 import jaminv.advancedmachines.objects.blocks.machine.instance.purifier.TileEntityMachinePurifier;
 import jaminv.advancedmachines.util.dialog.struct.DialogArea;
 import jaminv.advancedmachines.util.material.MaterialExpansion;
-import jaminv.advancedmachines.util.recipe.machine.GrinderManager;
-import jaminv.advancedmachines.util.recipe.machine.PurifierManager;
+import jaminv.advancedmachines.util.recipe.machine.grinder.GrinderManager;
+import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModRegistry;
@@ -25,7 +26,7 @@ import net.minecraft.item.ItemStack;
 
 public class GrinderRecipeCategory extends RecipeCategoryBase<GrinderRecipeCategory.GrinderRecipe> {
 	
-	protected static DialogMachinePurifier sDialog = new DialogMachinePurifier();
+	protected static DialogMachineGrinder sDialog = new DialogMachineGrinder();
 
 	public GrinderRecipeCategory(IGuiHelper guiHelper) {
 		super(sDialog); 
@@ -36,8 +37,8 @@ public class GrinderRecipeCategory extends RecipeCategoryBase<GrinderRecipeCateg
 	}
 
 	public static class GrinderRecipe extends RecipeWrapperBase<GrinderManager.GrinderRecipe> {
-		public GrinderRecipe(GrinderManager.GrinderRecipe recipe, DialogMachinePurifier dialog) {
-			super(recipe, dialog);
+		public GrinderRecipe(IGuiHelper guihelper, GrinderManager.GrinderRecipe recipe, DialogMachineGrinder dialog) {
+			super(guihelper, recipe, dialog); 
 		}
 	}
 	
@@ -77,7 +78,7 @@ public class GrinderRecipeCategory extends RecipeCategoryBase<GrinderRecipeCateg
 		List<GrinderRecipe> recipes = new ArrayList<>();
 		
 		for (GrinderManager.GrinderRecipe recipe : GrinderManager.getRecipeList()) {
-			recipes.add(new GrinderRecipe(recipe, sDialog));
+			recipes.add(new GrinderRecipe(guiHelper, recipe, sDialog));
 		}
 		
 		return recipes;

@@ -4,8 +4,8 @@ import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine;
 import jaminv.advancedmachines.objects.blocks.machine.DialogMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
 import jaminv.advancedmachines.util.dialog.gui.GuiContainerObservable;
-import jaminv.advancedmachines.util.recipe.machine.GrinderManager;
-import jaminv.advancedmachines.util.recipe.machine.PurifierManager;
+import jaminv.advancedmachines.util.recipe.machine.grinder.GrinderManager;
+import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.IInventory;
 
@@ -18,7 +18,7 @@ public class TileEntityMachineGrinder extends TileEntityMachineMultiblock {
 	public int getOutputCount() { return 1;	}
 	
 	@Override 
-	public int getSecondaryCount() { return 6; }
+	public int getSecondaryCount() { return 1; }
 	
 	private final DialogMachineGrinder dialog = new DialogMachineGrinder(this);
 	

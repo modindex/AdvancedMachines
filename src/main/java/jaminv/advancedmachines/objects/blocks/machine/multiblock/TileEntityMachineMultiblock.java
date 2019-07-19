@@ -8,32 +8,21 @@ import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgrade;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgrade.UpgradeType;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTileEntity;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTool;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.energy.BlockMachineEnergy;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.energy.TileEntityMachineEnergy;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.BlockMachineInventory;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.InventoryStateMessage;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.TileEntityMachineInventory;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockState.MultiblockSimple;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockState.MultiblockNull;
-import jaminv.advancedmachines.util.Config;
+import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.helper.BlockHelper;
-import jaminv.advancedmachines.util.helper.InventoryHelper;
 import jaminv.advancedmachines.util.helper.BlockHelper.BlockChecker;
 import jaminv.advancedmachines.util.helper.BlockHelper.ScanResult;
-import jaminv.advancedmachines.util.interfaces.IRedstoneControlled.RedstoneState;
 import jaminv.advancedmachines.util.recipe.IRecipeManager;
 import jaminv.advancedmachines.util.recipe.RecipeBase;
 import jaminv.advancedmachines.util.recipe.RecipeInput;
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
 public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase implements IMachineUpgradeTileEntity {
 
@@ -178,7 +167,7 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 	protected int beginProcess(RecipeBase recipe, RecipeInput[] input) {
 		IRecipeManager mgr = getRecipeManager();
 		qtyProcessing = Math.min(Math.min(mgr.getRecipeQty(recipe, input), mgr.getOutputQty(recipe, this.getOutputStacks())), upgrades.get(UpgradeType.MULTIPLY) + 1) ;
-		return Config.processTimeBasic;
+		return ModConfig.general.processTimeBasic;
 	}
 	
 	@Override

@@ -14,8 +14,8 @@ public class AlloyManager {
 		@Override
 		public int getOutputCount() { return 1; }
 		
-		public AlloyRecipe(int energy) {
-			super(energy);
+		public AlloyRecipe(String id, int energy) {
+			super(id, energy);
 		}
 	}
 	
@@ -31,19 +31,19 @@ public class AlloyManager {
 	public static List<AlloyRecipe> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {
-		manager.addRecipe((AlloyRecipe)new AlloyRecipe(4000)
+		manager.addRecipe((AlloyRecipe)new AlloyRecipe("1", 4000)
 			.addInput(0, "dustIron")
 			.addInput(1, "dustCoal", 4)
 			.setOutput("ingotSteel")
 		);
 		
-		manager.addRecipe((AlloyRecipe)new AlloyRecipe(4400)
+		manager.addRecipe((AlloyRecipe)new AlloyRecipe("2", 4400)
 			.addInput(0, "ingotIron")
 			.addInput(1, "dustCoal", 4)
 			.setOutput("ingotSteel")
 		);
 		
-		manager.addRecipe((AlloyRecipe)new AlloyRecipe(8000)
+		manager.addRecipe((AlloyRecipe)new AlloyRecipe("3", 8000)
 			.addInput(0, "ingotTitanium")
 			.addInput(1, "dustDiamondPure")
 			.setOutput("ingotTitaniumCarbide")

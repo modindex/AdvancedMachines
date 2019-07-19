@@ -4,6 +4,7 @@ import jaminv.advancedmachines.util.Reference;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -18,6 +19,7 @@ public class RecipeOutput implements Cloneable {
 	private int meta = -1;
 	private int count = -1;
 	private int chance = 100;
+	private NBTTagCompound nbt = null;
 	
 	public static final RecipeOutput EMPTY = new RecipeOutput(Items.AIR, -1, -1);
 	
@@ -35,16 +37,22 @@ public class RecipeOutput implements Cloneable {
 	public RecipeOutput(ItemStack stack) {
 		item = stack.getItem();
 		meta = Items.DIAMOND.getDamage(stack);
+		nbt = stack.getTagCompound();
 		
 		if (!stack.isEmpty()) {
 			count = stack.getCount();
 		}
 	}
 	
-	public RecipeOutput(Item item, int count, int meta) {
+	public RecipeOutput(Item item, int count, int meta, NBTTagCompound nbt) {
 		this.item = item;
 		this.count = count;
 		this.meta = meta;
+		this.nbt = nbt;
+	}
+	
+	public RecipeOutput(Item item, int count, int meta) {
+		this(item, count, meta, null);
 	}
 	
 	public RecipeOutput(Item item) {
@@ -69,7 +77,7 @@ public class RecipeOutput implements Cloneable {
 			return result;
 		}
 		if (item == Items.AIR) { return ItemStack.EMPTY; }
-		return new ItemStack(item, count, meta);
+		return new ItemStack(item, count, meta, nbt);
 	}
 	
 	public RecipeOutput withChance(int chance) {

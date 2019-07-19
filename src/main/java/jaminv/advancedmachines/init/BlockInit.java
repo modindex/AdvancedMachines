@@ -3,7 +3,6 @@ package jaminv.advancedmachines.init;
 import java.util.ArrayList;
 import java.util.List;
 
-import jaminv.advancedmachines.client.BakedModelMultiblock;
 import jaminv.advancedmachines.objects.blocks.BlockMaterial;
 import jaminv.advancedmachines.objects.blocks.BlockMaterialOre;
 import jaminv.advancedmachines.objects.blocks.DirectionalBlock;

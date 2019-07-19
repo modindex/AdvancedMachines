@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.util.material;
 
-import jaminv.advancedmachines.util.Config;
+import jaminv.advancedmachines.util.ModConfig;
 
 public class MaterialPure extends MaterialBase {
 
@@ -26,6 +26,6 @@ public class MaterialPure extends MaterialBase {
 	@Override
 	public boolean doInclude(String oreDictType) {
 		if (oreDictType == "ingot" && getName() == "diamond") { return false; }
-		return Config.doInclude("pure_" + getName());		
+		return ModConfig.material.doInclude("pure_" + getName());		
 	}		
 }

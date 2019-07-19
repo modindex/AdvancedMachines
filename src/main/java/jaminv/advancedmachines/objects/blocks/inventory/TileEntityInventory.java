@@ -1,26 +1,12 @@
 package jaminv.advancedmachines.objects.blocks.inventory;
 
-import org.apache.logging.log4j.Level;
-
-import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.objects.items.ItemStackHandlerObservable;
-import jaminv.advancedmachines.util.Config;
-import jaminv.advancedmachines.util.interfaces.IHasGui;
-import jaminv.advancedmachines.util.recipe.IRecipeManager;
-import jaminv.advancedmachines.util.recipe.RecipeBase;
-import jaminv.advancedmachines.util.recipe.RecipeInput;
-import jaminv.advancedmachines.util.recipe.RecipeOutput;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
-import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
 public abstract class TileEntityInventory extends TileEntity implements ItemStackHandlerObservable.IObserver {
 

@@ -2,5 +2,5 @@
     "parent": "advmach:block/machine_expansion",
     "textures": {
         "all": "advmach:blocks/machine/expansion/impossible/all"
-    }    
+    }
 }

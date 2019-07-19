@@ -4,11 +4,7 @@ import org.apache.logging.log4j.Level;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.objects.blocks.inventory.TileEntityInventory;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansion;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTileEntity;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.InventoryStateMessage;
-import jaminv.advancedmachines.objects.items.ItemStackHandlerObservable;
-import jaminv.advancedmachines.util.Config;
+import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.interfaces.ICanProcess;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
@@ -20,12 +16,8 @@ import jaminv.advancedmachines.util.recipe.RecipeBase;
 import jaminv.advancedmachines.util.recipe.RecipeInput;
 import jaminv.advancedmachines.util.recipe.RecipeOutput;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
@@ -34,7 +26,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
 public abstract class TileEntityMachineBase extends TileEntityInventory implements ITickable, IHasGui, IMachineEnergy, IRedstoneControlled, IDirectional, ICanProcess {
 
@@ -99,7 +90,7 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 	@Override
 	public void update() {
 		tick++;
-		if (tick < Config.tickUpdate) { return; }
+		if (tick < ModConfig.general.tickUpdate) { return; }
 
 		boolean oldProcess = this.isProcessing();
 		
@@ -131,7 +122,7 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 	
 	public float getProcessPercent() {
 		if (totalProcessTime <= 0 || processTimeRemaining <= 0) { return 0.0f; }
-		return ((float)totalProcessTime - processTimeRemaining + Config.tickUpdate) / totalProcessTime;
+		return ((float)totalProcessTime - processTimeRemaining + ModConfig.general.tickUpdate) / totalProcessTime;
 	}
 	
 	private RecipeInput lastInput = new RecipeInput();
@@ -169,7 +160,7 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 		}
 
 		if (!extractEnergy(lastRecipe, totalProcessTime)) { return; }
-		processTimeRemaining -= Config.tickUpdate;
+		processTimeRemaining -= ModConfig.general.tickUpdate;
 		
 		if (processTimeRemaining <= 0) {
 			RecipeBase recipe = lastRecipe;
@@ -182,13 +173,13 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 	}
 	
 	protected int beginProcess(RecipeBase recipe, RecipeInput[] input) {
-		return Config.processTimeBasic;
+		return ModConfig.general.processTimeBasic;
 	}
 	
 	protected boolean extractEnergy(RecipeBase lastRecipe, int totalProcessTime) {
-		if (energy.getEnergyStored() < (lastRecipe.getEnergy() / totalProcessTime) * Config.tickUpdate) { return false; }
+		if (energy.getEnergyStored() < (lastRecipe.getEnergy() / totalProcessTime) * ModConfig.general.tickUpdate) { return false; }
 		
-		energy.useEnergy((lastRecipe.getEnergy() / totalProcessTime) * Config.tickUpdate);
+		energy.useEnergy((lastRecipe.getEnergy() / totalProcessTime) * ModConfig.general.tickUpdate);
 		return true;
 	}
 	
@@ -328,7 +319,7 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 	protected boolean removeInput(RecipeInput input) {
 		for (int i = getFirstInputSlot(); i < getInputCount() + getFirstInputSlot(); i++) {
 			RecipeInput slot = new RecipeInput(inventory.getStackInSlot(i));
-			if (slot.doesMatch(input)) {
+			if (slot.isValidWithCountFor(input)) {
 				inventory.extractItem(i, input.getCount(), false);
 				return true;
 			}

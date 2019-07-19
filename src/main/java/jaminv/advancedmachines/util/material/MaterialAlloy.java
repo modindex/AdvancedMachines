@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.util.material;
 
-import jaminv.advancedmachines.util.Config;
+import jaminv.advancedmachines.util.ModConfig;
 
 public class MaterialAlloy extends MaterialBase {
 
@@ -24,6 +24,6 @@ public class MaterialAlloy extends MaterialBase {
 
 	@Override
 	public boolean doInclude(String oredictType) {
-		return Config.doInclude("alloy_" + getName());
+		return ModConfig.material.doInclude("alloy_" + getName());
 	}
 }

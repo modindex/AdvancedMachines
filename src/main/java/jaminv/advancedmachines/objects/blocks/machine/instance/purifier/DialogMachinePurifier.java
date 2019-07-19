@@ -1,5 +1,7 @@
 package jaminv.advancedmachines.objects.blocks.machine.instance.purifier;
 
+import jaminv.advancedmachines.integration.jei.element.JeiEnergyBar;
+import jaminv.advancedmachines.integration.jei.element.JeiProgressIndicator;
 import jaminv.advancedmachines.objects.blocks.machine.dialog.DialogEnergyBar;
 import jaminv.advancedmachines.objects.blocks.machine.dialog.DialogMultiblockQuantity;
 import jaminv.advancedmachines.objects.blocks.machine.dialog.DialogProcessBar;
@@ -11,7 +13,7 @@ import jaminv.advancedmachines.util.dialog.DialogBase;
 import jaminv.advancedmachines.util.dialog.struct.DialogArea;
 import jaminv.advancedmachines.util.dialog.struct.DialogTexture;
 import jaminv.advancedmachines.util.interfaces.IRedstoneControlled;
-import jaminv.advancedmachines.util.recipe.machine.PurifierManager;
+import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager;
 
 public class DialogMachinePurifier extends DialogMachineMultiblock {
 	
@@ -27,6 +29,10 @@ public class DialogMachinePurifier extends DialogMachineMultiblock {
 		
 		this.addText(8, 8, 160, "dialog.purifier.title", Color.DIALOG_TEXT);
 		this.addText(8, 73, "dialog.common.inventory", Color.DIALOG_TEXT);
+
+		addJeiElement(new JeiEnergyBar(9, 20, 14, 50, 200, 0));
+		addJeiElement(new JeiProgressIndicator(74, 23, 24, 17, 200, 50));		
+		this.setDrawSecondaryChancePos(JeiDrawSecondaryChance.ABOVE);
 	}
 	
 	public DialogMachinePurifier(TileEntityMachinePurifier te) {
