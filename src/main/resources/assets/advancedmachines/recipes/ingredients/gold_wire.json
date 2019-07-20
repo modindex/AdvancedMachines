@@ -1,0 +1,8 @@
+{
+    "type": "forge:ore_shapeless",
+    "ingredients": [
+        { "item": "advancedmachines:ingredient", "data": 1 },
+        { "type": "forge:ore_dict", "ore": "ingotGoldPure" }
+    ],    
+    "result": { "item": "advancedmachines:ingredient", "data": 2 }
+}

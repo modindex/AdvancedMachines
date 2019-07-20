@@ -1,0 +1,5 @@
+{
+    "conditions": {
+        "config": "jaminv.advancedmachines.util.conditions.ConfigConditionFactory"
+    }
+}

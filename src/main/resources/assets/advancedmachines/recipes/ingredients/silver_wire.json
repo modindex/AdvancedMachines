@@ -1,0 +1,23 @@
+{
+    "type": "forge:ore_shaped",
+    
+    "pattern":
+    [
+        "  R",
+        " O ",
+        "R  "
+    ],
+    
+    "key": {
+        "O": {
+            "type": "forge:ore_dict",
+            "ore": "ingotSilverPure"
+        },
+        "R": {
+            "type": "forge:ore_dict",
+            "ore": "dustRedstone"
+        }
+    },
+    
+    "result": { "item": "advancedmachines:ingredient", "data": 1 }
+}
