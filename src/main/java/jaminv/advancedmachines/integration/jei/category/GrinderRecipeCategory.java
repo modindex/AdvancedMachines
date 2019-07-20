@@ -71,7 +71,7 @@ public class GrinderRecipeCategory extends RecipeCategoryBase<GrinderRecipeCateg
 		registry.addRecipeCatalyst(new ItemStack(BlockInit.MACHINE_GRINDER, 1, MaterialExpansion.BASIC.getMeta()), RecipeUids.GRINDER);
 		registry.addRecipeCatalyst(new ItemStack(BlockInit.MACHINE_GRINDER, 1, MaterialExpansion.COMPRESSED.getMeta()), RecipeUids.GRINDER);
 		registry.addRecipeCatalyst(new ItemStack(BlockInit.MACHINE_GRINDER, 1, MaterialExpansion.QUAD.getMeta()), RecipeUids.GRINDER);
-		registry.addRecipeCatalyst(new ItemStack(BlockInit.MACHINE_GRINDER, 1, MaterialExpansion.IMPOSSIBLE.getMeta()), RecipeUids.GRINDER);
+		registry.addRecipeCatalyst(new ItemStack(BlockInit.MACHINE_GRINDER, 1, MaterialExpansion.IMPROBABLE.getMeta()), RecipeUids.GRINDER);
 	}
 	
 	public static List<GrinderRecipe> getRecipes(IGuiHelper guiHelper) {

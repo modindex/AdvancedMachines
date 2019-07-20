@@ -68,7 +68,7 @@ public class PurifierRecipeCategory extends RecipeCategoryBase<PurifierRecipeCat
 		registry.addRecipeCatalyst(new ItemStack(BlockInit.MACHINE_PURIFIER, 1, MaterialExpansion.BASIC.getMeta()), RecipeUids.PURIFIER);
 		registry.addRecipeCatalyst(new ItemStack(BlockInit.MACHINE_PURIFIER, 1, MaterialExpansion.COMPRESSED.getMeta()), RecipeUids.PURIFIER);
 		registry.addRecipeCatalyst(new ItemStack(BlockInit.MACHINE_PURIFIER, 1, MaterialExpansion.QUAD.getMeta()), RecipeUids.PURIFIER);
-		registry.addRecipeCatalyst(new ItemStack(BlockInit.MACHINE_PURIFIER, 1, MaterialExpansion.IMPOSSIBLE.getMeta()), RecipeUids.PURIFIER);
+		registry.addRecipeCatalyst(new ItemStack(BlockInit.MACHINE_PURIFIER, 1, MaterialExpansion.IMPROBABLE.getMeta()), RecipeUids.PURIFIER);
 	}
 	
 	public static List<PurifierRecipe> getRecipes(IGuiHelper guiHelper) {

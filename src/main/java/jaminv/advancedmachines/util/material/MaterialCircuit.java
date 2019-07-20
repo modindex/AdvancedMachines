@@ -10,7 +10,7 @@ public class MaterialCircuit extends MaterialBase {
 	public static final MaterialCircuit BASIC = new MaterialCircuit(1, "basic");
 	public static final MaterialCircuit ADVANCED = new MaterialCircuit(2, "advanced");
 	public static final MaterialCircuit ENDER = new MaterialCircuit(3, "ender");
-	public static final MaterialCircuit IMPOSSIBLE = new MaterialCircuit(4, "impossible");
+	public static final MaterialCircuit IMPROBABLE = new MaterialCircuit(4, "improbable");
 	
 	public static MaterialBase[] values() {
 		return MaterialBase.values(TYPE);

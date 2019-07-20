@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "variant=titanium": { "model": "advancedmachines:storage_titanium" },
+        "variant=copper": { "model": "advancedmachines:storage_copper" },
+        "variant=silver": { "model": "advancedmachines:storage_silver" }
+    }
+}

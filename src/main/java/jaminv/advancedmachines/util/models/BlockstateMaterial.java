@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import jaminv.advancedmachines.util.Reference;
 import jaminv.advancedmachines.util.material.MaterialBase;
 import jaminv.advancedmachines.util.material.MaterialBase.MaterialType;
 import jaminv.advancedmachines.util.models.BlockstateMaker.Properties;
@@ -27,7 +28,7 @@ public class BlockstateMaterial extends BlockstateMaker implements IItemTextureP
 	
 	@Override
 	public String getItemTextures(MaterialBase variant) {
-		return "        \"all\": \"advmach:blocks/" + getTextureFolder("north", new MaterialProperties(new Properties(true, true, true, true, true, true), variant)) + "all\"\r\n";
+		return "        \"all\": \"" + Reference.MODID + ":blocks/" + getTextureFolder("north", new MaterialProperties(new Properties(true, true, true, true, true, true), variant)) + "all\"\r\n";
 	}
 	
 	public BlockstateMaterial(String name, String folder, MaterialType type) {

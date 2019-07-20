@@ -98,6 +98,14 @@ public final class ModConfig {
 		
 	}
 	
+	@Config.Comment({ "Crafting Configuration", "Allows disabling of some common crafting recipes that may conflict with other mods." })
+	@Config.RequiresMcRestart
+	public static Crafting crafting = new Crafting();
+	public static class Crafting {
+		@Config.Comment("Include crafting recipe for 'Iron Gear'.")
+		public boolean craftIronGear = true;
+	}
+	
 	@Config.Comment({ "Recipe Configuration" })
 	public static Recipe recipe = new Recipe();
 	public static class Recipe {

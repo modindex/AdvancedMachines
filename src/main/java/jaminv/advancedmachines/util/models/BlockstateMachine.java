@@ -3,6 +3,7 @@ package jaminv.advancedmachines.util.models;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import jaminv.advancedmachines.util.Reference;
 import jaminv.advancedmachines.util.material.MaterialBase;
 import jaminv.advancedmachines.util.material.MaterialBase.MaterialType;
 import jaminv.advancedmachines.util.models.BlockstateMaker.Properties;
@@ -41,8 +42,8 @@ public class BlockstateMachine extends BlockstateMaker implements IItemTexturePr
 	@Override
 	public String getItemTextures(MaterialBase variant) {
 		InventoryProperties prop = new InventoryProperties(new Properties(true, true, true, true, true, true), variant, EnumFacing.NORTH, false);
-		return "        \"all\": \"advmach:blocks/" + getTextureFolder("up", prop) + "all\",\r\n" +
-				"        \"north\": \"advmach:blocks/" + getTextureFolder("north", prop) + "all\"\r\n";
+		return "        \"all\": \"" + Reference.MODID + ":blocks/" + getTextureFolder("up", prop) + "all\",\r\n" +
+				"        \"north\": \"" + Reference.MODID + ":blocks/" + getTextureFolder("north", prop) + "all\"\r\n";
 	}	
 	
 	@Override

@@ -1,7 +1,0 @@
-{
-    "parent": "advmach:block/machine_furnace",
-    "textures": {
-        "all": "advmach:blocks/machine/expansion/impossible/all",
-        "north": "advmach:blocks/machine/instance/furnace/inactive/impossible/all"
-    }
-}

@@ -1,0 +1,27 @@
+{
+    "type": "forge:ore_shaped",
+    
+    "pattern":
+    [
+        "SSS",
+        "SIS",
+        "TTT"
+    ],
+    
+    "key": {
+        "S": {
+            "type": "forge:ore_dict",
+            "ore": "ingotSilver"
+        },
+        "I": {
+            "type": "forge:ore_dict",
+            "ore": "gearIron"
+        },
+        "T": {
+            "type": "forge:ore_dict",
+            "ore": "ingotTitanium"
+        }
+    },
+    
+    "result": { "item": "advancedmachines:machine_frame", "data": 0 }
+}

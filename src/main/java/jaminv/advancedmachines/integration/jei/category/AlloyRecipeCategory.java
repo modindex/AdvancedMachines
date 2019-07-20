@@ -71,7 +71,7 @@ public class AlloyRecipeCategory extends RecipeCategoryBase<AlloyRecipeCategory.
 		registry.addRecipeCatalyst(new ItemStack(BlockInit.MACHINE_ALLOY, 1, MaterialExpansion.BASIC.getMeta()), RecipeUids.ALLOY);
 		registry.addRecipeCatalyst(new ItemStack(BlockInit.MACHINE_ALLOY, 1, MaterialExpansion.COMPRESSED.getMeta()), RecipeUids.ALLOY);
 		registry.addRecipeCatalyst(new ItemStack(BlockInit.MACHINE_ALLOY, 1, MaterialExpansion.QUAD.getMeta()), RecipeUids.ALLOY);
-		registry.addRecipeCatalyst(new ItemStack(BlockInit.MACHINE_ALLOY, 1, MaterialExpansion.IMPOSSIBLE.getMeta()), RecipeUids.ALLOY);
+		registry.addRecipeCatalyst(new ItemStack(BlockInit.MACHINE_ALLOY, 1, MaterialExpansion.IMPROBABLE.getMeta()), RecipeUids.ALLOY);
 	}
 	
 	public static List<AlloyRecipe> getRecipes(IGuiHelper guiHelper) {

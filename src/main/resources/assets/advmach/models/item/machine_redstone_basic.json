@@ -1,7 +1,0 @@
-{
-    "parent": "advmach:block/machine_redstone",
-    "textures": {
-        "all": "advmach:blocks/machine/expansion/basic/all",
-        "north": "advmach:blocks/machine/redstone/inactive/basic/all"
-    }
-}

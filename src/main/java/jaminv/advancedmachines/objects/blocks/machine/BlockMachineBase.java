@@ -59,7 +59,7 @@ public abstract class BlockMachineBase extends BlockMaterial implements ITileEnt
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 		
-		BlockHelper.setDirectional(worldIn, pos, placer);
+		BlockHelper.setDirectional(worldIn, pos, placer, false);
 	}
 	
 	@Override

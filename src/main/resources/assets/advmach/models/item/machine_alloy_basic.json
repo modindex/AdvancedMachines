@@ -1,7 +1,0 @@
-{
-    "parent": "advmach:block/machine_alloy",
-    "textures": {
-        "all": "advmach:blocks/machine/expansion/basic/all",
-        "north": "advmach:blocks/machine/instance/alloy/inactive/basic/all"
-    }
-}

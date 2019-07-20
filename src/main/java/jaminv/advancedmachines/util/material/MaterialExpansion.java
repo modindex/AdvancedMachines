@@ -7,7 +7,7 @@ public class MaterialExpansion extends MaterialBase {
 	public static final MaterialExpansion BASIC = new MaterialExpansion(0, "basic", 1);
 	public static final MaterialExpansion COMPRESSED = new MaterialExpansion(1, "compressed", 2);
 	public static final MaterialExpansion QUAD = new MaterialExpansion(2, "quad", 4);
-	public static final MaterialExpansion IMPOSSIBLE = new MaterialExpansion(3, "impossible", 8);
+	public static final MaterialExpansion IMPROBABLE = new MaterialExpansion(3, "improbable", 8);
 	
 	public static MaterialExpansion[] values() {
 		return MaterialBase.values(TYPE, new MaterialExpansion[0]);

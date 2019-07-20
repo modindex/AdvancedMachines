@@ -1,0 +1,9 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "up": "advancedmachines:blocks/machine/border/left",
+        "north": "advancedmachines:blocks/machine/border/left",
+        "south": "advancedmachines:blocks/machine/border/left",
+        "down": "advancedmachines:blocks/machine/border/left"
+    }
+}

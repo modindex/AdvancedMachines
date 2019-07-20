@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "advancedmachines:blocks/machine_side",
+    "down": "advancedmachines:blocks/machine_bottom",
+    "up": "advancedmachines:blocks/machine_top",
+    "east": "advancedmachines:blocks/machine_side",
+    "west": "advancedmachines:blocks/machine_side",
+    "north": "advancedmachines:blocks/machine_side",
+    "south": "advancedmachines:blocks/machine_side"
+  }
+}

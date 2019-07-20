@@ -1,0 +1,173 @@
+
+item.ingot_titanium.name=Titanium Ingot
+item.ingot_copper.name=Copper Ingot
+item.ingot_silver.name=Silver Ingot
+
+item.dust_coal.name=Coal Dust
+item.dust_iron.name=Iron Dust
+item.dust_gold.name=Gold Dust
+item.dust_titanium.name=Titanium Dust
+item.dust_copper.name=Copper Dust
+item.dust_silver.name=Silver Dust
+item.dust_diamond.name=Diamond Dust
+item.dust_ender.name=Ender Dust
+item.dust_nether_star.name=Nova Dust
+item.dust_glass.name=Glass Fiber
+
+item.ingot_pure_gold.name=Pure Gold Ingot
+item.ingot_pure_silver.name=Pure Silver Ingot
+item.ingot_pure_copper.name=Pure Copper Ingot
+
+item.alloy_titanium_carbide.name=Titanium Carbide Ingot
+item.alloy_titanium_endite.name=Titanium Endite Ingot
+item.alloy_titanium_improbable.name=Improbability Ingot
+
+item.dust_pure_gold.name=Pure Gold Dust
+item.dust_pure_silver.name=Pure Silver Dust
+item.dust_pure_copper.name=Pure Copper Dust
+item.dust_pure_diamond.name=Refined Carbon
+item.dust_pure_ender.name=Purified End
+item.dust_pure_nether_star.name=Improbability Catalyst
+
+item.gear_iron.name=Iron Gear
+item.gear_titanium.name=Titanium Gear
+item.gear_titanium.name=Titanium Carbide Gear
+item.gear_titanium_endite.name=Titanium Endite Gear
+
+item.circuit_pcb.name=PCB
+item.circuit_basic.name=Basic Processing Circuit
+item.circuit_advanced.name=Advanced Processing Circuit
+item.circuit_ender.name=Ender Processing Circuit
+item.circuit_improbable.name=Improbability Circuit
+
+item.ingredient_copper_wire.name=Copper Wire
+item.ingredient_silver_wire.name=Silver Wire
+item.ingredient_gold_wire.name=Gold-plated wire
+item.ingredient_plastic.name=Plastic
+item.ingredient_resin.name=Resin
+item.ingredient_rosin.name=Rosin
+
+item.axe_titanium.name=Titanium Axe
+item.hoe_titanium.name=Titanium Hoe
+item.pickaxe_titanium.name=Titanium Pickaxe
+item.shovel_titanium.name=Titanium Shovel
+item.sword_titanium.name=Titanium Sword
+
+item.helmet_titanium.name=Titanium Helmet
+item.chestplate_titanium.name=Titanium Chestplate
+item.legging_titanium.name=Titanium Leggings
+item.boots_titanium.name=Titanium Boots
+
+tile.storage_titanium.name=Titanium Block
+tile.storage_copper.name=Copper Block
+tile.storage_silver.name=Silver Block
+
+tile.ore_titanium.name=Titanium Ore
+tile.ore_copper.name=Copper Ore
+tile.ore_silver.name=Silver Ore
+
+tile.machine_frame_basic.name=Titanium Machine Frame
+tile.machine_frame_compressed.name=Compressed Machine Frame
+tile.machine_frame_quadratic.name=Quadratic Machine Frame
+tile.machine_frame_improbable.name=Improbable Machine Frame
+
+tile.machine_furnace_basic.name=Advanced Furnace
+tile.machine_furnace_compressed.name=Compressed Furnace
+tile.machine_furnace_quad.name=Quadratic Furnace
+tile.machine_furnace_improbable.name=Interdimensional Furnace
+tile.machine_purifier_basic.name=Purification Chamber
+tile.machine_purifier_compressed.name=Compressed Purification Chamber
+tile.machine_purifier_quad.name=Quadratic Purification Chamber
+tile.machine_purifier_improbable.name=Interdimensional Purification Chamber
+tile.machine_grinder_basic.name=Advanced Grinder
+tile.machine_grinder_compressed.name=Compressed Grinder
+tile.machine_grinder_quad.name=Quadratic Grinder
+tile.machine_grinder_improbable.name=Interdimensional Grinder
+tile.machine_alloy_basic.name=Alloy Furnace
+tile.machine_alloy_compressed.name=Compressed Alloy Furnace
+tile.machine_alloy_quad.name=Quadratic Alloy Furnace
+tile.machine_alloy_improbable.name=Interdimension Alloy Furnace
+
+tile.machine_expansion_basic.name=Machine Expansion
+tile.machine_expansion_compressed.name=Compressed Machine Expansion
+tile.machine_expansion_quad.name=Quadratic Machine Expansion
+tile.machine_expansion_improbable.name=improbable Machine Expansion
+tile.machine_speed_basic.name=Machine Speed Upgrade
+tile.machine_speed_compressed.name=Compressed Machine Speed Upgrade
+tile.machine_speed_quad.name=Quadratic Machine Speed Upgrade
+tile.machine_speed_improbable.name=improbable Machine Speed Upgrade
+
+tile.machine_inventory_basic.name=Machine Inventory
+tile.machine_inventory_compressed.name=Compressed Machine Inventory
+tile.machine_inventory_quad.name=Quadratic Machine Inventory
+tile.machine_inventory_improbable.name=improbable Machine Inventory
+tile.machine_energy_basic.name=Machine Energy Controller
+tile.machine_energy_compressed.name=Compressed Machine Energy Controller
+tile.machine_energy_quad.name=Quadratic Machine Energy Controller
+tile.machine_energy_improbable=improbable Machine Energy Controller
+tile.machine_redstone_basic.name=Machine Redstone Controller
+tile.machine_redstone_compressed.name=Compressed Machine Redstone Controller
+tile.machine_redstone_quad.name=Quadratic Machine Redstone Controller
+tile.machine_redstone_improbable.name=Interdimensional Machine Redstone Controller
+
+dialog.common.inventory=Inventory
+dialog.common.energy=%,d / %,d RF
+dialog.common.chance=Chance: %d%%
+dialog.common.percent=%d%%
+dialog.common.input=Input
+dialog.common.output=Output
+dialog.common.priority=Priority
+dialog.common.redstone.ignore=Redstone Mode: Ignored
+dialog.common.redstone.active=Redstone Mode: Active with signal
+dialog.common.redstone.inactive=Redstone Mode: Active without signal
+
+dialog.jei.energy=%,d RF
+dialog.jei.recipe_id=Recipe ID: %s
+
+dialog.alloy.title=Alloy Forge
+dialog.purifier.title=Purification Chamber
+dialog.grinder.title=Advanced Grinder
+dialog.furnace.title=Advanced Furnace
+dialog.energy.title=Energy
+dialog.machine_inventory.title=Machine Inventory
+
+message.no_controller=No Machine Controller Found
+message.controller_found=Machine Controller (%s) found at (%d, %d, %d)
+message.multiblock.null=Multiblock invalid. You should never see this message.
+message.multiblock.absent=You may create a multiblock using this block and several Machine Expansions in cuboid shape up to 3x3x4.
+message.multiblock.connected_machine=Only one machine may be connected to a multiblock. A second machine, "%s" is connected at (%d, %d, %d).
+message.multiblock.illegal=Block "%s" at (%d, %d, %d) is not a legal for multiblock structure.
+message.multiblock.complete=Valid Multiblock\n\nMachine Multiplier: %d\nSpeed Upgrades: %d\nProductivity Upgrades: %d\n
+message.multiblock.input=\nInventory Input at (%d, %d, %d)
+message.multiblock.output=\nInventory Output at (%d, %d, %d)
+message.multiblock.energy=\nEnergy Input at (%d, %d, %d)
+message.machine_inventory.connected=Connected to %s at (%d, %d, %d)
+message.machine_inventory.not_connected=Not connected to a multiblock
+message.machine_inventory.not_used=Advanced Machine multiblocks only support one input inventory block and one output.\nThis block is not being used.The block "%s" at (%d, %d, %d) is being used instead.
+
+advmach.config.title=Advanced Machines Configuration
+
+error.logger.unsupported_encoding=Error creating log file. Unexpected encoding: %s.
+error.logger.error_loading_file=Error creating log file '%s': %s.
+
+info.parser.parsing_file=Parsing data file: %s.
+info.parser.file_parsed=Data file parsed successfully: %s.
+error.parser.cannot_parse_file=Error parsing data file '%s': %s
+error.parser.error_loading_file=Error loading data file '%s': %s
+error.parser.error_reading_file=Error reading data file '%s': %s
+
+info.parser.ore_dictionary.complete=%d ore dictionary entries created successfully.
+info.parser.ore_dictionary.incomplete=%d ore dictionary entries not created.
+info.parser.recipe.complete=%d recipes added successfully.
+info.parser.recipe.incomplete=%d recipes not added.
+
+error.parser.required='%s': Required element '%s' is missing.
+error.parser.not_object='%s': Element must be an object.
+error.parser.not_array='%s': Element must be an array.
+error.parser.not_string='%s': Element must be a string type.
+error.parser.not_integer='%s': Element can not be evaluated to an integer.
+
+error.parser.recipe.item_not_found='%s': 'item' <%s> not found.
+error.parser.recipe.invalid_nbt='%s': Invalid NBT structure. %s
+
+error.unhandled=Unhandled error

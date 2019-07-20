@@ -1,0 +1,23 @@
+{
+    "type": "forge:ore_shaped",
+    
+    "pattern":
+    [
+        "II",
+        "IS",
+        " S"
+    ],
+    
+    "key": {
+        "I": {
+            "type": "forge:ore_dict",
+            "ore": "ingotTitanium"
+        },
+        "S": {
+            "type": "forge:ore_dict",
+            "ore": "stickWood"
+        }
+    },
+    
+    "result": { "item": "advancedmachines:axe_titanium" }
+}

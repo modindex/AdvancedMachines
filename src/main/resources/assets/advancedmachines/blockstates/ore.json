@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "variant=titanium": { "model": "advancedmachines:ore_titanium" },
+        "variant=copper": { "model": "advancedmachines:ore_copper" },
+        "variant=silver": { "model": "advancedmachines:ore_silver" }    
+    }
+}

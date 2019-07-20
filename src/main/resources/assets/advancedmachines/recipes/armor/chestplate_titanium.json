@@ -1,0 +1,19 @@
+{
+    "type": "forge:ore_shaped",
+    
+    "pattern":
+    [
+        "I I",
+        "III",
+        "III"
+    ],
+    
+    "key": {
+        "I": {
+            "type": "forge:ore_dict",
+            "ore": "ingotTitanium"
+        }
+    },
+    
+    "result": { "item": "advancedmachines:chestplate_titanium" }
+}

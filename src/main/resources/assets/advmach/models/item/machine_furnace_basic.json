@@ -1,7 +1,0 @@
-{
-    "parent": "advmach:block/machine_furnace",
-    "textures": {
-        "all": "advmach:blocks/machine/expansion/basic/all",
-        "north": "advmach:blocks/machine/instance/furnace/inactive/basic/all"
-    }
-}

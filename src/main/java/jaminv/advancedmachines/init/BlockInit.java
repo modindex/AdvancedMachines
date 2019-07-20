@@ -39,7 +39,9 @@ public class BlockInit {
 		protected PropertyMaterial getVariant() { return PropertyMaterial.create("variant", MaterialBase.MaterialType.MOD); }
 	};
 	
-	public static final DirectionalBlock BLOCK_MACHINE = new DirectionalBlock("machine", Material.IRON);
+	public static final BlockMaterial BLOCK_MATERIAL = new BlockMaterial("machine_frame", MaterialBase.MaterialType.EXPANSION, Material.IRON, 5.0f) {
+		protected PropertyMaterial getVariant() { return PropertyMaterial.create("variant", MaterialBase.MaterialType.EXPANSION); }
+	};
 	
 	public static final BlockMachineFurnace MACHINE_FURNACE = new BlockMachineFurnace("machine_furnace");
 	public static final BlockMachineGrinder MACHINE_GRINDER = new BlockMachineGrinder("machine_grinder");

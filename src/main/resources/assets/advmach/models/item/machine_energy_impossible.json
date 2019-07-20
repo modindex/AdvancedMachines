@@ -1,7 +1,0 @@
-{
-    "parent": "advmach:block/machine_energy",
-    "textures": {
-        "all": "advmach:blocks/machine/expansion/impossible/all",
-        "north": "advmach:blocks/machine/energy/impossible/all"
-    }
-}
