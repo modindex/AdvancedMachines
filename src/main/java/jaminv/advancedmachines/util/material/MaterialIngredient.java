@@ -7,7 +7,8 @@ public class MaterialIngredient extends MaterialBase {
 	private static MaterialType TYPE = MaterialType.INGREDIENT;
 	
 	public static final MaterialIngredient COPPER_WIRE = new MaterialIngredient(0, "copper_wire");
-	public static final MaterialIngredient GOLD_WIRE = new MaterialIngredient(1, "gold_wire");
+	public static final MaterialIngredient SILVER_WIRE = new MaterialIngredient(1, "silver_wire");
+	public static final MaterialIngredient GOLD_WIRE = new MaterialIngredient(2, "gold_wire");
 	
 	public static MaterialBase[] values() {
 		return MaterialBase.values(TYPE);

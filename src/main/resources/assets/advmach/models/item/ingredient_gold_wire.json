@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "advmach:items/copper_wire"
+        "layer0": "advmach:items/gold_wire"
     }
 }
