@@ -13,7 +13,8 @@ public class MaterialDust extends MaterialBase {
 	public static final MaterialDust COPPER = new MaterialDust(4, "copper");
 	public static final MaterialDust SILVER = new MaterialDust(5, "silver");
 	public static final MaterialDust DIAMOND = new MaterialDust(6, "diamond");
-	public static final MaterialDust ENDER = new MaterialDust(7, "ender");		
+	public static final MaterialDust ENDER = new MaterialDust(7, "ender");
+	public static final MaterialDust GLASS = new MaterialDust(8, "glass");
 	
 	public static MaterialBase[] values() {
 		return MaterialBase.values(TYPE);

@@ -43,7 +43,7 @@ public class ItemInit {
 	//public static final Item DUST_ALLOY = new ItemMaterial("dust_alloy", "dust", MaterialAlloy.values());
 	public static final Item GEAR = new ItemMaterialOre("gear", MaterialGear.values());
 	
-	public static final Item PROCESSOR = new ItemMaterial("processor", MaterialCircuit.values());
+	public static final Item CIRCUIT = new ItemMaterial("circuit", MaterialCircuit.values());
 	public static final Item INGREDIENT = new ItemMaterial("ingredient", MaterialIngredient.values());
 	
 	// Tools
