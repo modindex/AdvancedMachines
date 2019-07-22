@@ -2,7 +2,7 @@ package jaminv.advancedmachines.objects.blocks.machine.expansion.prodctivity;
 
 import javax.annotation.Nullable;
 
-import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachineExpansion;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachineExpansionBase;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
 import jaminv.advancedmachines.util.helper.BlockHelper;
@@ -14,6 +14,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
-public class TileEntityMachineProductivity extends TileEntityMachineExpansion {
+public class TileEntityMachineProductivity extends TileEntityMachineExpansionBase {
 
 }

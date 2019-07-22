@@ -1,7 +1,7 @@
 package jaminv.advancedmachines.objects.blocks.machine.expansion.energy;
 
-import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansion;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachineExpansion;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansionBase;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachineExpansionBase;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.util.enums.EnumGui;
 import jaminv.advancedmachines.util.helper.BlockHelper;
@@ -25,7 +25,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
-public class BlockMachineEnergy extends BlockMachineExpansion implements ITileEntityProvider, IHasTileEntity {
+public class BlockMachineEnergy extends BlockMachineExpansionBase implements ITileEntityProvider, IHasTileEntity {
 	
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
 

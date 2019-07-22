@@ -34,7 +34,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockMachineExpansion extends BlockMaterial implements IMachineUpgrade, ITileEntityProvider, IHasTileEntity {
+public class BlockMachineExpansionBase extends BlockMaterial implements IMachineUpgrade, ITileEntityProvider, IHasTileEntity {
 	
 	public static final PropertyBool BORDER_TOP = PropertyBool.create("border_top");
 	public static final PropertyBool BORDER_BOTTOM = PropertyBool.create("border_bottom");
@@ -43,24 +43,24 @@ public class BlockMachineExpansion extends BlockMaterial implements IMachineUpgr
 	public static final PropertyBool BORDER_EAST = PropertyBool.create("border_east");
 	public static final PropertyBool BORDER_WEST = PropertyBool.create("border_west");
 
-	public BlockMachineExpansion(String name) {
+	public BlockMachineExpansionBase(String name) {
 		super(name, MaterialBase.MaterialType.EXPANSION, null, Material.IRON, 5.0f);
 	}
 
 
 	@Override
 	public Class<? extends TileEntity> getTileEntityClass() {
-		return TileEntityMachineExpansion.class;
+		return TileEntityMachineExpansionBase.class;
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityMachineExpansion();
+		return new TileEntityMachineExpansionBase();
 	}	
 	
 	@Override
 	protected PropertyMaterial getVariant() {
-		return PropertyMaterial.create("variant", MaterialBase.MaterialType.EXPANSION);
+		return BlockMaterial.EXPANSION_VARIANT;
 	}
 	
 	@Override
@@ -97,8 +97,8 @@ public class BlockMachineExpansion extends BlockMaterial implements IMachineUpgr
         TileEntity tileentity = worldIn instanceof ChunkCache ? ((ChunkCache)worldIn).getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK) : worldIn.getTileEntity(pos);
         MultiblockBorders borders = MultiblockBorders.DEFAULT;
 
-        if (tileentity instanceof TileEntityMachineExpansion) {
-        	TileEntityMachineExpansion te = (TileEntityMachineExpansion)tileentity;
+        if (tileentity instanceof TileEntityMachineExpansionBase) {
+        	TileEntityMachineExpansionBase te = (TileEntityMachineExpansionBase)tileentity;
         	borders = te.getBorders();
         }
         

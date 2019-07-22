@@ -3,6 +3,7 @@ package jaminv.advancedmachines.objects.blocks.machine.instance.grinder;
 import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine;
 import jaminv.advancedmachines.objects.blocks.machine.DialogMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineParent;
 import jaminv.advancedmachines.util.dialog.gui.GuiContainerObservable;
 import jaminv.advancedmachines.util.recipe.machine.grinder.GrinderManager;
 import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager;
@@ -31,6 +32,11 @@ public class TileEntityMachineGrinder extends TileEntityMachineMultiblock {
 	
 	public TileEntityMachineGrinder() {
 		super(GrinderManager.getRecipeManager());		
+	}
+	
+	@Override
+	public MachineParent getMachineType() {
+		return MachineParent.GRINDER;
 	}
 
 	@Override

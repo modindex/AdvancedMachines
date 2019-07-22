@@ -6,6 +6,7 @@ import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.instance.purifier.DialogMachinePurifier;
 import jaminv.advancedmachines.objects.blocks.machine.instance.purifier.TileEntityMachinePurifier.GuiMachinePurifier;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineParent;
 import jaminv.advancedmachines.util.dialog.gui.GuiContainerObservable;
 import jaminv.advancedmachines.util.recipe.machine.AlloyManager;
 import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager;
@@ -33,6 +34,11 @@ public class TileEntityMachineAlloy extends TileEntityMachineMultiblock {
 	
 	public TileEntityMachineAlloy() {
 		super(AlloyManager.getRecipeManager());		
+	}
+
+	@Override
+	public MachineParent getMachineType() {
+		return MachineParent.ALLOY;
 	}
 
 	@Override

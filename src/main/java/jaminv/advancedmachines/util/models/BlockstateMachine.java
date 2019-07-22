@@ -69,6 +69,7 @@ public class BlockstateMachine extends BlockstateMaker implements IItemTexturePr
 		return "active=" + (iprop.active ? "true" : "false")  + ","
 			+ super.getVariantString(prop) +
 			",facing=" + iprop.facing.toString() +
+			",machine_face=none" +
 			",variant=" + iprop.variant.getName();
 	}
 

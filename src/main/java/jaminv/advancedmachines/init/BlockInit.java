@@ -5,9 +5,9 @@ import java.util.List;
 
 import jaminv.advancedmachines.objects.blocks.BlockMaterial;
 import jaminv.advancedmachines.objects.blocks.BlockMaterialOre;
-import jaminv.advancedmachines.objects.blocks.DirectionalBlock;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansion;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansionBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.energy.BlockMachineEnergy;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.expansion.BlockMachineExpansion;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.BlockMachineInventory;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.prodctivity.BlockMachineProductivity;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.redstone.BlockMachineRedstone;
@@ -22,8 +22,6 @@ import jaminv.advancedmachines.util.material.MaterialMod;
 import jaminv.advancedmachines.util.material.PropertyMaterial;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockInit {
 	// Force these objects to load before referencing them

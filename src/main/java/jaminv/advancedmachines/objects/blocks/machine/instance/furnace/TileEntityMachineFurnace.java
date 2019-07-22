@@ -3,6 +3,7 @@ package jaminv.advancedmachines.objects.blocks.machine.instance.furnace;
 import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine;
 import jaminv.advancedmachines.objects.blocks.machine.DialogMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineParent;
 import jaminv.advancedmachines.util.dialog.gui.GuiContainerObservable;
 import jaminv.advancedmachines.util.recipe.machine.FurnaceManager;
 import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager;
@@ -31,6 +32,12 @@ public class TileEntityMachineFurnace extends TileEntityMachineMultiblock {
 	
 	public TileEntityMachineFurnace() {
 		super(FurnaceManager.getRecipeManager());		
+	}
+	
+	@Override
+	public MachineParent getMachineType() {
+		// TODO Auto-generated method stub
+		return MachineParent.FURNACE;
 	}
 
 	@Override

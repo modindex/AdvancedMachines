@@ -1,8 +1,8 @@
 package jaminv.advancedmachines.objects.blocks.machine.expansion.redstone;
 
 import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansion;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachineExpansion;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansionBase;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachineExpansionBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.TileEntityMachineInventory;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
@@ -29,7 +29,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
-public class BlockMachineRedstone extends BlockMachineExpansion implements ITileEntityProvider, IHasTileEntity {
+public class BlockMachineRedstone extends BlockMachineExpansionBase implements ITileEntityProvider, IHasTileEntity {
 	
     public static final PropertyBool ACTIVE = PropertyBool.create("active");
     public static final PropertyDirection FACING = PropertyDirection.create("facing");

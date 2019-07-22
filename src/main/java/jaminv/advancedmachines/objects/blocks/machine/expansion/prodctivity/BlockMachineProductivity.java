@@ -1,8 +1,8 @@
 package jaminv.advancedmachines.objects.blocks.machine.expansion.prodctivity;
 
 import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansion;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachineExpansion;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansionBase;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachineExpansionBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgrade.UpgradeType;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.TileEntityMachineInventory;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
@@ -30,7 +30,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
-public class BlockMachineProductivity extends BlockMachineExpansion implements ITileEntityProvider, IHasTileEntity {
+public class BlockMachineProductivity extends BlockMachineExpansionBase implements ITileEntityProvider, IHasTileEntity {
 	
 	public BlockMachineProductivity(String name) {
 		super(name);

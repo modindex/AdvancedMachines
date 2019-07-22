@@ -31,6 +31,8 @@ public abstract class BlockMaterial extends Block implements IHasModel, IMetaNam
 	public PropertyMaterial VARIANT;
 	protected MaterialBase.MaterialType type;
 	
+	public static final PropertyMaterial EXPANSION_VARIANT = PropertyMaterial.create("variant", MaterialBase.MaterialType.EXPANSION);	
+	
 	protected abstract PropertyMaterial getVariant();
 	
 	private String name;

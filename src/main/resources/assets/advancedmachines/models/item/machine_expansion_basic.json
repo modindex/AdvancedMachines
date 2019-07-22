@@ -1,5 +1,5 @@
 {
-    "parent": "advancedmachines:block/machine_expansion",
+    "parent": "block/cube_all",
     "textures": {
         "all": "advancedmachines:blocks/machine/expansion/basic/all"
     }

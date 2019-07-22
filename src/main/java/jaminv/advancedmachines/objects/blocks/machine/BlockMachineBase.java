@@ -45,7 +45,7 @@ public abstract class BlockMachineBase extends BlockMaterial implements ITileEnt
 	
 	@Override
 	protected PropertyMaterial getVariant() {
-		return PropertyMaterial.create("variant", MaterialBase.MaterialType.EXPANSION);
+		return BlockMaterial.EXPANSION_VARIANT;
 	}	
 		
 	@Override

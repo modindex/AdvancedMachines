@@ -13,7 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
-public class TileEntityMachineExpansion extends TileEntity implements IMachineUpgradeTileEntity {
+public class TileEntityMachineExpansionBase extends TileEntity implements IMachineUpgradeTileEntity {
 
 	protected MultiblockBorders borders = new MultiblockBorders();
 	

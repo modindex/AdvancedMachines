@@ -6,7 +6,7 @@ import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.objects.blocks.inventory.ContainerInventory;
 import jaminv.advancedmachines.objects.blocks.inventory.TileEntityInventory;
 import jaminv.advancedmachines.objects.blocks.machine.MachineEnergyStorage;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansion;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansionBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTileEntity;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTool;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
@@ -47,7 +47,7 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 	}
 	public void setInputState(boolean state) {
 		this.inputState = state;
-		BlockMachineExpansion.scanMultiblock(world, this.getPos());
+		BlockMachineExpansionBase.scanMultiblock(world, this.getPos());
 		world.markBlockRangeForRenderUpdate(this.pos, this.pos);
 		
 		if (world.isRemote) {
