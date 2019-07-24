@@ -24,14 +24,14 @@ public class BakedModelMultiblockFurnace extends BakedModelMultiblock {
 	}
 
 	@Override
-	protected String checkFace(IBlockState state, EnumFacing side, String border) {
+	protected String checkFace(IBlockState state, EnumFacing side, Border border) {
 		String face;
 		if ((face = super.checkFace(state, side, border)) != null) { return face; }
 		
 		EnumFacing facing = state.getValue(BlockMachineBase.FACING);
 		MaterialBase variant = state.getValue(BlockMaterial.EXPANSION_VARIANT);
 		boolean active = state.getValue(BlockMachineBase.ACTIVE);
-		if (facing == side) { return "furnace." + (active ? "active" : "inactive") + "." + variant + "." + border; }
+		if (facing == side) { return "furnace." + (active ? "active" : "inactive") + "." + variant + "." + border.getBorder(); }
 		return null;
 	}
 }

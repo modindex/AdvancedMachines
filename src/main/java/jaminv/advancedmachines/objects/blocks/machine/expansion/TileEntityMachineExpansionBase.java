@@ -12,12 +12,13 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class TileEntityMachineExpansionBase extends TileEntity implements IMachineUpgradeTileEntity {
 
 	protected MultiblockBorders borders = new MultiblockBorders();
 	
-	public void setBorders(MultiblockBorders borders) {
+	public void setBorders(World world, MultiblockBorders borders) {
 		this.borders = borders;
 	}
 	
@@ -38,7 +39,7 @@ public class TileEntityMachineExpansionBase extends TileEntity implements IMachi
 		super.writeToNBT(compound);
 		compound.setTag("borders",  borders.serializeNBT());
 		return compound;
-	}
+	} 
 	
     @Nullable
     public SPacketUpdateTileEntity getUpdatePacket()

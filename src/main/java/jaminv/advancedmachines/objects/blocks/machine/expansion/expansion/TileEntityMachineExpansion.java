@@ -26,6 +26,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -37,17 +38,27 @@ public class TileEntityMachineExpansion extends TileEntityMachineExpansionBase i
 	protected MachineFace face = MachineFace.NONE;
 	protected MachineParent parent = MachineParent.NONE;
 	protected EnumFacing facing = EnumFacing.NORTH;
+	protected BlockPos parentpos = null;
+	protected boolean active = false;
 	
-	public void setMachineFace(MachineFace face, MachineParent parent, EnumFacing facing) {
+	public void setMachineFace(MachineFace face, MachineParent parent, EnumFacing facing, BlockPos pos) {
 		this.face = face;
 		this.parent = parent;
 		this.facing = facing;
+		parentpos = pos;
 	}
 	
+	@Override
+	public void setActive(boolean active) {
+		this.active = active;		
+	}
+	
+	public boolean isActive() { return active; }
+
 	public MachineFace getMachineFace() { return face; }
 	public MachineParent getMachineParent() { return parent; }
 	public EnumFacing getFacing() {	return facing; }
-	
+	public BlockPos getParentPos() { return parentpos; }
 
 	
 	@Override
@@ -63,6 +74,9 @@ public class TileEntityMachineExpansion extends TileEntityMachineExpansionBase i
 		if (compound.hasKey("facing")) {
 			facing = EnumFacing.byName(compound.getString("facing"));
 		}		
+		if (compound.hasKey("parentpos")) {
+			parentpos = NBTUtil.getPosFromTag(compound.getCompoundTag("parentpos"));
+		}
 	}
 
 	@Override
@@ -72,18 +86,19 @@ public class TileEntityMachineExpansion extends TileEntityMachineExpansionBase i
 		compound.setString("face", face.getName());
 		compound.setString("parent", parent.getName());
 		compound.setString("facing", facing.getName());    			
+		if (parentpos != null) {
+			compound.setTag("parentpos", NBTUtil.createPosTag(parentpos));
+		}
 
 		return compound;
 	}
 	
     @Nullable
-    public SPacketUpdateTileEntity getUpdatePacket()
-    {
+    public SPacketUpdateTileEntity getUpdatePacket() {
         return new SPacketUpdateTileEntity(this.pos, 1, this.getUpdateTag());
     }
-
-    public NBTTagCompound getUpdateTag()
-    {
+    
+	public NBTTagCompound getUpdateTag() {
         return this.writeToNBT(new NBTTagCompound());
     }	
 }

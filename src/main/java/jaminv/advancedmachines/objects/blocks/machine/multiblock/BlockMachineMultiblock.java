@@ -2,6 +2,7 @@ package jaminv.advancedmachines.objects.blocks.machine.multiblock;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.client.BakedModelMultiblock;
+import jaminv.advancedmachines.client.BakedModelMultiblockFurnace;
 import jaminv.advancedmachines.objects.blocks.machine.BlockMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTileEntity;
@@ -116,15 +117,10 @@ public abstract class BlockMachineMultiblock extends BlockMachineBase {
 	public void setMultiblock(World world, BlockPos pos, BlockPos parent, MultiblockBorders borders) {
 		BlockHelper.setBorders(world, pos, borders);
 	}
-	
+		
 	@Override
 	public void registerModels() {
-		StateMapperBase ignoreState = new StateMapperBase() {
-			@Override
-			protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
-				return BakedModelMultiblock.BAKED_MODEL_MULTIBLOCK;
-			}
-		};
-		ModelLoader.setCustomStateMapper(this, ignoreState);
+		registerCustomModel(BakedModelMultiblock.BAKED_MODEL_MULTIBLOCK);
+		registerVariantModels();
 	}	
 }

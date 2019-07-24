@@ -36,12 +36,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockMachineExpansionBase extends BlockMaterial implements IMachineUpgrade, ITileEntityProvider, IHasTileEntity {
 	
-	public static final PropertyBool BORDER_TOP = PropertyBool.create("border_top");
-	public static final PropertyBool BORDER_BOTTOM = PropertyBool.create("border_bottom");
-	public static final PropertyBool BORDER_NORTH = PropertyBool.create("border_north");
-	public static final PropertyBool BORDER_SOUTH = PropertyBool.create("border_south");
-	public static final PropertyBool BORDER_EAST = PropertyBool.create("border_east");
-	public static final PropertyBool BORDER_WEST = PropertyBool.create("border_west");
+	public static final PropertyBool BORDER_TOP = MultiblockBorders.BORDER_TOP;
+	public static final PropertyBool BORDER_BOTTOM = MultiblockBorders.BORDER_BOTTOM;
+	public static final PropertyBool BORDER_NORTH = MultiblockBorders.BORDER_NORTH;
+	public static final PropertyBool BORDER_SOUTH = MultiblockBorders.BORDER_SOUTH;
+	public static final PropertyBool BORDER_EAST = MultiblockBorders.BORDER_EAST;
+	public static final PropertyBool BORDER_WEST = MultiblockBorders.BORDER_WEST;
 
 	public BlockMachineExpansionBase(String name) {
 		super(name, MaterialBase.MaterialType.EXPANSION, null, Material.IRON, 5.0f);
@@ -132,7 +132,7 @@ public class BlockMachineExpansionBase extends BlockMaterial implements IMachine
 	public void setMultiblock(World world, BlockPos pos, BlockPos parent, MultiblockBorders borders) {
 		TileEntity tileentity = world.getTileEntity(pos);
 		if (tileentity instanceof IMachineUpgradeTileEntity) {
-			((IMachineUpgradeTileEntity)tileentity).setBorders(borders);
+			((IMachineUpgradeTileEntity)tileentity).setBorders(world, borders); 
 		}
 	}
 } 

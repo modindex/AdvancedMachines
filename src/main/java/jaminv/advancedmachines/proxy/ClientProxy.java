@@ -1,5 +1,6 @@
 package jaminv.advancedmachines.proxy;
 
+import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.client.BakedModelLoader;
 import jaminv.advancedmachines.util.Reference;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -17,7 +18,9 @@ public class ClientProxy extends CommonProxy {
 	public void preInit(FMLPreInitializationEvent e) {
 		super.preInit(e);
 		
+		Main.logger.info("Loading Baked Models");
 		ModelLoaderRegistry.registerLoader(new BakedModelLoader());
+		Main.logger.info("Completed - Loading Baked Models");
 	}
 	
 	@Override

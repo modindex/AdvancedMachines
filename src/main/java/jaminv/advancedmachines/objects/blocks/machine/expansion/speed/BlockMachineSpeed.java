@@ -57,7 +57,7 @@ public class BlockMachineSpeed extends BlockMachineExpansionBase implements ITil
 		TileEntity tileentity = world.getTileEntity(pos);
 		if (tileentity instanceof TileEntityMachineSpeed) {
 			TileEntityMachineSpeed te = (TileEntityMachineSpeed)tileentity;
-			te.setBorders(borders);
+			te.setBorders(world, borders);
 		}
 	}
 }

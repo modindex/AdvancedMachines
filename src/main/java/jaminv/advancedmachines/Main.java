@@ -37,6 +37,8 @@ public class Main {
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog();
         
+        logger.info("Advanced Machines preinit");
+        
 /*        ConfigurationBuilder<BuiltConfiguration> builder = ConfigurationBuilderFactory.newConfigurationBuilder();
         builder.setStatusLevel(Level.ALL);
         builder.setConfigurationName(Reference.MODID + ".parser");
@@ -51,6 +53,8 @@ public class Main {
         
         //LogManager.getLogger();
         proxy.preInit(event);
+        
+        logger.info("Complete - Advanced Machines preinit");
     }
 
     @EventHandler

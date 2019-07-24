@@ -25,7 +25,11 @@ public class CommonProxy {
 		//config = new Configuration(new File(directory.getPath(), "advancedmachines.cfg"));
 		//Config.readConfig();
 		
+		Main.logger.info("Other registries");
+		
 		RegistryHandler.otherRegistries();
+		
+		Main.logger.info("Completed - Other registries");
 	}
 	
 	public void init(FMLInitializationEvent e) {

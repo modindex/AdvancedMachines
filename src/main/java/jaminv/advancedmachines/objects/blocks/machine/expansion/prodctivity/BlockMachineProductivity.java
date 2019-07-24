@@ -57,7 +57,7 @@ public class BlockMachineProductivity extends BlockMachineExpansionBase implemen
 		TileEntity tileentity = world.getTileEntity(pos);
 		if (tileentity instanceof TileEntityMachineProductivity) {
 			TileEntityMachineProductivity te = (TileEntityMachineProductivity)tileentity;
-			te.setBorders(borders);
+			te.setBorders(world, borders);
 		}
 	}
 }

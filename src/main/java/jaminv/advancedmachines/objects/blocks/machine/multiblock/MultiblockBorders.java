@@ -1,10 +1,13 @@
 package jaminv.advancedmachines.objects.blocks.machine.multiblock;
 
 import jaminv.advancedmachines.objects.blocks.BlockMaterial;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansionBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgrade;
 import jaminv.advancedmachines.util.material.MaterialBase;
 import jaminv.advancedmachines.util.material.MaterialBase.MaterialType;
 import net.minecraft.block.Block;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
@@ -20,6 +23,26 @@ public class MultiblockBorders implements INBTSerializable<NBTTagCompound> {
 	public static final MultiblockBorders DEFAULT = new MultiblockBorders();
 	
 	public MultiblockBorders() { }
+
+	public MultiblockBorders(boolean top, boolean bottom, boolean north, boolean south, boolean east, boolean west) {
+		this.top = top; this.bottom = bottom; this.north = north; this.south = south; this.east = east; this.west = west;
+	}
+	
+	public static final PropertyBool BORDER_TOP = PropertyBool.create("border_top");
+	public static final PropertyBool BORDER_BOTTOM = PropertyBool.create("border_bottom");
+	public static final PropertyBool BORDER_NORTH = PropertyBool.create("border_north");
+	public static final PropertyBool BORDER_SOUTH = PropertyBool.create("border_south");
+	public static final PropertyBool BORDER_EAST = PropertyBool.create("border_east");
+	public static final PropertyBool BORDER_WEST = PropertyBool.create("border_west");
+	
+	public MultiblockBorders(IBlockState state) {
+		bottom = state.getValue(BlockMachineExpansionBase.BORDER_BOTTOM);
+		top = state.getValue(BlockMachineExpansionBase.BORDER_TOP);
+		north = state.getValue(BlockMachineExpansionBase.BORDER_NORTH);
+		south = state.getValue(BlockMachineExpansionBase.BORDER_SOUTH);
+		east = state.getValue(BlockMachineExpansionBase.BORDER_EAST);
+		west = state.getValue(BlockMachineExpansionBase.BORDER_WEST);		
+	}
 	
 	public MultiblockBorders(World world, BlockPos pos, BlockPos min, BlockPos max) {
 		if (max.getY() == pos.getY()) { top = true; } else { top = false; }
@@ -103,5 +126,5 @@ public class MultiblockBorders implements INBTSerializable<NBTTagCompound> {
     	if (nbt.hasKey("south")) { south = nbt.getBoolean("south"); }
     	if (nbt.hasKey("east")) { east = nbt.getBoolean("east"); }
     	if (nbt.hasKey("west")) { west = nbt.getBoolean("west"); }
-    }	
+    }
 }

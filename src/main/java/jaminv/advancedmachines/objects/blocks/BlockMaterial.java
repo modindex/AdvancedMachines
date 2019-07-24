@@ -5,6 +5,7 @@ import org.apache.commons.lang3.text.WordUtils;
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.init.BlockInit;
 import jaminv.advancedmachines.init.ItemInit;
+import jaminv.advancedmachines.objects.blocks.BlockBase.CustomStateMapper;
 import jaminv.advancedmachines.objects.blocks.item.ItemBlockVariants;
 import jaminv.advancedmachines.util.interfaces.IHasModel;
 import jaminv.advancedmachines.util.interfaces.IHasOreDictionary;
@@ -16,6 +17,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -24,6 +26,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.oredict.OreDictionary;
 
 public abstract class BlockMaterial extends Block implements IHasModel, IMetaName, IHasOreDictionary {
@@ -55,6 +58,8 @@ public abstract class BlockMaterial extends Block implements IHasModel, IMetaNam
 		BlockInit.BLOCKS.add(this);
 		ItemInit.ITEMS.add(new ItemBlockVariants(this).setRegistryName(this.getRegistryName()));
 	}
+	
+	protected String getName() { return name; }
 	
 	public MaterialBase.MaterialType getMaterialType() { return type; }
 	
@@ -112,8 +117,16 @@ public abstract class BlockMaterial extends Block implements IHasModel, IMetaNam
 		return (MaterialBase)state.getValue(VARIANT);
 	}
 	
+	public void registerCustomModel(ModelResourceLocation resource) {
+		ModelLoader.setCustomStateMapper(this, new CustomStateMapper(resource));
+	}	
+	
 	@Override
 	public void registerModels() {
+		registerVariantModels();
+	}
+
+	public void registerVariantModels() {
 		for (MaterialBase variant : MaterialBase.values(type)) {
 			String name = variant.getName();
 			if (variant.doInclude(oredictprefix)) {
@@ -121,7 +134,7 @@ public abstract class BlockMaterial extends Block implements IHasModel, IMetaNam
 			}
 		}
 	}
-
+	
 	@Override
 	public void registerOreDictionary() {
 		if (oredictprefix == null) { return; }

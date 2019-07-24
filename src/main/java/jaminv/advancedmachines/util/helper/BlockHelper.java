@@ -31,6 +31,20 @@ public class BlockHelper {
 		public abstract Action checkBlock(World world, BlockPos pos);
 	}
 	
+	public abstract static class BlockCallback {
+		public abstract void callback(World world, BlockPos pos);
+	}
+	
+	public static void iterateBlocks(World world, BlockPos min, BlockPos max, BlockCallback callback) {
+		for (int x = min.getX(); x <= max.getX(); x++) {
+			for (int y = min.getY(); y <= max.getY(); y++) {
+				for (int z = min.getZ(); z <= max.getZ(); z++) {
+					callback.callback(world, new BlockPos(x, y, z));
+				}
+			}
+		}
+	}
+	
 	public static String getBlockName(World world, BlockPos pos) {
 		return world.getBlockState(pos).getBlock().getLocalizedName();
 	}
@@ -75,7 +89,7 @@ public class BlockHelper {
 	public static void setBorders(World world, BlockPos pos, MultiblockBorders borders) {
 		TileEntity tileentity = world.getTileEntity(pos);
 		if (tileentity instanceof IMachineUpgradeTileEntity) {
-			((IMachineUpgradeTileEntity)tileentity).setBorders(borders);
+			((IMachineUpgradeTileEntity)tileentity).setBorders(world, borders);
 		}
 	}
 	
@@ -162,7 +176,6 @@ public class BlockHelper {
 		if (world.isRemote) { return true; }
 		player.openGui(Main.instance, guiId, world, pos.getX(), pos.getY(), pos.getZ());
 		return true;		
-	}
-	
+	}	
 
 }

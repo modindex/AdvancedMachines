@@ -7,6 +7,7 @@ import java.util.function.Function;
 import com.google.common.collect.ImmutableBiMap.Builder;
 import com.google.common.collect.ImmutableSet;
 
+import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.util.Reference;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -31,6 +32,7 @@ public class ModelMultiblock implements IModel {
 	
 	@Override
 	public Collection<ResourceLocation> getTextures() {
+		Main.logger.info("Model textures requested.");
 		return MultiblockTextures.textures;
 	}
 

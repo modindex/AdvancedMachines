@@ -111,8 +111,12 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 		
 		boolean newProcess = this.isProcessing();
 		if (newProcess != oldProcess) {
-			Main.NETWORK.sendToAll(new ProcessingStateMessage(pos, newProcess));
+			sendProcessingMesssage(newProcess);
 		}
+	}
+	
+	protected void sendProcessingMesssage(boolean isProcessing) {
+		Main.NETWORK.sendToAll(new ProcessingStateMessage(pos, pos, isProcessing));
 	}
 	
 	protected void tickUpdate() { }
@@ -135,7 +139,6 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 	protected boolean processingState = false;
 	public void setProcessingState(boolean state) {
 		this.processingState = state;
-		world.markBlockRangeForRenderUpdate(pos, pos);
 	}
 	
 	public boolean canProcess(RecipeInput[] input) {

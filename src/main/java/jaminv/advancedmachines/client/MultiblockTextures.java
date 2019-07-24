@@ -3,6 +3,7 @@ package jaminv.advancedmachines.client;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
+import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.util.Reference;
 import net.minecraft.util.ResourceLocation;
 
@@ -18,6 +19,8 @@ public class MultiblockTextures {
 	public final static ImmutableSet<ResourceLocation> textures;
 	
 	static {
+		Main.logger.info("Loading static textures");
+		
 		ImmutableMap.Builder<String, ResourceLocation> map = ImmutableMap.<String, ResourceLocation>builder();
 		ImmutableSet.Builder<ResourceLocation> set = ImmutableSet.<ResourceLocation>builder();
 		
@@ -38,11 +41,21 @@ public class MultiblockTextures {
 						set.add(res);
 					}
 
-					for (int x = 0; x < 3; x++) {
-						for (int y = 0; y < 3; y++) {
-							ResourceLocation res = new ResourceLocation(Reference.MODID, "blocks/machine/instance/" + machine + "/" + state + "/" + material + "/f3x3p" + x + y);
-							map.put(machine + "." + state + "." + material + "." + "f3x3p" + Integer.toString(x) + Integer.toString(y), res);
-							set.add(res);
+					if (machine.equals("furnace")) {
+						for (int x = 0; x < 3; x++) {
+							for (int y = 0; y < 3; y++) {
+								ResourceLocation res = new ResourceLocation(Reference.MODID, "blocks/machine/instance/" + machine + "/" + state + "/" + material + "/f3x3p" + x + y);
+								map.put(machine + "." + state + "." + material + "." + "f3x3p" + Integer.toString(x) + Integer.toString(y), res);
+								set.add(res);
+							}
+						}
+						
+						for (int x = 0; x < 2; x++) {
+							for (int y = 0; y < 2; y++) {
+								ResourceLocation res = new ResourceLocation(Reference.MODID, "blocks/machine/instance/" + machine + "/" + state + "/" + material + "/f2x2p" + x + y);
+								map.put(machine + "." + state + "." + material + "." + "f2x2p" + Integer.toString(x) + Integer.toString(y), res);
+								set.add(res);
+							}
 						}
 					}
 				}
@@ -51,5 +64,7 @@ public class MultiblockTextures {
 		
 		resources = map.build();
 		textures = set.build();
+
+		Main.logger.info("Completed - Loading static textures");
 	};	
 }

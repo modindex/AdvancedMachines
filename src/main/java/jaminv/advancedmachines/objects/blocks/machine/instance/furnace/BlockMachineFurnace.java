@@ -33,12 +33,7 @@ public class BlockMachineFurnace extends BlockMachineMultiblock {
 	
 	@Override
 	public void registerModels() {
-		StateMapperBase ignoreState = new StateMapperBase() {
-			@Override
-			protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
-				return BakedModelMultiblockFurnace.RESOURCELOCATION;
-			}
-		};
-		ModelLoader.setCustomStateMapper(this, ignoreState);
+		registerCustomModel(BakedModelMultiblockFurnace.RESOURCELOCATION);
+		registerVariantModels();
 	}		
 }

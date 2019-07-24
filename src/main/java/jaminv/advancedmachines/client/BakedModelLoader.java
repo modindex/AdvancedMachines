@@ -9,7 +9,7 @@ import net.minecraftforge.client.model.IModel;
 public class BakedModelLoader implements ICustomModelLoader {
 	
 	public static final ModelMultiblock MODEL_MULTIBLOCK = new ModelMultiblock();
-	public static final ModelMultiblockFurnace MODEL_MULTIBLOCK_FURNACE = new ModelMultiblockFurnace();
+	//public static final ModelMultiblockFurnace MODEL_MULTIBLOCK_FURNACE = new ModelMultiblockFurnace();
 
 	@Override
 	public void onResourceManagerReload(IResourceManager resourceManager) {	}
@@ -23,7 +23,7 @@ public class BakedModelLoader implements ICustomModelLoader {
 
 	@Override
 	public IModel loadModel(ResourceLocation modelLocation) throws Exception {
-		if ("bakedmodelmultiblockfurnace".equals(modelLocation.getResourcePath())) { return MODEL_MULTIBLOCK_FURNACE; }
+		if ("bakedmodelmultiblockfurnace".equals(modelLocation.getResourcePath())) { return MODEL_MULTIBLOCK; }
 		return MODEL_MULTIBLOCK;		
 	}
 

@@ -110,9 +110,9 @@ public class RecipeInput implements Cloneable {
 	}
 	
 	/**
-	 * Are items exactly equal
+	 * Are items exactly equal (quantity irrelevant)
 	 * 
-	 * This function is commutative: a.isNbtMatch(b) == b.isNbtMatch(a)
+	 * This function is commutative: a.isEqual(b) == b.isEqual(a)
 	 * 
 	 * This is the strictest requirement. All components, including nbt, must be the same.
 	 */
@@ -120,6 +120,15 @@ public class RecipeInput implements Cloneable {
 		return isEqualWithoutNbt(comp) && isNbtMatch(comp);
 	}
 	
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof RecipeInput) {
+			return isEqual((RecipeInput)obj);
+		}
+		return false;
+	}
+
 	public boolean equals(RecipeInput comp) {
 		return isEqual(comp);
 	}

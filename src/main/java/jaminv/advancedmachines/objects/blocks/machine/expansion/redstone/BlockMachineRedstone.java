@@ -101,7 +101,7 @@ public class BlockMachineRedstone extends BlockMachineExpansionBase implements I
 		TileEntity tileentity = world.getTileEntity(pos);
 		if (tileentity instanceof TileEntityMachineRedstone) {
 			TileEntityMachineRedstone te = (TileEntityMachineRedstone)tileentity;
-			te.setBorders(borders);
+			te.setBorders(world, borders);
 		}
 	}
 }

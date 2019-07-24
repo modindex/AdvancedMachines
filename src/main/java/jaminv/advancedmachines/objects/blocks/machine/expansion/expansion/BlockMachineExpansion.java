@@ -1,5 +1,6 @@
 package jaminv.advancedmachines.objects.blocks.machine.expansion.expansion;
 
+import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.client.BakedModelMultiblock;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansionBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachineExpansionBase;
@@ -12,6 +13,7 @@ import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.PropertyMa
 import jaminv.advancedmachines.util.enums.EnumGui;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import jaminv.advancedmachines.util.interfaces.IHasTileEntity;
+import jaminv.advancedmachines.util.material.MaterialBase;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -22,6 +24,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFlowerPot;
@@ -38,6 +41,7 @@ public class BlockMachineExpansion extends BlockMachineExpansionBase {
 	
     public static final PropertyMachineParent MACHINE_PARENT = PropertyMachineParent.create("parent");
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
+    public static final PropertyBool ACTIVE = PropertyBool.create("active");
 
 	public BlockMachineExpansion(String name) {
 		super(name);
@@ -63,7 +67,7 @@ public class BlockMachineExpansion extends BlockMachineExpansionBase {
 	@Override
 	protected BlockStateContainer createBlockState() {
 		VARIANT = this.getVariant();		
-		return new BlockStateContainer(this, new IProperty[] { VARIANT, ICanHaveMachineFace.MACHINE_FACE, MACHINE_PARENT, FACING, BORDER_TOP, BORDER_BOTTOM, BORDER_NORTH, BORDER_SOUTH, BORDER_EAST, BORDER_WEST });
+		return new BlockStateContainer(this, new IProperty[] { VARIANT, ICanHaveMachineFace.MACHINE_FACE, MACHINE_PARENT, FACING, ACTIVE, BORDER_TOP, BORDER_BOTTOM, BORDER_NORTH, BORDER_SOUTH, BORDER_EAST, BORDER_WEST });
 	}
 	
 	@Override
@@ -74,16 +78,18 @@ public class BlockMachineExpansion extends BlockMachineExpansionBase {
         MachineParent parent = MachineParent.NONE;
         EnumFacing facing = EnumFacing.NORTH;
         MultiblockBorders borders = MultiblockBorders.DEFAULT;
+        boolean active = false;
 
         if (tileentity instanceof TileEntityMachineExpansion) {
         	TileEntityMachineExpansion te = (TileEntityMachineExpansion)tileentity;
         	face = te.getMachineFace();
         	parent = te.getMachineParent();
         	facing = te.getFacing();
+        	active = te.isActive();
         	borders = te.getBorders();
         }
         
-        return state.withProperty(ICanHaveMachineFace.MACHINE_FACE, face).withProperty(MACHINE_PARENT, parent).withProperty(FACING, facing)
+        return state.withProperty(ICanHaveMachineFace.MACHINE_FACE, face).withProperty(MACHINE_PARENT, parent).withProperty(FACING, facing).withProperty(ACTIVE, active)
         	.withProperty(BORDER_TOP, borders.getTop()).withProperty(BORDER_BOTTOM, borders.getBottom())
         	.withProperty(BORDER_NORTH, borders.getNorth()).withProperty(BORDER_SOUTH, borders.getSouth())
         	.withProperty(BORDER_EAST, borders.getEast()).withProperty(BORDER_WEST, borders.getWest());
@@ -91,12 +97,25 @@ public class BlockMachineExpansion extends BlockMachineExpansionBase {
 
 	@Override
 	public void registerModels() {
-		StateMapperBase ignoreState = new StateMapperBase() {
-			@Override
-			protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
-				return BakedModelMultiblock.BAKED_MODEL_MULTIBLOCK;
-			}
-		};
-		ModelLoader.setCustomStateMapper(this, ignoreState);
+		registerCustomModel(BakedModelMultiblock.BAKED_MODEL_MULTIBLOCK);
+		registerVariantModels();
 	}
+	
+	@Override
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
+			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		
+		TileEntity te = worldIn.getTileEntity(pos);
+		if (te instanceof TileEntityMachineExpansion) {
+			TileEntityMachineExpansion exp = (TileEntityMachineExpansion)te;
+			if (exp.getMachineFace() == MachineFace.NONE) { return false; }
+
+			BlockPos machine = exp.getParentPos();
+			if (worldIn.isRemote) { return true; }
+			playerIn.openGui(Main.instance, exp.getMachineParent().getGuiId(), worldIn, machine.getX(), machine.getY(), machine.getZ());
+			return true;
+		}
+		
+		return false;
+	}	
 }

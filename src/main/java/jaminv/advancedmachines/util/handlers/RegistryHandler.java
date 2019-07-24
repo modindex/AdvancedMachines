@@ -1,5 +1,6 @@
 package jaminv.advancedmachines.util.handlers;
 
+import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.init.BlockInit;
 import jaminv.advancedmachines.init.ItemInit;
 import jaminv.advancedmachines.util.interfaces.IHasModel;
@@ -51,10 +52,16 @@ public class RegistryHandler {
 	}
 	
 	public static void otherRegistries() {
+		Main.logger.info("Message Registry");
 		MessageRegistry.register();
+		Main.logger.info("Complete - Message Registry");
 
-		GameRegistry.registerWorldGenerator(new WorldGenCustomOres(), 0);
+		Main.logger.info("World Generation Registry");
+		//GameRegistry.registerWorldGenerator(new WorldGenCustomOres(), 0);
+		Main.logger.info("Complete - World Generation Registry");
 		
+		Main.logger.info("Model Registry");
 		ModelRegistry.build();		
+		Main.logger.info("Complete - Model Registry");
 	}
 }

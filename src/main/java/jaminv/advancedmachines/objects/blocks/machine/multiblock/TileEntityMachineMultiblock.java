@@ -3,6 +3,8 @@ package jaminv.advancedmachines.objects.blocks.machine.multiblock;
 import org.apache.logging.log4j.Level;
 
 import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.objects.blocks.BlockMaterial;
+import jaminv.advancedmachines.objects.blocks.machine.BlockMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgrade;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgrade.UpgradeType;
@@ -17,6 +19,10 @@ import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import jaminv.advancedmachines.util.helper.BlockHelper.BlockChecker;
 import jaminv.advancedmachines.util.helper.BlockHelper.ScanResult;
+import jaminv.advancedmachines.util.material.MaterialBase;
+import jaminv.advancedmachines.util.material.MaterialBase.MaterialType;
+import jaminv.advancedmachines.util.message.ProcessingStateMessage;
+import jaminv.advancedmachines.util.material.MaterialExpansion;
 import jaminv.advancedmachines.util.recipe.IRecipeManager;
 import jaminv.advancedmachines.util.recipe.RecipeBase;
 import jaminv.advancedmachines.util.recipe.RecipeInput;
@@ -38,7 +44,7 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 	
 	protected MultiblockBorders borders = new MultiblockBorders();
 	
-	public void setBorders(MultiblockBorders borders) {
+	public void setBorders(World world, MultiblockBorders borders) {
 		this.borders = borders;
 	}
 	
@@ -49,12 +55,21 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 	public abstract MachineParent getMachineType();
 	
 	protected MachineFace face = MachineFace.NONE;
+	protected BlockPos facemin, facemax;
 
 	@Override
-	public void setMachineFace(MachineFace face, MachineParent parent, EnumFacing facing) {
-		this.face = face;		
+	public void setMachineFace(MachineFace face, MachineParent parent, EnumFacing facing, BlockPos pos) {
+		this.face = face;
+		if (face == MachineFace.NONE) {
+			facemin = pos; facemax = pos;
+		}
 	}
 	
+	@Override
+	public void setActive(boolean active) {
+		; // no op
+	}
+
 	public MachineFace getMachineFace() { return face; }
 
 	protected MultiblockState multiblockState = new MultiblockNull();
@@ -186,6 +201,7 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 	protected int beginProcess(RecipeBase recipe, RecipeInput[] input) {
 		IRecipeManager mgr = getRecipeManager();
 		qtyProcessing = Math.min(Math.min(mgr.getRecipeQty(recipe, input), mgr.getOutputQty(recipe, this.getOutputStacks())), upgrades.get(UpgradeType.MULTIPLY) + 1) ;
+		
 		return ModConfig.general.processTimeBasic;
 	}
 	
@@ -217,6 +233,11 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 	}
 	
 	@Override
+	protected void sendProcessingMesssage(boolean isProcessing) {
+		Main.NETWORK.sendToAll(new ProcessingStateMessage(facemin, facemax, isProcessing));
+	}
+
+	@Override
 	protected void haltProcess() {
 		super.haltProcess();
 		qtyProcessing = 0;
@@ -240,7 +261,7 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 								((IMachineUpgradeTool)te).setParent(null);
 							}
 							if (te instanceof ICanHaveMachineFace) {
-								((ICanHaveMachineFace)te).setMachineFace(MachineFace.NONE, MachineParent.NONE, EnumFacing.NORTH);
+								((ICanHaveMachineFace)te).setMachineFace(MachineFace.NONE, MachineParent.NONE, EnumFacing.NORTH, null);
 							}
 						} else { bord = new MultiblockBorders(world, upgrade, min, max); }
 						
@@ -269,6 +290,12 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
     	if (compound.hasKey("face")) {
     		face = MachineFace.lookup(compound.getString("face"));
     	}
+    	if (compound.hasKey("facemin")) {
+    		facemin = NBTUtil.getPosFromTag(compound.getCompoundTag("facemin"));
+    	}
+    	if (compound.hasKey("facemax")) {
+    		facemax = NBTUtil.getPosFromTag(compound.getCompoundTag("facemax"));
+    	}
 	}
 	
 	@Override
@@ -279,6 +306,8 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
         if (multiblockMin != null) { compound.setTag("multiblockMin", NBTUtil.createPosTag(multiblockMin)); }
         if (multiblockMax != null) { compound.setTag("multiblockMax", NBTUtil.createPosTag(multiblockMax)); }
         compound.setString("face", face.getName());
+        if (facemin != null) { compound.setTag("facemin", NBTUtil.createPosTag(facemin)); }
+        if (facemax != null) { compound.setTag("facemax", NBTUtil.createPosTag(facemax)); }
 		return compound;
 	}
 	
@@ -301,17 +330,19 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 	
 	protected void scanFace() {
 		EnumFacing dir = facing.rotateAround(Axis.Y);
-		for (int i = 0; i <= 1; i++) {
-			BlockPos pos = this.getPos().offset(dir, i).offset(EnumFacing.UP, i);
-			if (scanFaceAt(pos, 2, dir)) { buildFace(pos, 2, dir); }
-			if (scanFaceAt(pos, 3, dir)) { buildFace(pos, 3, dir); }
+		for (int x = 0; x <= 2; x++) {
+			for (int y = 0; y <= 2; y++) {
+				BlockPos pos = this.getPos().offset(dir, x).offset(EnumFacing.UP, y);
+				if (scanFaceAt(pos, 3, dir)) { buildFace(pos, 3, dir); }
+				if (x != 2 && y != 2 && scanFaceAt(pos, 2, dir)) { buildFace(pos, 2, dir); }				
+			}
 		}
-		
-		BlockPos pos = this.getPos().offset(dir, 2).offset(EnumFacing.UP, 2);
-		if (scanFaceAt(pos, 3, dir)) { buildFace(pos, 3, dir); }
 	}
 	
 	protected boolean scanFaceAt(BlockPos pos, int count, EnumFacing dir) {
+		World world = this.getWorld();
+		MaterialBase variant = world.getBlockState(getPos()).getValue(BlockMachineBase.EXPANSION_VARIANT);		
+		
 		for (int x = -count; x < 2; x++) {
 			for (int y = -count; y < 2; y++) {
 				BlockPos check = pos.offset(dir, x).offset(EnumFacing.UP, y);
@@ -321,7 +352,8 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 				
 				if (te != null) {
 					eval = (te instanceof ICanHaveMachineFace);
-					if (eval) { ; }
+					Block block = world.getBlockState(check).getBlock();
+					if (eval) { eval = world.getBlockState(check).getValue(BlockMachineBase.EXPANSION_VARIANT) == variant; }
 				} else { eval = false; }
 				
 				if (x == -count || y == -count || x == 1 || y == 1) {
@@ -339,15 +371,17 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 		for (int x = -count+1; x < 1; x++) {
 			for (int y = -count+1; y < 1; y++) {
 				int face;
-				if (count == 2) { face = MachineFace.F2x2P00.getIndex(); } else { face = MachineFace.F3x3P00.getIndex(); }
-				face += (-x) + (-y * count);
+				if (count == 2) { face = MachineFace.F2x2.getIndex(); } else { face = MachineFace.F3x3.getIndex(); }
 				
 				TileEntity te = world.getTileEntity(pos.offset(dir, x).offset(EnumFacing.UP, y));
 				
 				if (te instanceof ICanHaveMachineFace) {
-					((ICanHaveMachineFace)te).setMachineFace(MachineFace.values()[face], this.getMachineType(), dir);
+					((ICanHaveMachineFace)te).setMachineFace(MachineFace.values()[face], this.getMachineType(), dir, this.getPos());
 				}
 			}
 		}
+		
+		this.facemin = pos.offset(dir, -count+1).offset(EnumFacing.UP, -count+1);
+		this.facemax = pos;
 	}
 }

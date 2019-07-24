@@ -93,7 +93,7 @@ public class BlockMachineEnergy extends BlockMachineExpansionBase implements ITi
 		TileEntity tileentity = world.getTileEntity(pos);
 		if (tileentity instanceof TileEntityMachineEnergy) {
 			TileEntityMachineEnergy te = (TileEntityMachineEnergy)tileentity;
-			te.setBorders(borders);
+			te.setBorders(world, borders);
 		}
 	}	
 }

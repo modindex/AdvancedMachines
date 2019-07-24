@@ -11,10 +11,13 @@ import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.objects.blocks.BlockMaterial;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansionBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.expansion.BlockMachineExpansion;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.ICanHaveMachineFace;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineFace;
 import jaminv.advancedmachines.util.Reference;
 import jaminv.advancedmachines.util.material.MaterialBase;
 import jaminv.advancedmachines.util.parser.DataParserException;
@@ -44,17 +47,50 @@ public class BakedModelMultiblock implements IBakedModel {
 		String border = "";
 		Border() {}
 		
-		protected Border append(String append, boolean dir) {
+		private Border append(String append, boolean dir) {
 			if (!dir) { return this; }
 			if (border != "") { border += "_"; }
 			border += append;
 			return this;
 		}
 		
-		protected String getBorder() {
+		public Border appendTop(boolean dir) { return append("top", dir); }
+		public Border appendBottom(boolean dir) { return append("bottom", dir); }
+		public Border appendLeft(boolean dir) { return append("left", dir); }
+		public Border appendRight(boolean dir) { return append("right", dir); }
+		
+		public String getBorder() {
 			if (border.equals("")) { return "none"; }
 			if (border.equals("top_bottom_left_right")) { return "all"; }
 			return border;
+		}
+		
+		public String getMachineFaceTexture(MachineFace face) {
+			boolean f = (face == MachineFace.F2x2);
+			String root = (f ? "f2x2p" : "f3x3p");
+			
+			switch(border) {
+			case "top_left": 
+				return root + "00";
+			case "top":
+				return root + "10";
+			case "top_right":
+				return root + (f ? "10" : "20");
+			case "left":
+				return root + "01";
+			case "":
+				return root + "11";
+			case "right":
+				return root + "21";
+			case "bottom_left":
+				return root + (f ? "01" : "02");
+			case "bottom":
+				return root + "12";
+			case "bottom_right":
+				return root + (f ? "11" : "22");
+			default:
+				return root + "00";			
+			}
 		}
 	}
 	
@@ -66,9 +102,11 @@ public class BakedModelMultiblock implements IBakedModel {
 	public BakedModelMultiblock(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
 		this.format = format;
 		
+		Main.logger.info("Loading sprites");
 		for (Map.Entry<String, ResourceLocation> entry : MultiblockTextures.resources.entrySet()) {
 			sprites.put(entry.getKey(), bakedTextureGetter.apply(entry.getValue()));
 		}	
+		Main.logger.info("Completed - Loading sprites");
 	}
 	
 	private final Map<IBlockState, List<BakedQuad>> cache = new HashMap<IBlockState, List<BakedQuad>>();
@@ -76,43 +114,38 @@ public class BakedModelMultiblock implements IBakedModel {
 	
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
-		//List<BakedQuad> cached = cache.get(state);
-		//if (cached != null) { return cached; }
+		List<BakedQuad> cached = cache.get(state);
+		if (cached != null) { return cached; }
 		
 		List<BakedQuad> quads = new ArrayList<>();
 		
 		float a = 0f;
 		float b = 1f;
 		
-		boolean bottom = state.getValue(BlockMachineExpansionBase.BORDER_BOTTOM);
-		boolean top = state.getValue(BlockMachineExpansionBase.BORDER_TOP);
-		boolean north = state.getValue(BlockMachineExpansionBase.BORDER_NORTH);
-		boolean south = state.getValue(BlockMachineExpansionBase.BORDER_SOUTH);
-		boolean east = state.getValue(BlockMachineExpansionBase.BORDER_EAST);
-		boolean west = state.getValue(BlockMachineExpansionBase.BORDER_WEST);
+		MultiblockBorders border = new MultiblockBorders(state);
 		MaterialBase variant = state.getValue(BlockMaterial.EXPANSION_VARIANT);
 		EnumFacing facing = state.getValue(BlockMachineExpansion.FACING);
 
 		String baseresource = "expansion." + variant.getName() + ".";
 		String tex;
 		
-		String border_north = new Border().append("top", top).append("bottom", bottom).append("left", east).append("right", west).getBorder();
-		if ((tex = checkFace(state, EnumFacing.NORTH, border_north)) == null) { tex = baseresource + border_north; }
+		Border bnorth = new Border().appendTop(border.getTop()).appendBottom(border.getBottom()).appendLeft(border.getEast()).appendRight(border.getWest());
+		if ((tex = checkFace(state, EnumFacing.NORTH, bnorth)) == null) { tex = baseresource + bnorth.getBorder(); }
 		quads.add(createQuad(new Vec3d(b, b, a), new Vec3d(b, a, a), new Vec3d(a, a, a), new Vec3d(a, b, a), sprites.get(tex)));
 		
-		String border_west = new Border().append("top", north).append("bottom", south).append("left", bottom).append("right", top).getBorder();
-		quads.add(createQuad(new Vec3d(a, a, a), new Vec3d(a, a, b), new Vec3d(a, b, b), new Vec3d(a, b, a), sprites.get(baseresource + border_west)));
+		Border bwest = new Border().appendTop(border.getNorth()).appendBottom(border.getSouth()).appendLeft(border.getBottom()).appendRight(border.getTop());
+		quads.add(createQuad(new Vec3d(a, a, a), new Vec3d(a, a, b), new Vec3d(a, b, b), new Vec3d(a, b, a), sprites.get(baseresource + bwest.getBorder())));
 
-		String border_bottom = new Border().append("top", west).append("bottom", east).append("left", north).append("right", south).getBorder();
+		String border_bottom = new Border().appendTop(border.getWest()).appendBottom(border.getEast()).appendLeft(border.getNorth()).appendRight(border.getSouth()).getBorder();
 		quads.add(createQuad(new Vec3d(a, a, a), new Vec3d(b, a, a), new Vec3d(b, a, b), new Vec3d(a, a, b), sprites.get(baseresource + border_bottom)));
 		
-		String border_east = new Border().append("top", bottom).append("bottom", top).append("left", north).append("right", south).getBorder();
+		String border_east = new Border().appendTop(border.getBottom()).appendBottom(border.getTop()).appendLeft(border.getNorth()).appendRight(border.getSouth()).getBorder();
 		quads.add(createQuad(new Vec3d(b, a, a), new Vec3d(b, b, a), new Vec3d(b, b, b), new Vec3d(b, a, b), sprites.get(baseresource + border_east)));
 		
-		String border_top = new Border().append("top", east).append("bottom", west).append("left", north).append("right", south).getBorder();
+		String border_top = new Border().appendTop(border.getEast()).appendBottom(border.getWest()).appendLeft(border.getNorth()).appendRight(border.getSouth()).getBorder();
 		quads.add(createQuad(new Vec3d(b, b, a), new Vec3d(a, b, a), new Vec3d(a, b, b), new Vec3d(b, b, b), sprites.get(baseresource + border_top)));
 
-		String border_south = new Border().append("top", west).append("bottom", east).append("left", bottom).append("right", top).getBorder();
+		String border_south = new Border().appendTop(border.getWest()).appendBottom(border.getEast()).appendLeft(border.getBottom()).appendRight(border.getTop()).getBorder();
 		quads.add(createQuad(new Vec3d(a, a, b), new Vec3d(b, a, b), new Vec3d(b, b, b), new Vec3d(a, b, b), sprites.get(baseresource + border_south)));
 		
 		cache.put(state, quads);
@@ -135,11 +168,15 @@ public class BakedModelMultiblock implements IBakedModel {
     	return createQuad(v1, v2, v3, v4, tex, 0, 0);
     }
     
-    protected String checkFace(IBlockState state, EnumFacing side, String border) {
-    	String face = state.getValue(ICanHaveMachineFace.MACHINE_FACE).getName();
-    	if (face == "none") { return null; }
+    protected String checkFace(IBlockState state, EnumFacing side, Border border) {
+    	MachineFace face = state.getValue(ICanHaveMachineFace.MACHINE_FACE);
+    	if (face == MachineFace.NONE) { return null; }
+
+    	String tex = border.getMachineFaceTexture(face);
+    	Boolean active = state.getValue(BlockMachineExpansion.ACTIVE);
+		String variant = state.getValue(BlockMaterial.EXPANSION_VARIANT).getName();    	
     	
-    	return "furnace.inactive.basic." + face;
+    	return "furnace." + (active ? "active" : "inactive" ) + "." + variant + "." + tex;
     }
     
     private void putVertex(UnpackedBakedQuad.Builder builder, Vec3d normal, TextureAtlasSprite tex, double x, double y, double z, float u, float v) {

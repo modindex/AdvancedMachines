@@ -11,6 +11,7 @@ import java.util.TreeMap;
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
 
+import jaminv.advancedmachines.util.enums.EnumGui;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
@@ -19,20 +20,22 @@ import scala.actors.threadpool.Arrays;
 
 public enum MachineParent {
 	
-	NONE(0, "none"),
-	FURNACE(1, "furnace"),
-	GRINDER(2, "grinder"),
-	PURIFIER(3, "purifier"),
-	ALLOY(4, "alloy");
+	NONE(0, "none", -1),
+	FURNACE(1, "furnace", EnumGui.FURNACE.getId()),
+	GRINDER(2, "grinder", EnumGui.GRINDER.getId()),
+	PURIFIER(3, "purifier", EnumGui.PURIFIER.getId()),
+	ALLOY(4, "alloy", EnumGui.ALLOY.getId());
 	
     private final int index;
     private final String name;
+    private int guiid;    
     
     private static Map<String, MachineParent> val = new HashMap<String, MachineParent>();
 
-    private MachineParent(int index, String name) {
+    private MachineParent(int index, String name, int guiid) {
     	this.index = index;
     	this.name = name;
+    	this.guiid = guiid;
     }
     
     static {
@@ -43,6 +46,7 @@ public enum MachineParent {
     
     public int getIndex() { return index; }
     public String getName() { return name; }
+    public int getGuiId() { return guiid; }
     
     public static MachineParent lookup(String name) {
     	return val.get(name);

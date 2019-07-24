@@ -25,6 +25,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntityMachineInventory extends TileEntityInventory implements IHasGui, IMachineUpgradeTool {
@@ -130,7 +131,7 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 	}
 	
 	
-	public void setBorders(MultiblockBorders borders) {
+	public void setBorders(World world, MultiblockBorders borders) {
 		this.borders = borders;
 	}
 	
