@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Level;
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.objects.blocks.inventory.TileEntityInventory;
 import jaminv.advancedmachines.util.ModConfig;
+import jaminv.advancedmachines.util.helper.ItemHelper;
 import jaminv.advancedmachines.util.interfaces.ICanProcess;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
@@ -81,11 +82,11 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 		super();
 		this.energy = new MachineEnergyStorage(50000, 200);
 		this.recipeManager = recipeManager;
-		this.prevInput = new RecipeInput[getInputCount()];
+		this.prevInput = new ItemStack[getInputCount()];
 	}
 	
 	private int tick;
-	private RecipeInput[] prevInput; 
+	private ItemStack[] prevInput; 
 		
 	@Override
 	public void update() {
@@ -97,7 +98,7 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 		checkRedstone();
 		tickUpdate();
 		
-		RecipeInput[] input = getInput();
+		ItemStack[] input = getInput();
 		checkInventoryChanges(input);
 		
 		tick = 0;
@@ -116,7 +117,7 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 	}
 	
 	protected void sendProcessingMesssage(boolean isProcessing) {
-		Main.NETWORK.sendToAll(new ProcessingStateMessage(pos, pos, isProcessing));
+		Main.NETWORK.sendToAll(new ProcessingStateMessage(getPos(), getPos(), isProcessing));
 	}
 	
 	protected void tickUpdate() { }
@@ -141,7 +142,7 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 		this.processingState = state;
 	}
 	
-	public boolean canProcess(RecipeInput[] input) {
+	public boolean canProcess(ItemStack[] input) {
 		
 		RecipeBase recipe = recipeManager.getRecipeMatch(input);
 		if (recipe == null) { return false; }
@@ -149,7 +150,7 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 		return outputItem(recipe.getOutput(0), true);
 	}
 
-	protected void process(RecipeInput[] input) {
+	protected void process(ItemStack[] input) {
 		if (world.isRemote) { return; }
 		
 		if (!this.isRedstoneActive()) { return; }
@@ -175,7 +176,7 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 		}
 	}
 	
-	protected int beginProcess(RecipeBase recipe, RecipeInput[] input) {
+	protected int beginProcess(RecipeBase recipe, ItemStack[] input) {
 		return ModConfig.general.processTimeBasic;
 	}
 	
@@ -297,21 +298,21 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 		return super.getCapability(capability, facing);
 	}	
 	
-	public RecipeInput[] getInput() {
-		RecipeInput[] input = new RecipeInput[getInputCount()];
+	public ItemStack[] getInput() {
+		ItemStack[] input = new ItemStack[getInputCount()];
 		for (int i = 0; i < getInputCount(); i++) {
-			input[i] = new RecipeInput(inventory.getStackInSlot(getFirstInputSlot() + i));
+			input[i] = inventory.getStackInSlot(getFirstInputSlot() + i).copy();
 		}
 		return input;
 	}
 	
-	private void checkInventoryChanges(RecipeInput[] input) {
+	private void checkInventoryChanges(ItemStack[] input) {
 		for (int i = 0; i < getInputCount(); i++) {
 			if (prevInput[i] == null || input[i] == null) {
 				prevInput = input;
 				haltProcess(); return; 
 			}
-			if (!prevInput[i].equals(input[i])) {
+			if (!ItemHelper.itemsMatchWithCount(prevInput[i], input[i])) {
 				prevInput = input;
 				haltProcess(); return;
 			}
@@ -322,7 +323,7 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 	protected boolean removeInput(RecipeInput input) {
 		for (int i = getFirstInputSlot(); i < getInputCount() + getFirstInputSlot(); i++) {
 			RecipeInput slot = new RecipeInput(inventory.getStackInSlot(i));
-			if (slot.isValidWithCountFor(input)) {
+			if (input.isValid(inventory.getStackInSlot(i))) {
 				inventory.extractItem(i, input.getCount(), false);
 				return true;
 			}

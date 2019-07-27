@@ -1,5 +1,6 @@
 package jaminv.advancedmachines.objects.blocks.machine.expansion.prodctivity;
 
+import jaminv.advancedmachines.client.BakedModelMultiblock;
 import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansionBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachineExpansionBase;
@@ -60,4 +61,10 @@ public class BlockMachineProductivity extends BlockMachineExpansionBase implemen
 			te.setBorders(world, borders);
 		}
 	}
+	
+	@Override
+	public void registerModels() {
+		registerCustomModel(BakedModelMultiblock.PRODUCTIVITY);
+		registerVariantModels();
+	}		
 }

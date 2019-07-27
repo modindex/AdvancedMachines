@@ -1,0 +1,24 @@
+{
+    "glass": {
+        "input": { "ore": "blockGlass" },
+        "output": { "item": "minecraft:sand" }
+    },
+    "glass_bottle": {
+        "input": { "item": "minecraft:glass_bottle" },
+        "output": { "item": "minecraft:sand" }
+    },
+    "glowstone": {
+        "input": { "ore": "glowstone" },
+        "output": { "item": "minecraft:glowstone_dust", "count": 4 }
+    },
+    "magma": {
+        "input": { "item": "minecraft:magma" },
+        "output": { "item": "minecraft:magma_cream", "count": 4 }
+        , "energy_percent": 75
+    },
+    "flower_pot": { 
+        "input": { "item": "minecraft:flower_pot" },
+        "output": { "item": "minecraft:brick", "count": 4 }
+        , "energy_percent": 75
+    }        
+}

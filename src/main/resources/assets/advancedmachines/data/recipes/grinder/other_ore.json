@@ -1,0 +1,7 @@
+{
+    "apatite": {
+        "input": { "ore": "oreApatite" },
+        "output": { "ore": "gemApatite", "count": 12 },
+        "secondary": { "ore": "dustSulfur", "chance": 15 }        
+    } 
+}

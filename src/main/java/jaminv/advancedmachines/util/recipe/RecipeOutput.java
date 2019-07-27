@@ -1,6 +1,8 @@
 package jaminv.advancedmachines.util.recipe;
 
+import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.Reference;
+import jaminv.advancedmachines.util.helper.ItemHelper;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -60,24 +62,38 @@ public class RecipeOutput implements Cloneable {
 		this.count = 1;
 	}
 	
+	private ItemStack itemstack = null;	
 	public ItemStack toItemStack() {
+		if (itemstack != null) { ItemStack ret = itemstack.copy(); ret.setCount(count); return ret; }
+		
 		if (ore != "") {
 			NonNullList<ItemStack> list = OreDictionary.getOres(ore);
 			if (list.size() == 0) { return ItemStack.EMPTY; }
 			
-			ItemStack toCopy = list.get(0);			
+			int min = Integer.MAX_VALUE;
+			ItemStack minvalue = null;
+			
 			for (ItemStack item : list) {
-				if (item.getItem().getRegistryName().getResourceDomain().equals(Reference.MODID)) {
-					toCopy = item;
-					break;
+				for (int i = 0; i < ModConfig.recipe.oreDictionaryPreference.length; i++) {
+					if (item.getItem().getRegistryName().getResourceDomain().equals(ModConfig.recipe.oreDictionaryPreference[i])) {
+						if (i < min) {
+							min = i;
+							minvalue = item;
+						}
+						break;
+					}
 				}
+				if (minvalue == null) { minvalue = item; }
 			}
-			ItemStack result = toCopy.copy();
-			if (count != -1) { result.setCount(count); }
-			return result;
+			
+			itemstack = minvalue.copy();
+			if (count != -1) { itemstack.setCount(count); }
+			if (ItemHelper.getMeta(itemstack) == OreDictionary.WILDCARD_VALUE) { itemstack.setItemDamage(0); }
+			return itemstack.copy();
 		}
 		if (item == Items.AIR) { return ItemStack.EMPTY; }
-		return new ItemStack(item, count, meta, nbt);
+		itemstack = new ItemStack(item, count, meta, nbt);
+		return itemstack.copy();
 	}
 	
 	public RecipeOutput withChance(int chance) {

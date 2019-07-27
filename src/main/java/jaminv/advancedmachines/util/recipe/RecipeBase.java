@@ -63,12 +63,6 @@ public abstract class RecipeBase {
 		return input[index];
 	}
 	
-	public RecipeInput[] getSortedInput() {
-		RecipeInput[] ret = Arrays.copyOf(input, input.length);
-		Arrays.sort(ret, new RecipeInput.InputCompare());
-		return ret;
-	}
-	
 	public RecipeOutput getOutput(int index) {
 		return output[index];
 	}
@@ -129,4 +123,30 @@ public abstract class RecipeBase {
 	public RecipeBase setOutput(ItemStack stack) { return this.setOutput(new RecipeOutput(stack)); }
 	public RecipeBase setOutput(Item item, int count, int meta) { return this.setOutput(new RecipeOutput(item, count, meta)); }
 	public RecipeBase setOutput(Item item) { return this.setOutput(new RecipeOutput(item)); }
+	public int getSecondaryCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public String toString() {
+		String ret = getRecipeId() + " (";
+		boolean first = true;
+		for (RecipeInput i : input) {
+			if (!first) { ret += ", "; }
+			first = false;
+			
+			ret += i.toString();
+		}
+		ret += " -> ";
+		first = true;
+		for (RecipeOutput o : output) {
+			if (!first) { ret += ", "; }
+			first = false;
+			
+			ret += o.toString();
+		}
+		
+		ret += ")";
+		return ret;
+	}
 }

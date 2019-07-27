@@ -31,5 +31,25 @@
         "output": { "ore": "dustBasalz", "count": 4 },
         "secondary": { "ore": "dustObsidian", "chance": 50 },
         "energy_percent": 75
-    }
+    },
+    
+    "sand": {
+        "input": { "item": "minecraft:sandstone", "data": "*" },
+        "output": { "item": "minecraft:sand", "count": 2 },
+        "secondary": { "ore": "dustSaltpeter", "chance": 40 },
+        "energy_percent": 75,
+        "conditions": [
+            { "type": "advancedmachines:oredictionary", "property": "exists", "key": "dustSaltpeter" } 
+        ]
+    },
+    "redsand": {
+        "input": { "item": "minecraft:red_sandstone", "data": "*" },
+        "output": { "item": "minecraft:sand", "data": 1, "count": 2 },
+        "secondary": { "ore": "dustSaltpeter", "chance": 40 },
+        "energy_percent": 75,
+        "conditions": [
+            { "type": "advancedmachines:oredictionary", "property": "exists", "key": "dustSaltpeter" } 
+        ]
+    }   
+    
 }

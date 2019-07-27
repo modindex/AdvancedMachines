@@ -8,7 +8,7 @@ public interface IRecipeManager<T extends RecipeBase> {
 	
 	public T getRecipe(ItemStack[] stack);
 	
-	public T getRecipe(RecipeInput[] input);
+	//public T getRecipe(RecipeInput[] input);
 	
 	/**
 	 * Returns a valid recipe only if the items *and* count match,
@@ -17,7 +17,7 @@ public interface IRecipeManager<T extends RecipeBase> {
 	 * @param stack
 	 * @return T
 	 */
-	public T getRecipeMatch(RecipeInput[] input);
+	public T getRecipeMatch(ItemStack[] input);
 	
 	/**
 	 * This method doesn't make any steps to make sure the recipe
@@ -28,7 +28,7 @@ public interface IRecipeManager<T extends RecipeBase> {
 	 * @param input
 	 * @return number of output items that can be crafted
 	 */
-	public int getRecipeQty(T recipe, RecipeInput[] input);
+	public int getRecipeQty(T recipe, ItemStack[] input);
 	
 	public int getOutputQty(T recipe, ItemStack[] output);
 	
@@ -40,7 +40,7 @@ public interface IRecipeManager<T extends RecipeBase> {
 	 * @param slot
 	 * @return
 	 */
-	public boolean isItemValid(ItemStack stack, RecipeInput[] other);
+	public boolean isItemValid(ItemStack stack, ItemStack[] other);
 	
 	public List<T> getRecipeList();
 }

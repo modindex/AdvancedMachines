@@ -22,7 +22,7 @@ public class OreDictionaryHandler {
 			}
 		}
 		
-		DataParser.addFolder("data/ore_dictionary", new FileHandlerOreDictionary()); 
+		DataParser.parseFolder("data/ore_dictionary", new FileHandlerOreDictionary()); 
 	}
 
 }

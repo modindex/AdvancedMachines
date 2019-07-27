@@ -27,6 +27,7 @@ import jaminv.advancedmachines.util.recipe.IRecipeManager;
 import jaminv.advancedmachines.util.recipe.RecipeBase;
 import jaminv.advancedmachines.util.recipe.RecipeInput;
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
@@ -109,7 +110,7 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 	}
 	
 	public void scanMultiblock(boolean destroy) { 
-		if (destroy) {
+		if (destroy && multiblockMin != null && multiblockMax != null) {
 			Main.NETWORK.sendToAll(new MultiblockUpdateMessage(this.getPos(), multiblockMin, multiblockMax));
 		}
 		
@@ -198,7 +199,7 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 	}
 		
 	@Override
-	protected int beginProcess(RecipeBase recipe, RecipeInput[] input) {
+	protected int beginProcess(RecipeBase recipe, ItemStack[] input) {
 		IRecipeManager mgr = getRecipeManager();
 		qtyProcessing = Math.min(Math.min(mgr.getRecipeQty(recipe, input), mgr.getOutputQty(recipe, this.getOutputStacks())), upgrades.get(UpgradeType.MULTIPLY) + 1) ;
 		
@@ -234,7 +235,11 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 	
 	@Override
 	protected void sendProcessingMesssage(boolean isProcessing) {
-		Main.NETWORK.sendToAll(new ProcessingStateMessage(facemin, facemax, isProcessing));
+		if (facemin != null && facemax != null) {
+			Main.NETWORK.sendToAll(new ProcessingStateMessage(facemin, facemax, isProcessing));
+		} else {
+			super.sendProcessingMesssage(isProcessing);
+		}
 	}
 
 	@Override
@@ -261,7 +266,7 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 								((IMachineUpgradeTool)te).setParent(null);
 							}
 							if (te instanceof ICanHaveMachineFace) {
-								((ICanHaveMachineFace)te).setMachineFace(MachineFace.NONE, MachineParent.NONE, EnumFacing.NORTH, null);
+								((ICanHaveMachineFace)te).setMachineFace(MachineFace.NONE, MachineParent.NONE, EnumFacing.UP, null);
 							}
 						} else { bord = new MultiblockBorders(world, upgrade, min, max); }
 						
@@ -347,19 +352,20 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 			for (int y = -count; y < 2; y++) {
 				BlockPos check = pos.offset(dir, x).offset(EnumFacing.UP, y);
 				
-				boolean eval;
 				TileEntity te = world.getTileEntity(check);
+				boolean can;
+				boolean same;
 				
 				if (te != null) {
-					eval = (te instanceof ICanHaveMachineFace);
+					can = (te instanceof ICanHaveMachineFace);
 					Block block = world.getBlockState(check).getBlock();
-					if (eval) { eval = world.getBlockState(check).getValue(BlockMachineBase.EXPANSION_VARIANT) == variant; }
-				} else { eval = false; }
+					same = world.getBlockState(check).getValue(BlockMachineBase.EXPANSION_VARIANT) == variant;
+				} else { can = false; same = false; }
 				
 				if (x == -count || y == -count || x == 1 || y == 1) {
-					if (eval) { return false; }
+					if (can || same) { return false; }
 				} else {
-					if (!eval) { return false; }
+					if (!can && !same) { return false; }
 				}
 			}
 		}
@@ -376,7 +382,7 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 				TileEntity te = world.getTileEntity(pos.offset(dir, x).offset(EnumFacing.UP, y));
 				
 				if (te instanceof ICanHaveMachineFace) {
-					((ICanHaveMachineFace)te).setMachineFace(MachineFace.values()[face], this.getMachineType(), dir, this.getPos());
+					((ICanHaveMachineFace)te).setMachineFace(MachineFace.values()[face], this.getMachineType(), facing, this.getPos());
 				}
 			}
 		}

@@ -1,5 +1,6 @@
 package jaminv.advancedmachines.objects.blocks.machine.expansion.energy;
 
+import jaminv.advancedmachines.client.BakedModelMultiblock;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansionBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachineExpansionBase;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
@@ -95,5 +96,11 @@ public class BlockMachineEnergy extends BlockMachineExpansionBase implements ITi
 			TileEntityMachineEnergy te = (TileEntityMachineEnergy)tileentity;
 			te.setBorders(world, borders);
 		}
+	}
+	
+	@Override
+	public void registerModels() {
+		registerCustomModel(BakedModelMultiblock.ENERGY);
+		registerVariantModels();
 	}	
 }

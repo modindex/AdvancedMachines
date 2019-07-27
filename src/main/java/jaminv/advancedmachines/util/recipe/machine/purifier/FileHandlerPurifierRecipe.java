@@ -30,7 +30,7 @@ public class FileHandlerPurifierRecipe extends FileHandlerRecipe {
 		JsonArray secondary = getArray(path, json, "secondary", false);
 		for(JsonElement element : secondary) {
 			RecipeOutput sec = parseOutputWithChance(logger, path + ".secondary", assertObject(path + ".secondary", element));
-			
+			if (sec == null || sec.isEmpty()) { continue; }
 			recipe.addSecondary(sec);
 		}
 		

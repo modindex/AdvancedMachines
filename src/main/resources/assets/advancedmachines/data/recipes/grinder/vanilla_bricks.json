@@ -1,0 +1,31 @@
+{    
+    "bricks": {
+        "input": { "item": "minecraft:brick_block" },
+        "output": { "item": "minecraft:brick", "count": 4 },
+        "energy_percent": 75
+    },
+    "netherbrick": {
+        "input": { "item": "minecraft:nether_brick" },
+        "output": { "item": "minecraft:netherbrick", "count": 4 },
+        "energy_percent": 75
+    },
+    "quartz": {
+        "input": { "item": "minecraft:quartz_block", "data": "*" },
+        "output": { "item": "minecraft:quartz", "count": 4 },
+        "energy_percent": 75
+    },
+    "sand": {
+        "input": { "item": "minecraft:sandstone", "data": "*" },
+        "output": { "item": "minecraft:sand", "count": 4 },
+        "conditions": [
+            { "type": "advancedmachines:oredictionary", "property": "notexists", "key": "dustSaltpeter" } 
+        ]
+    },
+    "redsand": {
+        "input": { "item": "minecraft:red_sandstone", "data": "*" },
+        "output": { "item": "minecraft:sand", "data": 1, "count": 4 },
+        "conditions": [
+            { "type": "advancedmachines:oredictionary", "property": "notexists", "key": "dustSaltpeter" } 
+        ]
+    }   
+}

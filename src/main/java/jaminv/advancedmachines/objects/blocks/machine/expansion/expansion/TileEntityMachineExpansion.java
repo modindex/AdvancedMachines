@@ -37,7 +37,7 @@ public class TileEntityMachineExpansion extends TileEntityMachineExpansionBase i
 	
 	protected MachineFace face = MachineFace.NONE;
 	protected MachineParent parent = MachineParent.NONE;
-	protected EnumFacing facing = EnumFacing.NORTH;
+	protected EnumFacing facing = EnumFacing.UP;
 	protected BlockPos parentpos = null;
 	protected boolean active = false;
 	

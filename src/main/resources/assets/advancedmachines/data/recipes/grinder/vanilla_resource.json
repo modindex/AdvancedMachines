@@ -1,0 +1,17 @@
+{
+    "coal": {
+        "input": { "ore": "coal" },
+        "output": { "ore": "dustCoal" },
+        "energy_percent": 50
+    },
+    "iron": {
+        "input": { "ore": "ingotIron" },
+        "output": { "ore": "dustIron" },
+        "energy_percent": 50
+    },
+    "gold": {
+        "input": { "ore": "ingotGold" },
+        "output": { "ore": "dustGold" },
+        "energy_percent": 50        
+    }
+}

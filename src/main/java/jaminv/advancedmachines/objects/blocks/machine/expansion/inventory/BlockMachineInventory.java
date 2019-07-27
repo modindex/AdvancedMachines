@@ -1,5 +1,6 @@
 package jaminv.advancedmachines.objects.blocks.machine.expansion.inventory;
 
+import jaminv.advancedmachines.client.BakedModelMultiblock;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansionBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachineExpansionBase;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
@@ -90,4 +91,10 @@ public class BlockMachineInventory extends BlockMachineExpansionBase implements 
         	.withProperty(BORDER_NORTH, borders.getNorth()).withProperty(BORDER_SOUTH, borders.getSouth())
         	.withProperty(BORDER_EAST, borders.getEast()).withProperty(BORDER_WEST, borders.getWest());
 	}
+	
+	@Override
+	public void registerModels() {
+		registerCustomModel(BakedModelMultiblock.INVENTORY);
+		registerVariantModels();
+	}	
 }

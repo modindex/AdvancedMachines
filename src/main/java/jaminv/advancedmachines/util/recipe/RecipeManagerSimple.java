@@ -9,7 +9,8 @@ import net.minecraft.item.ItemStack;
 
 public abstract class RecipeManagerSimple<T extends RecipeBase> implements IRecipeManager<T> {  
 	
-	private Map<RecipeInput, T> recipes = new HashMap<RecipeInput, T>();
+	private List<T> recipes = new ArrayList<T>();
+	private Map<ItemComparable, T> lookup = new HashMap<ItemComparable, T>();
 	
 	protected void addRecipe(T recipe) {
 		if (recipe.getInput(0).isEmpty()) { return; }
@@ -17,7 +18,17 @@ public abstract class RecipeManagerSimple<T extends RecipeBase> implements IReci
 			if (recipe.getOutput(i).isEmpty()) { return; }
 		}
 		
-		recipes.put(recipe.getInput(0), recipe);
+		int count = 0;
+		List<ItemStack> input = recipe.getInput(0).getItems();
+		for (ItemStack item : input) {
+			ItemComparable comp = new ItemComparable(item);
+			if (!lookup.containsKey(comp)) {
+				lookup.put(comp, recipe);
+				count++;
+			}
+		}
+		
+		if (count >= 1) { recipes.add(recipe); }
 	}
 	
 	/**
@@ -26,14 +37,8 @@ public abstract class RecipeManagerSimple<T extends RecipeBase> implements IReci
 	 * @return PurifierRecipe
 	 */
 	public T getRecipe(ItemStack[] stack) {
-		if (stack[0].isEmpty()) { return null; }
-		RecipeInput item = new RecipeInput(stack[0]);
-		return recipes.get(item);
-	}
-	
-	public T getRecipe(RecipeInput[] input) {
-		if (input == null) { return null; }
-		return recipes.get(input[0]);
+		if (stack == null || stack.length == 0 || stack[0].isEmpty()) { return null; }
+		return lookup.get(new ItemComparable(stack[0]));
 	}
 	
 	/**
@@ -44,20 +49,21 @@ public abstract class RecipeManagerSimple<T extends RecipeBase> implements IReci
 	 * @return PurifierRecipe
 	 */
 	@Override
-	public T getRecipeMatch(RecipeInput[] input) {
+	public T getRecipeMatch(ItemStack[] input) {
 		if (input[0].isEmpty()) { return null; }
-		T recipe = recipes.get(input[0]);
+		
+		T recipe = getRecipe(input);
 		if (recipe == null) { return null; }
 		
-		if (!input[0].isValidWithCountFor(recipe.getInput(0))) { return null; } 
+		if (!recipe.getInput(0).isValid(input[0])) { return null; } 
 		return recipe;
 	}
 	
 	@Override
-	public int getRecipeQty(T recipe, RecipeInput[] input) {
+	public int getRecipeQty(T recipe, ItemStack[] input) {
 		if (input[0].isEmpty()) { return 0; }
 		
-		return input[0].getQty(recipe.getInput(0));
+		return recipe.getInput(0).getQty(input[0]);
 	}
 	
 	@Override
@@ -66,20 +72,13 @@ public abstract class RecipeManagerSimple<T extends RecipeBase> implements IReci
 	}
 	
 	@Override
-	public boolean isItemValid(ItemStack stack, RecipeInput[] other) {
-		if (stack.isEmpty()) { return false; }
-		RecipeInput input = new RecipeInput(stack);
-		T ret = recipes.get(input);
-		return ret != null;
+	public boolean isItemValid(ItemStack stack, ItemStack[] other) {
+		if (stack == null || stack.isEmpty()) { return false; }
+		return lookup.containsKey(new ItemComparable(stack));
 	}
 	
 	@Override
 	public List<T> getRecipeList() {
-		ArrayList<T> ret = new ArrayList<T>();
-		
-		for (Map.Entry<RecipeInput, T> entry : this.recipes.entrySet()) {
-			ret.add(entry.getValue());
-		}
-		return ret;
+		return recipes;
 	}
 }

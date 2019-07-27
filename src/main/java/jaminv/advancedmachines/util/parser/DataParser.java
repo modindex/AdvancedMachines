@@ -38,45 +38,48 @@ public class DataParser {
 	}
 	
 	public static void parse() {
+		for (Map.Entry<String, IFileHandler> entry : datafolder.entrySet()) {
+			parseFolder(entry.getKey(), entry.getValue());		
+		}
+	}
+	
+	public static void parseFolder(String path, IFileHandler handler ) {
 		ModContainer mod = FMLCommonHandler.instance().findContainerFor(Reference.MODID);
 		Logger logger = new Logger("logs/" + Reference.FILENAME + ".parser.log", "parser");
 		
-		for (Map.Entry<String, IFileHandler> entry : datafolder.entrySet()) {
-		
-			CraftingHelper.findFiles(mod, "assets/" + mod.getModId() + "/" + entry.getKey(), null, (root, file) -> {
-				String filename = file.getFileName().toString();
-	            if (!"json".equals(FilenameUtils.getExtension(filename)) || filename.startsWith("_")) {
-	                return true;
-	            }
-	            
-	            BufferedReader reader = null;
-	            try {
-	                reader = Files.newBufferedReader(file);
-	                JsonObject json = JsonUtils.fromJson(GSON, reader, JsonObject.class);
-	                logger.log(Level.INFO, I18n.format("info.parser.parsing_file", root.toString() + "/" + filename));
-	                if (entry.getValue().parseData(logger, FilenameUtils.getBaseName(filename), json)) {
-	                	logger.log(Level.INFO, I18n.format("info.parser.file_parsed", filename)); 
-	                } else {
-	                	logger.log(Level.ERROR, I18n.format("error.parser.cannot_parse_file", filename, "error_unhandled"));
-	                }
-	            }
-	            catch (DataParserException e) {
-	            	logger.log(Level.ERROR, I18n.format("error.parser.cannot_parse_file", filename, e.toString()));
-	            }
-	            catch (JsonParseException e) {
-	            	logger.log(Level.FATAL, I18n.format("error.parser.error_loading_file", filename, e.toString()));
-	            }
-	            catch (IOException e) {
-	            	logger.log(Level.FATAL, I18n.format("error.parser.error_reading_file", filename, e.toString()));
-	            } finally {
-	            	logger.logBlank();
-	                IOUtils.closeQuietly(reader); 
-	            }
-	            
-	            return true;
-			}, false, false);
-		}
-		
+		CraftingHelper.findFiles(mod, "assets/" + mod.getModId() + "/" + path, null, (root, file) -> {
+			String filename = file.getFileName().toString();
+            if (!"json".equals(FilenameUtils.getExtension(filename)) || filename.startsWith("_")) {
+                return true;
+            }
+            
+            BufferedReader reader = null;
+            try {
+                reader = Files.newBufferedReader(file);
+                JsonObject json = JsonUtils.fromJson(GSON, reader, JsonObject.class);
+                logger.log(Level.INFO, I18n.format("info.parser.parsing_file", root.toString() + "/" + filename));
+                if (handler.parseData(logger, FilenameUtils.getBaseName(filename), json)) {
+                	logger.log(Level.INFO, I18n.format("info.parser.file_parsed", filename)); 
+                } else {
+                	logger.log(Level.ERROR, I18n.format("error.parser.cannot_parse_file", filename, "error_unhandled"));
+                }
+            }
+            catch (DataParserException e) {
+            	logger.log(Level.ERROR, I18n.format("error.parser.cannot_parse_file", filename, e.toString()));
+            }
+            catch (JsonParseException e) {
+            	logger.log(Level.FATAL, I18n.format("error.parser.error_loading_file", filename, e.toString()));
+            }
+            catch (IOException e) {
+            	logger.log(Level.FATAL, I18n.format("error.parser.error_reading_file", filename, e.toString()));
+            } finally {
+            	logger.logBlank();
+                IOUtils.closeQuietly(reader); 
+            }
+            
+            return true;
+		}, false, false);
+
 		logger.close();
 	}
 }

@@ -1,0 +1,69 @@
+{
+    "tin": {
+        "input": { "ore": "oreTin" },
+        "output": { "ore": "dustTin", "count": 2 },
+        "secondary": { "ore": "dustIron", "chance": 10 }
+    },
+    "lead": {
+        "input": { "ore": "oreLead" },
+        "output": { "ore": "dustLead", "count": 2 },
+        "secondary": { "ore": "dustSilver", "chance": 10 }
+    },
+    "aluminum": {
+        "input": { "ore": "oreAluminum" },
+        "output": { "ore": "dustAluminum", "count": 2 },
+        "secondary": { "ore": "dustIron", "chance": 10 }
+    },
+    "nickel": {
+        "input": { "ore": "oreNickel" },
+        "output": { "ore": "dustNickel", "count": 2 },
+        "secondary": { "ore": "dustPlatinum", "chance": 10 }
+    },
+    "platinum": {
+        "input": { "ore": "orePlatinum" },
+        "output": { "ore": "dustPlatinum", "count": 2 },
+        "secondary": { "ore": "dustIridium", "chance": 10 }
+    },
+    "iridium": {
+        "input": { "ore": "oreIridium" },
+        "output": { "ore": "dustIridium", "count": 2 },
+        "secondary": { "ore": "dustPlatinum", "chance": 10 }
+    },     
+    "mithril": {
+        "input": { "ore": "oreMithril" },
+        "output": { "ore": "dustMithril", "count": 2 },
+        "secondary": { "ore": "dustGold", "chance": 10 }
+    },
+    "clathrate_sand": {
+        "input": { "ore": "oreClathrateOilSand" },
+        "output": { "ore": "clathrateOil", "count": 3 },
+        "secondary": { "ore": "ballTar", "chance": 50 }
+    },
+    "clathrate_shale": {
+        "input": { "ore": "oreClathrateOilShale" },
+        "output": { "ore": "clathrateOil", "count": 3 },
+        "secondary": { "item": "minecraft:flint", "chance": 50 }
+    },
+    "clathrate_redstone": {
+        "input": { "ore": "oreClathrateRedstone" },
+        "output": { "ore": "clathrateRedstone", "count": 3 },
+        "secondary": { "ore": "crystalCinnabar", "chance": 50 }
+    },
+    "clathrate_glowstone": {
+        "input": { "ore": "oreClathrateGlowstone" },
+        "output": { "ore": "clathrateGlowstone", "count": 3 },
+        "secondary": { "ore": "dustSulfur", "chance": 30 }
+    },
+    "clathrate_ender": {
+        "input": { "ore": "oreClathrateEnder" },
+        "output": { "ore": "clathrateEnder", "count": 3 }
+    },
+    "saltpeter": {
+        "input": { "ore": "oreSaltpeter" },
+        "output": { "ore": "dustSaltpeter", "count": 4 }        
+    },
+    "sulfur": {
+        "input": { "ore": "oreSulfur" },
+        "output": { "ore": "dustSulfur", "count": 6 }
+    }
+}

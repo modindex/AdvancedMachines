@@ -170,4 +170,9 @@ error.parser.not_integer='%s': Element can not be evaluated to an integer.
 error.parser.recipe.item_not_found='%s': 'item' <%s> not found.
 error.parser.recipe.invalid_nbt='%s': Invalid NBT structure. %s
 
+error.parser.recipe.condition_not_found:'%s': Condition '%s' not found.
+
+info.parser.recipe.condition_met:'%s': Condition '%s' met.
+info.parser.recipe.condition_not_met:'%s': Condition '%s' not net.
+
 error.unhandled=Unhandled error

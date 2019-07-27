@@ -31,7 +31,7 @@ public final class ModConfig {
 		
 		@Config.Comment("Default energy for standard grinder recipes")
 		@RangeInt(min = 0)
-		public int defaultGrinderEnergy = 2000;
+		public int defaultGrinderEnergy = 4000;
 		
 		@Config.Comment("Default energy for standard purifier recipes")
 		@RangeInt(min = 0)
@@ -104,6 +104,9 @@ public final class ModConfig {
 	public static class Crafting {
 		@Config.Comment("Include crafting recipe for 'Iron Gear'.")
 		public boolean craftIronGear = true;
+		
+		@Config.Comment("Include crafting recipe for 'Titanium Gear'.")
+		public boolean craftTitaniumGear = true;
 	}
 	
 	@Config.Comment({ "Recipe Configuration" })
@@ -122,6 +125,11 @@ public final class ModConfig {
 		
 		@Config.Comment("Exclude specific grinder recipes by recipe id.")
 		public String[] excludeGrinderRecipes = {};
+		
+		@Config.Comment({
+			"Order of preference for ore dictionary outputs. Can be used for consistant machine outputs across mods."
+		})
+		public String[] oreDictionaryPreference = { "minecraft", "thermalfoundation", "appliedenergistics2", "advancedmachines" };
 		
 		/*
 		for (String item : excludeGrinderRecipes) {

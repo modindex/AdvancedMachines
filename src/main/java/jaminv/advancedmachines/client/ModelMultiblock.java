@@ -18,11 +18,21 @@ import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 
 public class ModelMultiblock implements IModel {
+	
+	protected String basetexture, facetexture;
+	public ModelMultiblock(String basetexture, String facetexture) {
+		this.basetexture = basetexture;
+		this.facetexture = facetexture;
+	}
+	
+	public ModelMultiblock(String basetexture) {
+		this.basetexture = basetexture;
+	}
 
 	@Override
 	public IBakedModel bake(IModelState state, VertexFormat format,
 			Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-		return new BakedModelMultiblock(state, format, bakedTextureGetter); 
+		return new BakedModelMultiblock(state, format, bakedTextureGetter, basetexture, facetexture);
 	}
 	
 	@Override

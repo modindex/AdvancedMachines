@@ -32,5 +32,18 @@ public class ItemHelper {
 	public static boolean isIngot(ItemStack stack) {
 		return getOreName(stack).startsWith("ingot");
 	}
+	
+	public static int getMeta(ItemStack stack) {
+		return Items.DIAMOND.getDamage(stack);		
+	}
 
+	public static boolean itemsMatch(ItemStack a, ItemStack b) {
+		NBTTagCompound nbtA = a.getTagCompound();
+		NBTTagCompound nbtB = b.getTagCompound();
+		return a.getItem().equals(b.getItem()) && getMeta(a) == getMeta(b) && (nbtA == null && nbtB == null || nbtA != null && nbtB != null && nbtA.equals(nbtB));		
+	}
+	
+	public static boolean itemsMatchWithCount(ItemStack a, ItemStack b) {
+		return itemsMatch(a, b) && a.getCount() == b.getCount();
+	}
 }

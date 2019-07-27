@@ -1,7 +1,8 @@
 {
     "ore_dictionary": [
         { "item": "minecraft:blaze_rod", "ore": "rodBlaze" },
-        { "item": "minecraft:blaze_powder", "ore": "dustBlaze" }
-    ]
+        { "item": "minecraft:blaze_powder", "ore": "dustBlaze" },
+        { "item": { "item": "minecraft:stained_hardened_clay", "data": "*" }, "ore": "blockStainedHardenedClay" }
+    ]    
 }
    

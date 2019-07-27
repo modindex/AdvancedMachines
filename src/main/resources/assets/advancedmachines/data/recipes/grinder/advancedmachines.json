@@ -1,0 +1,46 @@
+{
+    "dustCopper": {
+        "input": { "ore": "ingotCopper" },
+        "output": { "ore": "dustCopper" },
+        "energy_percent": 50
+    }
+    , "dustSilver": {
+        "input": { "ore": "ingotSilver" },
+        "output": { "ore": "dustSilver" },
+        "energy_percent": 50
+    }
+    , "dustTitanium": {
+        "input": { "ore": "ingotTitanium" },
+        "output": { "ore": "dustTitanium" },
+        "energy_percent": 50
+    }
+    , "dustDiamond": {
+        "input": { "ore": "gemDiamond" },
+        "output": { "ore": "dustDiamond" },
+        "energy_percent": 50
+    }
+    , "dustEnder": {
+        "input": { "ore": "enderpearl" },
+        "output": { "ore": "dustEnder" },
+        "energy_percent": 50
+    }
+    , "glassFiber": {
+        "input": { "ore": "paneGlass" },
+        "output": { "ore": "dustGlass" }
+    }
+    , "goldPure": {
+        "input": { "ore": "ingotGoldPure" },
+        "output": { "ore": "dustGoldPure" },
+        "energy_percent": 50
+    }
+    , "copperPure": {
+        "input": { "ore": "ingotCopperPure" },
+        "output": { "ore": "dustCopperPure" },
+        "energy_percent": 50
+    }
+    , "silverPure": {
+        "input": { "ore": "ingotSilverPure" },
+        "output": { "ore": "dustSilverPure" },
+        "energy_percent": 50
+    }
+}

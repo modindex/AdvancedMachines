@@ -10,6 +10,7 @@ import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeT
 import jaminv.advancedmachines.objects.blocks.machine.expansion.redstone.TileEntityMachineRedstone;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -47,6 +48,10 @@ public class BlockHelper {
 	
 	public static String getBlockName(World world, BlockPos pos) {
 		return world.getBlockState(pos).getBlock().getLocalizedName();
+	}
+	
+	public static boolean hasProperty(IBlockState state, IProperty property) {
+		return state.getProperties().containsKey(property);
 	}
 	
 	public static EnumFacing getXZFacing(EntityLivingBase living) {

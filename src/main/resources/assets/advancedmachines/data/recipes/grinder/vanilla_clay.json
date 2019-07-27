@@ -1,0 +1,17 @@
+{
+    "clay": {
+        "input": "minecraft:clay",
+        "output": { "item": "minecraft:clay_ball", "count": 4 },
+        "energy_percent": 75
+    },
+    "hardened_clay": {
+        "input": "minecraft:hardened_clay",
+        "output": { "item": "minecraft:clay_ball", "count": 4 },
+        "energy_percent": 75
+    },
+    "stained_clay0": {
+        "input": { "ore": "blockStainedHardenedClay" },
+        "output": { "item": "minecraft:clay_ball", "count": 4 },
+        "energy_percent": 75
+    }
+}  

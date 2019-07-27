@@ -1,5 +1,6 @@
 package jaminv.advancedmachines.objects.blocks.machine.expansion.redstone;
 
+import jaminv.advancedmachines.client.BakedModelMultiblock;
 import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansionBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachineExpansionBase;
@@ -104,4 +105,10 @@ public class BlockMachineRedstone extends BlockMachineExpansionBase implements I
 			te.setBorders(world, borders);
 		}
 	}
+	
+	@Override
+	public void registerModels() {
+		registerCustomModel(BakedModelMultiblock.REDSTONE);
+		registerVariantModels();
+	}	
 }

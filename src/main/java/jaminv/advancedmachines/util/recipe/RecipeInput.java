@@ -2,8 +2,11 @@ package jaminv.advancedmachines.util.recipe;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
+import jaminv.advancedmachines.util.helper.ItemHelper;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -11,13 +14,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class RecipeInput implements Cloneable {
-	
-	public static class InputCompare implements Comparator<RecipeInput> {
-		@Override
-		public int compare(RecipeInput arg0, RecipeInput arg1) {
-			return arg0.hashCode() - arg1.hashCode();
-		}		
-	}
 	
 	private int oreId = -1;
 	private Item item = Items.AIR;
@@ -36,6 +32,8 @@ public class RecipeInput implements Cloneable {
 		} else {
 			invalid = true;
 		}
+		
+		registerItems();
 	}
 	
 	public RecipeInput(String oredictName) {
@@ -51,8 +49,8 @@ public class RecipeInput implements Cloneable {
 		if (!stack.isEmpty()) {
 			count = stack.getCount();
 		}
-
-		getOreId();
+		
+		registerItems();
 	}
 	
 	public RecipeInput(Item item, int count, int meta, NBTTagCompound nbt) {
@@ -61,7 +59,8 @@ public class RecipeInput implements Cloneable {
 		this.count = count;
 		this.meta = meta;
 		this.nbt = nbt;
-		getOreId();
+		
+		registerItems();
 	}
 	
 	public RecipeInput(Item item, int count, int meta) {
@@ -76,11 +75,23 @@ public class RecipeInput implements Cloneable {
 		this(item, 1, 0);
 	}
 	
-	private void getOreId() {
-		if (isEmpty()) { oreId = -1; return; }
-		int[] ids = OreDictionary.getOreIDs(this.toItemStack());
-		if (ids.length == 0) { oreId = -1; return; }
-		oreId = ids[0];
+	List<ItemStack> itemlist = new ArrayList<ItemStack>();
+	HashSet<ItemComparable> lookup = new HashSet<ItemComparable>();
+	
+	private void registerItems() {
+		if (this.isEmpty()) { return; }
+		if (oreId == -1) {
+			ItemStack stack = this.toItemStack();
+			itemlist.add(stack);
+			lookup.add(new ItemComparable(stack));
+		}
+		
+		for (ItemStack ore : OreDictionary.getOres(OreDictionary.getOreName(this.oreId), false)) {
+			ItemStack copy = ore.copy();
+			copy.setCount(this.count);
+			itemlist.add(copy);
+			lookup.add(new ItemComparable(copy));
+		}
 	}
 	
 	public int getCount() {
@@ -92,105 +103,41 @@ public class RecipeInput implements Cloneable {
 		return new ItemStack(item, count, meta, nbt);
 	}
 	
-	protected boolean isEqualWithoutNbt(RecipeInput comp) {
-		if (comp == null) { return false; }
-		
-		if (oreId != -1 && oreId == comp.oreId) { return true; }
-		
-		if (item == comp.item && meta == comp.meta) { return true; }
-		
-		return false;
-	}
-
-	/**
-	 * This function is commutative: a.isNbtMatch(b) == b.isNbtMatch(a)
-	 */
-	protected boolean isNbtMatch(RecipeInput comp) {
-		return (nbt == null && comp.nbt == null) || (nbt != null && comp.nbt != null && nbt.equals(comp));		
-	}
-	
-	/**
-	 * Are items exactly equal (quantity irrelevant)
-	 * 
-	 * This function is commutative: a.isEqual(b) == b.isEqual(a)
-	 * 
-	 * This is the strictest requirement. All components, including nbt, must be the same.
-	 */
-	public boolean isEqual(RecipeInput comp) {
-		return isEqualWithoutNbt(comp) && isNbtMatch(comp);
-	}
-	
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof RecipeInput) {
-			return isEqual((RecipeInput)obj);
-		}
-		return false;
-	}
-
-	public boolean equals(RecipeInput comp) {
-		return isEqual(comp);
-	}
-	
-	/**
-	 * This function is not commutative: a.isNbtValid(b) !n= b.isNbtValid(a)
-	 * 
-	 * This function returns is the NBT contents in a are valid for the requirement b.
-	 * If the b has no requirement, then it will be valid even if a has an nbt structure.
-	 * 
-	 * @param comp
-	 * @return
-	 */
-	protected boolean isNbtValidFor(RecipeInput require) {
-		return require.nbt == null || nbt != null && nbt.equals(require.nbt);
-	}
-	
 	public boolean isEmpty() {
 		return oreId == -1 && item == Items.AIR;
 	}
 	
-	public boolean isInvalid() {
+	public boolean hasOredictError() {
 		return invalid;
 	}
 
 	/**
 	 * Does input match requirement
 	 * 
-	 * This function is not commutative: a.isValidFor(b) !n= b.isValidFor(a).
-	 * 
-	 * This is expected to be called on the actual recipe input with the expected
-	 * recipe input as a parameter.  It returns true if the items are the same
-	 * and input a meets any nbt requirements. 
+	 * Returns true if the items are the same and meets any nbt requirements. 
 	 * 
 	 * @param expected
 	 * @return
 	 */
-	public boolean isValidFor(RecipeInput require) {
-		return isEqualWithoutNbt(require) && isNbtValidFor(require);		
-	}	
-
-	/**
-	 * Does actual input match expects
-	 * 
-	 * This function is not commutative: a.isValidWithCountFor(b) !n= b.isValidWithCountFor(a).
-	 * 
-	 * This is expected to be called on the actual recipe input with the expected
-	 * recipe input as a parameter.  It returns true if the items match
-	 * and this.count >= expected.count.  Meaning there must be at least enough
-	 * items to meet the expected recipe input. 
-	 * 
-	 * @param expected
-	 * @return
-	 */
-	public boolean isValidWithCountFor(RecipeInput require) {
-		return isValidFor(require) && count >= require.count;		
+	public boolean isValid(ItemStack stack) {
+		return lookup.contains(new ItemComparable(stack));		
 	}
 	
-	@Override
-	public int hashCode() {
-		if (oreId != -1) { return oreId; }
-		return item.getIdFromItem(item) | (meta & 0xFFFF);
+	public boolean isValid(ItemComparable stack) {
+		return lookup.contains(stack);
+	}
+
+	/**
+	 * Item valid for recipe, including count
+	 * 
+	 * It returns true if the items match and stack.getCount() >= this.count.
+	 * Meaning there must be at least enough items to meet the recipe input. 
+	 * 
+	 * @param expected
+	 * @return
+	 */
+	public boolean isValidWithCount(ItemStack stack) {
+		return isValid(stack) && stack.getCount() >= count;		
 	}
 	
 	@Override
@@ -204,25 +151,11 @@ public class RecipeInput implements Cloneable {
 	}
 	
 	public List<ItemStack> getItems() {
-		List<ItemStack> ret = new ArrayList<ItemStack>();
-		
-		if (this.isEmpty()) { return ret; }
-		if (oreId == -1) {
-			ret.add(this.toItemStack());
-			return ret;
-		}
-		
-		for (ItemStack ore : OreDictionary.getOres(OreDictionary.getOreName(this.oreId), false)) {
-			ItemStack copy = ore.copy();
-			copy.setCount(this.count);
-			ret.add(copy);
-		}
-		
-		return ret;
+		return itemlist;
 	}
 	
-	public int getQty(RecipeInput expected) {
-		return count / expected.count;
+	public int getQty(ItemStack stack) {
+		return stack.getCount() / count;
 	}
 	
 	public RecipeInput multiply(int factor) {

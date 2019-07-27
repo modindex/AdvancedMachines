@@ -76,7 +76,7 @@ public class BlockMachineExpansion extends BlockMachineExpansionBase {
 
         MachineFace face = MachineFace.NONE;
         MachineParent parent = MachineParent.NONE;
-        EnumFacing facing = EnumFacing.NORTH;
+        EnumFacing facing = EnumFacing.UP;
         MultiblockBorders borders = MultiblockBorders.DEFAULT;
         boolean active = false;
 
@@ -97,7 +97,7 @@ public class BlockMachineExpansion extends BlockMachineExpansionBase {
 
 	@Override
 	public void registerModels() {
-		registerCustomModel(BakedModelMultiblock.BAKED_MODEL_MULTIBLOCK);
+		registerCustomModel(BakedModelMultiblock.BASE);
 		registerVariantModels();
 	}
 	

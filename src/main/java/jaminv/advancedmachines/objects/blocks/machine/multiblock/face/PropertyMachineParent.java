@@ -31,7 +31,7 @@ public class PropertyMachineParent implements IProperty<MachineParent> {
 	
 	@Override
 	public Class getValueClass() {
-		return MachineFace.class;
+		return MachineParent.class;
 	}
 	
 	@Override

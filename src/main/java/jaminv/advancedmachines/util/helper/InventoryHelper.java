@@ -42,7 +42,7 @@ public class InventoryHelper {
         if (!stack.isEmpty() && insert) {
             i = startIndex;
             while (true) {
-        		if (i >= endIndex) { break; }
+        		if (i > endIndex) { break; }
 
                 ItemStack itemstack = inv.getStackInSlot(i);
 

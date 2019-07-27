@@ -21,6 +21,8 @@ public class ConfigConditionFactory implements IConditionFactory {
 			switch (value) {
 			case "gearIron":
 				return () -> ModConfig.crafting.craftIronGear;
+			case "gearTitanium":
+				return () -> ModConfig.crafting.craftTitaniumGear;
 			default:
 				break;
 			}

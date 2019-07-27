@@ -1,5 +1,6 @@
 package jaminv.advancedmachines.objects.blocks.machine.instance.grinder;
 
+import jaminv.advancedmachines.client.BakedModelMultiblock;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.BlockMachineMultiblock;
 import jaminv.advancedmachines.util.enums.EnumGui;
 import net.minecraft.tileentity.TileEntity;
@@ -22,4 +23,10 @@ public class BlockMachineGrinder extends BlockMachineMultiblock {
 	public Class<? extends TileEntity> getTileEntityClass() {
 		return TileEntityMachineGrinder.class;
 	}
+	
+	@Override
+	public void registerModels() {
+		registerCustomModel(BakedModelMultiblock.GRINDER);
+		registerVariantModels();
+	}		
 }

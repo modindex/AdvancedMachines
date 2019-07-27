@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.oredict.OreDictionary;
 
 public abstract class FileHandlerBase implements IFileHandler {
 	
@@ -73,7 +74,7 @@ public abstract class FileHandlerBase implements IFileHandler {
 			try {
 				ret = jp.getAsInt();
 			} catch(NumberFormatException e) {
-				throw new DataParserException(I18n.format("error.parser.recipe.not_integer", path, key));
+				throw new DataParserException(I18n.format("error.parser.not_integer", path, key));
 			}
 		} else if (def == NO_DEFAULT) {
 			throw new DataParserException(I18n.format("error.parser.required", path, key));
@@ -98,7 +99,11 @@ public abstract class FileHandlerBase implements IFileHandler {
 		
 		JsonObject obj = assertObject(path, element);
 		
-		int meta = getInt(path, obj, "meta", 0);
+		int meta = 0;
+		String metastring = getString(path, obj, "data", false); 
+		if (metastring != null && metastring.equals("*")) {
+			meta = OreDictionary.WILDCARD_VALUE;
+		} else { meta = getInt(path, obj, "data", 0); }
 		int count = getInt(path, obj, "count", 1);
 		
 		itemname = getString(path, obj, "item", false);

@@ -1,5 +1,6 @@
 package jaminv.advancedmachines.objects.blocks.machine.instance.alloy;
 
+import jaminv.advancedmachines.client.BakedModelMultiblock;
 import jaminv.advancedmachines.objects.blocks.machine.BlockMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.instance.purifier.TileEntityMachinePurifier;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.BlockMachineMultiblock;
@@ -28,4 +29,9 @@ public class BlockMachineAlloy extends BlockMachineMultiblock {
 		return TileEntityMachineAlloy.class;
 	}
 
+	@Override
+	public void registerModels() {
+		registerCustomModel(BakedModelMultiblock.ALLOY);
+		registerVariantModels();
+	}	
 }

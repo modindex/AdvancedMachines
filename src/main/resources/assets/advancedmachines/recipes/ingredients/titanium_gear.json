@@ -1,0 +1,23 @@
+{
+    "type": "forge:ore_shaped",
+    
+    "pattern":
+    [
+        " T ",
+        "TIT",
+        " T "
+    ],
+    
+    "key": {
+        "I": {
+            "type": "forge:ore_dict",
+            "ore": "ingotIron"
+        },
+        "T": {
+            "type": "forge:ore_dict",
+            "ore": "ingotTitanium"
+        }
+    },
+    
+    "result": { "item": "advancedmachines:gear", "data": 1 }
+}
