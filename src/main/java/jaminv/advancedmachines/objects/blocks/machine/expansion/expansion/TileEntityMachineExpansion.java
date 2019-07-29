@@ -2,36 +2,15 @@ package jaminv.advancedmachines.objects.blocks.machine.expansion.expansion;
 
 import javax.annotation.Nullable;
 
-import jaminv.advancedmachines.Main;
-import jaminv.advancedmachines.objects.blocks.inventory.ContainerInventory;
-import jaminv.advancedmachines.objects.blocks.inventory.TileEntityInventory;
-import jaminv.advancedmachines.objects.blocks.machine.MachineEnergyStorage;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansionBase;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTileEntity;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTool;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachineExpansionBase;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.ICanHaveMachineFace;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineFace;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineParent;
-import jaminv.advancedmachines.util.dialog.gui.GuiContainerObservable;
-import jaminv.advancedmachines.util.helper.InventoryHelper;
-import jaminv.advancedmachines.util.interfaces.IHasGui;
-import jaminv.advancedmachines.util.interfaces.IRedstoneControlled.RedstoneState;
-import jaminv.advancedmachines.util.recipe.IRecipeManager;
-import jaminv.advancedmachines.util.recipe.RecipeInput;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
-import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntityMachineExpansion extends TileEntityMachineExpansionBase implements ICanHaveMachineFace {
 	

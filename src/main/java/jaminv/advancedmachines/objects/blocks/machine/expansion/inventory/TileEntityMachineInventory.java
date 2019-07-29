@@ -5,20 +5,17 @@ import javax.annotation.Nullable;
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.objects.blocks.inventory.ContainerInventory;
 import jaminv.advancedmachines.objects.blocks.inventory.TileEntityInventory;
-import jaminv.advancedmachines.objects.blocks.machine.MachineEnergyStorage;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansionBase;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTileEntity;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTool;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
-import jaminv.advancedmachines.util.dialog.gui.GuiContainerObservable;
 import jaminv.advancedmachines.util.helper.InventoryHelper;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
 import jaminv.advancedmachines.util.interfaces.ISwitchableIO;
 import jaminv.advancedmachines.util.recipe.IRecipeManager;
-import jaminv.advancedmachines.util.recipe.RecipeInput;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -37,6 +34,16 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 	protected int priority = 0;
 	protected MultiblockBorders borders = new MultiblockBorders();
 	protected BlockPos parent = null;
+	
+	@Override
+	public ContainerInventory createContainer(IInventory inventory) {
+		return new ContainerInventory(inventory, DialogMachineInventory.layout, this);
+	}
+
+	@Override
+	public GuiContainer createGui(IInventory inventory) {
+		return new DialogMachineInventory(createContainer(inventory), this);
+	}	
 	
 	public void setFacing(EnumFacing facing) {
 		this.facing = facing;
@@ -145,25 +152,6 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 	@Override
 	public int getInventorySize() {
 		return SIZE;
-	}
-	
-	private final DialogMachineInventory dialog = new DialogMachineInventory(this);
-	
-	public class GuiMachineInventory extends GuiContainerObservable {
-		public GuiMachineInventory(ContainerInventory container, DialogMachineInventory dialog) {
-			super(container, dialog.getW(), dialog.getH());
-			this.addObserver(dialog);
-		}
-	}
-	
-	@Override
-	public ContainerInventory createContainer(IInventory inventory) {
-		return new ContainerInventory(inventory, this, dialog);
-	}
-	
-	@Override
-	public GuiContainer createGui(IInventory inventory) {
-		return new GuiMachineInventory(createContainer(inventory), dialog);
 	}
 	
 	@Override

@@ -11,6 +11,7 @@ import jaminv.advancedmachines.integration.jei.RecipeUids;
 import jaminv.advancedmachines.integration.jei.RecipeWrapperBase;
 import jaminv.advancedmachines.objects.blocks.machine.instance.purifier.DialogMachinePurifier;
 import jaminv.advancedmachines.objects.blocks.machine.instance.purifier.TileEntityMachinePurifier;
+import jaminv.advancedmachines.util.dialog.container.EmptyContainer;
 import jaminv.advancedmachines.util.dialog.struct.DialogArea;
 import jaminv.advancedmachines.util.material.MaterialExpansion;
 import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager;
@@ -23,7 +24,7 @@ import net.minecraft.item.ItemStack;
 
 public class PurifierRecipeCategory extends RecipeCategoryBase<PurifierRecipeCategory.PurifierRecipe> {
 	
-	protected static DialogMachinePurifier sDialog = new DialogMachinePurifier();
+	protected static DialogMachinePurifier sDialog = new DialogMachinePurifier(new EmptyContainer());
 
 	public PurifierRecipeCategory(IGuiHelper guiHelper) {
 		super(sDialog); 
@@ -59,7 +60,7 @@ public class PurifierRecipeCategory extends RecipeCategoryBase<PurifierRecipeCat
 		registry.addRecipes(getRecipes(guiHelper), RecipeUids.PURIFIER);
 		
 		DialogArea jeiTarget = sDialog.getJeiTarget();
-		registry.addRecipeClickArea(TileEntityMachinePurifier.GuiMachinePurifier.class,
+		registry.addRecipeClickArea(DialogMachinePurifier.class,
 			jeiTarget.getX(), jeiTarget.getY(),
 			jeiTarget.getW(), jeiTarget.getH(),
 			RecipeUids.PURIFIER

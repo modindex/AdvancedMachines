@@ -1,25 +1,18 @@
 package jaminv.advancedmachines.objects.blocks.machine.expansion.tank;
 
 import jaminv.advancedmachines.objects.blocks.fluid.ContainerFluid;
-import jaminv.advancedmachines.objects.blocks.inventory.DialogInventory;
+import jaminv.advancedmachines.objects.blocks.inventory.ContainerInventory;
+import jaminv.advancedmachines.objects.blocks.inventory.ContainerLayout;
 import jaminv.advancedmachines.objects.blocks.machine.dialog.DialogFluid;
 import jaminv.advancedmachines.objects.blocks.machine.dialog.DialogIOToggleButton;
 import jaminv.advancedmachines.util.Color;
+import jaminv.advancedmachines.util.dialog.DialogBase;
 import jaminv.advancedmachines.util.dialog.control.DialogTextBox;
-import jaminv.advancedmachines.util.dialog.control.DialogToggleButton;
-import jaminv.advancedmachines.util.dialog.control.DialogToggleButton.IEnumIterable;
-import jaminv.advancedmachines.util.dialog.control.IDialogElement;
-import jaminv.advancedmachines.util.dialog.control.IElementStateObserver;
 import jaminv.advancedmachines.util.dialog.struct.DialogTooltip;
-import jaminv.advancedmachines.util.enums.EnumComponent;
 import jaminv.advancedmachines.util.enums.IOState;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
 
-public class DialogMachineTank extends DialogInventory {
+public class DialogMachineTank extends DialogBase {
 	
 	public static class DialogTooltipInput extends DialogTooltip {
 		protected final DialogIOToggleButton button;
@@ -38,12 +31,15 @@ public class DialogMachineTank extends DialogInventory {
 	TileEntityMachineTank te;
 	DialogTextBox priority;
 	
-	public DialogMachineTank(TileEntityMachineTank te) {
-		super("textures/gui/tank.png", 24, 0, 176, 185);
+	public static final ContainerLayout layout = new ContainerLayout()
+		.addLayout(new ContainerFluid.BucketInputLayout(44, 37))
+		.addLayout(new ContainerFluid.BucketOutputLayout(116, 37))
+		.setInventoryLayout(8, 84)
+		.setHotbarLayout(8, 142);
+	
+	public DialogMachineTank(ContainerInventory container, TileEntityMachineTank te) {
+		super(container, "textures/gui/tank.png", 24, 0, 176, 185);
 		this.te = te;
-		
-		this.addLayout(new ContainerFluid.BucketInputLayout(44, 37));
-		this.addLayout(new ContainerFluid.BucketOutputLayout(116, 37));
 		
 		this.addElement(new DialogFluid(80, 21, 16, 48, te));
 		
@@ -51,8 +47,6 @@ public class DialogMachineTank extends DialogInventory {
 		this.addElement(button);
 		this.addTooltip(new DialogTooltipInput(button));
 		
-		this.setInventoryLayout(new InventoryLayout(8, 84));
-		this.setHotbarLayout(new HotbarLayout(8, 142));
 
 		this.addText(8, 6, 162, "dialog.machine_inventory.title", Color.DIALOG_TEXT);
 		this.addText(8, 73, "dialog.common.inventory", Color.DIALOG_TEXT);

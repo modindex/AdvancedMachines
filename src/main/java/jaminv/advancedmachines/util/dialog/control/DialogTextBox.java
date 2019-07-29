@@ -3,9 +3,7 @@ package jaminv.advancedmachines.util.dialog.control;
 import java.util.ArrayList;
 import java.util.List;
 
-import jaminv.advancedmachines.util.dialog.gui.IGuiObserver;
 import jaminv.advancedmachines.util.dialog.struct.DialogArea;
-import jaminv.advancedmachines.util.enums.EnumComponent;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;

@@ -2,7 +2,7 @@ package jaminv.advancedmachines.integration.jei;
 
 import java.util.List;
 
-import jaminv.advancedmachines.objects.blocks.inventory.DialogInventory.ContainerLayout;
+import jaminv.advancedmachines.objects.blocks.inventory.Layout;
 import jaminv.advancedmachines.objects.blocks.machine.DialogMachineBase;
 import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.Reference;
@@ -69,7 +69,7 @@ public abstract class RecipeCategoryBase<T extends RecipeWrapperBase> implements
 	}
 	
 	private enum Section { INPUT, OUTPUT, SECONDARY };	
-	protected void displayRecipeSection(IGuiItemStackGroup guiItemStacks, T recipe, ContainerLayout layout, List<List<ItemStack>> items, Section section) {
+	protected void displayRecipeSection(IGuiItemStackGroup guiItemStacks, T recipe, Layout layout, List<List<ItemStack>> items, Section section) {
 		int offset = 0, itemOffset = 0, itemCount = 0;
 		boolean input = false; 
 		

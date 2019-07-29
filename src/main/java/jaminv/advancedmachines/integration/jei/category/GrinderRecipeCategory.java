@@ -13,6 +13,7 @@ import jaminv.advancedmachines.objects.blocks.machine.instance.grinder.DialogMac
 import jaminv.advancedmachines.objects.blocks.machine.instance.grinder.TileEntityMachineGrinder;
 import jaminv.advancedmachines.objects.blocks.machine.instance.purifier.DialogMachinePurifier;
 import jaminv.advancedmachines.objects.blocks.machine.instance.purifier.TileEntityMachinePurifier;
+import jaminv.advancedmachines.util.dialog.container.EmptyContainer;
 import jaminv.advancedmachines.util.dialog.struct.DialogArea;
 import jaminv.advancedmachines.util.material.MaterialExpansion;
 import jaminv.advancedmachines.util.recipe.machine.grinder.GrinderManager;
@@ -26,7 +27,7 @@ import net.minecraft.item.ItemStack;
 
 public class GrinderRecipeCategory extends RecipeCategoryBase<GrinderRecipeCategory.GrinderRecipe> {
 	
-	protected static DialogMachineGrinder sDialog = new DialogMachineGrinder();
+	protected static DialogMachineGrinder sDialog = new DialogMachineGrinder(new EmptyContainer());
 
 	public GrinderRecipeCategory(IGuiHelper guiHelper) {
 		super(sDialog); 
@@ -62,7 +63,7 @@ public class GrinderRecipeCategory extends RecipeCategoryBase<GrinderRecipeCateg
 		registry.addRecipes(getRecipes(guiHelper), RecipeUids.GRINDER);
 		
 		DialogArea jeiTarget = sDialog.getJeiTarget();
-		registry.addRecipeClickArea(TileEntityMachineGrinder.GuiMachineGrinder.class,
+		registry.addRecipeClickArea(DialogMachineGrinder.class,
 			jeiTarget.getX(), jeiTarget.getY(),
 			jeiTarget.getW(), jeiTarget.getH(),
 			RecipeUids.GRINDER

@@ -1,50 +1,40 @@
 package jaminv.advancedmachines.objects.blocks.inventory;
 
-import jaminv.advancedmachines.objects.blocks.inventory.DialogInventory.ContainerLayout;
-import jaminv.advancedmachines.util.recipe.IRecipeManager;
-import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerInventory extends Container {
 
-	protected DialogInventory dialog;
-	protected TileEntityInventory te;
+	private TileEntityInventory te;
+	private IInventory playerInventory;
 	
-	public ContainerInventory(IInventory playerInventory, TileEntityInventory te, DialogInventory dialog) {
+	public ContainerInventory(IInventory playerInventory, ContainerLayout layout, TileEntityInventory te) {
 		this.te = te;
-		this.dialog = dialog;
+		this.container_layout = layout;
 		
 		addOwnSlots();
 		addPlayerSlots(playerInventory);
 	}
 	
-	public static SlotItemHandler createSlot(IItemHandler itemHandler, int slotIndex, int x, int y) {
-		return new SlotItemHandler(itemHandler, slotIndex, x, y);
-	}
+	protected TileEntityInventory getTileEntity() { return te; }
+	
+	ContainerLayout container_layout = null;
+	
+	protected ContainerLayout getLayout() { return container_layout; }
 	
 	private void addOwnSlots() {
 		IItemHandler itemHandler = this.te.getInventory();
 		int slotIndex = 0;
 		
-		ContainerLayout[] layouts = dialog.getLayouts();
-		for (int i = 0; i < layouts.length; i++) {
-			ContainerLayout layout = layouts[i];
-			
+		for (Layout layout : container_layout.getLayouts()) {
 			for (int r = 0; r < layout.getRows(); r++) {
 				for (int c = 0; c < layout.getCols(); c++) {
-					int x = layout.xpos + c * layout.xspacing;
-					int y = layout.ypos + r * layout.yspacing;
+					int x = layout.getXPos() + c * layout.getXSpacing();
+					int y = layout.getYPos() + r * layout.getYSpacing();
 					addSlotToContainer(layout.createSlot(itemHandler, slotIndex, x, y));
 					slotIndex++;
 				}
@@ -53,27 +43,31 @@ public class ContainerInventory extends Container {
 	}
 	
 	private void addPlayerSlots(IInventory playerInventory) {
-		DialogInventory.ContainerLayout inventory = dialog.getInventoryLayout();
-		DialogInventory.ContainerLayout hotbar = dialog.getHotbarLayout();
+		int slotIndex = 9;
+		Layout inventory = container_layout.getInventoryLayout();
+		Layout hotbar = container_layout.getHotbarLayout();		
 		
-		int slotIndex = 9;		
-		for (int r = 0; r < inventory.getRows(); r++) {
-			for (int c = 0; c < inventory.getCols(); c++) {
-				int x = inventory.xpos + c * inventory.xspacing;
-				int y = inventory.ypos + r * inventory.yspacing;
-				this.addSlotToContainer(new Slot(playerInventory, slotIndex, x, y));
-				slotIndex++;
+		if (inventory != null) {
+			for (int r = 0; r < inventory.getRows(); r++) {
+				for (int c = 0; c < inventory.getCols(); c++) {
+					int x = inventory.getXPos() + c * inventory.getXSpacing();
+					int y = inventory.getYPos() + r * inventory.getYSpacing();
+					this.addSlotToContainer(new Slot(playerInventory, slotIndex, x, y));
+					slotIndex++;
+				}
 			}
 		}
 
-		for (int r = 0; r < hotbar.getRows(); r++) {
-			for (int c = 0; c < hotbar.getCols(); c++) {
-				int x = hotbar.xpos + c * hotbar.xspacing;
-				int y = hotbar.ypos + r * hotbar.yspacing;
-				this.addSlotToContainer(new Slot(playerInventory, c, x, y));
+		if (hotbar != null) {
+			for (int r = 0; r < hotbar.getRows(); r++) {
+				for (int c = 0; c < hotbar.getCols(); c++) {
+					int x = hotbar.getXPos() + c * hotbar.getXSpacing();
+					int y = hotbar.getYPos() + r * hotbar.getYSpacing();
+					this.addSlotToContainer(new Slot(playerInventory, c, x, y));
+				}
 			}
 		}
-	}
+	}	
 	
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {

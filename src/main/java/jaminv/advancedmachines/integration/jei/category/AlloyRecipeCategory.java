@@ -13,6 +13,7 @@ import jaminv.advancedmachines.objects.blocks.machine.instance.alloy.DialogMachi
 import jaminv.advancedmachines.objects.blocks.machine.instance.alloy.TileEntityMachineAlloy;
 import jaminv.advancedmachines.objects.blocks.machine.instance.purifier.DialogMachinePurifier;
 import jaminv.advancedmachines.objects.blocks.machine.instance.purifier.TileEntityMachinePurifier;
+import jaminv.advancedmachines.util.dialog.container.EmptyContainer;
 import jaminv.advancedmachines.util.dialog.struct.DialogArea;
 import jaminv.advancedmachines.util.material.MaterialExpansion;
 import jaminv.advancedmachines.util.recipe.machine.AlloyManager;
@@ -26,7 +27,7 @@ import net.minecraft.item.ItemStack;
 
 public class AlloyRecipeCategory extends RecipeCategoryBase<AlloyRecipeCategory.AlloyRecipe> {
 	
-	protected static DialogMachineAlloy sDialog = new DialogMachineAlloy();
+	protected static DialogMachineAlloy sDialog = new DialogMachineAlloy(new EmptyContainer());
 
 	public AlloyRecipeCategory(IGuiHelper guiHelper) {
 		super(sDialog); 
@@ -62,7 +63,7 @@ public class AlloyRecipeCategory extends RecipeCategoryBase<AlloyRecipeCategory.
 		registry.addRecipes(getRecipes(guiHelper), RecipeUids.ALLOY);
 		
 		DialogArea jeiTarget = sDialog.getJeiTarget();
-		registry.addRecipeClickArea(TileEntityMachineAlloy.GuiMachineAlloy.class,
+		registry.addRecipeClickArea(DialogMachineAlloy.class,
 			jeiTarget.getX(), jeiTarget.getY(),
 			jeiTarget.getW(), jeiTarget.getH(),
 			RecipeUids.ALLOY

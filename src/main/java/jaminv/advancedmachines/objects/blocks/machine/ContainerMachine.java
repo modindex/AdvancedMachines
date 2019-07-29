@@ -1,22 +1,58 @@
 package jaminv.advancedmachines.objects.blocks.machine;
 
 import jaminv.advancedmachines.objects.blocks.inventory.ContainerInventory;
+import jaminv.advancedmachines.objects.blocks.inventory.ContainerLayout;
+import jaminv.advancedmachines.objects.blocks.inventory.Layout;
 import jaminv.advancedmachines.util.helper.InventoryHelper;
 import jaminv.advancedmachines.util.recipe.IRecipeManager;
-import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerMachine extends ContainerInventory {
+	
+	public static class InputLayout extends Layout {
+		IRecipeManager recipe;
+		
+		public InputLayout(IRecipeManager recipe, int xpos, int ypos, int xspacing, int yspacing, int rows, int cols) {
+			super(xpos, ypos, xspacing, yspacing, rows, cols);
+			this.recipe = recipe;
+		}
+		public InputLayout(IRecipeManager recipe, int xpos, int ypos, int rows, int cols) {
+			super(xpos, ypos, rows, cols);
+			this.recipe = recipe;
+		}
+		public InputLayout(IRecipeManager recipe, int xpos, int ypos) {
+			super(xpos, ypos);
+			this.recipe = recipe;
+		}
+		
+		public SlotItemHandler createSlot(IItemHandler itemHandler, int slotIndex, int x, int y) {
+			return new ContainerMachine.SlotInput(recipe, itemHandler, slotIndex, x, y);
+		}
+	}
+	
+	public static class OutputLayout extends Layout {
+		public OutputLayout(int xpos, int ypos, int xspacing, int yspacing, int rows, int cols) {
+			super(xpos, ypos, xspacing, yspacing, rows, cols);
+		}
+		public OutputLayout(int xpos, int ypos, int rows, int cols) {
+			super(xpos, ypos, rows, cols);
+		}
+		public OutputLayout(int xpos, int ypos) {
+			super(xpos, ypos);
+		}		
+
+		public SlotItemHandler createSlot(IItemHandler itemHandler, int slotIndex, int x, int y) {
+			return new ContainerMachine.SlotOutput(itemHandler,slotIndex, x, y);
+		}
+	}	
 	
 	public static class SlotOutput extends SlotItemHandler {
 
@@ -46,8 +82,8 @@ public class ContainerMachine extends ContainerInventory {
 	private final IRecipeManager recipeManager;
 	protected final TileEntityMachineBase machineTe;
 
-	public ContainerMachine(IInventory playerInventory, TileEntityMachineBase te, DialogMachineBase dialog, IRecipeManager manager) {
-		super(playerInventory, te, dialog);
+	public ContainerMachine(IInventory playerInventory, ContainerLayout layout, TileEntityMachineBase te, IRecipeManager manager) {
+		super(playerInventory, layout, te);
 		this.recipeManager = manager;
 		this.machineTe = te;
 	}	
@@ -66,7 +102,7 @@ public class ContainerMachine extends ContainerInventory {
 		ItemStack itemstack1 = slot.getStack();
 		itemstack = itemstack1.copy();
 		
-		if (index < te.getInventorySize()) {
+		if (index < getTileEntity().getInventorySize()) {
 			if (!this.mergeItemStack(itemstack1, machineTe.getInventorySize(), this.inventorySlots.size(), true)) {
 				return ItemStack.EMPTY;
 			}

@@ -8,16 +8,19 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EmptyContainer extends Container {
 	
-	IContainerUpdate te;
+	IContainerUpdate te = null;
 	public EmptyContainer(IContainerUpdate te) {
 		this.te = te;
 	}
+	
+	public EmptyContainer() {}
 	
 	protected int[] cachedFields;
 	
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
+		if (te == null) { return; }
 		
 		boolean sendAll = false;
 		if (cachedFields == null) {
@@ -44,11 +47,12 @@ public class EmptyContainer extends Container {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void updateProgressBar(int id, int data) {
-		te.setField(id, data);
+		if (te != null) { te.setField(id, data); }
 	}
 
 	@Override
 	public boolean canInteractWith(EntityPlayer playerIn) {
+		if (te == null) { return false; }
 		return te.canInteractWith(playerIn);
 	}
 }

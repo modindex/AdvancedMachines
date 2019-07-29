@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import jaminv.advancedmachines.integration.jei.element.JeiElement;
+import jaminv.advancedmachines.objects.blocks.inventory.Layout;
 import jaminv.advancedmachines.objects.blocks.machine.DialogMachineBase;
 import jaminv.advancedmachines.util.recipe.RecipeBase;
 import mezz.jei.api.IGuiHelper;
@@ -69,7 +70,7 @@ public class RecipeWrapperBase<T extends RecipeBase> implements IRecipeWrapper {
 			element.draw(minecraft, -dialog.getJeiAdjustX(), -dialog.getJeiAdjustY());
 		}
 		
-		DialogMachineBase.ContainerLayout layout = dialog.getJeiSecondaryLayout();
+		Layout layout = dialog.getJeiSecondaryLayout();
 		int x = layout.getXPos();
 		int y = layout.getYPos();
 		int count = 0;

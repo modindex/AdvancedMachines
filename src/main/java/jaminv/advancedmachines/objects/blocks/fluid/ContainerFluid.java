@@ -1,11 +1,9 @@
 package jaminv.advancedmachines.objects.blocks.fluid;
 
 import jaminv.advancedmachines.objects.blocks.inventory.ContainerInventory;
-import jaminv.advancedmachines.objects.blocks.inventory.DialogInventory;
-import jaminv.advancedmachines.objects.blocks.inventory.DialogInventory.ContainerLayout;
+import jaminv.advancedmachines.objects.blocks.inventory.Layout;
 import jaminv.advancedmachines.objects.blocks.inventory.TileEntityInventory;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.items.IItemHandler;
@@ -55,7 +53,7 @@ public class ContainerFluid extends ContainerInventory {
 		}		
 	}
 	
-	public static class BucketInputLayout extends ContainerLayout {
+	public static class BucketInputLayout extends Layout {
 		public BucketInputLayout(int xpos, int ypos) {
 			super(xpos, ypos);
 		}
@@ -67,7 +65,7 @@ public class ContainerFluid extends ContainerInventory {
 		}
 	}
 	
-	public static class BucketOutputLayout extends ContainerLayout {
+	public static class BucketOutputLayout extends Layout {
 		public BucketOutputLayout(int xpos, int ypos) {
 			super(xpos, ypos);
 		}
@@ -79,11 +77,7 @@ public class ContainerFluid extends ContainerInventory {
 		}
 	}
 	
-
-	
-	public ContainerFluid(IInventory playerInventory, TileEntityInventory te, DialogInventory dialog) {
-		super(playerInventory, te, dialog);
+	public ContainerFluid(IInventory playerInventory, TileEntityInventory te) {
+		super(playerInventory, te);
 	}
-	
-	
 }

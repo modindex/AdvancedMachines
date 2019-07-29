@@ -1,20 +1,18 @@
 package jaminv.advancedmachines.objects.blocks.machine.expansion.inventory;
 
-import jaminv.advancedmachines.objects.blocks.inventory.DialogInventory;
+import jaminv.advancedmachines.objects.blocks.inventory.ContainerInventory;
+import jaminv.advancedmachines.objects.blocks.inventory.ContainerLayout;
 import jaminv.advancedmachines.objects.blocks.machine.dialog.DialogIOToggleButton;
 import jaminv.advancedmachines.util.Color;
+import jaminv.advancedmachines.util.dialog.DialogBase;
 import jaminv.advancedmachines.util.dialog.control.DialogTextBox;
-import jaminv.advancedmachines.util.dialog.control.DialogToggleButton;
-import jaminv.advancedmachines.util.dialog.control.DialogToggleButton.IEnumIterable;
 import jaminv.advancedmachines.util.dialog.control.IDialogElement;
 import jaminv.advancedmachines.util.dialog.control.IElementStateObserver;
 import jaminv.advancedmachines.util.dialog.struct.DialogTooltip;
 import jaminv.advancedmachines.util.enums.EnumComponent;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 
-public class DialogMachineInventory extends DialogInventory implements IElementStateObserver<String> {
+public class DialogMachineInventory extends DialogBase implements IElementStateObserver<String> {
 	
 	public static class DialogTooltipInput extends DialogTooltip {
 		protected final DialogIOToggleButton button;
@@ -32,18 +30,18 @@ public class DialogMachineInventory extends DialogInventory implements IElementS
 	TileEntityMachineInventory te;
 	DialogTextBox priority;
 	
-	public DialogMachineInventory(TileEntityMachineInventory te) {
-		super("textures/gui/machine_inventory.png", 24, 0, 176, 185);
+	public static final ContainerLayout layout = new ContainerLayout()
+		.addLayout(8, 38)
+		.setInventoryLayout(8, 103)
+		.setHotbarLayout(8, 161);
+	
+	public DialogMachineInventory(ContainerInventory container, TileEntityMachineInventory te) {
+		super(container, "textures/gui/machine_inventory.png", 24, 0, 176, 185);
 		this.te = te;
-		
-		this.addLayout(new InventoryLayout(8, 38));
 		
 		DialogIOToggleButton button = new DialogIOToggleButton(8, 23, 9, 9, te); 
 		this.addElement(button);
 		this.addTooltip(new DialogTooltipInput(button));
-		
-		this.setInventoryLayout(new InventoryLayout(8, 103));
-		this.setHotbarLayout(new HotbarLayout(8, 161));
 		
 		priority = new DialogTextBox(EnumComponent.PRIORITY_MACHINE_INVENTORY.getId(), 136, 24, 36, 11, 4);
 		priority.setPattern("[0-9]");
@@ -66,8 +64,10 @@ public class DialogMachineInventory extends DialogInventory implements IElementS
 	}
 	
 	@Override
-	public void init(GuiScreen gui, FontRenderer font, int guiLeft, int guiTop) {
+	public void initGui() {
 		priority.setText(String.valueOf(te.getPriority()));
-		super.init(gui, font, guiLeft, guiTop);
+		super.initGui();
 	}
+	
+	
 }
