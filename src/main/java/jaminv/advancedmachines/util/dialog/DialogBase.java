@@ -1,5 +1,7 @@
 package jaminv.advancedmachines.util.dialog;
 
+import org.lwjgl.opengl.GL11;
+
 import jaminv.advancedmachines.objects.blocks.machine.dialog.DialogEnergyBar;
 import jaminv.advancedmachines.util.Reference;
 import jaminv.advancedmachines.util.dialog.control.DialogText;
@@ -14,6 +16,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiUtils;
@@ -156,5 +161,23 @@ public class DialogBase implements IGuiObserver {
 		}
 		
 		return false;
+	}
+	
+	public static void drawTiledTexture(int x, int y, TextureAtlasSprite sprite, int w, int h) {
+		for (int i = 0; i < w; i += 16) {
+			for (int j = 0; j < h; j += 16) {
+				drawScaledTexture(x + i, y + i, sprite, Math.min(w-i, 16), Math.min(h-i, 16));
+			}
+		}
+	}
+	
+	public static void drawScaledTexture(int x, int y, TextureAtlasSprite sprite, int w, int h) {
+		if (sprite == null) { return; }
+		
+		double minU = sprite.getMinU(), maxU = sprite.getMaxU(), minV = sprite.getMinV(), maxV = sprite.getMaxV();
+		
+		BufferBuilder buffer = Tesselator.getInstance().getBuffer();
+		buffer.begin(GL11.GL_QUADS DefaultVertexFormats.POSITION_TEX);
+		buffer.pos(x,  y + h,  )
 	}
 }

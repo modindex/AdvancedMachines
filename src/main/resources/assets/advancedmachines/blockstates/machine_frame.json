@@ -2,7 +2,7 @@
     "variants": {
         "variant=basic": { "model": "advancedmachines:machine_frame" },
         "variant=compressed": { "model": "advancedmachines:machine_frame" },
-        "variant=quadratic": { "model": "advancedmachines:machine_frame" },
+        "variant=quad": { "model": "advancedmachines:machine_frame" },
         "variant=improbable": { "model": "advancedmachines:machine_frame" }
     }
 }

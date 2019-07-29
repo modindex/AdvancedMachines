@@ -7,6 +7,7 @@ public enum EnumGui {
 	GRINDER(4),
 	MACHINE_INVENTORY(10),
 	MACHINE_POWER(11),
+	MACHINE_TANK(20),
 	PRIORITY(101);
 	
 	private final int id;

@@ -16,8 +16,12 @@ public abstract class TileEntityInventory extends TileEntity implements ItemStac
 	
 	public TileEntityInventory() {
 		super();
-		this.inventory = new ItemStackHandlerObservable(getInventorySize());
+		this.inventory = createInventory();
 		this.inventory.addObserver(this);		
+	}
+	
+	protected ItemStackHandlerObservable createInventory() {
+		return new ItemStackHandlerObservable(getInventorySize());
 	}
 	
 	public ItemStackHandlerObservable getInventory() {

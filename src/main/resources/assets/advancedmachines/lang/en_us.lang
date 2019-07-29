@@ -110,8 +110,12 @@ tile.machine_redstone_compressed.name=Compressed Machine Redstone Controller
 tile.machine_redstone_quad.name=Quadratic Machine Redstone Controller
 tile.machine_redstone_improbable.name=Interdimensional Machine Redstone Controller
 
+fluid.coal_tar=Coal Tar
+
 dialog.common.inventory=Inventory
 dialog.common.energy=%,d / %,d RF
+dialog.common.fluid.empty=%,d / %,d mB
+dialog.common.fluid=%s\n%,d / %,d mB
 dialog.common.chance=Chance: %d%%
 dialog.common.percent=%d%%
 dialog.common.input=Input

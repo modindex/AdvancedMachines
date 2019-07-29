@@ -1,6 +1,7 @@
 package jaminv.advancedmachines.objects.blocks.machine.expansion.inventory;
 
 import jaminv.advancedmachines.objects.blocks.inventory.DialogInventory;
+import jaminv.advancedmachines.objects.blocks.machine.dialog.DialogIOToggleButton;
 import jaminv.advancedmachines.util.Color;
 import jaminv.advancedmachines.util.dialog.control.DialogTextBox;
 import jaminv.advancedmachines.util.dialog.control.DialogToggleButton;
@@ -15,51 +16,9 @@ import net.minecraft.client.resources.I18n;
 
 public class DialogMachineInventory extends DialogInventory implements IElementStateObserver<String> {
 	
-	public static enum IOState implements IEnumIterable<IOState> {
-		INPUT(true, "dialog.common.input"), OUTPUT(false, "dialog.common.output");
-		private static IOState[] vals = values();
-		
-		private final boolean input;
-		private final String name;
-		private IOState(boolean input, String name) {
-			this.input = input;
-			this.name = name;
-		}
-		
-		public boolean getState() { return input; }
-		public String getName() { return name; }
-		
-		@Override
-		public IOState next() {
-			return vals[(this.ordinal() + 1) % vals.length];
-		}
-	}
-	
-	public static class IOToggleButton extends DialogToggleButton<IOState> {
-		protected final TileEntityMachineInventory te;
-		public IOToggleButton(TileEntityMachineInventory te) {
-			// This is created before the NBT data for the tile entity is loaded, so the default is largely irrevelent here and is set later.
-			super(8, 23, 9, 9, IOState.INPUT);
-			this.te = te;
-			this.addTexture(IOState.INPUT, 200, 0);
-			this.addTexture(IOState.OUTPUT, 200, 9);
-		}
-		
-		@Override
-		protected void onStateChanged(IOState newstate) {
-			te.setInputState(newstate.getState());
-		}
-		
-		@Override
-		public void draw(GuiScreen screen, FontRenderer font, int drawX, int drawY) {
-			this.state = te.getInputState() ? IOState.INPUT : IOState.OUTPUT;
-			super.draw(screen, font, drawX, drawY);
-		}
-	}
-	
 	public static class DialogTooltipInput extends DialogTooltip {
-		protected final IOToggleButton button;
-		public DialogTooltipInput(IOToggleButton button) {
+		protected final DialogIOToggleButton button;
+		public DialogTooltipInput(DialogIOToggleButton button) {
 			super(8, 23, 9, 9, "");
 			this.button = button;
 		}
@@ -79,7 +38,7 @@ public class DialogMachineInventory extends DialogInventory implements IElementS
 		
 		this.addLayout(new InventoryLayout(8, 38));
 		
-		IOToggleButton button = new IOToggleButton(te);
+		DialogIOToggleButton button = new DialogIOToggleButton(8, 23, 9, 9, te); 
 		this.addElement(button);
 		this.addTooltip(new DialogTooltipInput(button));
 		

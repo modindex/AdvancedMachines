@@ -2,6 +2,7 @@ package jaminv.advancedmachines.util.handlers;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.init.BlockInit;
+import jaminv.advancedmachines.init.FluidInit;
 import jaminv.advancedmachines.init.ItemInit;
 import jaminv.advancedmachines.util.interfaces.IHasModel;
 import jaminv.advancedmachines.util.interfaces.IHasTileEntity;
@@ -27,6 +28,7 @@ public class RegistryHandler {
 	
 	@SubscribeEvent
 	public static void onBlockRegister(RegistryEvent.Register<Block> event) {
+		FluidInit.registerFluids();
 		event.getRegistry().registerAll(BlockInit.BLOCKS.toArray(new Block[0]));
 		
 		for (Block block : BlockInit.BLOCKS) {

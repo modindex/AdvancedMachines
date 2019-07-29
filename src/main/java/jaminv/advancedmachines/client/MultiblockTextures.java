@@ -100,6 +100,10 @@ public class MultiblockTextures {
 			}
 		}
 		
+		ResourceLocation res = new ResourceLocation(Reference.MODID, "no_texture");
+		map.put("no_texture", res);
+		set.add(res);
+		
 		resources = map.build();
 		textures = set.build();
 

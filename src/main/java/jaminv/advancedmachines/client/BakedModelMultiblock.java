@@ -107,6 +107,7 @@ public class BakedModelMultiblock implements IBakedModel {
 	public static final ModelResourceLocation ENERGY = new ModelResourceLocation(Reference.MODID + ":bakedmodelmultiblock_energy");
 	public static final ModelResourceLocation SPEED = new ModelResourceLocation(Reference.MODID + ":bakedmodelmultiblock_speed");
 	public static final ModelResourceLocation PRODUCTIVITY = new ModelResourceLocation(Reference.MODID + ":bakedmodelmultiblock_productivity");
+	public static final ModelResourceLocation TANK = new ModelResourceLocation(Reference.MODID + ":bakedmodelmultiblock_tank");
 	
 	private VertexFormat format;
 	private Map<String, TextureAtlasSprite> sprites = new HashMap<String, TextureAtlasSprite>();
@@ -128,7 +129,10 @@ public class BakedModelMultiblock implements IBakedModel {
 	
 	protected TextureAtlasSprite getSprite(String resourcelocation, String direction) {
 		TextureAtlasSprite ret = sprites.get(resourcelocation);
-		if (ret == null) { throw new RuntimeException("Error loading sprite: '" + resourcelocation + "', direction: " + direction); }
+		if (ret == null) { 
+			ret = sprites.get("no_texture");
+			Main.logger.error("Error loading sprite: '" + resourcelocation + "', direction: " + direction);
+		}
 		return ret;
 	}
 	

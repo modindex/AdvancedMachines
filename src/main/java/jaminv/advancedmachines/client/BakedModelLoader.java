@@ -16,6 +16,7 @@ public class BakedModelLoader implements ICustomModelLoader {
 	public static final ModelMultiblock MODEL_MULTIBLOCK_INVENTORY = new ModelMultiblock("expansion", "inventory");
 	public static final ModelMultiblock MODEL_MULTIBLOCK_REDSTONE = new ModelMultiblock("expansion", "redstone");
 	public static final ModelMultiblock MODEL_MULTIBLOCK_ENERGY = new ModelMultiblock("expansion", "energy");
+	public static final ModelMultiblock MODEL_MULTIBLOCK_TANK = new ModelMultiblock("expansion", "expansion");
 	
 	public static final ModelMultiblock MODEL_MULTIBLOCK_SPEED = new ModelMultiblock("speed");
 	public static final ModelMultiblock MODEL_MULTIBLOCK_PRODUCTIVITY = new ModelMultiblock("productivity");
@@ -26,6 +27,7 @@ public class BakedModelLoader implements ICustomModelLoader {
 	@Override
 	public boolean accepts(ResourceLocation modelLocation) {
 		return modelLocation.getResourceDomain().equals(Reference.MODID) && 
+			modelLocation.getResourcePath().length() >= "bakedmodelmultiblock".length() &&
 			("bakedmodelmultiblock".equals(modelLocation.getResourcePath().substring(0, "bakedmodelmultiblock".length())));
 	}
 
@@ -50,6 +52,8 @@ public class BakedModelLoader implements ICustomModelLoader {
 			return MODEL_MULTIBLOCK_SPEED;
 		case "bakedmodelmultiblock_productivity":
 			return MODEL_MULTIBLOCK_PRODUCTIVITY;
+		case "bakedmodelmultiblock_tank":
+			return MODEL_MULTIBLOCK_TANK;
 		default:
 			return MODEL_MULTIBLOCK;
 		}

@@ -5,23 +5,26 @@ import java.util.List;
 
 import jaminv.advancedmachines.objects.blocks.BlockMaterial;
 import jaminv.advancedmachines.objects.blocks.BlockMaterialOre;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansionBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.energy.BlockMachineEnergy;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.expansion.BlockMachineExpansion;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.BlockMachineInventory;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.prodctivity.BlockMachineProductivity;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.redstone.BlockMachineRedstone;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.speed.BlockMachineSpeed;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.tank.BlockMachineTank;
 import jaminv.advancedmachines.objects.blocks.machine.instance.alloy.BlockMachineAlloy;
 import jaminv.advancedmachines.objects.blocks.machine.instance.furnace.BlockMachineFurnace;
 import jaminv.advancedmachines.objects.blocks.machine.instance.grinder.BlockMachineGrinder;
 import jaminv.advancedmachines.objects.blocks.machine.instance.purifier.BlockMachinePurifier;
+import jaminv.advancedmachines.objects.fluids.BlockFluidClassicBase;
 import jaminv.advancedmachines.util.material.MaterialBase;
 import jaminv.advancedmachines.util.material.MaterialExpansion;
 import jaminv.advancedmachines.util.material.MaterialMod;
 import jaminv.advancedmachines.util.material.PropertyMaterial;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialLiquid;
 
 public class BlockInit {
 	// Force these objects to load before referencing them
@@ -52,4 +55,7 @@ public class BlockInit {
 	public static final BlockMachineInventory MACHINE_INVENTORY = new BlockMachineInventory("machine_inventory");
 	public static final BlockMachineEnergy MACHINE_ENERGY = new BlockMachineEnergy("machine_energy");
 	public static final BlockMachineRedstone MACHINE_REDSTONE = new BlockMachineRedstone("machine_redstone");
+	public static final BlockMachineTank MACHINE_TANK = new BlockMachineTank("machine_tank");
+	
+	public static final BlockFluidClassicBase FLUID_COAL_TAR = new BlockFluidClassicBase("coal_tar", FluidInit.COAL_TAR, new MaterialLiquid(MapColor.BLACK));
 }

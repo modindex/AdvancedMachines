@@ -18,6 +18,7 @@ import jaminv.advancedmachines.util.dialog.container.IContainerUpdate;
 import jaminv.advancedmachines.util.dialog.container.IContainerUpdate;
 import jaminv.advancedmachines.util.dialog.gui.GuiContainerObservable;
 import jaminv.advancedmachines.util.dialog.gui.GuiScreenObservable;
+import jaminv.advancedmachines.util.interfaces.IDirectional;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
 import jaminv.advancedmachines.util.recipe.IRecipeManager;
@@ -34,7 +35,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 
-public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase implements IHasGui, IContainerUpdate, IMachineEnergy, IMachineUpgradeTool {
+public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase implements IHasGui, IContainerUpdate, IMachineEnergy, IMachineUpgradeTool, IDirectional {
 	
 	protected EnumFacing facing = EnumFacing.NORTH;
 	protected BlockPos parent;

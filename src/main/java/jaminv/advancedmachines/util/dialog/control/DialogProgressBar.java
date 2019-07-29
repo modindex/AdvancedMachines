@@ -25,6 +25,7 @@ public abstract class DialogProgressBar extends DialogTextureMapDefault implemen
 	@Override
 	public void draw(GuiScreen gui, FontRenderer font, int drawX, int drawY) {
 		DialogTexture texture = this.getTexture(TextureDefault.DEFAULT);		
+
 		int y = drawY;
 		int w = this.getW(), h = this.getH();
 		int v = texture.getV();
@@ -40,7 +41,11 @@ public abstract class DialogProgressBar extends DialogTextureMapDefault implemen
 			break;
 		}
 		
-		gui.drawTexturedModalRect(drawX, y, texture.getU(), v, w, h);
+		drawProgressBar(gui, texture, drawX, y, texture.getU(), v, w, h);
+	}
+	
+	protected void drawProgressBar(GuiScreen gui, DialogTexture texture, int x, int y, int u, int v, int w, int h) {
+		gui.drawTexturedModalRect(x, y, texture.getU(), v, w, h);
 	}
 	
 	@Override

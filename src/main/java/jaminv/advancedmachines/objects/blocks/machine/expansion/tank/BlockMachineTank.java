@@ -1,13 +1,11 @@
-package jaminv.advancedmachines.objects.blocks.machine.expansion.inventory;
+package jaminv.advancedmachines.objects.blocks.machine.expansion.tank;
 
 import jaminv.advancedmachines.client.BakedModelMultiblock;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansionBase;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachineExpansionBase;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.expansion.BlockMachineExpansion;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.TileEntityMachineInventory;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.util.enums.EnumGui;
 import jaminv.advancedmachines.util.helper.BlockHelper;
-import jaminv.advancedmachines.util.interfaces.IHasTileEntity;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
@@ -17,7 +15,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityFlowerPot;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -26,23 +23,16 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
-public class BlockMachineInventory extends BlockMachineExpansionBase implements ITileEntityProvider, IHasTileEntity {
+public class BlockMachineTank extends BlockMachineExpansion {
 	
     public static final PropertyBool INPUT = PropertyBool.create("input");
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
 
-	public BlockMachineInventory(String name) {
+	public BlockMachineTank(String name) {
 		super(name);
 	}
-	
-	protected int getGuiId() { return EnumGui.MACHINE_INVENTORY.getId(); }
-	
-	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-		
-		BlockHelper.setDirectional(worldIn, pos, placer);
-	}		 
+
+	protected int getGuiId() { return EnumGui.MACHINE_TANK.getId(); }
 	
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
@@ -52,13 +42,20 @@ public class BlockMachineInventory extends BlockMachineExpansionBase implements 
 	}
 	
 	@Override
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+		
+		BlockHelper.setDirectional(worldIn, pos, placer);
+	}		
+	
+	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityMachineInventory();
+		return new TileEntityMachineTank();
 	}
 	
 	@Override
 	public Class<? extends TileEntity> getTileEntityClass() {
-		return TileEntityMachineInventory.class;
+		return TileEntityMachineTank.class;
 	}
 
 	@Override
@@ -75,8 +72,8 @@ public class BlockMachineInventory extends BlockMachineExpansionBase implements 
         boolean input = true;
         MultiblockBorders borders = MultiblockBorders.DEFAULT;
 
-        if (tileentity instanceof TileEntityMachineInventory) {
-        	TileEntityMachineInventory te = (TileEntityMachineInventory)tileentity;
+        if (tileentity instanceof TileEntityMachineTank) {
+        	TileEntityMachineTank te = (TileEntityMachineTank)tileentity;
         	facing = te.getFacing();
         	input = te.getInputState();
         	borders = te.getBorders();
@@ -90,7 +87,8 @@ public class BlockMachineInventory extends BlockMachineExpansionBase implements 
 	
 	@Override
 	public void registerModels() {
-		registerCustomModel(BakedModelMultiblock.INVENTORY);
+		registerCustomModel(BakedModelMultiblock.TANK);
 		registerVariantModels();
 	}	
+
 }

@@ -1,7 +1,22 @@
 {
     "variants": {
-        "variant=titanium": { "model": "advancedmachines:ore_titanium" },
-        "variant=copper": { "model": "advancedmachines:ore_copper" },
-        "variant=silver": { "model": "advancedmachines:ore_silver" }    
+        "variant=titanium": { 
+            "model": "advancedmachines:ore_titanium",
+            "textures": {
+                "all": "advancedmachines:blocks/ore_titanium"
+            }
+        },
+        "variant=copper": { 
+            "model": "advancedmachines:ore_copper",
+            "textures": {
+                "all": "advancedmachines:blocks/ore_copper"
+            }
+        },
+        "variant=silver": { 
+            "model": "advancedmachines:ore_silver",
+            "textures": {
+                "all": "advancedmachines:blocks/ore_silver"
+            }
+        }
     }
 }

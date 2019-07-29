@@ -1,23 +1,19 @@
-package jaminv.advancedmachines.objects.blocks.machine.expansion.inventory;
+package jaminv.advancedmachines.objects.blocks.machine.expansion.tank;
 
 import javax.annotation.Nullable;
 
 import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.objects.blocks.fluid.TileEntityFluid;
 import jaminv.advancedmachines.objects.blocks.inventory.ContainerInventory;
-import jaminv.advancedmachines.objects.blocks.inventory.TileEntityInventory;
-import jaminv.advancedmachines.objects.blocks.machine.MachineEnergyStorage;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansionBase;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTileEntity;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTool;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
 import jaminv.advancedmachines.util.dialog.gui.GuiContainerObservable;
-import jaminv.advancedmachines.util.helper.InventoryHelper;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
 import jaminv.advancedmachines.util.interfaces.ISwitchableIO;
-import jaminv.advancedmachines.util.recipe.IRecipeManager;
-import jaminv.advancedmachines.util.recipe.RecipeInput;
+import jaminv.advancedmachines.util.message.IOStateMessage;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -28,9 +24,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.fluids.FluidActionResult;
+import net.minecraftforge.fluids.FluidUtil;
 
-public class TileEntityMachineInventory extends TileEntityInventory implements IHasGui, IMachineUpgradeTool, IDirectional, ISwitchableIO {
+public class TileEntityMachineTank extends TileEntityFluid implements IHasGui, IMachineUpgradeTool, IDirectional, ISwitchableIO {
 	
 	protected EnumFacing facing = EnumFacing.NORTH;
 	protected boolean inputState = true;
@@ -41,6 +38,7 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 	public void setFacing(EnumFacing facing) {
 		this.facing = facing;
 	}
+	
 	public EnumFacing getFacing() {
 		return facing;
 	}
@@ -48,13 +46,19 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 	public boolean getInputState() {
 		return inputState;
 	}
+    
+	@Override
+	public int getCapacity() {
+		return 4000;
+	}
+	
 	public void setInputState(boolean state) {
 		this.inputState = state;
 		BlockMachineExpansionBase.scanMultiblock(world, this.getPos());
 		world.markBlockRangeForRenderUpdate(this.pos, this.pos);
 		
 		if (world.isRemote) {
-			Main.NETWORK.sendToServer(new InventoryStateMessage(this.getPos(), state, priority));
+			Main.NETWORK.sendToServer(new IOStateMessage(this.getPos(), state, priority));
 		}
 	}
 	
@@ -62,7 +66,7 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 		this.priority = priority;
 				
 		if (world.isRemote) {
-			Main.NETWORK.sendToServer(new InventoryStateMessage(this.getPos(), inputState, priority));
+			Main.NETWORK.sendToServer(new IOStateMessage(this.getPos(), inputState, priority));
 		}
 		
 		if (parent == null) { return; }
@@ -85,51 +89,40 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 	@Override
 	public void tickUpdate(TileEntityMachineMultiblock te) {
 		if (inputState) {
-			moveInput(te);
+			//moveInput(te);
 		} else {
-			moveOutput(te);
+			//moveOutput(te);
 		}
 	}
 	
-	protected void moveInput(TileEntityMachineMultiblock te) {
- 		ItemStackHandler inv = te.getInventory();
-		IRecipeManager recipe = te.getRecipeManager();
+	boolean inChangedEvent = false; // Prevent inventory changes in below event from triggering more events
+	
+	@Override
+	public void onContentsChanged(int slot) {
+		if (inChangedEvent) { return; }
+		inChangedEvent = true;
 
-		ItemStack[] input = new ItemStack[te.getInputCount()];
-		for (int i = te.getFirstInputSlot(); i < te.getInputCount() + te.getFirstInputSlot(); i++) {
-			input[i - te.getFirstInputSlot()] = inv.getStackInSlot(i);
-		}
-		
-		for (int i = te.getFirstInputSlot(); i < te.getInputCount() + te.getFirstInputSlot(); i++) {
-			ItemStack item = inv.getStackInSlot(i);
-			if (item.isEmpty()) {
-				for (int d = 0; d < inventory.getSlots(); d++) {
-					ItemStack other = inventory.getStackInSlot(d);
-					if (!other.isEmpty() && recipe.isItemValid(other, te.getInput())) {
-						inventory.extractItem(d, other.getCount(), false);
-						inv.insertItem(i, other, false);
-						break;
-					}
-				}
+		for (int i = 0; i <= 1; i++) {
+			ItemStack stack = this.getInventory().getStackInSlot(slot);
+			if (stack == null) { break; }
+
+			FluidActionResult result = null;
+			if (slot == 0) { 
+				result = FluidUtil.tryEmptyContainer(stack, this.getTank(), this.getCapacity(), null, true);
+			} else if (slot == 1) {
+				result = FluidUtil.tryFillContainer(stack, this.getTank(), this.getCapacity(), null, true);
 			}
 			
-			for (int d = 0; d < inventory.getSlots(); d++) {
-				ItemStack other = inventory.getStackInSlot(d);				
-				other = InventoryHelper.pushStack(other, inv, i, i, false);
-			}
-		}
-	}
-	
-	protected void moveOutput(TileEntityMachineMultiblock te) {
-		ItemStackHandler inv = te.getInventory();
-		
-		for (int i = te.getFirstOutputSlot(); i < te.getOutputCount() + te.getFirstOutputSlot(); i++) {
-			inv.setStackInSlot(i, InventoryHelper.pushStack(inv.getStackInSlot(i), inventory));
+			if (result != null && result.success) {
+				this.getInventory().extractItem(slot, stack.getCount(), false);
+				this.getInventory().insertItem(slot, result.getResult(), false);
+			} else { break; } // Prevent infinite loop
+			
+			slot = (slot == 0) ? 1 : 0;
 		}
 		
-		for (int i = te.getFirstSecondarySlot(); i < te.getSecondaryCount() + te.getFirstSecondarySlot(); i++) {
-			inv.setStackInSlot(i, InventoryHelper.pushStack(inv.getStackInSlot(i), inventory));
-		}
+		super.onContentsChanged(slot);
+		inChangedEvent = false;
 	}
 	
 	
@@ -141,16 +134,15 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 		return borders; 
 	}	
 	
-	public final int SIZE = 27;
 	@Override
 	public int getInventorySize() {
-		return SIZE;
+		return 2;
 	}
 	
-	private final DialogMachineInventory dialog = new DialogMachineInventory(this);
+	private final DialogMachineTank dialog = new DialogMachineTank(this);
 	
-	public class GuiMachineInventory extends GuiContainerObservable {
-		public GuiMachineInventory(ContainerInventory container, DialogMachineInventory dialog) {
+	public class GuiMachineTank extends GuiContainerObservable {
+		public GuiMachineTank(ContainerInventory container, DialogMachineTank dialog) {
 			super(container, dialog.getW(), dialog.getH());
 			this.addObserver(dialog);
 		}
@@ -163,8 +155,10 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 	
 	@Override
 	public GuiContainer createGui(IInventory inventory) {
-		return new GuiMachineInventory(createContainer(inventory), dialog);
+		return new GuiMachineTank(createContainer(inventory), dialog);
 	}
+	
+	
 	
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
@@ -208,5 +202,5 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
     public NBTTagCompound getUpdateTag()
     {
         return this.writeToNBT(new NBTTagCompound());
-    }	
+    }
 }

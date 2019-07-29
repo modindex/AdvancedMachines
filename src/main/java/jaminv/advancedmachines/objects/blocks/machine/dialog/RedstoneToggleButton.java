@@ -1,12 +1,6 @@
 package jaminv.advancedmachines.objects.blocks.machine.dialog;
 
-import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.TileEntityMachineInventory;
-import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.DialogMachineInventory.IOState;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.DialogMachineInventory.IOToggleButton;
 import jaminv.advancedmachines.util.dialog.control.DialogToggleButton;
-import jaminv.advancedmachines.util.dialog.control.DialogToggleButton.IEnumIterable;
-import jaminv.advancedmachines.util.dialog.struct.DialogTooltip;
 import jaminv.advancedmachines.util.interfaces.IRedstoneControlled;
 import jaminv.advancedmachines.util.interfaces.IRedstoneControlled.RedstoneState;
 import net.minecraft.client.gui.FontRenderer;

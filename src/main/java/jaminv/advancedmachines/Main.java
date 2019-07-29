@@ -10,6 +10,7 @@ import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
 
 import jaminv.advancedmachines.proxy.CommonProxy;
 import jaminv.advancedmachines.util.Reference;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -32,6 +33,10 @@ public class Main {
 	public static CommonProxy proxy;
 	
 	public static Logger logger;
+	
+	static {
+		FluidRegistry.enableUniversalBucket();
+	}
 	
 	@EventHandler
     public void preInit(FMLPreInitializationEvent event) {

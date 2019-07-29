@@ -37,15 +37,11 @@ public class BlockMachineEnergy extends BlockMachineExpansionBase implements ITi
 	protected int getGuiId() { return EnumGui.MACHINE_POWER.getId(); }
 	
 	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
-			ItemStack stack) {
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-
-		TileEntity te = worldIn.getTileEntity(pos);
-		if (te != null && te instanceof TileEntityMachineEnergy) {
-			((TileEntityMachineEnergy)te).setFacing(EnumFacing.getDirectionFromEntityLiving(pos, placer));
-		}
-	}		 
+		
+		BlockHelper.setDirectional(worldIn, pos, placer);
+	}	 
 	
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
