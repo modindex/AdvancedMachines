@@ -3,6 +3,7 @@ package jaminv.advancedmachines.util.dialog.control;
 import java.util.ArrayList;
 import java.util.List;
 
+import jaminv.advancedmachines.util.dialog.DialogBase;
 import jaminv.advancedmachines.util.dialog.struct.DialogArea;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -38,7 +39,7 @@ public class DialogTextBox extends DialogArea implements IDialogControlAdvanced 
 	}
 
 	@Override
-	public void draw(GuiScreen screen, FontRenderer font, int drawX, int drawY) {
+	public void draw(DialogBase gui, FontRenderer font, int drawX, int drawY) {
 		field.drawTextBox();
 	}
 

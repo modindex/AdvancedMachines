@@ -11,13 +11,18 @@ import jaminv.advancedmachines.util.dialog.control.IDialogControlAdvanced;
 import jaminv.advancedmachines.util.dialog.control.IDialogElement;
 import jaminv.advancedmachines.util.dialog.struct.DialogArea;
 import jaminv.advancedmachines.util.dialog.struct.DialogTooltip;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.client.config.GuiUtils;
 import scala.actors.threadpool.Arrays;
 
@@ -172,22 +177,44 @@ public class DialogBase extends GuiContainer {
 		this.renderHoveredToolTip(mouseX, mouseY);
 	}
 	
-	public static void drawTiledTexture(int x, int y, TextureAtlasSprite sprite, int w, int h) {
+	public void drawFluid(int x, int y, FluidStack fluid, int w, int h) {
+		if (fluid == null) { return; }
+		
+		GL11.glPushMatrix();
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		
+		Minecraft mc = Minecraft.getMinecraft();
+		
+		mc.renderEngine.bindTexture(new ResourceLocation("textures/atlas/blocks.png"));
+		
+		TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluid.getFluid().getStill(fluid).toString());
+		drawTiledTexture(x, y, sprite, w, h);
+		
+		mc.getTextureManager().bindTexture(this.background);
+		GL11.glPopMatrix();		
+	}
+	
+	public void drawTiledTexture(int x, int y, TextureAtlasSprite sprite, int w, int h) {
 		for (int i = 0; i < w; i += 16) {
 			for (int j = 0; j < h; j += 16) {
-				drawScaledTexture(x + i, y + i, sprite, Math.min(w-i, 16), Math.min(h-i, 16));
+				drawScaledTexture(x + i, y + j, sprite, Math.min(w-i, 16), Math.min(h-j, 16));
 			}
 		}
 	}
 	
-	public static void drawScaledTexture(int x, int y, TextureAtlasSprite sprite, int w, int h) {
-		/*if (sprite == null) { return; }
+	public void drawScaledTexture(int x, int y, TextureAtlasSprite sprite, int w, int h) {
+		if (sprite == null) { return; }
 		
 		double minU = sprite.getMinU(), maxU = sprite.getMaxU(), minV = sprite.getMinV(), maxV = sprite.getMaxV();
 		
-		BufferBuilder buffer = Tesselator.getInstance().getBuffer();
-		buffer.begin(GL11.GL_QUADS DefaultVertexFormats.POSITION_TEX);
-		buffer.pos(x,  y + h,  ) */
+		BufferBuilder buffer = Tessellator.getInstance().getBuffer();
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+		buffer.pos(x, y+h, this.zLevel).tex(minU, minV + (maxV - minV) * h / 16F).endVertex();
+		buffer.pos(x+w, y+h, this.zLevel).tex(minU + (maxU - minU) * w / 16F, minV + (maxV - minV) * h / 16F).endVertex();
+		buffer.pos(x+w, y, this.zLevel).tex(minU + (maxU - minU) * w / 16F, minV).endVertex();
+		buffer.pos(x, y, this.zLevel).tex(minU, minV).endVertex();
+		Tessellator.getInstance().draw();
 	}
 
 }

@@ -1,5 +1,6 @@
 package jaminv.advancedmachines.objects.blocks.machine.dialog;
 
+import jaminv.advancedmachines.util.dialog.DialogBase;
 import jaminv.advancedmachines.util.dialog.control.DialogToggleButton;
 import jaminv.advancedmachines.util.interfaces.IRedstoneControlled;
 import jaminv.advancedmachines.util.interfaces.IRedstoneControlled.RedstoneState;
@@ -35,9 +36,9 @@ public class RedstoneToggleButton extends DialogToggleButton<RedstoneState> {
 	}
 		
 	@Override
-	public void draw(GuiScreen screen, FontRenderer font, int drawX, int drawY) {
+	public void draw(DialogBase gui, FontRenderer font, int drawX, int drawY) {
 		this.state = te.getRedstoneState();
-		super.draw(screen, font, drawX, drawY);
+		super.draw(gui, font, drawX, drawY);
 	}
 	
 	@Override

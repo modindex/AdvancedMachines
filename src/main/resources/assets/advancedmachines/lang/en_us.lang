@@ -134,6 +134,7 @@ dialog.grinder.title=Advanced Grinder
 dialog.furnace.title=Advanced Furnace
 dialog.energy.title=Energy
 dialog.machine_inventory.title=Machine Inventory
+dialog.machine_tank.title=Fluid Tank
 
 message.no_controller=No Machine Controller Found
 message.controller_found=Machine Controller (%s) found at (%d, %d, %d)

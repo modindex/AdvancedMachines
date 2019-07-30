@@ -1,12 +1,17 @@
 package jaminv.advancedmachines.objects.blocks.machine.dialog;
 
+import org.lwjgl.opengl.GL11;
+
 import jaminv.advancedmachines.objects.blocks.fluid.TileEntityFluid;
+import jaminv.advancedmachines.util.dialog.DialogBase;
 import jaminv.advancedmachines.util.dialog.control.DialogProgressBar;
 import jaminv.advancedmachines.util.dialog.struct.DialogTexture;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
 public class DialogFluid extends DialogProgressBar {
@@ -33,13 +38,7 @@ public class DialogFluid extends DialogProgressBar {
 	}
 
 	@Override
-	protected void drawProgressBar(GuiScreen gui, DialogTexture texture, int x, int y, int u, int v, int w, int h) {
-		if (te.getFluid() == null) { return; }
-		FluidStack fluid = te.getFluid();
-		
-		Minecraft mc = Minecraft.getMinecraft();
-		TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluid.getFluid().getStill(fluid).toString());
-		
-		gui.drawTexturedModalRect(x, y, sprite, w, h);
+	protected void drawProgressBar(DialogBase gui, DialogTexture texture, int x, int y, int u, int v, int w, int h) {
+		gui.drawFluid(x, y, te.getFluid(), w, h);
 	}
 }

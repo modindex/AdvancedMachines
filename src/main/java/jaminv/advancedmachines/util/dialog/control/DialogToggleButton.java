@@ -1,5 +1,6 @@
 package jaminv.advancedmachines.util.dialog.control;
 
+import jaminv.advancedmachines.util.dialog.DialogBase;
 import jaminv.advancedmachines.util.dialog.struct.DialogTextureMap;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -20,8 +21,8 @@ public class DialogToggleButton<T extends DialogToggleButton.IEnumIterable<T>> e
 	public T getState() { return this.state; }
 	
 	@Override
-	public void draw(GuiScreen screen, FontRenderer font, int drawX, int drawY) {
-		this.draw(screen, drawX, drawY, state);
+	public void draw(DialogBase gui, FontRenderer font, int drawX, int drawY) {
+		this.draw(gui, drawX, drawY, state);
 	}
 
 	@Override

@@ -14,18 +14,6 @@ import net.minecraft.client.resources.I18n;
 
 public class DialogMachineInventory extends DialogBase implements IElementStateObserver<String> {
 	
-	public static class DialogTooltipInput extends DialogTooltip {
-		protected final DialogIOToggleButton button;
-		public DialogTooltipInput(DialogIOToggleButton button) {
-			super(8, 23, 9, 9, "");
-			this.button = button;
-		}
-		
-		@Override
-		public String getText() {
-			return I18n.format(button.getState().getName());
-		}
-	}
 	
 	TileEntityMachineInventory te;
 	DialogTextBox priority;
@@ -39,9 +27,7 @@ public class DialogMachineInventory extends DialogBase implements IElementStateO
 		super(container, "textures/gui/machine_inventory.png", 24, 0, 176, 185);
 		this.te = te;
 		
-		DialogIOToggleButton button = new DialogIOToggleButton(8, 23, 9, 9, te); 
-		this.addElement(button);
-		this.addTooltip(new DialogTooltipInput(button));
+		this.addElement(new DialogIOToggleButton(8, 23, 9, 9, te)); 
 		
 		priority = new DialogTextBox(EnumComponent.PRIORITY_MACHINE_INVENTORY.getId(), 136, 24, 36, 11, 4);
 		priority.setPattern("[0-9]");

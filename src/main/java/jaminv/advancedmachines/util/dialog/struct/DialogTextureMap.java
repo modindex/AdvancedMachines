@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import jaminv.advancedmachines.util.dialog.DialogBase;
 import net.minecraft.client.gui.GuiScreen;
 
 public class DialogTextureMap<T> extends DialogArea {
@@ -41,7 +42,7 @@ public class DialogTextureMap<T> extends DialogArea {
 		return textures.get(identifier);
 	}
 	
-	public void draw(GuiScreen gui, int drawX, int drawY, T identifier) {
+	public void draw(DialogBase gui, int drawX, int drawY, T identifier) {
 		DialogTexture texture = textures.get(identifier);
 		if (texture == null) { return; }
 		

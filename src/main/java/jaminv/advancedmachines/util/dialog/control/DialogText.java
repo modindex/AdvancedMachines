@@ -1,5 +1,6 @@
 package jaminv.advancedmachines.util.dialog.control;
 
+import jaminv.advancedmachines.util.dialog.DialogBase;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -75,7 +76,7 @@ public class DialogText implements IDialogElement {
 		}
 	}
 	
-	public void draw(GuiScreen gui, FontRenderer font, int drawX, int drawY) {
+	public void draw(DialogBase gui, FontRenderer font, int drawX, int drawY) {
 		String loc = I18n.format(this.getText());
 		int xpos = this.getX(font, loc, drawX);
 		int ypos = this.getY(font, loc, drawY);

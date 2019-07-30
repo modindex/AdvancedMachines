@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.util.dialog.control;
 
-import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
+import jaminv.advancedmachines.util.dialog.DialogBase;
 import jaminv.advancedmachines.util.dialog.struct.DialogTexture;
 import jaminv.advancedmachines.util.dialog.struct.DialogTextureMap.DialogTextureMapDefault;
 import net.minecraft.client.gui.FontRenderer;
@@ -23,7 +23,7 @@ public abstract class DialogProgressBar extends DialogTextureMapDefault implemen
 	protected abstract float getPercent();
 
 	@Override
-	public void draw(GuiScreen gui, FontRenderer font, int drawX, int drawY) {
+	public void draw(DialogBase gui, FontRenderer font, int drawX, int drawY) {
 		DialogTexture texture = this.getTexture(TextureDefault.DEFAULT);		
 
 		int y = drawY;
@@ -44,7 +44,7 @@ public abstract class DialogProgressBar extends DialogTextureMapDefault implemen
 		drawProgressBar(gui, texture, drawX, y, texture.getU(), v, w, h);
 	}
 	
-	protected void drawProgressBar(GuiScreen gui, DialogTexture texture, int x, int y, int u, int v, int w, int h) {
+	protected void drawProgressBar(DialogBase gui, DialogTexture texture, int x, int y, int u, int v, int w, int h) {
 		gui.drawTexturedModalRect(x, y, texture.getU(), v, w, h);
 	}
 	

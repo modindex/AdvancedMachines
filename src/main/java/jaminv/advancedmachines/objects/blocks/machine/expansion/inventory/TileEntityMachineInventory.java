@@ -13,9 +13,9 @@ import jaminv.advancedmachines.util.helper.InventoryHelper;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
 import jaminv.advancedmachines.util.interfaces.ISwitchableIO;
+import jaminv.advancedmachines.util.message.IOStateMessage;
 import jaminv.advancedmachines.util.recipe.IRecipeManager;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -61,7 +61,7 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 		world.markBlockRangeForRenderUpdate(this.pos, this.pos);
 		
 		if (world.isRemote) {
-			Main.NETWORK.sendToServer(new InventoryStateMessage(this.getPos(), state, priority));
+			Main.NETWORK.sendToServer(new IOStateMessage(this.getPos(), state, priority));
 		}
 	}
 	
@@ -69,7 +69,7 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 		this.priority = priority;
 				
 		if (world.isRemote) {
-			Main.NETWORK.sendToServer(new InventoryStateMessage(this.getPos(), inputState, priority));
+			Main.NETWORK.sendToServer(new IOStateMessage(this.getPos(), inputState, priority));
 		}
 		
 		if (parent == null) { return; }

@@ -1,11 +1,11 @@
 package jaminv.advancedmachines.objects.blocks.machine.dialog;
 
-import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.TileEntityMachineInventory;
+import jaminv.advancedmachines.util.dialog.DialogBase;
 import jaminv.advancedmachines.util.dialog.control.DialogToggleButton;
 import jaminv.advancedmachines.util.enums.IOState;
 import jaminv.advancedmachines.util.interfaces.ISwitchableIO;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
 
 public class DialogIOToggleButton extends DialogToggleButton<IOState> {
 	
@@ -24,8 +24,13 @@ public class DialogIOToggleButton extends DialogToggleButton<IOState> {
 	}
 	
 	@Override
-	public void draw(GuiScreen screen, FontRenderer font, int drawX, int drawY) {
+	public void draw(DialogBase gui, FontRenderer font, int drawX, int drawY) {
 		this.state = te.getInputState() ? IOState.INPUT : IOState.OUTPUT;
-		super.draw(screen, font, drawX, drawY);
+		super.draw(gui, font, drawX, drawY);		
+	}
+
+	@Override
+	public String getTooltip(int mouseX, int mouseY) {
+		return I18n.format(te.getInputState() ? IOState.INPUT.getName() : IOState.OUTPUT.getName());
 	}
 }

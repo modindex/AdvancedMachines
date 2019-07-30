@@ -14,20 +14,6 @@ import net.minecraft.client.resources.I18n;
 
 public class DialogMachineTank extends DialogBase {
 	
-	public static class DialogTooltipInput extends DialogTooltip {
-		protected final DialogIOToggleButton button;
-		public DialogTooltipInput(DialogIOToggleButton button) {
-			super(8, 23, 9, 9, "");
-			this.button = button;
-		}
-		
-		@Override
-		public String getText() {
-			IOState state = button.getState();
-			return I18n.format(state.getName());
-		}
-	}
-	
 	TileEntityMachineTank te;
 	DialogTextBox priority;
 	
@@ -42,13 +28,9 @@ public class DialogMachineTank extends DialogBase {
 		this.te = te;
 		
 		this.addElement(new DialogFluid(80, 21, 16, 48, te));
-		
-		DialogIOToggleButton button = new DialogIOToggleButton(8, 8, 9, 9, te);
-		this.addElement(button);
-		this.addTooltip(new DialogTooltipInput(button));
-		
+		this.addElement(new DialogIOToggleButton(8, 8, 9, 9, te));
 
-		this.addText(8, 6, 162, "dialog.machine_inventory.title", Color.DIALOG_TEXT);
+		this.addText(8, 6, 162, "dialog.machine_tank.title", Color.DIALOG_TEXT);
 		this.addText(8, 73, "dialog.common.inventory", Color.DIALOG_TEXT);
 
 	}
