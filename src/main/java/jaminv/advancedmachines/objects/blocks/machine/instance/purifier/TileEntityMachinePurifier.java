@@ -2,7 +2,7 @@ package jaminv.advancedmachines.objects.blocks.machine.instance.purifier;
 
 import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineParent;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.IInventory;
@@ -23,8 +23,8 @@ public class TileEntityMachinePurifier extends TileEntityMachineMultiblock {
 	}
 	
 	@Override
-	public MachineParent getMachineType() {
-		return MachineParent.PURIFIER;
+	public MachineType getMachineType() {
+		return MachineType.PURIFIER;
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 {
     "parent": "advancedmachines:block/machine_alloy",
     "textures": {
-        "all": "advancedmachines:blocks/machine/expansion/compressed/all",
+        "all": "advancedmachines:blocks/machine/expansion/compressed_all",
         "north": "advancedmachines:blocks/machine/instance/alloy/inactive/compressed/all"
     }
 }

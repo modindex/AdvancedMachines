@@ -1,34 +1,26 @@
 package jaminv.advancedmachines.objects.blocks.machine.expansion.redstone;
 
-import jaminv.advancedmachines.client.BakedModelMultiblock;
-import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
+import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansionBase;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachineExpansionBase;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.TileEntityMachineInventory;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.expansion.BakedModelExpansion;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
-import jaminv.advancedmachines.util.enums.EnumGui;
-import jaminv.advancedmachines.util.helper.BlockHelper;
 import jaminv.advancedmachines.util.interfaces.IHasTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityFlowerPot;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.property.IExtendedBlockState;
 
 public class BlockMachineRedstone extends BlockMachineExpansionBase implements ITileEntityProvider, IHasTileEntity {
 	
@@ -71,12 +63,19 @@ public class BlockMachineRedstone extends BlockMachineExpansionBase implements I
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		VARIANT = this.getVariant();		
-		return new BlockStateContainer(this, new IProperty[] { VARIANT, ACTIVE, FACING, BORDER_TOP, BORDER_BOTTOM, BORDER_NORTH, BORDER_SOUTH, BORDER_EAST, BORDER_WEST });
+		VARIANT = this.getVariant();
+		BlockStateContainer.Builder builder = new BlockStateContainer.Builder(this);
+		return builder.add(VARIANT)
+			.add(Properties.BORDER_TOP, Properties.BORDER_BOTTOM) 
+			.add(Properties.BORDER_NORTH, Properties.BORDER_SOUTH)
+			.add(Properties.BORDER_EAST, Properties.BORDER_WEST)
+			.add(Properties.FACING, Properties.ACTIVE)
+			.build();
 	}
 	
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+	public IExtendedBlockState getExtendedState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		IExtendedBlockState ext = (IExtendedBlockState)state;
         TileEntity tileentity = worldIn instanceof ChunkCache ? ((ChunkCache)worldIn).getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK) : worldIn.getTileEntity(pos);
 
         EnumFacing facing = EnumFacing.NORTH;
@@ -90,10 +89,10 @@ public class BlockMachineRedstone extends BlockMachineExpansionBase implements I
         	borders = te.getBorders();
         }
         
-        return state.withProperty(FACING, facing).withProperty(ACTIVE, active)
-        	.withProperty(BORDER_TOP, borders.getTop()).withProperty(BORDER_BOTTOM, borders.getBottom())
-        	.withProperty(BORDER_NORTH, borders.getNorth()).withProperty(BORDER_SOUTH, borders.getSouth())
-        	.withProperty(BORDER_EAST, borders.getEast()).withProperty(BORDER_WEST, borders.getWest());
+        return (IExtendedBlockState) ext.withProperty(Properties.FACING, facing).withProperty(Properties.ACTIVE, active)
+            	.withProperty(Properties.BORDER_TOP, borders.getTop()).withProperty(Properties.BORDER_BOTTOM, borders.getBottom())
+            	.withProperty(Properties.BORDER_NORTH, borders.getNorth()).withProperty(Properties.BORDER_SOUTH, borders.getSouth())
+            	.withProperty(Properties.BORDER_EAST, borders.getEast()).withProperty(Properties.BORDER_WEST, borders.getWest());
 	}
 	
 	@Override
@@ -108,7 +107,7 @@ public class BlockMachineRedstone extends BlockMachineExpansionBase implements I
 	
 	@Override
 	public void registerModels() {
-		registerCustomModel(BakedModelMultiblock.REDSTONE);
+		registerCustomModel("bakedmodel_redstone", BakedModelRedstone.class);
 		registerVariantModels();
 	}	
 }

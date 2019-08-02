@@ -1,6 +1,6 @@
 {
     "parent": "advancedmachines:block/machine_productivity",
     "textures": {
-        "all": "advancedmachines:blocks/machine/productivity/improbable/all"
+        "all": "advancedmachines:blocks/machine/productivity/improbable_all"
     }
 }

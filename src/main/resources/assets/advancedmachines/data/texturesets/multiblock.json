@@ -1,0 +1,16 @@
+{
+    "variant": {
+        "basic": {
+            "constant": "border_gray"
+        },
+        "compressed": {
+            "constant": "border_dark"
+        },
+        "quad": {
+            "constant": "border_dark"
+        },
+        "improbable": {
+            "constant": "border_dark"
+        }
+    }
+}

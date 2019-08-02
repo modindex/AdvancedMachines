@@ -2,7 +2,7 @@ package jaminv.advancedmachines.objects.blocks.machine.instance.grinder;
 
 import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineParent;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.util.recipe.machine.grinder.GrinderManager;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.IInventory;
@@ -24,8 +24,8 @@ public class TileEntityMachineGrinder extends TileEntityMachineMultiblock {
 	}
 	
 	@Override
-	public MachineParent getMachineType() {
-		return MachineParent.GRINDER;
+	public MachineType getMachineType() {
+		return MachineType.GRINDER;
 	}
 
 	@Override

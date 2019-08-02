@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.objects.blocks.machine.instance.furnace;
 
-import jaminv.advancedmachines.client.BakedModelMultiblock;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.expansion.BakedModelExpansion;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.BlockMachineMultiblock;
 import jaminv.advancedmachines.util.enums.EnumGui;
 import net.minecraft.tileentity.TileEntity;
@@ -22,11 +22,5 @@ public class BlockMachineFurnace extends BlockMachineMultiblock {
 	@Override
 	public Class<? extends TileEntity> getTileEntityClass() {
 		return TileEntityMachineFurnace.class;
-	}
-	
-	@Override
-	public void registerModels() {
-		registerCustomModel(BakedModelMultiblock.FURNACE);
-		registerVariantModels();
-	}		
+	}	
 }	

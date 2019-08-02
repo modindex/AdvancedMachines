@@ -1,8 +1,10 @@
 package jaminv.advancedmachines.objects.blocks.machine.multiblock;
 
+import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.objects.blocks.BlockMaterial;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansionBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgrade;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.util.material.MaterialBase;
 import jaminv.advancedmachines.util.material.MaterialBase.MaterialType;
 import net.minecraft.block.Block;
@@ -14,43 +16,35 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 
 public class MultiblockBorders implements INBTSerializable<NBTTagCompound> {
-	protected boolean top = true, bottom = true, north = true, south = true, east = true, west = true;
+	protected MultiblockBorderType top = MultiblockBorderType.SOLID, bottom = MultiblockBorderType.SOLID, north = MultiblockBorderType.SOLID,
+		south = MultiblockBorderType.SOLID, east = MultiblockBorderType.SOLID, west = MultiblockBorderType.SOLID;
 	
 	public static final MultiblockBorders DEFAULT = new MultiblockBorders();
 	
 	public MultiblockBorders() { }
-
-	public MultiblockBorders(boolean top, boolean bottom, boolean north, boolean south, boolean east, boolean west) {
-		this.top = top; this.bottom = bottom; this.north = north; this.south = south; this.east = east; this.west = west;
-	}
 	
-	public static final PropertyBool BORDER_TOP = PropertyBool.create("border_top");
-	public static final PropertyBool BORDER_BOTTOM = PropertyBool.create("border_bottom");
-	public static final PropertyBool BORDER_NORTH = PropertyBool.create("border_north");
-	public static final PropertyBool BORDER_SOUTH = PropertyBool.create("border_south");
-	public static final PropertyBool BORDER_EAST = PropertyBool.create("border_east");
-	public static final PropertyBool BORDER_WEST = PropertyBool.create("border_west");
-	
-	public MultiblockBorders(IBlockState state) {
-		bottom = state.getValue(BlockMachineExpansionBase.BORDER_BOTTOM);
-		top = state.getValue(BlockMachineExpansionBase.BORDER_TOP);
-		north = state.getValue(BlockMachineExpansionBase.BORDER_NORTH);
-		south = state.getValue(BlockMachineExpansionBase.BORDER_SOUTH);
-		east = state.getValue(BlockMachineExpansionBase.BORDER_EAST);
-		west = state.getValue(BlockMachineExpansionBase.BORDER_WEST);		
+	public MultiblockBorders(IExtendedBlockState state) {
+		bottom = state.getValue(Properties.BORDER_BOTTOM);
+		top = state.getValue(Properties.BORDER_TOP);
+		north = state.getValue(Properties.BORDER_NORTH);
+		south = state.getValue(Properties.BORDER_SOUTH);
+		east = state.getValue(Properties.BORDER_EAST);
+		west = state.getValue(Properties.BORDER_WEST);		
 	}
 	
 	public MultiblockBorders(World world, BlockPos pos, BlockPos min, BlockPos max) {
-		if (max.getY() == pos.getY()) { top = true; } else { top = false; }
-		if (min.getY() == pos.getY()) { bottom = true; } else { bottom = false; }
-		if (min.getZ() == pos.getZ()) { north = true; } else { north = false; }
-		if (max.getZ() == pos.getZ()) { south = true; } else { south = false; }
-		if (max.getX() == pos.getX()) { east = true; } else { east = false; }
-		if (min.getX() == pos.getX()) { west = true; } else { west = false; }
+		if (max.getY() == pos.getY()) { top = MultiblockBorderType.SOLID; } else { top = MultiblockBorderType.NONE; }
+		if (min.getY() == pos.getY()) { bottom = MultiblockBorderType.SOLID; } else { bottom = MultiblockBorderType.NONE; }
+		if (min.getZ() == pos.getZ()) { north = MultiblockBorderType.SOLID; } else { north = MultiblockBorderType.NONE; }
+		if (max.getZ() == pos.getZ()) { south = MultiblockBorderType.SOLID; } else { south = MultiblockBorderType.NONE; }
+		if (max.getX() == pos.getX()) { east = MultiblockBorderType.SOLID; } else { east = MultiblockBorderType.NONE; }
+		if (min.getX() == pos.getX()) { west = MultiblockBorderType.SOLID; } else { west = MultiblockBorderType.NONE; }
 		
 		Block current = world.getBlockState(pos).getBlock();
 		if (current instanceof BlockMaterial && ((BlockMaterial)current).getMaterialType() == MaterialType.EXPANSION) {
@@ -58,73 +52,80 @@ public class MultiblockBorders implements INBTSerializable<NBTTagCompound> {
 			
 			for (EnumFacing facing : EnumFacing.VALUES) {
 				Block check = world.getBlockState(pos.offset(facing)).getBlock();
-				boolean border = false;
+				MultiblockBorderType border = MultiblockBorderType.NONE;
 				
 				 if (check instanceof BlockMaterial && ((BlockMaterial)check).getMaterialType() == MaterialType.EXPANSION) {
 					if (((BlockMaterial)check).getVariant(world.getBlockState(pos.offset(facing))) != variant) {
-						border = true;
+						border = MultiblockBorderType.SINGLE;
 					}
 				}				
 				
 				if (check instanceof IMachineUpgrade && !(current instanceof IMachineUpgrade)) {
-					if (((IMachineUpgrade)check).getUpgradeType() != IMachineUpgrade.UpgradeType.MULTIPLY) { border = true; }
+					if (((IMachineUpgrade)check).getUpgradeType() != IMachineUpgrade.UpgradeType.MULTIPLY) { border = MultiblockBorderType.SINGLE; }
 				}
 				
 				if (current instanceof IMachineUpgrade && !(check instanceof IMachineUpgrade)) {
-					if (((IMachineUpgrade)current).getUpgradeType() != IMachineUpgrade.UpgradeType.MULTIPLY) { border = true; }
+					if (((IMachineUpgrade)current).getUpgradeType() != IMachineUpgrade.UpgradeType.MULTIPLY) { border = MultiblockBorderType.SINGLE; }
 				}
 				
 				if (check instanceof IMachineUpgrade && current instanceof IMachineUpgrade) {
-					if (((IMachineUpgrade)current).getUpgradeType() != ((IMachineUpgrade)check).getUpgradeType()) { border = true; }
+					if (((IMachineUpgrade)current).getUpgradeType() != ((IMachineUpgrade)check).getUpgradeType()) { border = MultiblockBorderType.SINGLE; }
 				}				
 					
-				if (border) {		
+				if (border != MultiblockBorderType.NONE) {		
 					switch (facing) {
 					case UP:
-						top = true; break;
+						top = border; break;
 					case DOWN:
-						bottom = true; break;
+						bottom = border; break;
 					case NORTH:
-						north = true; break;
+						north = border; break;
 					case SOUTH:
-						south = true; break;
+						south = border; break;
 					case WEST:
-						west = true; break;
+						west = border; break;
 					case EAST:
-						east = true; break;							
+						east = border; break;							
 					}
 				}
 			}
 		}
 	}
 	
-	public boolean getTop() { return top; }
-	public boolean getBottom() { return bottom; }
-	public boolean getNorth() { return north; }
-	public boolean getSouth() { return south; }
-	public boolean getEast() { return east; }
-	public boolean getWest() { return west; }
+	public MultiblockBorderType getTop() { return top; }
+	public MultiblockBorderType getBottom() { return bottom; }
+	public MultiblockBorderType getNorth() { return north; }
+	public MultiblockBorderType getSouth() { return south; }
+	public MultiblockBorderType getEast() { return east; }
+	public MultiblockBorderType getWest() { return west; }
 	
     @Override
     public NBTTagCompound serializeNBT()
     {
         NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setBoolean("top", top);
-        nbt.setBoolean("bottom", bottom);
-        nbt.setBoolean("north", north);
-        nbt.setBoolean("south", south);
-        nbt.setBoolean("east", east);
-        nbt.setBoolean("west", west);
+        nbt.setString("top", top.getName());
+        nbt.setString("bottom", bottom.getName());
+        nbt.setString("north", north.getName());
+        nbt.setString("south", south.getName());
+        nbt.setString("east", east.getName());
+        nbt.setString("west", west.getName());
         return nbt;
     }
 
     @Override
     public void deserializeNBT(NBTTagCompound nbt) {
-    	if (nbt.hasKey("top")) { top = nbt.getBoolean("top"); }
-    	if (nbt.hasKey("bottom")) { bottom = nbt.getBoolean("bottom"); }
-    	if (nbt.hasKey("north")) { north = nbt.getBoolean("north"); }
-    	if (nbt.hasKey("south")) { south = nbt.getBoolean("south"); }
-    	if (nbt.hasKey("east")) { east = nbt.getBoolean("east"); }
-    	if (nbt.hasKey("west")) { west = nbt.getBoolean("west"); }
+    	if (nbt.hasKey("top")) { top = MultiblockBorderType.lookup(nbt.getString("top")); }
+    	if (nbt.hasKey("bottom")) { bottom = MultiblockBorderType.lookup(nbt.getString("bottom")); }
+    	if (nbt.hasKey("north")) { north = MultiblockBorderType.lookup(nbt.getString("north")); }
+    	if (nbt.hasKey("south")) { south = MultiblockBorderType.lookup(nbt.getString("south")); }
+    	if (nbt.hasKey("east")) { east = MultiblockBorderType.lookup(nbt.getString("east")); }
+    	if (nbt.hasKey("west")) { west = MultiblockBorderType.lookup(nbt.getString("west")); }
+    	
+    	if (top == null) { top = MultiblockBorderType.SOLID; }
+    	if (bottom == null) { bottom = MultiblockBorderType.SOLID; }
+    	if (north == null) { north = MultiblockBorderType.SOLID; }
+    	if (south == null) { south = MultiblockBorderType.SOLID; }
+    	if (east == null) { east = MultiblockBorderType.SOLID; }
+    	if (west == null) { west = MultiblockBorderType.SOLID; }
     }
 }

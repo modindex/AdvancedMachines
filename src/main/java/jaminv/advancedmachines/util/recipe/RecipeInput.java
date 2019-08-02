@@ -107,7 +107,7 @@ public class RecipeInput implements Cloneable {
 		return oreId == -1 && item == Items.AIR;
 	}
 	
-	public boolean hasOredictError() {
+	public boolean hasError() {
 		return invalid;
 	}
 

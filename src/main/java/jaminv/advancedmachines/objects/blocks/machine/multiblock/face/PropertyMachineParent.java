@@ -11,7 +11,7 @@ import jaminv.advancedmachines.util.material.MaterialBase.MaterialRegistry;
 import net.minecraft.block.properties.IProperty;
 import scala.actors.threadpool.Arrays;
 
-public class PropertyMachineParent implements IProperty<MachineParent> {
+public class PropertyMachineParent implements IProperty<MachineType> {
 	
 	protected final String name;
 	
@@ -25,13 +25,13 @@ public class PropertyMachineParent implements IProperty<MachineParent> {
 
 	@Override
 	public Collection getAllowedValues() {
-		return new ArrayList<>(Arrays.asList(MachineParent.values()));
+		return new ArrayList<>(Arrays.asList(MachineType.values()));
 	}
 	
 	
 	@Override
 	public Class getValueClass() {
-		return MachineParent.class;
+		return MachineType.class;
 	}
 	
 	@Override
@@ -40,7 +40,7 @@ public class PropertyMachineParent implements IProperty<MachineParent> {
 	}
 
 	@Override
-	public String getName(MachineParent value) {
+	public String getName(MachineType value) {
 		return value.getName();
 	}
 

@@ -1,20 +1,19 @@
 package jaminv.advancedmachines.objects.blocks.machine.expansion.tank;
 
-import jaminv.advancedmachines.client.BakedModelMultiblock;
+import jaminv.advancedmachines.init.property.Properties;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.expansion.BakedModelExpansion;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.expansion.BlockMachineExpansion;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.TileEntityMachineInventory;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.speed.BakedModelSpeed;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.util.enums.EnumGui;
 import jaminv.advancedmachines.util.helper.BlockHelper;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -22,11 +21,12 @@ import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockMachineTank extends BlockMachineExpansion {
-	
-    public static final PropertyBool INPUT = PropertyBool.create("input");
-    public static final PropertyDirection FACING = PropertyDirection.create("facing");
 
 	public BlockMachineTank(String name) {
 		super(name);
@@ -60,34 +60,52 @@ public class BlockMachineTank extends BlockMachineExpansion {
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		VARIANT = this.getVariant();		
-		return new BlockStateContainer(this, new IProperty[] { VARIANT, INPUT, FACING, BORDER_TOP, BORDER_BOTTOM, BORDER_NORTH, BORDER_SOUTH, BORDER_EAST, BORDER_WEST });
+		VARIANT = this.getVariant();
+		BlockStateContainer.Builder builder = new BlockStateContainer.Builder(this);
+		return builder.add(VARIANT).add(Properties.FLUID)
+			.add(Properties.INPUT, Properties.FACING)
+			.add(Properties.BORDER_TOP, Properties.BORDER_BOTTOM) 
+			.add(Properties.BORDER_NORTH, Properties.BORDER_SOUTH)
+			.add(Properties.BORDER_EAST, Properties.BORDER_WEST)				
+			.build();
 	}
-	
+
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+	public IExtendedBlockState getExtendedState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		IExtendedBlockState ext = (IExtendedBlockState)state;
+		
         TileEntity tileentity = worldIn instanceof ChunkCache ? ((ChunkCache)worldIn).getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK) : worldIn.getTileEntity(pos);
 
         EnumFacing facing = EnumFacing.NORTH;
         boolean input = true;
         MultiblockBorders borders = MultiblockBorders.DEFAULT;
+        FluidStack fluid = null;
 
         if (tileentity instanceof TileEntityMachineTank) {
         	TileEntityMachineTank te = (TileEntityMachineTank)tileentity;
         	facing = te.getFacing();
         	input = te.getInputState();
         	borders = te.getBorders();
+        	fluid = te.getFluid();
         }
         
-        return state.withProperty(FACING, facing).withProperty(INPUT, input)
-        	.withProperty(BORDER_TOP, borders.getTop()).withProperty(BORDER_BOTTOM, borders.getBottom())
-        	.withProperty(BORDER_NORTH, borders.getNorth()).withProperty(BORDER_SOUTH, borders.getSouth())
-        	.withProperty(BORDER_EAST, borders.getEast()).withProperty(BORDER_WEST, borders.getWest());
+        return (IExtendedBlockState) ext.withProperty(Properties.FLUID, fluid)
+            	.withProperty(Properties.FACING, facing).withProperty(Properties.INPUT, input)
+            	.withProperty(Properties.BORDER_TOP, borders.getTop()).withProperty(Properties.BORDER_BOTTOM, borders.getBottom())
+            	.withProperty(Properties.BORDER_NORTH, borders.getNorth()).withProperty(Properties.BORDER_SOUTH, borders.getSouth())
+            	.withProperty(Properties.BORDER_EAST, borders.getEast()).withProperty(Properties.BORDER_WEST, borders.getWest());        
 	}
 	
 	@Override
+	@SideOnly (Side.CLIENT)
+	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+
+		return layer == BlockRenderLayer.CUTOUT || layer == BlockRenderLayer.TRANSLUCENT;
+	}	
+	
+	@Override
 	public void registerModels() {
-		registerCustomModel(BakedModelMultiblock.TANK);
+		registerCustomModel("bakedmodel_tank", BakedModelSpeed.class);
 		registerVariantModels();
 	}	
 

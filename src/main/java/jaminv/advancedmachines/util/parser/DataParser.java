@@ -8,48 +8,61 @@ import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.logging.log4j.Level;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
-import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.util.Reference;
 import jaminv.advancedmachines.util.logger.Logger;
-import jaminv.advancedmachines.util.recipe.parser.RecipeFile;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.ModContainer;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class DataParser {
 	
     private static Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();	
-	private static Map<String, IFileHandler> datafolder = new HashMap<String, IFileHandler>();
+ 	
+	public static final String LOG_PATH = "logs/" + Reference.FILENAME + ".parser.log";
+	private static Map<String, JsonObject> constants = null;
+	private static Map<String, Map<String, Class>> factories = null;
 	
-	public static void addFolder(String path, IFileHandler handler) {
-		datafolder.put(path, handler);
+	public static void parseConstants() {
+		constants = new HashMap<String, JsonObject>();
+		factories = new HashMap<String, Map<String, Class>>();
+		
+		(new Logger(LOG_PATH, "parser", false)).close();
+		
+		FileHandlerConstants chandler = new FileHandlerConstants();
+		parseFolder("data", chandler, "_constants.json");
+
+		constants = chandler.getConstants();
+		
+		//FileHandlerFactories fhandler = new FileHandlerFactories();
+		//parseFolder("data", fhandler, "_factories.json");
+		
+		//factories = fhandler.getFactories();				
 	}
 	
-	public static void parse() {
-		for (Map.Entry<String, IFileHandler> entry : datafolder.entrySet()) {
-			parseFolder(entry.getKey(), entry.getValue());		
-		}
+	public static void parseFolder(String path, IFileHandler handler) {
+		parseFolder(path, handler, null);
 	}
 	
-	public static void parseFolder(String path, IFileHandler handler ) {
+	public static void parseFolder(String path, IFileHandler handler, String findFilename) {
 		ModContainer mod = FMLCommonHandler.instance().findContainerFor(Reference.MODID);
-		Logger logger = new Logger("logs/" + Reference.FILENAME + ".parser.log", "parser");
+		handler.setConstants(constants);
+		handler.setFactories(factories);
+
+		Logger logger = new Logger(LOG_PATH, "parser");
 		
 		CraftingHelper.findFiles(mod, "assets/" + mod.getModId() + "/" + path, null, (root, file) -> {
 			String filename = file.getFileName().toString();
-            if (!"json".equals(FilenameUtils.getExtension(filename)) || filename.startsWith("_")) {
+            if ((findFilename != null && !filename.equals(findFilename)) ||
+            	!"json".equals(FilenameUtils.getExtension(filename)) || 
+            	(findFilename == null && filename.startsWith("_"))) {
+            	
                 return true;
             }
             
@@ -57,21 +70,15 @@ public class DataParser {
             try {
                 reader = Files.newBufferedReader(file);
                 JsonObject json = JsonUtils.fromJson(GSON, reader, JsonObject.class);
-                logger.log(Level.INFO, I18n.format("info.parser.parsing_file", root.toString() + "/" + filename));
+                logger.info("Parsing file: " + root.toString() + "\\" + filename);
                 if (handler.parseData(logger, FilenameUtils.getBaseName(filename), json)) {
-                	logger.log(Level.INFO, I18n.format("info.parser.file_parsed", filename)); 
+                	logger.info("File '" + filename + "' parsed successfully."); 
                 } else {
-                	logger.log(Level.ERROR, I18n.format("error.parser.cannot_parse_file", filename, "error_unhandled"));
+                	logger.error("Unhandled error parsing file: " + filename);
                 }
             }
-            catch (DataParserException e) {
-            	logger.log(Level.ERROR, I18n.format("error.parser.cannot_parse_file", filename, e.toString()));
-            }
-            catch (JsonParseException e) {
-            	logger.log(Level.FATAL, I18n.format("error.parser.error_loading_file", filename, e.toString()));
-            }
-            catch (IOException e) {
-            	logger.log(Level.FATAL, I18n.format("error.parser.error_reading_file", filename, e.toString()));
+            catch (DataParserException | JsonParseException | IOException e) {
+            	logger.error("Error parsing file '" + filename + "': " + e.toString());
             } finally {
             	logger.logBlank();
                 IOUtils.closeQuietly(reader); 
@@ -79,7 +86,7 @@ public class DataParser {
             
             return true;
 		}, false, false);
-
+		
 		logger.close();
 	}
 }

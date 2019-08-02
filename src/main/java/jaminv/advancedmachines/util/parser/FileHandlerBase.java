@@ -1,20 +1,18 @@
 package jaminv.advancedmachines.util.parser;
 
-import org.apache.logging.log4j.Level;
+import java.util.Map;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 
 import jaminv.advancedmachines.util.logger.Logger;
-import jaminv.advancedmachines.util.recipe.RecipeInput;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
@@ -22,97 +20,71 @@ import net.minecraftforge.oredict.OreDictionary;
 public abstract class FileHandlerBase implements IFileHandler {
 	
 	public static int NO_DEFAULT = Integer.MIN_VALUE;
+	
+	private Map<String, JsonObject> constants;
+	private Map<String, Map<String, Class>> factories;
+	public Map<String, JsonObject> getConstants() { return constants; }
+	public Map<String, Map<String, Class>> getFactories() {	return factories; }
 
-	protected JsonElement getElement(String path, JsonObject parent, String key, boolean required) throws DataParserException {
-		JsonElement element = parent.get(key);
-		if (element == null) {
-			if (required) { throw new DataParserException(I18n.format("error.parser.required", path, key)); }
-			return null; 
-		}
-		return element;
-	}
-	
-	protected JsonObject getObject(String path, JsonObject parent, String key, boolean required) throws DataParserException {
-		JsonElement element = getElement(path, parent, key, required);
-		if (element == null) { return null; }
-		return assertObject(path + "." + key, element);
-	}
-	
-	protected JsonObject assertObject(String path, JsonElement element) throws DataParserException {
-		if (!element.isJsonObject()) { throw new DataParserException(I18n.format("error.parser.not_object", path)); }
-		return (JsonObject)element;
+	@Override
+	public void setConstants(Map<String, JsonObject> constants) {
+		this.constants = constants;
 	}
 
-	protected JsonArray getArray(String path, JsonObject parent, String key, boolean required) throws DataParserException {
-		JsonElement element = getElement(path, parent, key, required);
-		if (element == null) { return null; }
-		return assertArray(path + "." + key, element);
+	@Override
+	public void setFactories(Map<String, Map<String, Class>> factories) {
+		this.factories = factories;
 	}
 	
-	protected JsonArray assertArray(String path, JsonElement element) throws DataParserException {
-		if (!element.isJsonArray()) { throw new DataParserException(I18n.format("error.parser.not_array", path)); }
-		return (JsonArray)element;		
-	}
+	protected JsonObject parseConstants(JsonObject obj) throws DataParserException {
+		String name = JsonUtils.getString(obj, "constant", null);
+		if (name == null) { return obj; }
 		
-	protected String getString(String path, JsonObject parent, String key, boolean required) throws DataParserException {
-		JsonElement element = getElement(path, parent, key, required);
-		if (element == null) { return null; }
-		return assertString(path + "." + key, element);
-	}
-	
-	protected String assertString(String path, JsonElement element) throws DataParserException {
-		if (!element.isJsonPrimitive()) { throw new DataParserException(I18n.format("error.parser.not_string", path)); }
-		return ((JsonPrimitive)element).getAsString();
-	}
-	
-	protected int getInt(String path, JsonObject parent, String key, int def) throws DataParserException {
-		int ret = def;
-		JsonElement je = parent.get(key);
-		if (je != null) {
-			if (!je.isJsonPrimitive()) { throw new DataParserException(I18n.format("error.parser.not_integer", path, key)); }
-			JsonPrimitive jp = (JsonPrimitive)je;
-			try {
-				ret = jp.getAsInt();
-			} catch(NumberFormatException e) {
-				throw new DataParserException(I18n.format("error.parser.not_integer", path, key));
-			}
-		} else if (def == NO_DEFAULT) {
-			throw new DataParserException(I18n.format("error.parser.required", path, key));
+		JsonObject constant = constants.get(name);
+		if (constant == null) { throw new DataParserException("Constant '" + name + "' not found."); }
+		
+		for (Map.Entry<String,JsonElement> entry : constant.entrySet()) {
+			obj.add(entry.getKey(), entry.getValue());
 		}
-		return ret;
+		obj.remove("constant");
+		return obj;
 	}
 	
-	protected ItemStack parseItemStack(Logger logger, String path, JsonElement element) throws DataParserException {
-		String itemname;
-		Item item;
+	protected JsonObject getJsonObject(JsonObject json, String memberName) throws DataParserException { 
+		return parseConstants(JsonUtils.getJsonObject(json, memberName)); 
+	}
+	protected JsonObject getJsonObject(JsonElement json, String memberName) throws DataParserException {
+		return parseConstants(JsonUtils.getJsonObject(json, memberName));
+	}
 	
-		if (element.isJsonPrimitive()) {
-			itemname = element.getAsString();
+	protected ItemStack parseItemStack(JsonElement json, String memberName) throws DataParserException {
+		if (json == null) { throw new DataParserException("Missing itemstack element: " + memberName); }
+		
+		if (JsonUtils.isString(json)) {
+			String itemname = JsonUtils.getString(json, memberName);
 
-			item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemname));
+			Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemname));
 			if (item == null) {
-				logger.warn(I18n.format("error.parser.recipe.item_not_found", path, itemname));
-				return null; 
+				throw new DataParserException("Item '" + itemname + "' not found.");
 			}
 			return new ItemStack(item);
 		}
 		
-		JsonObject obj = assertObject(path, element);
+		JsonObject obj = parseConstants(getJsonObject(json, memberName));
 		
-		int meta = 0;
-		String metastring = getString(path, obj, "data", false); 
+		int meta;
+		String metastring = JsonUtils.getString(obj, "data", null); 
 		if (metastring != null && metastring.equals("*")) {
 			meta = OreDictionary.WILDCARD_VALUE;
-		} else { meta = getInt(path, obj, "data", 0); }
-		int count = getInt(path, obj, "count", 1);
-		
-		itemname = getString(path, obj, "item", false);
-		if (itemname == null) { return null; }
+		} else { meta = JsonUtils.getInt(obj, "data", 0); }
 
-		item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemname));
+		int count = JsonUtils.getInt(obj, "count", 1);
+		
+		String itemname = JsonUtils.getString(obj, "item");
+
+		Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemname));
 		if (item == null) { 
-			logger.warn(I18n.format("error.parser.recipe.item_not_found", path, itemname));
-			return null; 
+			throw new DataParserException("Item '" + itemname + "' not found.");
 		}
 		
 		ItemStack stack = new ItemStack(item, count, meta);		
@@ -123,8 +95,7 @@ public abstract class FileHandlerBase implements IFileHandler {
 			try {
 				stack.setTagCompound(JsonToNBT.getTagFromJson(jnbt.getAsString()));
 			} catch(NBTException e) {
-				logger.error(I18n.format("error.parser.recipe.invalid_nbt", path, e.getMessage()));
-				return null;
+				throw new DataParserException("Error parsing item NBT:" + e.getMessage());
 			}
 		}
 		
@@ -132,9 +103,9 @@ public abstract class FileHandlerBase implements IFileHandler {
 	}
 	
 	protected void logComplete(Logger logger, int complete, int total, String complete_message, String incomplete_message) {
-		logger.info(I18n.format(complete_message, complete));
+		logger.info(String.format(complete_message, complete));
 		if (complete < total) {
-			logger.warn(I18n.format(incomplete_message, total - complete));
+			logger.warn(String.format(incomplete_message, total - complete));
 		}
 	}
 }

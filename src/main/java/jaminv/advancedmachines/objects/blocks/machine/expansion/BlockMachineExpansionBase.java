@@ -1,10 +1,14 @@
 package jaminv.advancedmachines.objects.blocks.machine.expansion;
 
+import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.objects.blocks.BlockMaterial;
 import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.expansion.TileEntityMachineExpansion;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.TileEntityMachineInventory;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineFace;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import jaminv.advancedmachines.util.helper.BlockHelper.ScanResult;
 import jaminv.advancedmachines.util.interfaces.IHasTileEntity;
@@ -31,18 +35,12 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockMachineExpansionBase extends BlockMaterial implements IMachineUpgrade, ITileEntityProvider, IHasTileEntity {
 	
-	public static final PropertyBool BORDER_TOP = MultiblockBorders.BORDER_TOP;
-	public static final PropertyBool BORDER_BOTTOM = MultiblockBorders.BORDER_BOTTOM;
-	public static final PropertyBool BORDER_NORTH = MultiblockBorders.BORDER_NORTH;
-	public static final PropertyBool BORDER_SOUTH = MultiblockBorders.BORDER_SOUTH;
-	public static final PropertyBool BORDER_EAST = MultiblockBorders.BORDER_EAST;
-	public static final PropertyBool BORDER_WEST = MultiblockBorders.BORDER_WEST;
-
 	public BlockMachineExpansionBase(String name) {
 		super(name, MaterialBase.MaterialType.EXPANSION, null, Material.IRON, 5.0f);
 	}
@@ -64,13 +62,6 @@ public class BlockMachineExpansionBase extends BlockMaterial implements IMachine
 	}
 	
 	@Override
-	protected IBlockState createDefaultState() {
-		return super.createDefaultState().withProperty(BORDER_TOP, true).withProperty(BORDER_BOTTOM, true)
-			.withProperty(BORDER_NORTH, true).withProperty(BORDER_SOUTH, true)
-			.withProperty(BORDER_EAST, true).withProperty(BORDER_WEST, true);
-	}
-	
-	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
 			ItemStack stack) {
 		scanMultiblock(worldIn, pos);
@@ -88,12 +79,18 @@ public class BlockMachineExpansionBase extends BlockMaterial implements IMachine
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		VARIANT = this.getVariant();		
-		return new BlockStateContainer(this, new IProperty[] { VARIANT, BORDER_TOP, BORDER_BOTTOM, BORDER_NORTH, BORDER_SOUTH, BORDER_EAST, BORDER_WEST });
+		VARIANT = this.getVariant();
+		
+		BlockStateContainer.Builder builder = new BlockStateContainer.Builder(this);
+		builder.add(VARIANT);
+		return builder.add(Properties.BORDER_TOP, Properties.BORDER_BOTTOM,
+				Properties.BORDER_NORTH, Properties.BORDER_SOUTH,
+				Properties.BORDER_EAST, Properties.BORDER_WEST).build();
 	}
 	
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+	public IExtendedBlockState getExtendedState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		IExtendedBlockState ext = (IExtendedBlockState)state;
         TileEntity tileentity = worldIn instanceof ChunkCache ? ((ChunkCache)worldIn).getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK) : worldIn.getTileEntity(pos);
         MultiblockBorders borders = MultiblockBorders.DEFAULT;
 
@@ -102,10 +99,10 @@ public class BlockMachineExpansionBase extends BlockMaterial implements IMachine
         	borders = te.getBorders();
         }
         
-        return state.withProperty(BORDER_TOP, borders.getTop()).withProperty(BORDER_BOTTOM, borders.getBottom())
-        	.withProperty(BORDER_NORTH, borders.getNorth()).withProperty(BORDER_SOUTH, borders.getSouth())
-        	.withProperty(BORDER_EAST, borders.getEast()).withProperty(BORDER_WEST, borders.getWest());
-	}
+        return (IExtendedBlockState) ext.withProperty(Properties.BORDER_TOP, borders.getTop()).withProperty(Properties.BORDER_BOTTOM, borders.getBottom())
+        	.withProperty(Properties.BORDER_NORTH, borders.getNorth()).withProperty(Properties.BORDER_SOUTH, borders.getSouth())
+        	.withProperty(Properties.BORDER_EAST, borders.getEast()).withProperty(Properties.BORDER_WEST, borders.getWest());
+	}	
 	
 	public static void scanMultiblock(World world, BlockPos pos) {
 		ScanResult result = BlockHelper.scanBlocks(world, pos, new TileEntityMachineMultiblock.MultiblockChecker());
@@ -134,5 +131,12 @@ public class BlockMachineExpansionBase extends BlockMaterial implements IMachine
 		if (tileentity instanceof IMachineUpgradeTileEntity) {
 			((IMachineUpgradeTileEntity)tileentity).setBorders(world, borders); 
 		}
+	}
+	
+	@Override
+	@SideOnly (Side.CLIENT)
+	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+
+		return layer == BlockRenderLayer.CUTOUT || layer == BlockRenderLayer.TRANSLUCENT;
 	}
 } 

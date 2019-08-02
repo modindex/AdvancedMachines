@@ -1,0 +1,35 @@
+{
+    "border_gray": {
+        "borders": {
+            "solid": {
+                "top": "border.solid_gray.top",
+                "left": "border.solid_gray.left",
+                "bottom": "border.solid_gray.bottom",
+                "right": "border.solid_gray.right"
+            },
+            "single": {
+                "top": "border.single.top",
+                "left": "border.single.left",
+                "bottom": "border.single.bottom",
+                "right": "border.single.right"
+            }
+        }
+    },
+    "border_dark": {
+        "borders": {
+            "solid": {
+                "top": "border.solid_dark.top",
+                "left": "border.solid_dark.left",
+                "bottom": "border.solid_dark.bottom",
+                "right": "border.solid_dark.right"
+            },
+            "single": {
+                "top": "border.single.top",
+                "left": "border.single.left",
+                "bottom": "border.single.bottom",
+                "right": "border.single.right"
+            }
+        }
+    }
+    
+}

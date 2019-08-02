@@ -8,6 +8,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSyntaxException;
 
 import jaminv.advancedmachines.util.Reference;
 import jaminv.advancedmachines.util.logger.Logger;
@@ -19,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.IConditionFactory;
 import net.minecraftforge.common.crafting.JsonContext;
@@ -36,96 +38,93 @@ public abstract class FileHandlerRecipe extends FileHandlerBase {
 		int i = 0, c = 0;
 		for (Map.Entry<String,JsonElement> entry : json.entrySet()) {
 			String name = entry.getKey();
-			if (!entry.getValue().isJsonObject()) { throw new DataParserException(I18n.format("error.parser.recipe.recipe_not_object", name)); }
-			JsonObject recipe = (JsonObject)entry.getValue();
+			JsonObject recipe = getJsonObject(json, entry.getKey());
 			
 			try {
 				if (parseRecipe(logger, filename, name, recipe)) { c++; }
-			} catch(DataParserException e) {
+			} catch(DataParserException | JsonSyntaxException e) {
 				logger.error(e.getMessage());
 			}
 			i++;
 		}
-		
-		logComplete(logger, c, i, "info.parser.recipe.complete", "info.parser.recipe.incomplete");
+
+		logComplete(logger, c, i, "%d recipes added successfully.", "%d recipes not added.");
 		
 		return true;
 	}
 	
 	protected abstract boolean parseRecipe(Logger logger, String filename, String path, JsonObject recipe) throws DataParserException;
 	
-	protected RecipeInput parseInput(Logger logger, String path, JsonElement input) throws DataParserException {
-		if (input == null) { return null; }
-		if (input.isJsonPrimitive()) {
-			ItemStack item = parseItemStack(logger, path, input);
-			if (item != null) { return new RecipeInput(item); } else { return null; }
+	protected RecipeInput parseInput(JsonElement input, String memberName) throws DataParserException {
+		if (input == null) { throw new DataParserException("Missing recipe element: '" + memberName + "'"); }
+		
+		if (JsonUtils.isString(input)) {
+			return new RecipeInput(parseItemStack(input, memberName));
 		}
-		JsonObject inputob = assertObject(path, input);
+		JsonObject inputob = getJsonObject(input, memberName);
+		if (!inputob.has("ore")) {
+			return new RecipeInput(parseItemStack(input, memberName));
+		}
 		
-		int count = getInt(path, inputob, "count", 1);
-		
-		String ore = getString(path, inputob, "ore", false);
-		if (ore != null) { return new RecipeInput(ore, count); }
-		
-		ItemStack item = parseItemStack(logger, path, input);
-		if (item != null) { return new RecipeInput(item); }
-		
-		return null;
+		int count = JsonUtils.getInt(inputob, "count", 1);
+		String ore = JsonUtils.getString(inputob, "ore");
+		return new RecipeInput(ore, count);
 	}
 	
-	protected RecipeOutput parseOutput(Logger logger, String path, JsonElement output) throws DataParserException {
-		if (output == null) { return null; }
-		if (output.isJsonPrimitive()) {
-			ItemStack item = parseItemStack(logger, path, output);
-			if (item != null) { return new RecipeOutput(item); } else { return null; }
+	protected RecipeOutput parseOutput(JsonElement output, String memberName) throws DataParserException {
+		if (output == null) { throw new DataParserException("Missing recipe element: '" + memberName + "'"); }
+		
+		if (JsonUtils.isString(output)) {
+			return new RecipeOutput(parseItemStack(output, memberName));
 		}
-		JsonObject outputob = assertObject(path, output);
+		JsonObject outputob = getJsonObject(output, memberName);
+		if (!outputob.has("ore")) {
+			return new RecipeOutput(parseItemStack(output, memberName));
+		}
 		
-		int count = getInt(path, outputob, "count", 1);
-		
-		String ore = getString(path, outputob, "ore", false);
-		if (ore != null) { return new RecipeOutput(ore, count); }
-		
-		ItemStack item = parseItemStack(logger, path, outputob);
-		if (item != null) { return new RecipeOutput(item); }
-		
-		return null;
+		int count = JsonUtils.getInt(outputob, "count", 1);
+		String ore = JsonUtils.getString(outputob, "ore");
+		return new RecipeOutput(ore, count);
 	}
 	
-	protected RecipeOutput parseOutputWithChance(Logger logger, String path, JsonObject output) throws DataParserException {
+	protected RecipeOutput parseOutputWithChance(JsonElement output, String memberName) throws DataParserException {
 		if (output == null) { return null; }
+		if (JsonUtils.isString(output)) { return parseOutput(output, memberName); }
 		
-		RecipeOutput ret = parseOutput(logger, path, output);
-		if (ret == null) { return null; }
-		
-		int chance = getInt(path, output, "chance", 100);
+		RecipeOutput ret = parseOutput(output, memberName);
+		JsonObject outputob = getJsonObject(output, memberName);
+		int chance = JsonUtils.getInt(outputob, "chance", 100);
 		return ret.withChance(chance);
 	}
 
-	protected int getEnergy(String name, JsonObject input, int def) throws DataParserException {
-		int energy = getInt(name, input, "energy", def);
-		int energy_percent = getInt(name, input, "energy_percent", 100);
+	protected int getEnergy(JsonObject obj, int def) throws DataParserException {
+		int energy = JsonUtils.getInt(obj, "energy", def);
+		int energy_percent = JsonUtils.getInt(obj, "energy_percent", 100);
 		
 		return (int)Math.floor(energy * energy_percent / 100.0f);
 	}
 	
-	protected boolean checkConditions(Logger logger, String path, JsonObject parent, String key) throws DataParserException {
-		JsonArray list = getArray(path, parent, key, false);
+	protected boolean checkConditions(JsonObject parent, String key, Logger logger) throws DataParserException {
+		JsonArray list = JsonUtils.getJsonArray(parent, key, null);
 		if (list == null) { return true; }
 		
+		int i = 0;
 		for (JsonElement condition : list) {
-			JsonObject ob = assertObject(path, condition);
-			String value = getString(path, ob, "type", true);
+			JsonObject ob = getJsonObject(condition, key + "[" + i + "]");
+			String value = JsonUtils.getString(ob, "type");
 			
+			// TODO: Add Factories
 			IConditionFactory factory = condition_factories.get(value);
 			if (factory == null) {
-				logger.error(I18n.format("error.parser.recipe.condition_not_found", path, value));
+				throw new DataParserException("Condition '" + value + "' not found.");
 			}
 			
 			JsonContext context = new JsonContext(Reference.MODID);
 			BooleanSupplier func = factory.parse(context, ob);  
-			if (!func.getAsBoolean()) { logger.info(I18n.format("info.parser.recipe.condition_not_met", path, value)); return false; }
-			logger.info(I18n.format("info.parser.recipe.condition_met", path, value));
+			if (!func.getAsBoolean()) { logger.info("Condition '" + value + "' not met."); return false; }
+			logger.info("Condition '" + value + "' met.");
+			
+			i++;
 		}
 		
 		return true;

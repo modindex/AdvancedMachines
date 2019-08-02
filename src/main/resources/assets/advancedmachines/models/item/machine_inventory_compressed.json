@@ -1,7 +1,7 @@
 {
     "parent": "advancedmachines:block/machine_inventory",
     "textures": {
-        "all": "advancedmachines:blocks/machine/expansion/compressed/all",
-        "north": "advancedmachines:blocks/machine/inventory/input/compressed/all"
+        "all": "advancedmachines:blocks/machine/expansion/compressed_all",
+        "north": "advancedmachines:blocks/machine/inventory/input/compressed_all"
     }
 }

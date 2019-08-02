@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTileEntity;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.redstone.TileEntityMachineRedstone;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
@@ -23,6 +24,7 @@ import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.property.IExtendedBlockState;
 
 public class BlockHelper {
 	
@@ -50,8 +52,17 @@ public class BlockHelper {
 		return world.getBlockState(pos).getBlock().getLocalizedName();
 	}
 	
-	public static boolean hasProperty(IBlockState state, IProperty property) {
+	public static boolean hasProperty(IBlockState state, Object property) {
 		return state.getProperties().containsKey(property);
+	}
+	
+	public static boolean hasUnlistedProperty(IExtendedBlockState state, Object property) {
+		return state.getUnlistedProperties().containsKey(property);
+	}
+	
+	public static EnumFacing getExtendedFacing(IBlockState state) {
+		if (!(state instanceof IExtendedBlockState)) { return null; }
+		return ((IExtendedBlockState)state).getValue(Properties.FACING);
 	}
 	
 	public static EnumFacing getXZFacing(EntityLivingBase living) {

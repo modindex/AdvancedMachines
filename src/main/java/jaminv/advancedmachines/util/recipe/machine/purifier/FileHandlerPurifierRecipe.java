@@ -11,27 +11,34 @@ import jaminv.advancedmachines.util.parser.FileHandlerRecipe;
 import jaminv.advancedmachines.util.recipe.RecipeInput;
 import jaminv.advancedmachines.util.recipe.RecipeOutput;
 import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager.PurifierRecipe;
+import net.minecraft.util.JsonUtils;
 
 public class FileHandlerPurifierRecipe extends FileHandlerRecipe {
 
 	@Override
 	protected boolean parseRecipe(Logger logger, String filename, String path, JsonObject json) throws DataParserException {
 		logger = logger.getLogger("purifier");
-		RecipeInput input = parseInput(logger, path + ".input", getObject(path, json, "input", true));
-		RecipeOutput output = parseOutput(logger, path + ".output", getObject(path, json, "output", true));
-		int energy = getEnergy(path, json, ModConfig.general.defaultGrinderEnergy);
+		RecipeInput input = parseInput(json.get("input"), "input");
+		RecipeOutput output = parseOutput(json.get("output"), "output");
+		int energy = getEnergy(json, ModConfig.general.defaultGrinderEnergy);
 		
-		if (input == null || output == null) { return false; }
+		if (input == null || input.isEmpty() || output == null || output.isEmpty()) { return false; }
+		if (!checkConditions(json, "conditions", logger)) { return false; }
 		
 		PurifierRecipe recipe = new PurifierRecipe(filename + "." + path, energy);
 		recipe.setInput(input);
 		recipe.setOutput(output);
 		
-		JsonArray secondary = getArray(path, json, "secondary", false);
-		for(JsonElement element : secondary) {
-			RecipeOutput sec = parseOutputWithChance(logger, path + ".secondary", assertObject(path + ".secondary", element));
-			if (sec == null || sec.isEmpty()) { continue; }
-			recipe.addSecondary(sec);
+		JsonArray secondary = JsonUtils.getJsonArray(json, "secondary", null);
+		if (secondary != null) {
+			int i = 0;
+			for(JsonElement element : secondary) {
+				RecipeOutput sec = parseOutputWithChance(element, "secondary[" + i + "]");
+				if (sec == null || sec.isEmpty()) { continue; }
+				recipe.addSecondary(sec);
+				
+				i++;
+			}
 		}
 		
 		PurifierManager.getRecipeManager().addRecipe(recipe);

@@ -1,7 +1,7 @@
 {
     "parent": "advancedmachines:block/machine_grinder",
     "textures": {
-        "all": "advancedmachines:blocks/machine/expansion/improbable/all",
+        "all": "advancedmachines:blocks/machine/expansion/improbable_all",
         "north": "advancedmachines:blocks/machine/instance/grinder/inactive/improbable/all"
     }
 }

@@ -1,9 +1,13 @@
 package jaminv.advancedmachines.objects.blocks.machine.multiblock;
 
-import jaminv.advancedmachines.client.BakedModelMultiblock;
+import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.objects.blocks.machine.BlockMachineBase;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.expansion.BakedModelExpansion;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.expansion.TileEntityMachineExpansion;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.ICanHaveMachineFace;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineFace;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineType;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.model.BakedModelMultiblockMachine;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import jaminv.advancedmachines.util.material.MaterialExpansion;
 import net.minecraft.block.properties.IProperty;
@@ -20,6 +24,9 @@ import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class BlockMachineMultiblock extends BlockMachineBase {
 	
@@ -60,18 +67,27 @@ public abstract class BlockMachineMultiblock extends BlockMachineBase {
 	
 	@Override
 	protected BlockStateContainer createBlockState() {
-		VARIANT = this.getVariant();		
-		return new BlockStateContainer(this, new IProperty[] { VARIANT, FACING, ICanHaveMachineFace.MACHINE_FACE, ACTIVE, BORDER_TOP, BORDER_BOTTOM, BORDER_NORTH, BORDER_SOUTH, BORDER_EAST, BORDER_WEST });
-	}
+		VARIANT = this.getVariant();
+		BlockStateContainer.Builder builder = new BlockStateContainer.Builder(this);
+		return builder.add(VARIANT)
+			.add(Properties.BORDER_TOP, Properties.BORDER_BOTTOM) 
+			.add(Properties.BORDER_NORTH, Properties.BORDER_SOUTH)
+			.add(Properties.BORDER_EAST, Properties.BORDER_WEST)
+			.add(Properties.MACHINE_FACE, Properties.MACHINE_TYPE)
+			.add(Properties.FACING, Properties.ACTIVE)
+			.build();
+	}	
 	
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+	public IExtendedBlockState getExtendedState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		IExtendedBlockState ext = (IExtendedBlockState)state;
         TileEntity tileentity = worldIn instanceof ChunkCache ? ((ChunkCache)worldIn).getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK) : worldIn.getTileEntity(pos);
 
         EnumFacing facing = EnumFacing.NORTH;
         boolean active = false;
         MultiblockBorders borders = MultiblockBorders.DEFAULT;
         MachineFace face = MachineFace.NONE;
+        MachineType type = MachineType.NONE;
 
         if (tileentity instanceof TileEntityMachineMultiblock) {
         	TileEntityMachineMultiblock te = (TileEntityMachineMultiblock)tileentity;
@@ -79,13 +95,24 @@ public abstract class BlockMachineMultiblock extends BlockMachineBase {
         	active = te.isProcessing();
         	borders = te.getBorders();
         	face = te.getMachineFace();
+        	type = te.getMachineType();
         }
         
-        return state.withProperty(FACING, facing).withProperty(ICanHaveMachineFace.MACHINE_FACE, face).withProperty(ACTIVE, active)
-        	.withProperty(BORDER_TOP, borders.getTop()).withProperty(BORDER_BOTTOM, borders.getBottom())
-        	.withProperty(BORDER_NORTH, borders.getNorth()).withProperty(BORDER_SOUTH, borders.getSouth())
-        	.withProperty(BORDER_EAST, borders.getEast()).withProperty(BORDER_WEST, borders.getWest());
+        return (IExtendedBlockState) ext.withProperty(Properties.MACHINE_FACE, face).withProperty(Properties.MACHINE_TYPE, type)
+            	.withProperty(Properties.FACING, facing).withProperty(Properties.ACTIVE, active)
+            	.withProperty(Properties.BORDER_TOP, borders.getTop()).withProperty(Properties.BORDER_BOTTOM, borders.getBottom())
+            	.withProperty(Properties.BORDER_NORTH, borders.getNorth()).withProperty(Properties.BORDER_SOUTH, borders.getSouth())
+            	.withProperty(Properties.BORDER_EAST, borders.getEast()).withProperty(Properties.BORDER_WEST, borders.getWest());
 	}
+	
+	@Override
+	@SideOnly (Side.CLIENT)
+	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+
+		return layer == BlockRenderLayer.CUTOUT || layer == BlockRenderLayer.TRANSLUCENT;
+	}
+	
+	
 	
 	@Override
 	public UpgradeType getUpgradeType() {
@@ -101,10 +128,12 @@ public abstract class BlockMachineMultiblock extends BlockMachineBase {
 	public void setMultiblock(World world, BlockPos pos, BlockPos parent, MultiblockBorders borders) {
 		BlockHelper.setBorders(world, pos, borders);
 	}
-		
+
+	public static final String BAKEDMODEL_MACHINE = "bakedmodel_machine";
+	
 	@Override
 	public void registerModels() {
-		registerCustomModel(BakedModelMultiblock.BASE);
+		registerCustomModel(BAKEDMODEL_MACHINE, BakedModelMultiblockMachine.class);
 		registerVariantModels();
 	}	
 }

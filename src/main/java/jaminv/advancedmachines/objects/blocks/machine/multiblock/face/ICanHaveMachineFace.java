@@ -6,7 +6,7 @@ import net.minecraft.util.math.BlockPos;
 public interface ICanHaveMachineFace {
 	public static final PropertyMachineFace MACHINE_FACE = PropertyMachineFace.create("machine_face");	
 	
-	void setMachineFace(MachineFace face, MachineParent parent, EnumFacing facing, BlockPos parentloc);
+	void setMachineFace(MachineFace face, MachineType parent, EnumFacing facing, BlockPos parentloc);
 	
 	void setActive(boolean active);
 }

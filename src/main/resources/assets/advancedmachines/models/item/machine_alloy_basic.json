@@ -1,7 +1,7 @@
 {
     "parent": "block:cube/all",
     "textures": {
-        "all": "advancedmachines:blocks/machine/expansion/basic/all",
-        "north": "advancedmachines:blocks/machine/expansion/basic/all"
+        "all": "advancedmachines:blocks/machine/expansion/basic_all",
+        "north": "advancedmachines:blocks/machine/instance/alloy/inactive/basic/all"
     }
 }

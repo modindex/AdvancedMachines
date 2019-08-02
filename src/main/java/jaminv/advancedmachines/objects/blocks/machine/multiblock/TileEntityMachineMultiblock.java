@@ -14,7 +14,7 @@ import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachin
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockState.MultiblockNull;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.ICanHaveMachineFace;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineFace;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineParent;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import jaminv.advancedmachines.util.helper.BlockHelper.BlockChecker;
@@ -53,13 +53,13 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 		return borders; 
 	}
 	
-	public abstract MachineParent getMachineType();
+	public abstract MachineType getMachineType();
 	
 	protected MachineFace face = MachineFace.NONE;
 	protected BlockPos facemin, facemax;
 
 	@Override
-	public void setMachineFace(MachineFace face, MachineParent parent, EnumFacing facing, BlockPos pos) {
+	public void setMachineFace(MachineFace face, MachineType parent, EnumFacing facing, BlockPos pos) {
 		this.face = face;
 		if (face == MachineFace.NONE) {
 			facemin = pos; facemax = pos;
@@ -266,7 +266,7 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 								((IMachineUpgradeTool)te).setParent(null);
 							}
 							if (te instanceof ICanHaveMachineFace) {
-								((ICanHaveMachineFace)te).setMachineFace(MachineFace.NONE, MachineParent.NONE, EnumFacing.UP, null);
+								((ICanHaveMachineFace)te).setMachineFace(MachineFace.NONE, MachineType.NONE, EnumFacing.UP, null);
 							}
 						} else { bord = new MultiblockBorders(world, upgrade, min, max); }
 						
@@ -346,26 +346,25 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 	
 	protected boolean scanFaceAt(BlockPos pos, int count, EnumFacing dir) {
 		World world = this.getWorld();
-		MaterialBase variant = world.getBlockState(getPos()).getValue(BlockMachineBase.EXPANSION_VARIANT);		
+		MaterialBase variant = world.getBlockState(getPos()).getValue(BlockMaterial.EXPANSION_VARIANT);		
 		
 		for (int x = -count; x < 2; x++) {
 			for (int y = -count; y < 2; y++) {
 				BlockPos check = pos.offset(dir, x).offset(EnumFacing.UP, y);
 				
+				boolean eval;
 				TileEntity te = world.getTileEntity(check);
-				boolean can;
-				boolean same;
 				
 				if (te != null) {
-					can = (te instanceof ICanHaveMachineFace);
+					eval = (te instanceof ICanHaveMachineFace);
 					Block block = world.getBlockState(check).getBlock();
-					same = world.getBlockState(check).getValue(BlockMachineBase.EXPANSION_VARIANT) == variant;
-				} else { can = false; same = false; }
+					if (eval) { eval = world.getBlockState(check).getValue(BlockMachineBase.EXPANSION_VARIANT) == variant; }
+				} else { eval = false; }
 				
 				if (x == -count || y == -count || x == 1 || y == 1) {
-					if (can || same) { return false; }
+					if (eval) { return false; }
 				} else {
-					if (!can && !same) { return false; }
+					if (!eval) { return false; }
 				}
 			}
 		}
@@ -376,13 +375,10 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 		int i = 0;
 		for (int x = -count+1; x < 1; x++) {
 			for (int y = -count+1; y < 1; y++) {
-				int face;
-				if (count == 2) { face = MachineFace.F2x2.getIndex(); } else { face = MachineFace.F3x3.getIndex(); }
-				
 				TileEntity te = world.getTileEntity(pos.offset(dir, x).offset(EnumFacing.UP, y));
 				
 				if (te instanceof ICanHaveMachineFace) {
-					((ICanHaveMachineFace)te).setMachineFace(MachineFace.values()[face], this.getMachineType(), facing, this.getPos());
+					((ICanHaveMachineFace)te).setMachineFace(MachineFace.build(count, -x, -y), this.getMachineType(), facing, this.getPos());
 				}
 			}
 		}

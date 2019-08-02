@@ -1,35 +1,20 @@
 package jaminv.advancedmachines.objects.blocks.machine.expansion.speed;
 
-import jaminv.advancedmachines.client.BakedModelMultiblock;
-import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
+import java.util.function.Function;
+
+import jaminv.advancedmachines.objects.blocks.machine.expansion.BakedModelExpansionBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansionBase;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachineExpansionBase;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgrade.UpgradeType;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.TileEntityMachineInventory;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.expansion.BakedModelExpansion;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
-import jaminv.advancedmachines.util.enums.EnumGui;
-import jaminv.advancedmachines.util.helper.BlockHelper;
 import jaminv.advancedmachines.util.interfaces.IHasTileEntity;
-import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityFlowerPot;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ChunkCache;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.model.IModelState;
 
 public class BlockMachineSpeed extends BlockMachineExpansionBase implements ITileEntityProvider, IHasTileEntity {
 	
@@ -64,7 +49,7 @@ public class BlockMachineSpeed extends BlockMachineExpansionBase implements ITil
 	
 	@Override
 	public void registerModels() {
-		registerCustomModel(BakedModelMultiblock.SPEED);
+		registerCustomModel("bakedmodel_speed", BakedModelSpeed.class);
 		registerVariantModels();
 	}		
 }

@@ -1,6 +1,0 @@
-{
-    "parent": "advancedmachines:block/machine_expansion",
-    "textures": {
-        "all": "advancedmachines:blocks/machine/expansion/impossible/all"
-    }
-}

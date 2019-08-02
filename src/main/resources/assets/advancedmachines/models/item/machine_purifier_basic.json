@@ -1,7 +1,7 @@
 {
     "parent": "advancedmachines:block/machine_purifier",
     "textures": {
-        "all": "advancedmachines:blocks/machine/expansion/basic/all",
+        "all": "advancedmachines:blocks/machine/expansion/basic_all",
         "north": "advancedmachines:blocks/machine/instance/purifier/inactive/basic/all"
     }
 }

@@ -2,13 +2,16 @@ package jaminv.advancedmachines.proxy;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.client.BakedModelLoader;
+import jaminv.advancedmachines.client.textureset.FileHandlerTextureSet;
 import jaminv.advancedmachines.util.Reference;
+import jaminv.advancedmachines.util.parser.DataParser;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -23,6 +26,17 @@ public class ClientProxy extends CommonProxy {
 		Main.logger.info("Completed - Loading Baked Models");
 	}
 	
+	
+	
+	@Override
+	public void postInit(FMLPostInitializationEvent e) {
+		super.postInit(e);
+		
+		DataParser.parseFolder("data/texturesets", new FileHandlerTextureSet());		
+	}
+
+
+
 	@Override
 	public void registerItemRenderer(Item item, int meta, String id) {
 		ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName(), id));

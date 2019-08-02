@@ -1,9 +1,11 @@
 package jaminv.advancedmachines.proxy;
 
 import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.client.textureset.FileHandlerTextureSet;
 import jaminv.advancedmachines.init.RecipeInit;
-import jaminv.advancedmachines.util.handlers.OreDictionaryHandler;
-import jaminv.advancedmachines.util.handlers.RegistryHandler;
+import jaminv.advancedmachines.proxy.handlers.EventHandlerClient;
+import jaminv.advancedmachines.proxy.handlers.OreDictionaryHandler;
+import jaminv.advancedmachines.proxy.handlers.RegistryHandler;
 import jaminv.advancedmachines.util.parser.DataParser;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
@@ -20,10 +22,7 @@ public class CommonProxy {
 	public static Configuration config;
 	
 	public void preInit(FMLPreInitializationEvent e) {
-		//File directory = e.getModConfigurationDirectory();
-		//ConfigManager.
-		//config = new Configuration(new File(directory.getPath(), "advancedmachines.cfg"));
-		//Config.readConfig();
+		MinecraftForge.EVENT_BUS.register(EventHandlerClient.INSTANCE);		
 		
 		Main.logger.info("Other registries");
 		
@@ -33,6 +32,8 @@ public class CommonProxy {
 	}
 	
 	public void init(FMLInitializationEvent e) {
+		DataParser.parseConstants();
+		
 		OreDictionaryHandler.registerOreDictionary();
 		RecipeInit.init();
 		
@@ -40,7 +41,6 @@ public class CommonProxy {
 	}
 
 	public void postInit(FMLPostInitializationEvent e) {
-		DataParser.parse();
 	}
 	
 	public void registerItemRenderer(Item item, int meta, String id) {}	

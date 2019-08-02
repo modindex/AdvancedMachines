@@ -1,6 +1,6 @@
 {
     "parent": "advancedmachines:block/machine_productivity",
     "textures": {
-        "all": "advancedmachines:blocks/machine/productivity/quad/all"
+        "all": "advancedmachines:blocks/machine/productivity/quad_all"
     }
 }

@@ -9,6 +9,7 @@ import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpa
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTool;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
+import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
 import jaminv.advancedmachines.util.interfaces.ISwitchableIO;
@@ -21,12 +22,13 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidUtil;
 
-public class TileEntityMachineTank extends TileEntityFluid implements IHasGui, IMachineUpgradeTool, IDirectional, ISwitchableIO {
+public class TileEntityMachineTank extends TileEntityFluid implements ITickable, IHasGui, IMachineUpgradeTool, IDirectional, ISwitchableIO {
 	
 	protected EnumFacing facing = EnumFacing.NORTH;
 	protected boolean inputState = true;
@@ -95,46 +97,70 @@ public class TileEntityMachineTank extends TileEntityFluid implements IHasGui, I
 		return priority;
 	}
 	
+	boolean doNothing = true;
+	
+	private int tick;
+		
+	@Override
+	public void update() {
+		if (doNothing) { return; }		// Return quickly if there's nothing to do
+
+		tick++;
+		if (tick < ModConfig.general.tickUpdate) { return; }
+		tick = 0;
+		
+		boolean didSomething = false;
+		
+		for (int i = 0; i < this.getInventorySize(); i++) {
+			ItemStack stack = this.getInventory().getStackInSlot(i);
+			if (stack == null) { continue; }
+
+			FluidActionResult result = null;
+			if (i == 0) { 
+				result = FluidUtil.tryEmptyContainer(stack, this.getTank(), 1000, null, true);
+			} else if (i == 1) {
+				result = FluidUtil.tryFillContainer(stack, this.getTank(), 1000, null, true);
+			}
+			
+			if (result != null && result.success) {
+				this.getInventory().extractItem(i, stack.getCount(), false);
+				this.getInventory().insertItem(i, result.getResult(), false);
+				didSomething = true;
+			}
+		}		
+		
+		if (!didSomething) { doNothing = true; }
+	}
+	
 	@Override
 	public void tickUpdate(TileEntityMachineMultiblock te) {
+		if (doNothing) { return; }		// Return quickly if there's nothing to do
+		boolean didSomething = false;
+		
 		if (inputState) {
 			//moveInput(te);
 		} else {
 			//moveOutput(te);
 		}
+		
+		if (!didSomething) { doNothing = true; }
 	}
-	
-	boolean inChangedEvent = false; // Prevent inventory changes in below event from triggering more events
 	
 	@Override
-	public void onContentsChanged(int slot) {
-		if (inChangedEvent) { return; }
-		inChangedEvent = true;
-
-		for (int i = 0; i <= 1; i++) {
-			ItemStack stack = this.getInventory().getStackInSlot(slot);
-			if (stack == null) { break; }
-
-			FluidActionResult result = null;
-			if (slot == 0) { 
-				result = FluidUtil.tryEmptyContainer(stack, this.getTank(), this.getCapacity(), null, true);
-			} else if (slot == 1) {
-				result = FluidUtil.tryFillContainer(stack, this.getTank(), this.getCapacity(), null, true);
-			}
-			
-			if (result != null && result.success) {
-				this.getInventory().extractItem(slot, stack.getCount(), false);
-				this.getInventory().insertItem(slot, result.getResult(), false);
-			} else { break; } // Prevent infinite loop
-			
-			slot = (slot == 0) ? 1 : 0;
-		}
-		
-		super.onContentsChanged(slot);
-		inChangedEvent = false;
+	public void onInventoryContentsChanged(int slot) {
+		doNothing = false;
+		super.onInventoryContentsChanged(slot);
 	}
 	
-	
+	@Override
+	public void onTankContentsChanged() {
+		doNothing = false;
+		
+		world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
+		world.markBlockRangeForRenderUpdate(pos, pos);
+		super.onTankContentsChanged();
+	}
+
 	public void setBorders(World world, MultiblockBorders borders) {
 		this.borders = borders;
 	}

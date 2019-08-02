@@ -3,10 +3,14 @@ package jaminv.advancedmachines.objects.blocks;
 import org.apache.commons.lang3.text.WordUtils;
 
 import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.client.BakedModelBase;
+import jaminv.advancedmachines.client.BakedModelLoader;
+import jaminv.advancedmachines.client.quads.IModelQuad;
 import jaminv.advancedmachines.init.BlockInit;
 import jaminv.advancedmachines.init.ItemInit;
 import jaminv.advancedmachines.objects.blocks.BlockBase.CustomStateMapper;
 import jaminv.advancedmachines.objects.blocks.item.ItemBlockVariants;
+import jaminv.advancedmachines.util.Reference;
 import jaminv.advancedmachines.util.interfaces.IHasModel;
 import jaminv.advancedmachines.util.interfaces.IHasOreDictionary;
 import jaminv.advancedmachines.util.interfaces.IMetaName;
@@ -117,10 +121,11 @@ public abstract class BlockMaterial extends Block implements IHasModel, IMetaNam
 		return (MaterialBase)state.getValue(VARIANT);
 	}
 	
-	public void registerCustomModel(ModelResourceLocation resource) {
-		ModelLoader.setCustomStateMapper(this, new CustomStateMapper(resource));
-	}	
-	
+	public void registerCustomModel(String resource, Class<? extends BakedModelBase> modelClass) {
+		ModelLoader.setCustomStateMapper(this, new CustomStateMapper(new ModelResourceLocation(Reference.MODID + ":" + resource)));
+		BakedModelLoader.register(resource, modelClass);
+	}
+
 	@Override
 	public void registerModels() {
 		registerVariantModels();

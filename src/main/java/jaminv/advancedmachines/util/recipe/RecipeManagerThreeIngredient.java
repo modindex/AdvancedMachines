@@ -26,7 +26,7 @@ public abstract class RecipeManagerThreeIngredient<T extends RecipeBase> impleme
 		boolean valid = false;
 		for (int i = 0; i < recipe.getInputCount(); i++) {
 			RecipeInput item = recipe.getInput(i);
-			if (item.hasOredictError()) { return; }
+			if (item.hasError()) { return; }
 			if (!item.isEmpty()) { valid = true; }
 		}
 		if (!valid) { return; }

@@ -40,19 +40,6 @@ public class ContainerFluid extends ContainerInventory {
 		}		
 	}
 	
-	public static class SlotBucketOutput extends SlotBucket {
-
-		public SlotBucketOutput(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
-			super(itemHandler, index, xPosition, yPosition);
-		}
-		
-		@Override
-		public boolean isItemValid(ItemStack stack) {
-			if (!super.isItemValid(stack)) { return false; }
-			return FluidUtil.getFluidContained(stack) == null;
-		}		
-	}
-	
 	public static class BucketInputLayout extends Layout {
 		public BucketInputLayout(int xpos, int ypos) {
 			super(xpos, ypos);
@@ -73,11 +60,11 @@ public class ContainerFluid extends ContainerInventory {
 		@Override
 		public SlotItemHandler createSlot(IItemHandler itemHandler, int slotIndex, int x, int y) {
 			// TODO Auto-generated method stub
-			return new SlotBucketOutput(itemHandler, slotIndex, x, y);
+			return new SlotBucket(itemHandler, slotIndex, x, y);
 		}
 	}
 	
 	public ContainerFluid(IInventory playerInventory, TileEntityInventory te) {
-		super(playerInventory, te);
+		super(playerInventory, null, te);
 	}
 }

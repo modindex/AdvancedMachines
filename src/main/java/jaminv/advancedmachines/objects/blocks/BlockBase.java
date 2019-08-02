@@ -1,11 +1,9 @@
 package jaminv.advancedmachines.objects.blocks;
 
 import jaminv.advancedmachines.Main;
-import jaminv.advancedmachines.client.BakedModelMultiblock;
 import jaminv.advancedmachines.init.BlockInit;
 import jaminv.advancedmachines.init.ItemInit;
 import jaminv.advancedmachines.util.interfaces.IHasModel;
-import jaminv.advancedmachines.util.material.MaterialBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

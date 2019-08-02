@@ -22,6 +22,7 @@ public class RecipeOutput implements Cloneable {
 	private int count = -1;
 	private int chance = 100;
 	private NBTTagCompound nbt = null;
+	boolean invalid = false;
 	
 	public static final RecipeOutput EMPTY = new RecipeOutput(Items.AIR, -1, -1);
 	
@@ -37,6 +38,7 @@ public class RecipeOutput implements Cloneable {
 	}
 	
 	public RecipeOutput(ItemStack stack) {
+		if (stack == null || stack.isEmpty()) { invalid = true; return; }
 		item = stack.getItem();
 		meta = Items.DIAMOND.getDamage(stack);
 		nbt = stack.getTagCompound();
@@ -47,6 +49,7 @@ public class RecipeOutput implements Cloneable {
 	}
 	
 	public RecipeOutput(Item item, int count, int meta, NBTTagCompound nbt) {
+		if (item == null) { invalid = true; return; }
 		this.item = item;
 		this.count = count;
 		this.meta = meta;
@@ -60,6 +63,10 @@ public class RecipeOutput implements Cloneable {
 	public RecipeOutput(Item item) {
 		this.item = item;
 		this.count = 1;
+	}
+	
+	public boolean hasError() {
+		return invalid;
 	}
 	
 	private ItemStack itemstack = null;	

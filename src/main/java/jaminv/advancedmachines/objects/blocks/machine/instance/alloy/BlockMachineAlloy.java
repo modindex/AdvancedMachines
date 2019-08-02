@@ -1,14 +1,9 @@
 package jaminv.advancedmachines.objects.blocks.machine.instance.alloy;
 
-import jaminv.advancedmachines.client.BakedModelMultiblock;
-import jaminv.advancedmachines.objects.blocks.machine.BlockMachineBase;
-import jaminv.advancedmachines.objects.blocks.machine.instance.purifier.TileEntityMachinePurifier;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.expansion.BakedModelExpansion;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.BlockMachineMultiblock;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.util.enums.EnumGui;
-import jaminv.advancedmachines.util.material.MaterialBase.MaterialType;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class BlockMachineAlloy extends BlockMachineMultiblock {
@@ -28,10 +23,4 @@ public class BlockMachineAlloy extends BlockMachineMultiblock {
 	public Class<? extends TileEntity> getTileEntityClass() {
 		return TileEntityMachineAlloy.class;
 	}
-
-	@Override
-	public void registerModels() {
-		registerCustomModel(BakedModelMultiblock.ALLOY);
-		registerVariantModels();
-	}	
 }

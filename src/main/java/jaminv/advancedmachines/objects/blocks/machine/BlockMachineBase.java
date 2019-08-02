@@ -69,7 +69,7 @@ public abstract class BlockMachineBase extends BlockMaterial implements ITileEnt
 	}	
 	
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+	public IBlockState getExtendedState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         TileEntity tileentity = BlockHelper.getTileEntity(worldIn, pos);
 
         EnumFacing facing = EnumFacing.NORTH;

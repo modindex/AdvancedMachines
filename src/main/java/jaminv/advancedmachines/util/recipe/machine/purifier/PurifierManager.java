@@ -5,6 +5,7 @@ import java.util.List;
 import jaminv.advancedmachines.util.parser.DataParser;
 import jaminv.advancedmachines.util.recipe.RecipeBase;
 import jaminv.advancedmachines.util.recipe.RecipeManagerSimple;
+import jaminv.advancedmachines.util.recipe.machine.grinder.FileHandlerGrinderRecipe;
 
 public class PurifierManager {
 	
@@ -32,6 +33,6 @@ public class PurifierManager {
 	public static List<PurifierRecipe> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {
-		DataParser.addFolder("data/recipes/purifier", new FileHandlerPurifierRecipe());
+		DataParser.parseFolder("data/recipes/purifier", new FileHandlerPurifierRecipe());
 	}
 }

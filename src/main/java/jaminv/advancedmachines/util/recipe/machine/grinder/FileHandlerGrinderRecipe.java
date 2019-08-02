@@ -23,14 +23,16 @@ public class FileHandlerGrinderRecipe extends FileHandlerRecipe {
 
 	@Override
 	protected boolean parseRecipe(Logger logger, String filename, String path, JsonObject recipe) throws DataParserException {
-		logger = logger.getLogger("grinder");
-		RecipeInput input = parseInput(logger, path + ".input", getElement(path, recipe, "input", true));
-		RecipeOutput output = parseOutput(logger, path + ".output", getElement(path, recipe, "output", true));
-		RecipeOutput secondary = parseOutputWithChance(logger, path + ".secondary", getObject(path, recipe, "secondary", false));
-		int energy = getEnergy(path, recipe, ModConfig.general.defaultGrinderEnergy);
+		logger = logger.getLogger("grinder");		
+		logger.info("Parsing recipe '" + path + "'.");
 		
-		if (input == null || output == null) { return false; }
-		if (!checkConditions(logger, path + ".conditions", recipe, "conditions")) { return false; }
+		RecipeInput input = parseInput(recipe.get("input"), "input");
+		RecipeOutput output = parseOutput(recipe.get("output"), "output");
+		RecipeOutput secondary = parseOutputWithChance(recipe.get("secondary"), "secondary");
+		int energy = getEnergy(recipe, ModConfig.general.defaultGrinderEnergy);
+		
+		if (input == null || input.isEmpty() || output == null || output.isEmpty()) { return false; }
+		if (!checkConditions(recipe, "conditions", logger)) { return false; }
 		
 		GrinderRecipe rec = new GrinderRecipe(filename + "." + path, energy);
 		rec.setInput(input);

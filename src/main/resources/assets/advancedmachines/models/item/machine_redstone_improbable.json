@@ -1,7 +1,7 @@
 {
     "parent": "advancedmachines:block/machine_redstone",
     "textures": {
-        "all": "advancedmachines:blocks/machine/expansion/improbable/all",
-        "north": "advancedmachines:blocks/machine/redstone/inactive/improbable/all"
+        "all": "advancedmachines:blocks/machine/expansion/improbable_all",
+        "north": "advancedmachines:blocks/machine/redstone/inactive/improbable_all"
     }
 }

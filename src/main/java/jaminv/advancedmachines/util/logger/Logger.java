@@ -12,15 +12,19 @@ public class Logger {
 	private final Writer writer;
 	protected String name = null;
 	
-	public Logger(String filename, String name) {
+	public Logger(String filename, String name, boolean append) {
 		this.name = name;
 		try {
-			writer = new OutputStreamWriter(new FileOutputStream(new File(filename)), "utf-8");
+			writer = new OutputStreamWriter(new FileOutputStream(new File(filename), append), "utf-8");
 		} catch(UnsupportedEncodingException e) {
 			throw new RuntimeException(I18n.format("error.logger.unsupported_encoding", "utf-8", e.getMessage()));
 		} catch(FileNotFoundException e) {
 			throw new RuntimeException(I18n.format("error.logger.error_loading_file", filename, e.getMessage()));
 		}		
+	}
+	
+	public Logger(String filename, String name) {
+		this(filename, name, true);
 	}
 
 	public void close() {

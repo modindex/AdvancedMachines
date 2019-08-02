@@ -2,7 +2,7 @@ package jaminv.advancedmachines.objects.blocks.machine.instance.furnace;
 
 import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineParent;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.util.recipe.machine.FurnaceManager;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.IInventory;
@@ -24,9 +24,9 @@ public class TileEntityMachineFurnace extends TileEntityMachineMultiblock {
 	}
 	
 	@Override
-	public MachineParent getMachineType() {
+	public MachineType getMachineType() {
 		// TODO Auto-generated method stub
-		return MachineParent.FURNACE;
+		return MachineType.FURNACE;
 	}
 
 	@Override

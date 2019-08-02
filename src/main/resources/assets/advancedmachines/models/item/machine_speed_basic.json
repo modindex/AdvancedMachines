@@ -1,6 +1,6 @@
 {
     "parent": "advancedmachines:block/machine_speed",
     "textures": {
-        "all": "advancedmachines:blocks/machine/speed/basic/all"
+        "all": "advancedmachines:blocks/machine/speed/basic_all"
     }
 }

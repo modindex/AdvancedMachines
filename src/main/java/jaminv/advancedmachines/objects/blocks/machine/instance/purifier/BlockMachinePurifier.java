@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.objects.blocks.machine.instance.purifier;
 
-import jaminv.advancedmachines.client.BakedModelMultiblock;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.expansion.BakedModelExpansion;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.BlockMachineMultiblock;
 import jaminv.advancedmachines.util.enums.EnumGui;
 import net.minecraft.tileentity.TileEntity;
@@ -23,10 +23,4 @@ public class BlockMachinePurifier extends BlockMachineMultiblock {
 	public Class<? extends TileEntity> getTileEntityClass() {
 		return TileEntityMachinePurifier.class;
 	}
-	
-	@Override
-	public void registerModels() {
-		registerCustomModel(BakedModelMultiblock.PURIFIER);
-		registerVariantModels();
-	}	
 }

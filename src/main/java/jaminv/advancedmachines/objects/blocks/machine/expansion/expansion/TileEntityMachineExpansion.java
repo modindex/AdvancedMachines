@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachineExpansionBase;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.ICanHaveMachineFace;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineFace;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineParent;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineType;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -15,12 +15,12 @@ import net.minecraft.util.math.BlockPos;
 public class TileEntityMachineExpansion extends TileEntityMachineExpansionBase implements ICanHaveMachineFace {
 	
 	protected MachineFace face = MachineFace.NONE;
-	protected MachineParent parent = MachineParent.NONE;
+	protected MachineType parent = MachineType.NONE;
 	protected EnumFacing facing = EnumFacing.UP;
 	protected BlockPos parentpos = null;
 	protected boolean active = false;
 	
-	public void setMachineFace(MachineFace face, MachineParent parent, EnumFacing facing, BlockPos pos) {
+	public void setMachineFace(MachineFace face, MachineType parent, EnumFacing facing, BlockPos pos) {
 		this.face = face;
 		this.parent = parent;
 		this.facing = facing;
@@ -35,7 +35,7 @@ public class TileEntityMachineExpansion extends TileEntityMachineExpansionBase i
 	public boolean isActive() { return active; }
 
 	public MachineFace getMachineFace() { return face; }
-	public MachineParent getMachineParent() { return parent; }
+	public MachineType getMachineParent() { return parent; }
 	public EnumFacing getFacing() {	return facing; }
 	public BlockPos getParentPos() { return parentpos; }
 
@@ -48,7 +48,7 @@ public class TileEntityMachineExpansion extends TileEntityMachineExpansionBase i
     		face = MachineFace.lookup(compound.getString("face"));
     	}
     	if (compound.hasKey("parent")) {
-    		parent = MachineParent.lookup(compound.getString("parent"));
+    		parent = MachineType.lookup(compound.getString("parent"));
     	}
 		if (compound.hasKey("facing")) {
 			facing = EnumFacing.byName(compound.getString("facing"));

@@ -1,6 +1,5 @@
 package jaminv.advancedmachines.objects.blocks.inventory;
 
-import jaminv.advancedmachines.objects.items.ItemStackHandlerObservable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -29,7 +28,7 @@ public abstract class TileEntityInventory extends TileEntity implements ItemStac
 	}
 	
 	@Override
-	public void onContentsChanged(int slot) {
+	public void onInventoryContentsChanged(int slot) {
 		this.markDirty();
 	}
 	
