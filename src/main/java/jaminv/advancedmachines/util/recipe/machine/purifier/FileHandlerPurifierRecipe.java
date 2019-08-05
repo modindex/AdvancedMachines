@@ -20,7 +20,7 @@ public class FileHandlerPurifierRecipe extends FileHandlerRecipe {
 		logger = logger.getLogger("purifier");
 		RecipeInput input = parseInput(json.get("input"), "input");
 		RecipeOutput output = parseOutput(json.get("output"), "output");
-		int energy = getEnergy(json, ModConfig.general.defaultGrinderEnergy);
+		int energy = getEnergy(json, ModConfig.general.defaultGrinderEnergyCost);
 		
 		if (input == null || input.isEmpty() || output == null || output.isEmpty()) { return false; }
 		if (!checkConditions(json, "conditions", logger)) { return false; }

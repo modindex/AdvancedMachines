@@ -29,7 +29,7 @@ public class FileHandlerGrinderRecipe extends FileHandlerRecipe {
 		RecipeInput input = parseInput(recipe.get("input"), "input");
 		RecipeOutput output = parseOutput(recipe.get("output"), "output");
 		RecipeOutput secondary = parseOutputWithChance(recipe.get("secondary"), "secondary");
-		int energy = getEnergy(recipe, ModConfig.general.defaultGrinderEnergy);
+		int energy = getEnergy(recipe, ModConfig.general.defaultGrinderEnergyCost);
 		
 		if (input == null || input.isEmpty() || output == null || output.isEmpty()) { return false; }
 		if (!checkConditions(recipe, "conditions", logger)) { return false; }

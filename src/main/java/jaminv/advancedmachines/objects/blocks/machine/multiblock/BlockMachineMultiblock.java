@@ -4,12 +4,12 @@ import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.objects.blocks.machine.BlockMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.expansion.BakedModelExpansion;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.expansion.TileEntityMachineExpansion;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.ICanHaveMachineFace;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.IMachineFaceTE;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineFace;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.model.BakedModelMultiblockMachine;
+import jaminv.advancedmachines.objects.material.MaterialExpansion;
 import jaminv.advancedmachines.util.helper.BlockHelper;
-import jaminv.advancedmachines.util.material.MaterialExpansion;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
@@ -111,8 +111,6 @@ public abstract class BlockMachineMultiblock extends BlockMachineBase {
 
 		return layer == BlockRenderLayer.CUTOUT || layer == BlockRenderLayer.TRANSLUCENT;
 	}
-	
-	
 	
 	@Override
 	public UpgradeType getUpgradeType() {

@@ -24,7 +24,8 @@ public enum MachineType {
 	FURNACE(1, "furnace", EnumGui.FURNACE.getId()),
 	GRINDER(2, "grinder", EnumGui.GRINDER.getId()),
 	PURIFIER(3, "purifier", EnumGui.PURIFIER.getId()),
-	ALLOY(4, "alloy", EnumGui.ALLOY.getId());
+	ALLOY(4, "alloy", EnumGui.ALLOY.getId()),
+	MELTER(5, "melter", EnumGui.MELTER.getId());
 	
     private final int index;
     private final String name;

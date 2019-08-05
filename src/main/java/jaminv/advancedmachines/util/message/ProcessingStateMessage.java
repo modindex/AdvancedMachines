@@ -1,16 +1,16 @@
 package jaminv.advancedmachines.util.message;
 
 import io.netty.buffer.ByteBuf;
+import jaminv.advancedmachines.init.property.PropertyMaterial;
 import jaminv.advancedmachines.objects.blocks.BlockMaterial;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.ICanHaveMachineFace;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.IMachineFaceTE;
+import jaminv.advancedmachines.objects.material.MaterialBase;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import jaminv.advancedmachines.util.helper.BlockHelper.BlockCallback;
 import jaminv.advancedmachines.util.interfaces.ICanProcess;
 import jaminv.advancedmachines.util.interfaces.IRedstoneControlled;
 import jaminv.advancedmachines.util.interfaces.IRedstoneControlled.RedstoneState;
-import jaminv.advancedmachines.util.material.MaterialBase;
-import jaminv.advancedmachines.util.material.PropertyMaterial;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -66,8 +66,8 @@ public class ProcessingStateMessage implements IMessage {
 					if (te instanceof ICanProcess) {
 						((ICanProcess)te).setProcessingState(state);
 					}
-					if (te instanceof ICanHaveMachineFace) {
-						((ICanHaveMachineFace)te).setActive(state);
+					if (te instanceof IMachineFaceTE) {
+						((IMachineFaceTE)te).setActive(state);
 					}
 				}
 			};			  

@@ -1,0 +1,6 @@
+{
+    "coal": {
+        "input": { "ore": "logWood" },
+        "output": { "fluid": "coal", "amount": 100 }
+    }
+}

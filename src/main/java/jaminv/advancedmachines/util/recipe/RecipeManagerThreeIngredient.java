@@ -13,6 +13,7 @@ import jaminv.advancedmachines.util.helper.ItemHelper;
 import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager;
 import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager.PurifierRecipe;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidTank;
 
 public abstract class RecipeManagerThreeIngredient<T extends RecipeBase> implements IRecipeManager<T> {  
 	
@@ -132,6 +133,12 @@ public abstract class RecipeManagerThreeIngredient<T extends RecipeBase> impleme
 		return recipe.getOutputQty(output);
 	}
 	
+	@Override
+	public int getOutputQty(T recipe, FluidTank output) {
+		return recipe.getOutputQty(output);
+	}
+
+
 	@Override
 	public boolean isItemValid(ItemStack stack, ItemStack[] other) {
 		if (stack.isEmpty()) { return false; }

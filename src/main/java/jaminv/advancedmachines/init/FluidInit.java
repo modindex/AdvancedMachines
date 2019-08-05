@@ -8,7 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidRegistry;
 
 public class FluidInit {
-	public static final FluidBase COAL_TAR = (FluidBase)new FluidBase("coal_tar",
+	public static final FluidBase COAL_TAR = (FluidBase)new FluidBase("coal",
 			new ResourceLocation(Reference.MODID, "fluids/coal_tar_still"),
 			new ResourceLocation(Reference.MODID, "fluids/coal_tar_flow")
 		).setMaterial(new MaterialLiquid(MapColor.BLACK))

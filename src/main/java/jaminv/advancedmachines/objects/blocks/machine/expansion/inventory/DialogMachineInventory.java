@@ -2,6 +2,7 @@ package jaminv.advancedmachines.objects.blocks.machine.expansion.inventory;
 
 import jaminv.advancedmachines.objects.blocks.inventory.ContainerInventory;
 import jaminv.advancedmachines.objects.blocks.inventory.ContainerLayout;
+import jaminv.advancedmachines.objects.blocks.inventory.Layout;
 import jaminv.advancedmachines.objects.blocks.machine.dialog.DialogIOToggleButton;
 import jaminv.advancedmachines.util.Color;
 import jaminv.advancedmachines.util.dialog.DialogBase;
@@ -19,7 +20,7 @@ public class DialogMachineInventory extends DialogBase implements IElementStateO
 	DialogTextBox priority;
 	
 	public static final ContainerLayout layout = new ContainerLayout()
-		.addLayout(8, 38)
+		.addLayout(new Layout.InventoryLayout(8, 38))
 		.setInventoryLayout(8, 103)
 		.setHotbarLayout(8, 161);
 	

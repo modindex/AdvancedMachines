@@ -1,8 +1,10 @@
 package jaminv.advancedmachines.objects.blocks.machine.instance.alloy;
 
+import jaminv.advancedmachines.objects.blocks.BlockMaterial;
 import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineType;
+import jaminv.advancedmachines.objects.material.MaterialExpansion;
 import jaminv.advancedmachines.util.recipe.machine.AlloyManager;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.IInventory;
@@ -19,7 +21,7 @@ public class TileEntityMachineAlloy extends TileEntityMachineMultiblock {
 	
 	
 	public TileEntityMachineAlloy() {
-		super(AlloyManager.getRecipeManager());		
+		super(AlloyManager.getRecipeManager());	
 	}
 
 	@Override

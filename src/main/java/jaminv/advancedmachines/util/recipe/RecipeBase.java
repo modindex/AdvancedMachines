@@ -5,6 +5,8 @@ import java.util.Arrays;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
 
 public abstract class RecipeBase {
 	public abstract int getInputCount();
@@ -96,6 +98,26 @@ public abstract class RecipeBase {
 			if (min == -1 || min > count) { min = count; }
 		}
 		return min;
+	}
+	
+	/**
+	 * In its current state, recipes only handle a single fluid output.
+	 * That will likely always remain the case.
+	 * If getOutputQty() != 1, this method returns 0.
+	 * @param tank FluidTank to fill
+	 * @return int
+	 */
+	public int getOutputQty(FluidTank tank) {
+		if (this.getOutputCount() != 1) { return 0; }
+		
+		FluidStack output = this.getOutput(0).toFluidStack();
+		
+		// Simulate a single fill to see if it will take
+		// This is an easy way to make sure all the fluid type checking occurs.
+		if (tank.fill(output, false) != output.amount) { return 0; }
+		
+		int capacity = tank.getCapacity() - tank.getFluidAmount();
+		return capacity / output.amount;
 	}
 	
 	/* Helpful utility methods */

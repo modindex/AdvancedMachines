@@ -1,6 +1,7 @@
 package jaminv.advancedmachines.objects.blocks.machine.expansion;
 
 import jaminv.advancedmachines.init.property.Properties;
+import jaminv.advancedmachines.init.property.PropertyMaterial;
 import jaminv.advancedmachines.objects.blocks.BlockMaterial;
 import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.expansion.TileEntityMachineExpansion;
@@ -9,12 +10,11 @@ import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorde
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineFace;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineType;
+import jaminv.advancedmachines.objects.material.MaterialBase;
+import jaminv.advancedmachines.objects.material.MaterialExpansion;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import jaminv.advancedmachines.util.helper.BlockHelper.ScanResult;
 import jaminv.advancedmachines.util.interfaces.IHasTileEntity;
-import jaminv.advancedmachines.util.material.MaterialBase;
-import jaminv.advancedmachines.util.material.MaterialExpansion;
-import jaminv.advancedmachines.util.material.PropertyMaterial;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -65,6 +65,7 @@ public class BlockMachineExpansionBase extends BlockMaterial implements IMachine
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
 			ItemStack stack) {
 		scanMultiblock(worldIn, pos);
+		BlockHelper.setMeta(worldIn, pos, stack);
 	}	
 	
 	@Override

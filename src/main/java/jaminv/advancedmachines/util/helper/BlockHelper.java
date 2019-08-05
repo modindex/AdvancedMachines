@@ -7,15 +7,18 @@ import java.util.Map;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.init.property.Properties;
+import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTileEntity;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.redstone.TileEntityMachineRedstone;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
+import jaminv.advancedmachines.util.interfaces.IHasMetadata;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -63,6 +66,13 @@ public class BlockHelper {
 	public static EnumFacing getExtendedFacing(IBlockState state) {
 		if (!(state instanceof IExtendedBlockState)) { return null; }
 		return ((IExtendedBlockState)state).getValue(Properties.FACING);
+	}
+	
+	public static void setMeta(World worldIn, BlockPos pos, ItemStack stack) {
+		TileEntity te = worldIn.getTileEntity(pos);
+		if (te instanceof IHasMetadata) {
+			((IHasMetadata)te).setMeta(ItemHelper.getMeta(stack));
+		}
 	}
 	
 	public static EnumFacing getXZFacing(EntityLivingBase living) {

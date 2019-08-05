@@ -29,5 +29,6 @@ public class Properties {
 	public static final UnlistedEnum<MachineType> MACHINE_TYPE = new UnlistedEnum<MachineType>("machine_type", MachineType.class);
 	public static final UnlistedEnum<MachineFace> MACHINE_FACE = new UnlistedEnum<MachineFace>("machine_face", MachineFace.class);
 	
-	public static final UnlistedFluidStack FLUID = new UnlistedFluidStack("fluid");	
+	public static final UnlistedFluidStack FLUID = new UnlistedFluidStack("fluid");
+	public static final UnlistedInteger CAPACITY = new UnlistedInteger("capacity");
 }

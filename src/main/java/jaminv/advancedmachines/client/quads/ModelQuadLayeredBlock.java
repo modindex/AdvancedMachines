@@ -9,6 +9,15 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 
 public class ModelQuadLayeredBlock extends ModelQuadBase {
+	
+	private boolean inverted = false;
+	public ModelQuadLayeredBlock invert() { this.inverted = true; return this; }
+	
+	private float xoff = 0, yoff = 0, zoff = 0;
+	public ModelQuadLayeredBlock offset(float xoff, float yoff, float zoff) {
+		this.xoff = xoff; this.yoff = yoff; this.zoff = zoff;
+		return this;
+	}
 
 	private EnumFacing facing;
 	private ILayeredTexture texture, face, top, bottom;
@@ -42,7 +51,7 @@ public class ModelQuadLayeredBlock extends ModelQuadBase {
 			List<TextureAtlasSprite> textures = layers.getTextures(side); 
 			
 			for (TextureAtlasSprite sprite : textures) {
-				quads.addAll((new ModelQuadBlockFace(getFormat(), sprite, side)).getQuads());
+				quads.addAll((new ModelQuadBlockFace.Unit(getFormat(), sprite, side, inverted).offset(xoff, yoff, zoff)).getQuads());
 			}
 		}
 		

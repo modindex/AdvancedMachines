@@ -2,6 +2,7 @@ package jaminv.advancedmachines.objects.blocks.machine.instance.furnace;
 
 import jaminv.advancedmachines.objects.blocks.machine.expansion.expansion.BakedModelExpansion;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.BlockMachineMultiblock;
+import jaminv.advancedmachines.objects.material.MaterialExpansion;
 import jaminv.advancedmachines.util.enums.EnumGui;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;

@@ -7,6 +7,12 @@ import java.util.Comparator;
 
 import net.minecraft.item.ItemStack;
 
+/**
+ * Used to manage a list of ItemComparable objects that is sortable and comparable.
+ * 
+ * This list maintains a "sorted" state and only sorts when necessary.
+ * The list is sorted (if necessary) when comparisons are performed.
+ */
 public class ItemComparableList {
 	protected ArrayList<ItemComparable> list = new ArrayList<ItemComparable>();
 	boolean sorted = false;
@@ -28,6 +34,14 @@ public class ItemComparableList {
 		sort();
 	}
 	
+	/**
+	 * Add an Item to the List
+	 * 
+	 * Adding items clears the "sorted" state.
+	 * 
+	 * @param item
+	 * @return
+	 */
 	public boolean add(ItemComparable item) {
 		if (item.isEmpty()) { return false; }
 		sorted = false;

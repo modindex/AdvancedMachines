@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidTank;
 
 public abstract class RecipeManagerSimple<T extends RecipeBase> implements IRecipeManager<T> {  
 	
@@ -71,6 +72,11 @@ public abstract class RecipeManagerSimple<T extends RecipeBase> implements IReci
 		return recipe.getOutputQty(output);
 	}
 	
+	@Override
+	public int getOutputQty(T recipe, FluidTank output) {
+		return recipe.getOutputQty(output);
+	}
+
 	@Override
 	public boolean isItemValid(ItemStack stack, ItemStack[] other) {
 		if (stack == null || stack.isEmpty()) { return false; }

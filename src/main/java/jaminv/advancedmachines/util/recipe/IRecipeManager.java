@@ -3,6 +3,7 @@ package jaminv.advancedmachines.util.recipe;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidTank;
 
 public interface IRecipeManager<T extends RecipeBase> {
 	
@@ -31,6 +32,7 @@ public interface IRecipeManager<T extends RecipeBase> {
 	public int getRecipeQty(T recipe, ItemStack[] input);
 	
 	public int getOutputQty(T recipe, ItemStack[] output);
+	public int getOutputQty(T recipe, FluidTank output);
 	
 	/**
 	 * Returns -1 if invalid

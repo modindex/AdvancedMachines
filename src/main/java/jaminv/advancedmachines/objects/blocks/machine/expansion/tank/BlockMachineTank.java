@@ -46,6 +46,7 @@ public class BlockMachineTank extends BlockMachineExpansion {
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 		
 		BlockHelper.setDirectional(worldIn, pos, placer);
+		BlockHelper.setMeta(worldIn, pos, stack);
 	}		
 	
 	@Override
@@ -62,7 +63,7 @@ public class BlockMachineTank extends BlockMachineExpansion {
 	protected BlockStateContainer createBlockState() {
 		VARIANT = this.getVariant();
 		BlockStateContainer.Builder builder = new BlockStateContainer.Builder(this);
-		return builder.add(VARIANT).add(Properties.FLUID)
+		return builder.add(VARIANT).add(Properties.FLUID, Properties.CAPACITY)
 			.add(Properties.INPUT, Properties.FACING)
 			.add(Properties.BORDER_TOP, Properties.BORDER_BOTTOM) 
 			.add(Properties.BORDER_NORTH, Properties.BORDER_SOUTH)
@@ -80,6 +81,7 @@ public class BlockMachineTank extends BlockMachineExpansion {
         boolean input = true;
         MultiblockBorders borders = MultiblockBorders.DEFAULT;
         FluidStack fluid = null;
+        int capacity = 0;
 
         if (tileentity instanceof TileEntityMachineTank) {
         	TileEntityMachineTank te = (TileEntityMachineTank)tileentity;
@@ -87,10 +89,11 @@ public class BlockMachineTank extends BlockMachineExpansion {
         	input = te.getInputState();
         	borders = te.getBorders();
         	fluid = te.getFluid();
+        	capacity = te.getFluidCapacity();
         }
         
         return (IExtendedBlockState) ext.withProperty(Properties.FLUID, fluid)
-            	.withProperty(Properties.FACING, facing).withProperty(Properties.INPUT, input)
+            	.withProperty(Properties.FACING, facing).withProperty(Properties.INPUT, input).withProperty(Properties.CAPACITY, capacity)
             	.withProperty(Properties.BORDER_TOP, borders.getTop()).withProperty(Properties.BORDER_BOTTOM, borders.getBottom())
             	.withProperty(Properties.BORDER_NORTH, borders.getNorth()).withProperty(Properties.BORDER_SOUTH, borders.getSouth())
             	.withProperty(Properties.BORDER_EAST, borders.getEast()).withProperty(Properties.BORDER_WEST, borders.getWest());        
@@ -99,13 +102,17 @@ public class BlockMachineTank extends BlockMachineExpansion {
 	@Override
 	@SideOnly (Side.CLIENT)
 	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
-
 		return layer == BlockRenderLayer.CUTOUT || layer == BlockRenderLayer.TRANSLUCENT;
-	}	
-	
+	}
+
+	@Override
+	public boolean isOpaqueCube(IBlockState state) {
+		return false;
+	}
+
 	@Override
 	public void registerModels() {
-		registerCustomModel("bakedmodel_tank", BakedModelSpeed.class);
+		registerCustomModel("bakedmodel_tank", BakedModelTank.class);
 		registerVariantModels();
 	}	
 

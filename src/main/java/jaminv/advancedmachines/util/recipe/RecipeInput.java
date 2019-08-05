@@ -11,6 +11,9 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class RecipeInput implements Cloneable {
@@ -20,6 +23,7 @@ public class RecipeInput implements Cloneable {
 	private int meta = -1;
 	private int count = -1;
 	private NBTTagCompound nbt = null;
+	private Fluid fluid = null;
 	
 	private boolean invalid = false;
 		
@@ -59,6 +63,7 @@ public class RecipeInput implements Cloneable {
 		this.count = count;
 		this.meta = meta;
 		this.nbt = nbt;
+		this.fluid = null;
 		
 		registerItems();
 	}
@@ -73,6 +78,22 @@ public class RecipeInput implements Cloneable {
 	
 	public RecipeInput(Item item) {
 		this(item, 1, 0);
+	}
+	
+	public RecipeInput(Fluid fluid, int amount, NBTTagCompound nbt) {
+		this.item = Items.AIR;
+		this.meta = -1;
+		
+		// Member variable `count` is used interchangeably with 'amount'
+		this.count = amount;
+		this.fluid = fluid;
+		this.nbt = nbt;
+	}
+	
+	public RecipeInput(Fluid fluid, int amount) { this(fluid, amount, null); }
+	
+	public RecipeInput(FluidStack stack) {
+		this(stack.getFluid(), stack.amount, stack.tag);
 	}
 	
 	List<ItemStack> itemlist = new ArrayList<ItemStack>();
@@ -94,17 +115,24 @@ public class RecipeInput implements Cloneable {
 		}
 	}
 	
-	public int getCount() {
-		return count;
+	private void registerFluids() {
+		lookup.add(new ItemComparable(this.toFluidStack()));
 	}
+	
+	public int getCount() { return count; }
+	public int getAmount() { return count; }
 	
 	public ItemStack toItemStack() {
 		if (item == Items.AIR) { return ItemStack.EMPTY; }
 		return new ItemStack(item, count, meta, nbt);
 	}
 	
+	public FluidStack toFluidStack() {
+		return new FluidStack(fluid, count, nbt);
+	}
+	
 	public boolean isEmpty() {
-		return oreId == -1 && item == Items.AIR;
+		return oreId == -1 && item == Items.AIR && fluid == null;
 	}
 	
 	public boolean hasError() {
@@ -145,6 +173,8 @@ public class RecipeInput implements Cloneable {
 		String ret = "RecipeInput(";
 		if (oreId != -1) {
 			return ret + "oreId=" + oreId + ", ore=" + OreDictionary.getOreName(oreId) + ")";
+		} else if (fluid != null) {
+			return ret + toFluidStack() + ")";
 		} else {
 			return ret + toItemStack() + ")";
 		}
@@ -156,6 +186,9 @@ public class RecipeInput implements Cloneable {
 	
 	public int getQty(ItemStack stack) {
 		return stack.getCount() / count;
+	}
+	public int getQty(FluidStack stack) {
+		return stack.amount / count;
 	}
 	
 	public RecipeInput multiply(int factor) {

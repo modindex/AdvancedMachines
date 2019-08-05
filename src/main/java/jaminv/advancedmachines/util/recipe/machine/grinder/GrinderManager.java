@@ -63,7 +63,7 @@ public class GrinderManager {
 		String ingot = "ingot" + oreType;
 		String oreNether = "oreNether" + oreType;
 		String oreEnd = "oreEnd" + oreType;
-		int energy = ModConfig.general.defaultGrinderEnergy;
+		int energy = ModConfig.general.defaultGrinderEnergyCost;
 		
 		if (OreDictionary.doesOreNameExist(gem)) {
 			addRecipe(energy, ore, gem, 2);

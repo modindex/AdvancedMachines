@@ -1,24 +1,29 @@
 package jaminv.advancedmachines.objects.blocks.machine.expansion.energy;
 
+import jaminv.advancedmachines.objects.blocks.energy.EnergyStorageObservable;
 import jaminv.advancedmachines.objects.blocks.machine.IMachineEnergy;
 import jaminv.advancedmachines.objects.blocks.machine.MachineEnergyStorage;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTool;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachineExpansionBase;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
+import jaminv.advancedmachines.objects.material.MaterialExpansion;
 import jaminv.advancedmachines.util.dialog.container.EmptyContainer;
 import jaminv.advancedmachines.util.dialog.container.IContainerUpdate;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
+import jaminv.advancedmachines.util.interfaces.IHasMetadata;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 
-public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase implements IHasGui, IContainerUpdate, IMachineEnergy, IMachineUpgradeTool, IDirectional {
+public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase implements IHasGui, IContainerUpdate, IMachineEnergy, IMachineUpgradeTool, IHasMetadata, IDirectional, EnergyStorageObservable.IObserver {
 	
 	protected EnumFacing facing = EnumFacing.NORTH;
 	protected BlockPos parent;
@@ -29,6 +34,14 @@ public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase impl
 	public EnumFacing getFacing() {
 		return facing;
 	}
+	
+	protected MaterialExpansion material;
+
+	@Override
+	public void setMeta(int meta) {
+		material = MaterialExpansion.byMetadata(meta);
+		energy.setMaterial(material);
+	}
 
 	public MachineEnergyStorage energy;
 	
@@ -38,7 +51,7 @@ public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase impl
 	
 	public TileEntityMachineEnergy() {
 		super();
-		this.energy = new MachineEnergyStorage(50000, 200);
+		this.energy = new MachineEnergyStorage();
 	}
 	
 	@Override
@@ -52,14 +65,30 @@ public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase impl
 	}
 	
 	@Override
-	public void tickUpdate(TileEntityMachineMultiblock te) {
-		this.transferEnergy(te.getEnergy());
+	public void onEnergyAvailable() {
+		if (parent == null) { return; }
+		TileEntity te = world.getTileEntity(parent);
+		if (te instanceof TileEntityMachineMultiblock) {
+			((TileEntityMachineMultiblock)te).doSomething();
+		}
 	}
 	
-	public void transferEnergy(MachineEnergyStorage storage) {
-		int transfer = Math.min(storage.getMaxEnergyStored() - storage.getEnergyStored(), energy.getEnergyStored());	
-		energy.setEnergy(energy.getEnergyStored() - transfer);
-		storage.setEnergy(storage.getEnergyStored() + transfer);
+	@Override
+	public boolean tickUpdate(TileEntityMachineMultiblock te) {
+		return this.transferEnergy(te.getEnergy()) > 0;
+	}
+	
+	public int transferEnergy(IEnergyStorage storage) {
+		int transfer;
+		
+		transfer = energy.extractEnergy(Integer.MAX_VALUE, true);
+		transfer = storage.receiveEnergy(transfer, true);
+		
+		if (transfer > 0) {
+			energy.extractEnergy(transfer, false);
+			storage.receiveEnergy(transfer, false);
+		}
+		return transfer;
 	}
 	
 	@Override
@@ -91,6 +120,9 @@ public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase impl
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
+		if (compound.hasKey("meta")) {
+			setMeta(compound.getInteger("meta"));
+		}
 		if (compound.hasKey("facing")) {
 			facing = EnumFacing.byName(compound.getString("facing"));
 		}
@@ -102,6 +134,7 @@ public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase impl
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
+		compound.setInteger("meta", material.getMeta());
 		compound.setString("facing", facing.getName());
 		energy.writeToNBT(compound);
 		return compound;
@@ -119,11 +152,12 @@ public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase impl
 	public void setField(int id, int value) {
 		switch(id) {
 		case 0:
-			energy.setEnergy(value); return;
+			energy.setEnergy(value);
 		}
 	}
 	
 	public boolean canInteractWith(EntityPlayer playerIn) {
 		return !isInvalid() && playerIn.getDistanceSq(pos.add(0.5D, 0.5D, 0.5D)) <= 64D;
 	}
+
 }

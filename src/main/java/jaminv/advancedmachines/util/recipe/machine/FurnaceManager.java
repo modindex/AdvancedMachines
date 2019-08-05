@@ -46,7 +46,7 @@ public class FurnaceManager {
 			if (output.isEmpty()) {
 				continue;
 			}
-			int energy = ModConfig.general.defaultFurnaceEnergy;
+			int energy = ModConfig.general.defaultFurnaceEnergyCost;
 			
 			if (output.getItem() instanceof ItemFood) {
 				energy /= 2;

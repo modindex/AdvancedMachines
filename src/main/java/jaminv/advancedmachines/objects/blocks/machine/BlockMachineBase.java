@@ -1,6 +1,7 @@
 package jaminv.advancedmachines.objects.blocks.machine;
 
 import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.init.property.PropertyMaterial;
 import jaminv.advancedmachines.objects.blocks.BlockMaterial;
 import jaminv.advancedmachines.objects.blocks.DirectionalBlock;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgrade;
@@ -8,11 +9,11 @@ import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeT
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgrade.UpgradeType;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.redstone.TileEntityMachineRedstone;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
+import jaminv.advancedmachines.objects.material.MaterialBase;
+import jaminv.advancedmachines.objects.material.MaterialExpansion;
 import jaminv.advancedmachines.util.helper.BlockHelper;
+import jaminv.advancedmachines.util.helper.ItemHelper;
 import jaminv.advancedmachines.util.interfaces.IHasTileEntity;
-import jaminv.advancedmachines.util.material.MaterialBase;
-import jaminv.advancedmachines.util.material.MaterialExpansion;
-import jaminv.advancedmachines.util.material.PropertyMaterial;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -60,6 +61,7 @@ public abstract class BlockMachineBase extends BlockMaterial implements ITileEnt
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 		
 		BlockHelper.setDirectional(worldIn, pos, placer, false);
+		BlockHelper.setMeta(worldIn, pos, stack);
 	}
 	
 	@Override
@@ -83,13 +85,4 @@ public abstract class BlockMachineBase extends BlockMaterial implements ITileEnt
         
         return state.withProperty(FACING, facing).withProperty(ACTIVE, active);
 	}
-	
-/*	@Override
-	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
-		TileEntity te = world.getTileEntity(pos);
-		if (te instanceof TileEntityMachineBase) {
-			((TileEntityMachineBase)te).checkRedstone();
-		}
-		super.onNeighborChange(world, pos, neighbor);
-	} */
 }

@@ -13,9 +13,9 @@ import jaminv.advancedmachines.objects.blocks.machine.instance.grinder.DialogMac
 import jaminv.advancedmachines.objects.blocks.machine.instance.grinder.TileEntityMachineGrinder;
 import jaminv.advancedmachines.objects.blocks.machine.instance.purifier.DialogMachinePurifier;
 import jaminv.advancedmachines.objects.blocks.machine.instance.purifier.TileEntityMachinePurifier;
+import jaminv.advancedmachines.objects.material.MaterialExpansion;
 import jaminv.advancedmachines.util.dialog.container.EmptyContainer;
 import jaminv.advancedmachines.util.dialog.struct.DialogArea;
-import jaminv.advancedmachines.util.material.MaterialExpansion;
 import jaminv.advancedmachines.util.recipe.machine.grinder.GrinderManager;
 import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager;
 import mezz.jei.api.IGuiHelper;

@@ -132,6 +132,7 @@ dialog.alloy.title=Alloy Forge
 dialog.purifier.title=Purification Chamber
 dialog.grinder.title=Advanced Grinder
 dialog.furnace.title=Advanced Furnace
+dialog.melter.title=Melter
 dialog.energy.title=Energy
 dialog.machine_inventory.title=Machine Inventory
 dialog.machine_tank.title=Fluid Tank

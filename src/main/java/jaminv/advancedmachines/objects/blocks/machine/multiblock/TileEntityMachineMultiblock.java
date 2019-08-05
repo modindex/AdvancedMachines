@@ -10,22 +10,18 @@ import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgrade;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgrade.UpgradeType;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTileEntity;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTool;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachineExpansionBase;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockState.MultiblockNull;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.ICanHaveMachineFace;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.IMachineFaceTE;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineFace;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineType;
+import jaminv.advancedmachines.objects.material.MaterialBase;
 import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import jaminv.advancedmachines.util.helper.BlockHelper.BlockChecker;
 import jaminv.advancedmachines.util.helper.BlockHelper.ScanResult;
-import jaminv.advancedmachines.util.material.MaterialBase;
-import jaminv.advancedmachines.util.material.MaterialBase.MaterialType;
 import jaminv.advancedmachines.util.message.ProcessingStateMessage;
-import jaminv.advancedmachines.util.material.MaterialExpansion;
 import jaminv.advancedmachines.util.recipe.IRecipeManager;
 import jaminv.advancedmachines.util.recipe.RecipeBase;
-import jaminv.advancedmachines.util.recipe.RecipeInput;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -37,7 +33,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 
-public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase implements IMachineUpgradeTileEntity, ICanHaveMachineFace {
+public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase implements IMachineUpgradeTileEntity, IMachineFaceTE {
 
 	public TileEntityMachineMultiblock(IRecipeManager recipeManager) {
 		super(recipeManager);
@@ -160,6 +156,9 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 			}
 		}
 		
+		// Add the upgrade for the machine itself
+		this.upgrades.add(UpgradeType.MULTIPLY, this.getMultiplier());
+		
 		this.multiblockState = new MultiblockState.MultiblockComplete(this.upgrades);
 		multiblockMin = min; multiblockMax = max;
 		
@@ -176,16 +175,18 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 	public int getQtyProcessing() { return qtyProcessing; }
 	
 	@Override
-	protected void tickUpdate() {
-		super.tickUpdate();
+	protected boolean tickUpdate() {
+		boolean didSomething = super.tickUpdate();
 		
 		BlockPos[] tools = upgrades.getTools();
 		for (BlockPos tool : tools) {
 			TileEntity te = world.getTileEntity(tool);
 			if (te instanceof IMachineUpgradeTool) {
-				((IMachineUpgradeTool)te).tickUpdate(this);
+				didSomething = ((IMachineUpgradeTool)te).tickUpdate(this) || didSomething;
 			}
 		}
+		
+		return didSomething;
 	}
 	
 	public void sortTools() {
@@ -201,7 +202,7 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 	@Override
 	protected int beginProcess(RecipeBase recipe, ItemStack[] input) {
 		IRecipeManager mgr = getRecipeManager();
-		qtyProcessing = Math.min(Math.min(mgr.getRecipeQty(recipe, input), mgr.getOutputQty(recipe, this.getOutputStacks())), upgrades.get(UpgradeType.MULTIPLY) + 1) ;
+		qtyProcessing = Math.min(Math.min(mgr.getRecipeQty(recipe, input), mgr.getOutputQty(recipe, this.getOutputStacks())), upgrades.get(UpgradeType.MULTIPLY)) ;
 		
 		return ModConfig.general.processTimeBasic;
 	}
@@ -245,7 +246,7 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 	@Override
 	protected void haltProcess() {
 		super.haltProcess();
-		qtyProcessing = 0;
+		if (!world.isRemote) { qtyProcessing = 0; }
 	}
 	
 	public static void setMultiblock(BlockPos min, BlockPos max, boolean isMultiblock, World world, BlockPos pos) {
@@ -265,8 +266,8 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 							if (te instanceof IMachineUpgradeTool) {
 								((IMachineUpgradeTool)te).setParent(null);
 							}
-							if (te instanceof ICanHaveMachineFace) {
-								((ICanHaveMachineFace)te).setMachineFace(MachineFace.NONE, MachineType.NONE, EnumFacing.UP, null);
+							if (te instanceof IMachineFaceTE) {
+								((IMachineFaceTE)te).setMachineFace(MachineFace.NONE, MachineType.NONE, EnumFacing.UP, null);
 							}
 						} else { bord = new MultiblockBorders(world, upgrade, min, max); }
 						
@@ -356,7 +357,7 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 				TileEntity te = world.getTileEntity(check);
 				
 				if (te != null) {
-					eval = (te instanceof ICanHaveMachineFace);
+					eval = (te instanceof IMachineFaceTE);
 					Block block = world.getBlockState(check).getBlock();
 					if (eval) { eval = world.getBlockState(check).getValue(BlockMachineBase.EXPANSION_VARIANT) == variant; }
 				} else { eval = false; }
@@ -377,8 +378,8 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 			for (int y = -count+1; y < 1; y++) {
 				TileEntity te = world.getTileEntity(pos.offset(dir, x).offset(EnumFacing.UP, y));
 				
-				if (te instanceof ICanHaveMachineFace) {
-					((ICanHaveMachineFace)te).setMachineFace(MachineFace.build(count, -x, -y), this.getMachineType(), facing, this.getPos());
+				if (te instanceof IMachineFaceTE) {
+					((IMachineFaceTE)te).setMachineFace(MachineFace.build(count, -x, -y), this.getMachineType(), facing, this.getPos());
 				}
 			}
 		}

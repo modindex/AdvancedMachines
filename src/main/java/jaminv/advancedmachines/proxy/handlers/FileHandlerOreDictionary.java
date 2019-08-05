@@ -37,7 +37,7 @@ public class FileHandlerOreDictionary extends FileHandlerBase {
 		}
 		
 		logComplete(logger, c, i, "%d ore dictionary entries created successfully.", "%d ore dictionary entries not created.");
-	
+			
 		return true;
 	}
 	
@@ -47,6 +47,7 @@ public class FileHandlerOreDictionary extends FileHandlerBase {
 		String orename = JsonUtils.getString(ore, "ore");
 		
 		OreDictionary.registerOre(orename, item);
+
 		return true;
 	}
 }

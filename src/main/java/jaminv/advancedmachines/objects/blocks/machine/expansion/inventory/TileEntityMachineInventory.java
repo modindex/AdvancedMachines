@@ -9,9 +9,11 @@ import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpa
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTool;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
+import jaminv.advancedmachines.objects.material.MaterialExpansion;
 import jaminv.advancedmachines.util.helper.InventoryHelper;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
+import jaminv.advancedmachines.util.interfaces.IHasMetadata;
 import jaminv.advancedmachines.util.interfaces.ISwitchableIO;
 import jaminv.advancedmachines.util.message.IOStateMessage;
 import jaminv.advancedmachines.util.recipe.IRecipeManager;
@@ -27,7 +29,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineInventory extends TileEntityInventory implements IHasGui, IMachineUpgradeTool, IDirectional, ISwitchableIO {
+public class TileEntityMachineInventory extends TileEntityInventory implements IHasGui, IMachineUpgradeTool, IHasMetadata, IDirectional, ISwitchableIO {
 	
 	protected EnumFacing facing = EnumFacing.NORTH;
 	protected boolean inputState = true;
@@ -35,6 +37,13 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 	protected MultiblockBorders borders = new MultiblockBorders();
 	protected BlockPos parent = null;
 	
+	private MaterialExpansion material;
+	
+	@Override
+	public void setMeta(int meta) {
+		material = MaterialExpansion.byMetadata(meta);
+	}
+
 	@Override
 	public ContainerInventory createContainer(IInventory inventory) {
 		return new ContainerInventory(inventory, DialogMachineInventory.layout, this);
@@ -90,15 +99,27 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 	}
 	
 	@Override
-	public void tickUpdate(TileEntityMachineMultiblock te) {
+	public void onInventoryContentsChanged(int slot) {
+		super.onInventoryContentsChanged(slot);
+		
+		if (parent == null) { return; }
+		TileEntity te = world.getTileEntity(parent);
+		if (te instanceof TileEntityMachineMultiblock) {
+			((TileEntityMachineMultiblock)te).doSomething();
+		}
+	}
+
+	@Override
+	public boolean tickUpdate(TileEntityMachineMultiblock te) {
 		if (inputState) {
-			moveInput(te);
+			return moveInput(te);
 		} else {
-			moveOutput(te);
+			return moveOutput(te);
 		}
 	}
 	
-	protected void moveInput(TileEntityMachineMultiblock te) {
+	protected boolean moveInput(TileEntityMachineMultiblock te) {
+		boolean didSomething = false;
  		ItemStackHandler inv = te.getInventory();
 		IRecipeManager recipe = te.getRecipeManager();
 
@@ -115,6 +136,7 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 					if (!other.isEmpty() && recipe.isItemValid(other, te.getInput())) {
 						inventory.extractItem(d, other.getCount(), false);
 						inv.insertItem(i, other, false);
+						didSomething = true;
 						break;
 					}
 				}
@@ -122,21 +144,40 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 			
 			for (int d = 0; d < inventory.getSlots(); d++) {
 				ItemStack other = inventory.getStackInSlot(d);				
-				other = InventoryHelper.pushStack(other, inv, i, i, false);
+				ItemStack newother = InventoryHelper.pushStack(other, inv, i, i, false);
+				if (newother.getCount() != other.getCount()) { 
+					didSomething = true;
+					inv.setStackInSlot(d, newother);
+				}
 			}
 		}
+		
+		return didSomething;
 	}
 	
-	protected void moveOutput(TileEntityMachineMultiblock te) {
+	protected boolean moveOutput(TileEntityMachineMultiblock te) {
+		boolean didSomething = false;
 		ItemStackHandler inv = te.getInventory();
 		
 		for (int i = te.getFirstOutputSlot(); i < te.getOutputCount() + te.getFirstOutputSlot(); i++) {
-			inv.setStackInSlot(i, InventoryHelper.pushStack(inv.getStackInSlot(i), inventory));
+			ItemStack other = inv.getStackInSlot(i);
+			ItemStack newother = InventoryHelper.pushStack(other, inventory);
+			if (newother.getCount() != other.getCount()) {
+				didSomething = true;
+				inv.setStackInSlot(i, newother);
+			}
 		}
 		
 		for (int i = te.getFirstSecondarySlot(); i < te.getSecondaryCount() + te.getFirstSecondarySlot(); i++) {
-			inv.setStackInSlot(i, InventoryHelper.pushStack(inv.getStackInSlot(i), inventory));
+			ItemStack other = inv.getStackInSlot(i);
+			ItemStack newother = InventoryHelper.pushStack(inv.getStackInSlot(i), inventory);
+			if (newother.getCount() != other.getCount()) {
+				didSomething = true;
+				inv.setStackInSlot(i, newother);
+			}
 		}
+		
+		return didSomething;
 	}
 	
 	
@@ -157,6 +198,9 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
+		if (compound.hasKey("meta")) {
+			setMeta(compound.getInteger("meta"));
+		}
 		if (compound.hasKey("facing")) {
 			facing = EnumFacing.byName(compound.getString("facing"));
 		}
@@ -177,6 +221,7 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
+		compound.setInteger("meta", material.getMeta());
 		compound.setString("facing", facing.getName());
 		compound.setBoolean("inputState", inputState);
 		compound.setInteger("priority", priority);

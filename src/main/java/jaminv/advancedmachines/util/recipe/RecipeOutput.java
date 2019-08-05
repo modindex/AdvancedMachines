@@ -8,6 +8,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -18,6 +20,7 @@ public class RecipeOutput implements Cloneable {
 	
 	private String ore = "";
 	private Item item = Items.AIR;
+	private Fluid fluid = null;
 	private int meta = -1;
 	private int count = -1;
 	private int chance = 100;
@@ -65,6 +68,19 @@ public class RecipeOutput implements Cloneable {
 		this.count = 1;
 	}
 	
+	public RecipeOutput(Fluid fluid, int amount, NBTTagCompound nbt) {
+		// Member variable `count` is used interchangeably with 'amount'
+		this.count = amount;
+		this.fluid = fluid;
+		this.nbt = nbt;
+	}
+	
+	public RecipeOutput(Fluid fluid, int amount) { this(fluid, amount, null); }
+	
+	public RecipeOutput(FluidStack stack) {
+		this(stack.getFluid(), stack.amount, stack.tag);
+	}
+	
 	public boolean hasError() {
 		return invalid;
 	}
@@ -103,24 +119,33 @@ public class RecipeOutput implements Cloneable {
 		return itemstack.copy();
 	}
 	
+	public FluidStack toFluidStack() {
+		return new FluidStack(fluid, count, nbt);
+	}
+	
 	public RecipeOutput withChance(int chance) {
 		this.chance = chance;
 		return this;
 	}
 	
 	public boolean isEmpty() {
+		if (fluid != null) { return false; }
 		return toItemStack().isEmpty();
 	}
+	
+	public boolean isFluid() { return fluid != null; }
+	public boolean isItem() { return !item.equals(Items.AIR); }
 	
 	@Override
 	public String toString() {
 		String ret = "RecipeOutput(";
 		if (ore != "") {
-			return ret + "ore=" + ore + ", count=" + count + ")"; 
+			return ret + "ore=" + ore + ", count=" + count + ")";
+		} else if(fluid != null) {
+			return ret + toFluidStack() + ")";
 		} else {
 			return ret + toItemStack() + ")";
 		}
-
 	}
 	
 	public int getChance() {

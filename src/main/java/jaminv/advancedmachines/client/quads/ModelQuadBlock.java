@@ -9,24 +9,54 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 
 public class ModelQuadBlock extends ModelQuadBase {
+	
+	public static class Unit extends ModelQuadBlock {
+		public Unit(VertexFormat format, EnumFacing facing, TextureAtlasSprite texture, TextureAtlasSprite face,
+				TextureAtlasSprite top, TextureAtlasSprite bottom) {
+			super(format, 0, 1, 0, 1, 0, 1, facing, texture, face, top, bottom);
+		}
+		public Unit(VertexFormat format, EnumFacing facing, TextureAtlasSprite texture, TextureAtlasSprite face) {
+			super(format, 0, 1, 0, 1, 0, 1, facing, texture, face);
+		}
+		public Unit(VertexFormat format, TextureAtlasSprite texture) {
+			super(format, 0, 1, 0, 1, 0, 1, texture);
+		}
+	}
 
 	private EnumFacing facing;
 	private TextureAtlasSprite texture, face, top, bottom;
-	public ModelQuadBlock(VertexFormat format, EnumFacing facing, TextureAtlasSprite texture, TextureAtlasSprite face, TextureAtlasSprite top, TextureAtlasSprite bottom) {
+	
+	public ModelQuadBlock offset(float xoff, float yoff, float zoff) {
+		this.xmin += xoff; this.xmax -= xoff;
+		this.ymin += yoff; this.ymax -= yoff;
+		this.zmin += zoff; this.zmax -= zoff;
+		return this;
+	}
+	
+	float xmin, xmax, ymin, ymax, zmin, zmax;
+	
+	public ModelQuadBlock(VertexFormat format, float xmin, float xmax, float ymin, float ymax, float zmin, float zmax,
+			EnumFacing facing, TextureAtlasSprite texture, TextureAtlasSprite face, TextureAtlasSprite top, TextureAtlasSprite bottom) {
 		super(format);
 		this.facing = facing;
 		this.texture = texture;
 		this.face = face;
 		this.top = top;
 		this.bottom = bottom;
+
+		this.xmin = xmin; this.xmax = xmax;
+		this.ymin = ymin; this.ymax = ymax;
+		this.zmin = zmin; this.zmax = zmax;	
 	}
 	
-	public ModelQuadBlock(VertexFormat format, EnumFacing facing, TextureAtlasSprite texture, TextureAtlasSprite face) {
-		this(format, facing, texture, face, texture, texture);
+	public ModelQuadBlock(VertexFormat format, float xmin, float xmax, float ymin, float ymax, float zmin, float zmax,
+			EnumFacing facing, TextureAtlasSprite texture, TextureAtlasSprite face) {
+		this(format, xmin, xmax, ymin, ymax, zmin, zmax, facing, texture, face, texture, texture);
 	}
 	
-	public ModelQuadBlock(VertexFormat format, TextureAtlasSprite texture) {
-		this(format, EnumFacing.NORTH, texture, texture, texture, texture);
+	public ModelQuadBlock(VertexFormat format, float xmin, float xmax, float ymin, float ymax, float zmin, float zmax,
+			TextureAtlasSprite texture) {
+		this(format, xmin, xmax, ymin, ymax, zmin, zmax, EnumFacing.NORTH, texture, texture, texture, texture);
 	}
 
 	@Override
@@ -39,7 +69,7 @@ public class ModelQuadBlock extends ModelQuadBase {
 			if (side == EnumFacing.UP) { sprite = top; }
 			if (side == EnumFacing.DOWN) { sprite = bottom; }
 			
-			quads.addAll((new ModelQuadBlockFace(getFormat(), sprite, side)).getQuads());
+			quads.addAll((new ModelQuadBlockFace(getFormat(), xmin, xmax, ymin, ymax, zmin, zmax, sprite, side)).getQuads());
 		}
 		
 		return quads;

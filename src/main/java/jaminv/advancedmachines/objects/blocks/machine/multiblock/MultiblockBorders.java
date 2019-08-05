@@ -5,8 +5,8 @@ import jaminv.advancedmachines.objects.blocks.BlockMaterial;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansionBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgrade;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineType;
-import jaminv.advancedmachines.util.material.MaterialBase;
-import jaminv.advancedmachines.util.material.MaterialBase.MaterialType;
+import jaminv.advancedmachines.objects.material.MaterialBase;
+import jaminv.advancedmachines.objects.material.MaterialBase.MaterialType;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.IBlockState;
@@ -98,6 +98,18 @@ public class MultiblockBorders implements INBTSerializable<NBTTagCompound> {
 	public MultiblockBorderType getSouth() { return south; }
 	public MultiblockBorderType getEast() { return east; }
 	public MultiblockBorderType getWest() { return west; }
+	
+	public MultiblockBorderType get(EnumFacing dir) {
+		switch (dir) {
+		case UP: return top;
+		case DOWN: return bottom;
+		case NORTH: return north;
+		case SOUTH: return south;
+		case EAST: return east;
+		case WEST: return west;
+		default: return top;
+		}
+	}
 	
     @Override
     public NBTTagCompound serializeNBT()

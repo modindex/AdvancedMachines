@@ -1,4 +1,4 @@
-package jaminv.advancedmachines.util.material;
+package jaminv.advancedmachines.objects.material;
 
 public abstract class MaterialBaseOre extends MaterialBase {
 	

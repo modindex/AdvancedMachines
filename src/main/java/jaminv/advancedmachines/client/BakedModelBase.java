@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.function.Function;
 
 import com.google.common.collect.Lists;
@@ -15,12 +17,13 @@ import jaminv.advancedmachines.objects.blocks.BlockMaterial;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.expansion.BlockMachineExpansion;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.BlockMachineInventory;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.ICanHaveMachineFace;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.IMachineFaceTE;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineFace;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineType;
+import jaminv.advancedmachines.objects.material.MaterialBase;
 import jaminv.advancedmachines.util.Reference;
 import jaminv.advancedmachines.util.helper.BlockHelper;
-import jaminv.advancedmachines.util.material.MaterialBase;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -39,6 +42,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fluids.FluidStack;
 
 public abstract class BakedModelBase implements IBakedModel {
@@ -70,32 +74,37 @@ public abstract class BakedModelBase implements IBakedModel {
 			quads.addAll(quad.getQuads());
 		}
 		
+		cache.put(state, quads);
 		return quads;		
 	}
 	
 	public abstract List<IModelQuad> render(VertexFormat format, IBlockState state, EnumFacing side, long rand);
 	
-    public static BakedQuad createQuad(VertexFormat format, Vec3d v1, Vec3d v2, Vec3d v3, Vec3d v4, TextureAtlasSprite tex, boolean inverted) {
+    public static BakedQuad createQuad(VertexFormat format, Vec3d v1, Vec3d v2, Vec3d v3, Vec3d v4, TextureAtlasSprite tex, int umin, int umax, int vmin, int vmax, boolean inverted) {
         Vec3d normal = v3.subtract(v2).crossProduct(v1.subtract(v2)).normalize();
 
         UnpackedBakedQuad.Builder builder = new UnpackedBakedQuad.Builder(format);
         builder.setTexture(tex);
         if (!inverted) {
-	        putVertex(format, builder, normal, tex, v1.x, v1.y, v1.z, 0, 0);
-	        putVertex(format, builder, normal, tex, v2.x, v2.y, v2.z, 0, 16);
-	        putVertex(format, builder, normal, tex, v3.x, v3.y, v3.z, 16, 16);
-	        putVertex(format, builder, normal, tex, v4.x, v4.y, v4.z, 16, 0);
+	        putVertex(format, builder, normal, tex, v1.x, v1.y, v1.z, umin, vmin);
+	        putVertex(format, builder, normal, tex, v2.x, v2.y, v2.z, umin, vmax);
+	        putVertex(format, builder, normal, tex, v3.x, v3.y, v3.z, umax, vmax);
+	        putVertex(format, builder, normal, tex, v4.x, v4.y, v4.z, umax, umin);
         } else {
-	        putVertex(format, builder, normal, tex, v1.x, v1.y, v1.z, 0, 0);
-	        putVertex(format, builder, normal, tex, v4.x, v4.y, v4.z, 16, 0);
-	        putVertex(format, builder, normal, tex, v3.x, v3.y, v3.z, 16, 16);
-	        putVertex(format, builder, normal, tex, v2.x, v2.y, v2.z, 0, 16);
+	        putVertex(format, builder, normal, tex, v1.x, v1.y, v1.z, umin, vmin);
+	        putVertex(format, builder, normal, tex, v4.x, v4.y, v4.z, umax, vmin);
+	        putVertex(format, builder, normal, tex, v3.x, v3.y, v3.z, umax, vmax);
+	        putVertex(format, builder, normal, tex, v2.x, v2.y, v2.z, umin, vmax);
         }
         return builder.build();
     }
+    
+    public static BakedQuad createQuad(VertexFormat format, Vec3d v1, Vec3d v2, Vec3d v3, Vec3d v4, TextureAtlasSprite tex, boolean inverted) {
+    	return createQuad(format, v1, v2, v3, v4, tex, 0, 16, 0, 16, inverted);
+    }
 
     public static BakedQuad createQuad(VertexFormat format, Vec3d v1, Vec3d v2, Vec3d v3, Vec3d v4, TextureAtlasSprite tex) {
-    	return createQuad(format, v1, v2, v3, v4, tex, false);
+    	return createQuad(format, v1, v2, v3, v4, tex, 0, 16, 0, 16, false);
     }
     
     public static void putVertex(VertexFormat format, UnpackedBakedQuad.Builder builder, Vec3d normal, TextureAtlasSprite tex, double x, double y, double z, float u, float v) {

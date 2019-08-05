@@ -21,25 +21,34 @@ public final class ModConfig {
 		@RangeInt(min = 1, max = 100)
 		public int tickUpdate = 5;
 		
+		@Config.Comment("Default machine energy capacity for lowest tier")
+		public int defaultMachineEnergyCapacity = 50000;
+		
+		@Config.Comment("Default machine energy transfer rate for lowest tier")
+		public int defaultMachineEnergyTransfer = 250;
+		
+		@Config.Comment("Default machine fluid capacity for lowest tier")
+		public int defaultMachineFluidCapacity = 4000;
+		
 		@Config.Comment("Processing time for machines with no upgrages")
 		@RangeInt(min = 1)
 		public int processTimeBasic = 100;
 		
-		@Config.Comment("Default energy for standard furnace recipes")
+		@Config.Comment("Default energy cost for standard furnace recipes")
 		@RangeInt(min = 0)
-		public int defaultFurnaceEnergy = 1400;
+		public int defaultFurnaceEnergyCost = 1400;
 		
-		@Config.Comment("Default energy for standard grinder recipes")
+		@Config.Comment("Default energy cost for standard grinder recipes")
 		@RangeInt(min = 0)
-		public int defaultGrinderEnergy = 4000;
+		public int defaultGrinderEnergyCost = 4000;
 		
-		@Config.Comment("Default energy for standard purifier recipes")
+		@Config.Comment("Default energy cost for standard purifier recipes")
 		@RangeInt(min = 0)
-		public int defaultPurifierEnergy = 30000;
+		public int defaultPurifierEnergyCost = 30000;
 		
-		@Config.Comment("Default energy for standard alloy furnace recipes")
+		@Config.Comment("Default energy cost for standard alloy furnace recipes")
 		@RangeInt(min = 0)
-		public int defaultAlloyEnergy = 8000;
+		public int defaultAlloyEnergyCost = 8000;
 	}
 	
 	@Config.Comment({ "Material Configuration", "",

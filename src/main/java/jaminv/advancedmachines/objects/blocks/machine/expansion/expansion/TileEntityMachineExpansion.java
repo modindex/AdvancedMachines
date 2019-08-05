@@ -3,7 +3,7 @@ package jaminv.advancedmachines.objects.blocks.machine.expansion.expansion;
 import javax.annotation.Nullable;
 
 import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachineExpansionBase;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.ICanHaveMachineFace;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.IMachineFaceTE;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineFace;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineType;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,8 +12,12 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
-public class TileEntityMachineExpansion extends TileEntityMachineExpansionBase implements ICanHaveMachineFace {
+public class TileEntityMachineExpansion extends TileEntityMachineExpansionBase implements IMachineFaceTE {
 	
+	public TileEntityMachineExpansion() {
+		super();
+	}
+
 	protected MachineFace face = MachineFace.NONE;
 	protected MachineType parent = MachineType.NONE;
 	protected EnumFacing facing = EnumFacing.UP;

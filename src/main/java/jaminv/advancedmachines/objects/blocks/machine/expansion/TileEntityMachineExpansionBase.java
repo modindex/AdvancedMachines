@@ -3,19 +3,29 @@ package jaminv.advancedmachines.objects.blocks.machine.expansion;
 import javax.annotation.Nullable;
 
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
-import jaminv.advancedmachines.util.helper.BlockHelper;
+import jaminv.advancedmachines.objects.material.MaterialExpansion;
+import jaminv.advancedmachines.util.interfaces.IHasMetadata;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class TileEntityMachineExpansionBase extends TileEntity implements IMachineUpgradeTileEntity {
+public class TileEntityMachineExpansionBase extends TileEntity implements IMachineUpgradeTileEntity, IHasMetadata {
 
+	private MaterialExpansion material;
+	public MaterialExpansion getMaterial() { return material; }
+	public int getMultiplier() { return material.getMultiplier(); }
+	
+	@Override
+	public void setMeta(int meta) {
+		material = MaterialExpansion.byMetadata(meta);
+	}
+	
+	public TileEntityMachineExpansionBase() {
+		super();
+	}
+	
 	protected MultiblockBorders borders = new MultiblockBorders();
 	
 	public void setBorders(World world, MultiblockBorders borders) {
@@ -29,6 +39,9 @@ public class TileEntityMachineExpansionBase extends TileEntity implements IMachi
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
+		if (compound.hasKey("meta")) {
+			material = MaterialExpansion.byMetadata(compound.getInteger("meta"));
+		}
 		if (compound.hasKey("borders")) {
 			borders.deserializeNBT(compound.getCompoundTag("borders"));
 		}
@@ -37,6 +50,7 @@ public class TileEntityMachineExpansionBase extends TileEntity implements IMachi
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
+		compound.setInteger("meta", material.getMeta());
 		compound.setTag("borders",  borders.serializeNBT());
 		return compound;
 	} 

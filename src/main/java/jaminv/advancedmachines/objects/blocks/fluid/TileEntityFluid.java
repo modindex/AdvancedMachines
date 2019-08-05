@@ -20,7 +20,7 @@ import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 
-public abstract class TileEntityFluid extends TileEntityInventory implements FluidTankObservable.IObserver {
+public abstract class TileEntityFluid extends TileEntityInventory implements IFluidHandlerTE, FluidTankObservable.IObserver {
 
 	@Override
 	protected ItemStackHandlerObservable createInventory() {
@@ -38,10 +38,10 @@ public abstract class TileEntityFluid extends TileEntityInventory implements Flu
 	private FluidTankObservable tank;
 	protected FluidTankObservable getTank() { return tank; }
 	
-	public abstract int getCapacity();
+	public abstract FluidTankObservable createTank();
 	
 	public TileEntityFluid() {
-		tank = new FluidTankObservable(getCapacity());
+		tank = createTank();
 		tank.addObserver(this);
 	}
 	
@@ -53,6 +53,7 @@ public abstract class TileEntityFluid extends TileEntityInventory implements Flu
 
 	public FluidStack getFluid() { return tank.getFluid(); }
 	public int getFluidAmount() { return tank.getFluidAmount(); }
+	public int getFluidCapacity() { return tank.getCapacity(); }
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {

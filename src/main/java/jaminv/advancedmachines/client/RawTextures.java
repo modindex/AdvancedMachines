@@ -18,11 +18,14 @@ import jaminv.advancedmachines.util.helper.StringHelper;
 import jaminv.advancedmachines.util.logger.Logger;
 import jaminv.advancedmachines.util.parser.DataParserException;
 import jaminv.advancedmachines.util.parser.IFileHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.ModContainer;
 
@@ -73,6 +76,7 @@ public class RawTextures {
 			for (String file : files) {
 				map.put("expansion." + mat + "." + file, register("blocks/machine/expansion/" + mat + "_" + file));
 				map.put("energy." + mat + "." + file, register("blocks/machine/energy/" + mat + "_" + file));
+				map.put("tank." + mat + "." + file, register("blocks/machine/tank/" + mat + "_" + file));
 			}
 		}
 		
@@ -90,13 +94,6 @@ public class RawTextures {
 				}
 			}
 		}
-		
-		/*for (String mat : materials) {
-			for (String file : files) {
-				map.put("expansion." + mat + "." + file, register("blocks/machine/expansion/" + mat + "/" + file));
-				map.put("tank." + mat + "." + file, register("blocks/machine/tank/" + mat + "/" + file));
-			}
-		}*/
 		
 		for (String state : states) {
 			for (String material : materials) {
@@ -144,6 +141,11 @@ public class RawTextures {
 		map.put("no_texture", register("no_texture"));
 		textures = map.build();
 
-		Main.logger.info("Completed - Loading static textures");
+		Main.logger.info("Completed - Loading raw textures");
+	}
+	
+	public static TextureAtlasSprite getFluidTexture(FluidStack fluid) {
+		if (fluid == null) { textures.get("no_texture"); }
+		return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluid.getFluid().getStill(fluid).toString());	
 	}
 }

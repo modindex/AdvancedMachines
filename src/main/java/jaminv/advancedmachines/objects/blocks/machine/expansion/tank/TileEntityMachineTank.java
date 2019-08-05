@@ -3,15 +3,18 @@ package jaminv.advancedmachines.objects.blocks.machine.expansion.tank;
 import javax.annotation.Nullable;
 
 import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.objects.blocks.fluid.FluidTankObservable;
 import jaminv.advancedmachines.objects.blocks.fluid.TileEntityFluid;
 import jaminv.advancedmachines.objects.blocks.inventory.ContainerInventory;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansionBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTool;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
+import jaminv.advancedmachines.objects.material.MaterialExpansion;
 import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
+import jaminv.advancedmachines.util.interfaces.IHasMetadata;
 import jaminv.advancedmachines.util.interfaces.ISwitchableIO;
 import jaminv.advancedmachines.util.message.IOStateMessage;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -28,7 +31,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidUtil;
 
-public class TileEntityMachineTank extends TileEntityFluid implements ITickable, IHasGui, IMachineUpgradeTool, IDirectional, ISwitchableIO {
+public class TileEntityMachineTank extends TileEntityFluid implements ITickable, IHasGui, IMachineUpgradeTool, IHasMetadata, IDirectional, ISwitchableIO {
 	
 	protected EnumFacing facing = EnumFacing.NORTH;
 	protected boolean inputState = true;
@@ -57,11 +60,17 @@ public class TileEntityMachineTank extends TileEntityFluid implements ITickable,
 	public boolean getInputState() {
 		return inputState;
 	}
-    
+	
+	private MaterialExpansion material;
+	    
 	@Override
-	public int getCapacity() {
-		return 4000;
+	public void setMeta(int meta) {
+		material = MaterialExpansion.byMetadata(meta);
+		this.getTank().setCapacity(ModConfig.general.defaultMachineFluidCapacity * material.getMultiplier());
 	}
+
+	@Override
+	public FluidTankObservable createTank() { return new FluidTankObservable(ModConfig.general.defaultMachineFluidCapacity * MaterialExpansion.maxMultiplier); }
 	
 	public void setInputState(boolean state) {
 		this.inputState = state;
@@ -127,14 +136,17 @@ public class TileEntityMachineTank extends TileEntityFluid implements ITickable,
 				this.getInventory().insertItem(i, result.getResult(), false);
 				didSomething = true;
 			}
-		}		
+		}
+		
+		//Fluid f = this.getTank().getFluid().getFluid();
+		//String name = FluidRegistry.getFluidName(f);
+		//String name2 = FluidRegistry.getFluidName(this.getTank().getFluid());
 		
 		if (!didSomething) { doNothing = true; }
 	}
 	
 	@Override
-	public void tickUpdate(TileEntityMachineMultiblock te) {
-		if (doNothing) { return; }		// Return quickly if there's nothing to do
+	public boolean tickUpdate(TileEntityMachineMultiblock te) {
 		boolean didSomething = false;
 		
 		if (inputState) {
@@ -143,22 +155,34 @@ public class TileEntityMachineTank extends TileEntityFluid implements ITickable,
 			//moveOutput(te);
 		}
 		
-		if (!didSomething) { doNothing = true; }
+		return didSomething;
 	}
 	
 	@Override
 	public void onInventoryContentsChanged(int slot) {
-		doNothing = false;
 		super.onInventoryContentsChanged(slot);
+		doNothing = false;
+
+		if (parent == null) { return; }
+		TileEntity te = world.getTileEntity(parent);
+		if (te instanceof TileEntityMachineMultiblock) {
+			((TileEntityMachineMultiblock)te).doSomething();
+		}		
 	}
 	
 	@Override
 	public void onTankContentsChanged() {
+		super.onTankContentsChanged();
 		doNothing = false;
 		
 		world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
 		world.markBlockRangeForRenderUpdate(pos, pos);
-		super.onTankContentsChanged();
+		
+		if (parent == null) { return; }
+		TileEntity te = world.getTileEntity(parent);
+		if (te instanceof TileEntityMachineMultiblock) {
+			((TileEntityMachineMultiblock)te).doSomething();
+		}		
 	}
 
 	public void setBorders(World world, MultiblockBorders borders) {
@@ -178,6 +202,9 @@ public class TileEntityMachineTank extends TileEntityFluid implements ITickable,
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
+		if (compound.hasKey("meta")) {
+			setMeta(compound.getInteger("meta"));
+		}
 		if (compound.hasKey("facing")) {
 			facing = EnumFacing.byName(compound.getString("facing"));
 		}
@@ -198,6 +225,7 @@ public class TileEntityMachineTank extends TileEntityFluid implements ITickable,
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
+		compound.setInteger("meta", material.getMeta());
 		compound.setString("facing", facing.getName());
 		compound.setBoolean("inputState", inputState);
 		compound.setInteger("priority", priority);

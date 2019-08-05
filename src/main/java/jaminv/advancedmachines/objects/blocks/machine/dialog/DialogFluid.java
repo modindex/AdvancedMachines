@@ -2,6 +2,7 @@ package jaminv.advancedmachines.objects.blocks.machine.dialog;
 
 import org.lwjgl.opengl.GL11;
 
+import jaminv.advancedmachines.objects.blocks.fluid.IFluidHandlerTE;
 import jaminv.advancedmachines.objects.blocks.fluid.TileEntityFluid;
 import jaminv.advancedmachines.util.dialog.DialogBase;
 import jaminv.advancedmachines.util.dialog.control.DialogProgressBar;
@@ -16,24 +17,24 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class DialogFluid extends DialogProgressBar {
 	
-	TileEntityFluid te;
+	IFluidHandlerTE te;
 
-	public DialogFluid(int x, int y, int w, int h, TileEntityFluid te) {
+	public DialogFluid(int x, int y, int w, int h, IFluidHandlerTE te) {
 		super(x, y, w, h, 0, 0, ProgressAxis.VERTICAL);
 		this.te = te;
 	}
 
 	@Override
 	protected float getPercent() {
-		return te.getFluidAmount() / (float)te.getCapacity();
+		return te.getFluidAmount() / (float)te.getFluidCapacity();
 	}
 
 	@Override
 	public String getTooltip(int mouseX, int mouseY) {
 		if (te.getFluid() != null) {
-			return I18n.format("dialog.common.fluid", te.getFluid().getLocalizedName(), te.getFluidAmount(), te.getCapacity());
+			return I18n.format("dialog.common.fluid", te.getFluid().getLocalizedName(), te.getFluidAmount(), te.getFluidCapacity());
 		} else {
-			return I18n.format("dialog.common.fluid.empty", te.getFluidAmount(), te.getCapacity());
+			return I18n.format("dialog.common.fluid.empty", te.getFluidAmount(), te.getFluidCapacity());
 		}
 	}
 

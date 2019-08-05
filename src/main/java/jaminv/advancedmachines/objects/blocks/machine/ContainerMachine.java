@@ -156,6 +156,9 @@ public class ContainerMachine extends ContainerInventory {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void updateProgressBar(int id, int data) {
+		if (id == 4) {
+			int a = 0;
+		}
 		machineTe.setField(id, data);
 	}
 }

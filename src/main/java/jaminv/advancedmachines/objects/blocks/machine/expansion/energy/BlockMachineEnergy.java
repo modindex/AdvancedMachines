@@ -43,6 +43,7 @@ public class BlockMachineEnergy extends BlockMachineExpansionBase implements ITi
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 		
 		BlockHelper.setDirectional(worldIn, pos, placer);
+		BlockHelper.setMeta(worldIn, pos, stack);
 	}	 
 	
 	@Override

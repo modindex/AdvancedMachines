@@ -5,6 +5,7 @@ import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachin
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -31,6 +32,12 @@ public class TileEntityMachineRedstone extends TileEntityMachineExpansionBase im
 		redstone = world.isBlockPowered(pos);
 		if (oldRedstone != redstone) {
 			world.markBlockRangeForRenderUpdate(pos, pos);
+			
+			if (parent == null) { return; }
+			TileEntity te = world.getTileEntity(parent);
+			if (te instanceof TileEntityMachineMultiblock) {
+				((TileEntityMachineMultiblock)te).doSomething();
+			}
 		}
 	}
 	public boolean getRedstone() {
@@ -43,8 +50,9 @@ public class TileEntityMachineRedstone extends TileEntityMachineExpansionBase im
 	}
 	
 	@Override
-	public void tickUpdate(TileEntityMachineMultiblock te) {
+	public boolean tickUpdate(TileEntityMachineMultiblock te) {
 		te.setRedstone(redstone);
+		return false;
 	}
 	
 	@Override

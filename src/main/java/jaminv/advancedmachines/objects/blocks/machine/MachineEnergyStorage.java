@@ -1,33 +1,18 @@
 package jaminv.advancedmachines.objects.blocks.machine;
 
-import mezz.jei.api.JEIPlugin;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.energy.EnergyStorage;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import jaminv.advancedmachines.objects.blocks.energy.EnergyStorageObservable;
+import jaminv.advancedmachines.objects.material.MaterialExpansion;
+import jaminv.advancedmachines.util.ModConfig;
 
-public class MachineEnergyStorage extends EnergyStorage {
+public class MachineEnergyStorage extends EnergyStorageObservable {
 
-	public MachineEnergyStorage(int capacity, int maxTransfer) {
-		super(capacity, maxTransfer); 
+	public MachineEnergyStorage() {
+		super(ModConfig.general.defaultMachineEnergyCapacity * MaterialExpansion.maxMultiplier,
+			ModConfig.general.defaultMachineEnergyTransfer * MaterialExpansion.maxMultiplier);		
 	}
-	
-	public void setEnergy(int energy) {
-		this.energy = energy;
+
+	public void setMaterial(MaterialExpansion material) {
+		setCapacity(ModConfig.general.defaultMachineEnergyCapacity * material.getMultiplier());
+		setMaxTransfer(ModConfig.general.defaultMachineEnergyTransfer * material.getMultiplier());
 	}
-	
-	public void useEnergy(int energy) {
-		if (energy < 0) { return; }
-		this.energy -= energy;
-		if (this.energy < 0) { this.energy = 0; }		
-	}
-  
-	public void readFromNBT(NBTTagCompound compound) {
-		this.energy = compound.getInteger("energy");
-	}
-    
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		compound.setInteger("energy", this.energy);		
-		return compound;
-	}    
 }

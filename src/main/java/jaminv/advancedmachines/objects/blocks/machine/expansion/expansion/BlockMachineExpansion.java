@@ -35,6 +35,7 @@ public class BlockMachineExpansion extends BlockMachineExpansionBase {
 		return TileEntityMachineExpansion.class;
 	}
 	
+	
 	@Override
 	protected BlockStateContainer createBlockState() {
 		VARIANT = this.getVariant();

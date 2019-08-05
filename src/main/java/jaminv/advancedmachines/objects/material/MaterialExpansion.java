@@ -1,4 +1,4 @@
-package jaminv.advancedmachines.util.material;
+package jaminv.advancedmachines.objects.material;
 
 public class MaterialExpansion extends MaterialBase {
 
@@ -8,6 +8,8 @@ public class MaterialExpansion extends MaterialBase {
 	public static final MaterialExpansion COMPRESSED = new MaterialExpansion(1, "compressed", 2);
 	public static final MaterialExpansion QUAD = new MaterialExpansion(2, "quad", 4);
 	public static final MaterialExpansion IMPROBABLE = new MaterialExpansion(3, "improbable", 8);
+	
+	public static final int maxMultiplier = 64;
 	
 	public static MaterialExpansion[] values() {
 		return MaterialBase.values(TYPE, new MaterialExpansion[0]);
