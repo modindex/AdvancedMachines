@@ -64,20 +64,6 @@ public class BlockHelper {
 		}
 	}
 	
-    private static final Function <IProperty<?>, Comparable<?>> PROPERTY_GET_NAME_FUNC = new Function <IProperty<?>, Comparable<?>> () {
-        @Nullable
-        public String apply(@Nullable IProperty<?> prop) {
-            return prop == null ? "<NULL>" : prop.getName();
-        }
-    };	
-    
-    private static final Function <IUnlistedProperty<?>, String> UNLISTEDPROPERTY_GET_NAME_FUNC = new Function <IUnlistedProperty<?>, String> () {
-        @Nullable
-        public String apply(@Nullable IUnlistedProperty<?> prop) {
-            return prop == null ? "<NULL>" : prop.getName();
-        }
-    };	
-	
 	public static String getBlockName(World world, BlockPos pos) {
 		return world.getBlockState(pos).getBlock().getLocalizedName();
 	}
@@ -90,31 +76,6 @@ public class BlockHelper {
 		return state.getUnlistedProperties().containsKey(property);
 	}
 	
-	public static String toStringBlockState(IBlockState state) {
-		ToStringHelper helper = MoreObjects.toStringHelper(state);
-
-		helper.add("block", Block.REGISTRY.getNameForObject(state.getBlock()));
-		for (Entry<IProperty<?>, Comparable<?>> entry : state.getProperties().entrySet()) {
-			helper.add(entry.getKey().getName(), entry.getValue().toString());
-		}
-		
-		//helper.add("properties", Iterables.transform(state.getProperties(), PROPERTY_GET_NAME_FUNC)).toString();
-		
-		if (state instanceof IExtendedBlockState) {
-			IExtendedBlockState ext = (IExtendedBlockState)state;
-			for (Entry<IUnlistedProperty<?>, Optional<?>> entry: ext.getUnlistedProperties().entrySet()) {
-				if (!entry.getValue().isPresent()) {
-					helper.add(entry.getKey().getName(), "<NULL>");
-				} else {
-					IUnlistedProperty prop = entry.getKey();
-					helper.add(prop.getName(), prop.valueToString(ext.getValue(prop)));
-				}
-			}
-		}
-		//	helper.add("unlisted", Iterables.transform(((IExtendedBlockState)state).getUnlistedProperties().values(), UNLISTEDPROPERTY_GET_NAME_FUNC));
-		//}
-		return helper.toString();
-	}
 	
 	public static EnumFacing getExtendedFacing(IBlockState state) {
 		if (!(state instanceof IExtendedBlockState)) { return null; }

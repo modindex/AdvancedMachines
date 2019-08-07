@@ -8,6 +8,8 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.function.Function;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.collect.Lists;
 
 import jaminv.advancedmachines.Main;
@@ -23,6 +25,7 @@ import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineTyp
 import jaminv.advancedmachines.objects.material.MaterialBase;
 import jaminv.advancedmachines.util.Reference;
 import jaminv.advancedmachines.util.helper.BlockHelper;
+import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -59,9 +62,36 @@ public abstract class BakedModelBase implements IBakedModel {
 		return RawTextures.get(resourcelocation);
 	}
 	
+	public ToStringHelper addCacheKeyProperties(IBlockState state, ToStringHelper helper) { return helper; }
+	
+	public String buildCacheKey(IBlockState state) {
+		ToStringHelper helper = MoreObjects.toStringHelper(this);
+
+		helper.add("meta", state.getBlock().getMetaFromState(state)); 
+		for (Entry<IProperty<?>, Comparable<?>> entry : state.getProperties().entrySet()) {
+			helper.add(entry.getKey().getName(), entry.getValue().toString());
+		}
+		
+		if (state instanceof IExtendedBlockState) {
+			IExtendedBlockState ext = (IExtendedBlockState)state;
+			for (Entry<IUnlistedProperty<?>, Optional<?>> entry: ext.getUnlistedProperties().entrySet()) {
+				if (!entry.getValue().isPresent()) {
+					helper.add(entry.getKey().getName(), "<NULL>");
+				} else {
+					IUnlistedProperty prop = entry.getKey();
+					helper.add(prop.getName(), prop.valueToString(ext.getValue(prop)));
+				}
+			}
+		}
+		
+		helper = addCacheKeyProperties(state, helper);
+
+		return helper.toString();
+	}	
+	
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
-		String cachekey = BlockHelper.toStringBlockState(state);
+		String cachekey = buildCacheKey(state);
 		List<BakedQuad> cached = cache.get(cachekey);
 		if (cached != null) { return cached; }
 		
