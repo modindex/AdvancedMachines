@@ -22,10 +22,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
-public abstract class TileEntityMachineMultiblockFluidHandler extends TileEntityMachineMultiblock implements IFluidHandlerTE, FluidTankObservable.IObserver {
-
+public abstract class TileEntityMachineMultiblockFluid extends TileEntityMachineMultiblock implements IFluidHandlerTE, FluidTankObservable.IObserver {
 	
-	public TileEntityMachineMultiblockFluidHandler(IRecipeManager recipeManager) {
+	public TileEntityMachineMultiblockFluid(IRecipeManager recipeManager) {
 		super(recipeManager);
 
 		tank = new FluidTankObservable(ModConfig.general.defaultMachineFluidCapacity * MaterialExpansion.maxMultiplier);
@@ -33,7 +32,7 @@ public abstract class TileEntityMachineMultiblockFluidHandler extends TileEntity
 	}
 
 	private FluidTankObservable tank;
-	protected FluidTankObservable getTank() { return tank; }
+	public FluidTankObservable getTank() { return tank; }
 	
 	@Override
 	public void setMeta(int meta) {
@@ -111,10 +110,10 @@ public abstract class TileEntityMachineMultiblockFluidHandler extends TileEntity
 		if (!output.isFluid()) { return super.outputItem(output, simulate); }
 		
 		FluidStack stack = output.toFluidStack();
-		if (tank.fill(stack, false) != stack.amount) { return false; }
+		if (tank.fillInternal(stack, false) != stack.amount) { return false; }
 		
 		if (!simulate) { 
-			tank.fill(stack, true);
+			tank.fillInternal(stack, true);
 		}
 		return true;
 	}

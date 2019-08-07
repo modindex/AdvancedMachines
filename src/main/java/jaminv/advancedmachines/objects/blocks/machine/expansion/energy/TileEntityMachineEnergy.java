@@ -35,12 +35,10 @@ public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase impl
 		return facing;
 	}
 	
-	protected MaterialExpansion material;
-
 	@Override
 	public void setMeta(int meta) {
-		material = MaterialExpansion.byMetadata(meta);
-		energy.setMaterial(material);
+		super.setMeta(meta);
+		energy.setMaterial(getMaterial());
 	}
 
 	public MachineEnergyStorage energy;
@@ -69,7 +67,7 @@ public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase impl
 		if (parent == null) { return; }
 		TileEntity te = world.getTileEntity(parent);
 		if (te instanceof TileEntityMachineMultiblock) {
-			((TileEntityMachineMultiblock)te).doSomething();
+			((TileEntityMachineMultiblock)te).wake();
 		}
 	}
 	
@@ -120,9 +118,6 @@ public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase impl
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		if (compound.hasKey("meta")) {
-			setMeta(compound.getInteger("meta"));
-		}
 		if (compound.hasKey("facing")) {
 			facing = EnumFacing.byName(compound.getString("facing"));
 		}
@@ -134,7 +129,6 @@ public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase impl
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
-		compound.setInteger("meta", material.getMeta());
 		compound.setString("facing", facing.getName());
 		energy.writeToNBT(compound);
 		return compound;

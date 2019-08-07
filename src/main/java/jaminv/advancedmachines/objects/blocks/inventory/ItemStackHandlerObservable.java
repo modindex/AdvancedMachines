@@ -31,4 +31,13 @@ public class ItemStackHandlerObservable extends ItemStackHandler {
 			obv.onInventoryContentsChanged(slot);
 		}
 	}
+	
+	boolean allowInsert = true;
+	boolean allowExtract = true;
+	
+	public void setCanInsert(boolean canInsert) { this.allowInsert = canInsert; }
+	public void setCanExtract(boolean canExtract) { this.allowExtract = canExtract; }
+	
+	public boolean canInsert() { return allowInsert; } 
+	public boolean canExtract() { return allowExtract; }
 }

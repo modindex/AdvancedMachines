@@ -3,12 +3,16 @@ package jaminv.advancedmachines.objects.blocks.machine.expansion.inventory;
 import javax.annotation.Nullable;
 
 import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.objects.blocks.fluid.FluidTankObservable;
 import jaminv.advancedmachines.objects.blocks.inventory.ContainerInventory;
+import jaminv.advancedmachines.objects.blocks.inventory.ItemStackHandlerObservable;
 import jaminv.advancedmachines.objects.blocks.inventory.TileEntityInventory;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansionBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTool;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockHelper;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblockFluid;
 import jaminv.advancedmachines.objects.material.MaterialExpansion;
 import jaminv.advancedmachines.util.helper.InventoryHelper;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
@@ -37,7 +41,7 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 	protected MultiblockBorders borders = new MultiblockBorders();
 	protected BlockPos parent = null;
 	
-	private MaterialExpansion material;
+	private MaterialExpansion material = MaterialExpansion.BASIC;
 	
 	@Override
 	public void setMeta(int meta) {
@@ -60,18 +64,19 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 	public EnumFacing getFacing() {
 		return facing;
 	}
-	
+
 	public boolean getInputState() {
 		return inputState;
 	}
 	public void setInputState(boolean state) {
 		this.inputState = state;
-		BlockMachineExpansionBase.scanMultiblock(world, this.getPos());
 		world.markBlockRangeForRenderUpdate(this.pos, this.pos);
 		
 		if (world.isRemote) {
 			Main.NETWORK.sendToServer(new IOStateMessage(this.getPos(), state, priority));
 		}
+		
+		MultiblockHelper.wakeParent(world, parent);
 	}
 	
 	public void setPriority(int priority) {
@@ -88,9 +93,33 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 		}
 	}
 	
+	boolean allowInput = false;
+	boolean allowOutput = false;
+	
+	@Override
+	public boolean canInput() { return allowInput; }
+	
+	@Override
+	public boolean canOutput() { return allowOutput; }
+	
+	@Override
+	public boolean hasParent() { return parent != null; }
+
 	@Override
 	public void setParent(BlockPos pos) {
-		parent = pos;		
+		parent = pos;
+		if (parent != null) {
+			TileEntityMachineMultiblock te = MultiblockHelper.getParent(world, pos);
+			ItemStackHandlerObservable inv = te.getInventory();
+			allowInput = inv.canInsert();
+			allowOutput = inv.canExtract();
+			
+			if (allowInput && !allowOutput) { this.setInputState(true); }
+			if (allowOutput && !allowInput) { this.setInputState(false); }
+		} else {
+			allowInput = false;
+			allowOutput = false;
+		}
 	}	
 	
 	@Override
@@ -102,11 +131,7 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 	public void onInventoryContentsChanged(int slot) {
 		super.onInventoryContentsChanged(slot);
 		
-		if (parent == null) { return; }
-		TileEntity te = world.getTileEntity(parent);
-		if (te instanceof TileEntityMachineMultiblock) {
-			((TileEntityMachineMultiblock)te).doSomething();
-		}
+		MultiblockHelper.wakeParent(world, parent);
 	}
 
 	@Override
@@ -214,7 +239,13 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 			borders.deserializeNBT(compound.getCompoundTag("borders"));
 		}
 		if (compound.hasKey("parent")) {
-			parent = NBTUtil.getPosFromTag(compound.getCompoundTag("parent"));
+			NBTUtil.getPosFromTag(compound.getCompoundTag("parent"));
+		}
+		if (compound.hasKey("allowInput")) {
+			allowInput = compound.getBoolean("allowInput");
+		}
+		if (compound.hasKey("allowOutput")) {
+			allowOutput = compound.getBoolean("allowOutput");
 		}
 	}
 	
@@ -229,6 +260,8 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 		if (parent != null) {
 			compound.setTag("parent", NBTUtil.createPosTag(parent));
 		}
+		compound.setBoolean("allowInput", allowInput);
+		compound.setBoolean("allowOutput", allowOutput);
 		return compound;
 	}
 	

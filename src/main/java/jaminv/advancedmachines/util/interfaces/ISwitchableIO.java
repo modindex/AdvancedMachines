@@ -6,4 +6,8 @@ public interface ISwitchableIO {
 	
 	public boolean getInputState();
 	public int getPriority();
+	
+	public boolean canInput();
+	public boolean canOutput();
+	public boolean hasParent();
 }

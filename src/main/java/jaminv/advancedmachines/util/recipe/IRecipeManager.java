@@ -42,7 +42,11 @@ public interface IRecipeManager<T extends RecipeBase> {
 	 * @param slot
 	 * @return
 	 */
-	public boolean isItemValid(ItemStack stack, ItemStack[] other);
+	public default boolean isItemValid(ItemStack stack, ItemStack[] other) {
+		return isItemValid(new ItemComparable(stack), new ItemComparableList(other));
+	}
+	
+	public boolean isItemValid(ItemComparable item, ItemComparableList other);
 	
 	public List<T> getRecipeList();
 }

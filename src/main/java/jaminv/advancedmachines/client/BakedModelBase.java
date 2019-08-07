@@ -53,7 +53,7 @@ public abstract class BakedModelBase implements IBakedModel {
 		this.format = format;
 	}
 	
-	private static final Map<IBlockState, List<BakedQuad>> cache = new HashMap<IBlockState, List<BakedQuad>>();
+	private static final Map<String, List<BakedQuad>> cache = new HashMap<String, List<BakedQuad>>();
 	
 	protected TextureAtlasSprite getTexture(String resourcelocation) {
 		return RawTextures.get(resourcelocation);
@@ -61,7 +61,8 @@ public abstract class BakedModelBase implements IBakedModel {
 	
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
-		List<BakedQuad> cached = cache.get(state);
+		String cachekey = BlockHelper.toStringBlockState(state);
+		List<BakedQuad> cached = cache.get(cachekey);
 		if (cached != null) { return cached; }
 		
 		List<BakedQuad> quads = new ArrayList<>();
@@ -74,7 +75,7 @@ public abstract class BakedModelBase implements IBakedModel {
 			quads.addAll(quad.getQuads());
 		}
 		
-		cache.put(state, quads);
+		cache.put(cachekey, quads);
 		return quads;		
 	}
 	

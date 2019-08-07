@@ -6,7 +6,7 @@ import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgrade.UpgradeType;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblockFluidHandler;
+import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblockFluid;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.recipe.IRecipeManager;
@@ -19,7 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidUtil;
 
-public class TileEntityMachineMelter extends TileEntityMachineMultiblockFluidHandler {
+public class TileEntityMachineMelter extends TileEntityMachineMultiblockFluid {
 
 	@Override
 	public int getInputCount() { return 1; }
@@ -29,12 +29,11 @@ public class TileEntityMachineMelter extends TileEntityMachineMultiblockFluidHan
 	
 	@Override 
 	public int getSecondaryCount() { return 0; }
-	
-	@Override
-	public int getCapacity() { return 4000;	}
 
 	public TileEntityMachineMelter() {
-		super(MelterManager.getRecipeManager());		
+		super(MelterManager.getRecipeManager());
+		this.getTank().setCanFill(false);
+		this.getInventory().setCanExtract(false);
 	}
 
 	@Override

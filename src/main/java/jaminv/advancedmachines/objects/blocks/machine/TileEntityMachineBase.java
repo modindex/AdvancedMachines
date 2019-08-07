@@ -107,20 +107,20 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 	private int tick;
 	private ItemStack[] prevInput;
 	
-	private boolean doNothing = false;
+	private boolean sleep = false;
 	/** Call to restart tick updates when a tile entity's state changes. */
-	public void doSomething() { doNothing = false; }
+	public void wake() { sleep = false; }
 	
 	@Override
 	public void onInventoryContentsChanged(int slot) {
 		super.onInventoryContentsChanged(slot);
 		
-		doNothing = false;
+		sleep = false;
 	}
 	
 	@Override
 	public void update() {
-		if (doNothing) { return; }
+		if (sleep) { return; }
 
 		boolean didSomething = false;
 		
@@ -142,7 +142,7 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 			haltProcess();
 		}
 		
-		if (!didSomething) { doNothing = true; }
+		if (!didSomething) { sleep = true; }
 		
 		if (world.isRemote) { return; }
 		

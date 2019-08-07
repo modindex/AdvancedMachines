@@ -28,7 +28,7 @@ public final class ModConfig {
 		public int defaultMachineEnergyTransfer = 250;
 		
 		@Config.Comment("Default machine fluid capacity for lowest tier")
-		public int defaultMachineFluidCapacity = 4000;
+		public int defaultMachineFluidCapacity = 16000;
 		
 		@Config.Comment("Processing time for machines with no upgrages")
 		@RangeInt(min = 1)

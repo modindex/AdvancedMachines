@@ -114,7 +114,7 @@ public abstract class RecipeBase {
 		
 		// Simulate a single fill to see if it will take
 		// This is an easy way to make sure all the fluid type checking occurs.
-		if (tank.fill(output, false) != output.amount) { return 0; }
+		if (tank.fillInternal(output, false) != output.amount) { return 0; }
 		
 		int capacity = tank.getCapacity() - tank.getFluidAmount();
 		return capacity / output.amount;

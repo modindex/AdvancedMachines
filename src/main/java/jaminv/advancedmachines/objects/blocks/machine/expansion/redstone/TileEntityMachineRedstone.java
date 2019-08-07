@@ -36,7 +36,7 @@ public class TileEntityMachineRedstone extends TileEntityMachineExpansionBase im
 			if (parent == null) { return; }
 			TileEntity te = world.getTileEntity(parent);
 			if (te instanceof TileEntityMachineMultiblock) {
-				((TileEntityMachineMultiblock)te).doSomething();
+				((TileEntityMachineMultiblock)te).wake();
 			}
 		}
 	}

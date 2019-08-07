@@ -43,7 +43,7 @@ public class BakedModelTank extends BakedModelBase {
 		ret.add(new ModelQuadLayeredBlock(format, new LayeredTextureMultiblockTransparent(state, "tank")).offset(0.0001f, 0.0001f, 0.0001f).invert());
 
 		if (fluid != null && capacity > 0) {
-			ret.add(new ModelQuadFluid(format, fluid, fluid.amount / (float)capacity).offset(0.0002f,  0.0002f, 0.0002f)); 
+			ret.add(new ModelQuadFluid(format, fluid, fluid.amount / (float)capacity).offset(0.01f,  0.01f, 0.01f)); 
 		}	
 		
 

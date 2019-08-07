@@ -1,5 +1,8 @@
 package jaminv.advancedmachines.init.property;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
+
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -28,7 +31,13 @@ public class UnlistedFluidStack implements IUnlistedProperty<FluidStack> {
 
 	@Override
 	public String valueToString(FluidStack value) {
-		return value.toString();
+		ToStringHelper helper = MoreObjects.toStringHelper(this);
+		helper.add("fluid", value.getFluid().getName());
+		helper.add("amount", value.amount);
+		if (value.tag != null) {
+			helper.add("nbt", value.tag.toString());
+		}
+		return helper.toString();
 	}
 
 }

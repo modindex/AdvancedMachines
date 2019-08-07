@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 
 public class TileEntityMachineExpansionBase extends TileEntity implements IMachineUpgradeTileEntity, IHasMetadata {
 
-	private MaterialExpansion material;
+	private MaterialExpansion material = MaterialExpansion.BASIC;
 	public MaterialExpansion getMaterial() { return material; }
 	public int getMultiplier() { return material.getMultiplier(); }
 	

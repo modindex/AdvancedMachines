@@ -31,7 +31,6 @@ public class AlloyManager {
 	public static List<AlloyRecipe> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {
-		/*
 		manager.addRecipe((AlloyRecipe)new AlloyRecipe("1", 4000)
 			.addInput(0, "dustIron")
 			.addInput(1, "dustCoal", 4)
@@ -49,6 +48,5 @@ public class AlloyManager {
 			.addInput(1, "dustDiamondPure")
 			.setOutput("ingotTitaniumCarbide")
 		);
-		*/
 	}
 }

@@ -28,8 +28,7 @@ public class DialogTextureMap<T> extends DialogArea {
 	protected Map<T, DialogTexture> textures = new HashMap<>();
 	
 	public DialogTextureMap addTexture(T identifier, int u, int v) {
-		textures.put(identifier, new DialogTexture(u, v));
-		return this;
+		return this.addTexture(identifier, new DialogTexture(u, v));
 	}
 	
 	public DialogTextureMap addTexture(T identifier, DialogTexture texture) {
@@ -45,7 +44,7 @@ public class DialogTextureMap<T> extends DialogArea {
 	public void draw(DialogBase gui, int drawX, int drawY, T identifier) {
 		DialogTexture texture = textures.get(identifier);
 		if (texture == null) { return; }
-		
+
 		gui.drawTexturedModalRect(drawX, drawY, texture.getU(), texture.getV(), w, h);
 	}
 }

@@ -125,6 +125,11 @@ dialog.common.redstone.ignore=Redstone Mode: Ignored
 dialog.common.redstone.active=Redstone Mode: Active with signal
 dialog.common.redstone.inactive=Redstone Mode: Active without signal
 
+dialog.io.no_input=Output only
+dialog.io.no_output=Input only
+dialog.io.no_machine=No attached machine
+dialog.io.no_io=Attached machine does not intact with this storage type.
+
 dialog.jei.energy=%,d RF
 dialog.jei.recipe_id=Recipe ID: %s
 

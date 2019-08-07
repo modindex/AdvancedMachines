@@ -1,9 +1,20 @@
 package jaminv.advancedmachines.util.helper;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
+
+import javax.annotation.Nullable;
+
+import com.google.common.base.Function;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
+import com.google.common.collect.ImmutableCollection;
+import com.google.common.collect.Iterables;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.init.property.Properties;
@@ -13,6 +24,7 @@ import jaminv.advancedmachines.objects.blocks.machine.expansion.redstone.TileEnt
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
 import jaminv.advancedmachines.util.interfaces.IHasMetadata;
+import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -28,6 +40,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 
 public class BlockHelper {
 	
@@ -51,6 +64,20 @@ public class BlockHelper {
 		}
 	}
 	
+    private static final Function <IProperty<?>, Comparable<?>> PROPERTY_GET_NAME_FUNC = new Function <IProperty<?>, Comparable<?>> () {
+        @Nullable
+        public String apply(@Nullable IProperty<?> prop) {
+            return prop == null ? "<NULL>" : prop.getName();
+        }
+    };	
+    
+    private static final Function <IUnlistedProperty<?>, String> UNLISTEDPROPERTY_GET_NAME_FUNC = new Function <IUnlistedProperty<?>, String> () {
+        @Nullable
+        public String apply(@Nullable IUnlistedProperty<?> prop) {
+            return prop == null ? "<NULL>" : prop.getName();
+        }
+    };	
+	
 	public static String getBlockName(World world, BlockPos pos) {
 		return world.getBlockState(pos).getBlock().getLocalizedName();
 	}
@@ -61,6 +88,32 @@ public class BlockHelper {
 	
 	public static boolean hasUnlistedProperty(IExtendedBlockState state, Object property) {
 		return state.getUnlistedProperties().containsKey(property);
+	}
+	
+	public static String toStringBlockState(IBlockState state) {
+		ToStringHelper helper = MoreObjects.toStringHelper(state);
+
+		helper.add("block", Block.REGISTRY.getNameForObject(state.getBlock()));
+		for (Entry<IProperty<?>, Comparable<?>> entry : state.getProperties().entrySet()) {
+			helper.add(entry.getKey().getName(), entry.getValue().toString());
+		}
+		
+		//helper.add("properties", Iterables.transform(state.getProperties(), PROPERTY_GET_NAME_FUNC)).toString();
+		
+		if (state instanceof IExtendedBlockState) {
+			IExtendedBlockState ext = (IExtendedBlockState)state;
+			for (Entry<IUnlistedProperty<?>, Optional<?>> entry: ext.getUnlistedProperties().entrySet()) {
+				if (!entry.getValue().isPresent()) {
+					helper.add(entry.getKey().getName(), "<NULL>");
+				} else {
+					IUnlistedProperty prop = entry.getKey();
+					helper.add(prop.getName(), prop.valueToString(ext.getValue(prop)));
+				}
+			}
+		}
+		//	helper.add("unlisted", Iterables.transform(((IExtendedBlockState)state).getUnlistedProperties().values(), UNLISTEDPROPERTY_GET_NAME_FUNC));
+		//}
+		return helper.toString();
 	}
 	
 	public static EnumFacing getExtendedFacing(IBlockState state) {

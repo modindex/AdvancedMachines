@@ -16,8 +16,18 @@ public class DialogIOToggleButton extends DialogToggleButton<IOState> {
 		this.te = te;
 		this.addTexture(IOState.INPUT, 200, 0);
 		this.addTexture(IOState.OUTPUT, 200, 9);
+		this.setDisabledTexture(209, 0);
 	}
 	
+	@Override
+	protected boolean canChangeState(IOState newstate) {
+		if (newstate == IOState.INPUT) {
+			return te.canInput();
+		} else {
+			return te.canOutput();
+		}
+	}
+
 	@Override
 	protected void onStateChanged(IOState newstate) {
 		te.setInputState(newstate.getState());
@@ -25,12 +35,22 @@ public class DialogIOToggleButton extends DialogToggleButton<IOState> {
 	
 	@Override
 	public void draw(DialogBase gui, FontRenderer font, int drawX, int drawY) {
+		if (!te.canInput() && !te.canOutput()) {
+			super.drawDisabledTexture(gui, drawX, drawY);
+			return;
+		}
 		this.state = te.getInputState() ? IOState.INPUT : IOState.OUTPUT;
 		super.draw(gui, font, drawX, drawY);		
 	}
 
 	@Override
 	public String getTooltip(int mouseX, int mouseY) {
+		if (!te.canInput() && !te.canOutput()) { 
+			if (!te.hasParent()) { return I18n.format("dialog.io.no_machine"); }
+			else { return I18n.format("dialog.io.no_io"); } 
+		}
+		if (!te.canInput()) { return I18n.format("dialog.io.no_input"); }
+		if (!te.canOutput()) { return I18n.format("dialog.io.no_output"); }
 		return I18n.format(te.getInputState() ? IOState.INPUT.getName() : IOState.OUTPUT.getName());
 	}
 }

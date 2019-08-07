@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.IFluidTank;
 
 public class FluidTankObservable extends FluidTank {
 
@@ -31,5 +33,20 @@ public class FluidTankObservable extends FluidTank {
 		for (IObserver obv : observers) {
 			obv.onTankContentsChanged();
 		}
-	}	
+	}
+	
+	public int fillTank(IFluidTank other, int max_amount) {
+		FluidStack stack = drain(max_amount, false);
+		int amount = other.fill(stack, false);
+		
+		if (amount > 0) {
+			stack = drain(amount, true);
+			other.fill(stack, true);
+			return amount;
+		}
+		
+		return 0;
+	}
+	
+	public int fillTank(IFluidTank other) { return fillTank(other, Integer.MAX_VALUE); }
 }

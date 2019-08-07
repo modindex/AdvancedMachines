@@ -135,6 +135,9 @@ public class RecipeInput implements Cloneable {
 		return oreId == -1 && item == Items.AIR && fluid == null;
 	}
 	
+	public boolean isFluid() { return fluid != null; }
+	public boolean isItem() { return !item.equals(Items.AIR); }
+	
 	public boolean hasError() {
 		return invalid;
 	}

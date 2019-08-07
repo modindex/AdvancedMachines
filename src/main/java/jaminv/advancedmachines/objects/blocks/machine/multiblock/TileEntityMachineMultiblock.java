@@ -105,12 +105,13 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 		this.upgrades.reset();
 	}
 	
-	public void scanMultiblock(boolean destroy) { 
+	public void scanMultiblock(boolean destroy) {
 		if (destroy && multiblockMin != null && multiblockMax != null) {
 			Main.NETWORK.sendToAll(new MultiblockUpdateMessage(this.getPos(), multiblockMin, multiblockMax));
 		}
 		
-		this.reset();		
+		this.wake();
+		this.reset();
 		
 		if (destroy) { return; }
 		

@@ -13,25 +13,31 @@ import net.minecraft.item.ItemStack;
  * This list maintains a "sorted" state and only sorts when necessary.
  * The list is sorted (if necessary) when comparisons are performed.
  */
-public class ItemComparableList {
+public class ItemComparableList  {
 	protected ArrayList<ItemComparable> list = new ArrayList<ItemComparable>();
 	boolean sorted = false;
 	
 	public static class ItemCompare implements Comparator<ItemComparable> {
 		@Override
 		public int compare(ItemComparable arg0, ItemComparable arg1) {
-			return arg0.hashCode() - arg1.hashCode();
+			return Math.abs(arg0.hashCode()) - Math.abs(arg1.hashCode());
 		}		
 	}	
 	
-	public ItemComparableList() {}
+	public ItemComparableList() { sorted = true; }
+	
+	public ItemComparableList(ItemComparable item) {
+		if (item == null || item.isEmpty()) { return; }
+		add(item);
+		sorted = true;
+	}
 	
 	public ItemComparableList(ItemStack[] stack) {
 		if (stack == null) { return; }
 		for (ItemStack item : stack) {
 			add(new ItemComparable(item));
 		}
-		sort();
+		if (stack.length > 1) { sort(); } else { sorted = true; }
 	}
 	
 	/**
@@ -42,16 +48,18 @@ public class ItemComparableList {
 	 * @param item
 	 * @return
 	 */
-	public boolean add(ItemComparable item) {
-		if (item.isEmpty()) { return false; }
-		sorted = false;
-		return list.add(item);
+	public ItemComparableList add(ItemComparable item) {
+		if (item.isEmpty()) { return this; }
+		if (list.size() > 1) { sorted = false; }
+		list.add(item);
+		return this;
 	}
 	
-	public void sort() {
-		if (sorted) { return; }
+	public ItemComparableList sort() {
+		if (sorted) { return this; }
 		list.sort(new ItemCompare());
 		sorted = true;
+		return this;
 	}
 	
 	public int size() {
@@ -60,6 +68,13 @@ public class ItemComparableList {
 	
 	public ItemComparable get(int index) {
 		return list.get(index);
+	}
+
+	public ItemComparableList copy() {
+		ItemComparableList ret = new ItemComparableList();
+		ret.list = (ArrayList<ItemComparable>) list.clone();
+		ret.sorted = sorted;
+		return ret;
 	}
 
 	@Override
@@ -76,5 +91,25 @@ public class ItemComparableList {
 		}
 		
 		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 0;
+		for (ItemComparable item : list) {
+			hash += item.hashCode();
+		}
+		return hash;
+	}
+
+	@Override
+	public String toString() {
+		String ret = "ItemComparableList([";
+		boolean first = true;
+		for (ItemComparable item : list) {
+			if (!first) { ret += ", "; } first = false;
+			ret += item.toString();
+		}
+		return ret + "])";
 	}
 }
