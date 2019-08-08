@@ -172,84 +172,6 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 		return;
 	}
 	
-	protected int qtyProcessing = 0;
-	public int getQtyProcessing() { return qtyProcessing; }
-	
-	@Override
-	protected boolean tickUpdate() {
-		boolean didSomething = super.tickUpdate();
-		
-		BlockPos[] tools = upgrades.getTools();
-		for (BlockPos tool : tools) {
-			TileEntity te = world.getTileEntity(tool);
-			if (te instanceof IMachineUpgradeTool) {
-				didSomething = ((IMachineUpgradeTool)te).tickUpdate(this) || didSomething;
-			}
-		}
-		
-		return didSomething;
-	}
-	
-	public void sortTools() {
-		upgrades.sortTools(world);
-	}
-	
-	public void setRedstone(boolean redstone) {
-		if (redstone) {
-			this.redstone = true;
-		}
-	}
-		
-	@Override
-	protected int beginProcess(RecipeBase recipe, ItemStack[] input) {
-		IRecipeManager mgr = getRecipeManager();
-		qtyProcessing = Math.min(Math.min(mgr.getRecipeQty(recipe, input), mgr.getOutputQty(recipe, this.getOutputStacks())), upgrades.get(UpgradeType.MULTIPLY)) ;
-		
-		return ModConfig.general.processTimeBasic;
-	}
-	
-	@Override
-	protected void endProcess(RecipeBase recipe) {
-		for (int i = 0; i < recipe.getInputCount(); i++) {
-			if (recipe.getInput(i).isEmpty()) { continue; }
-			if (!removeInput(recipe.getInput(i).multiply(qtyProcessing))) {
-				// Some kind of strange error
-				Main.logger.log(Level.ERROR,  "error.machine.process.cannot_input");
-				haltProcess();
-				return;
-			}
-		}
-		
-		for (int i = 0; i < recipe.getOutputCount(); i++) {
-			if (recipe.getOutput(i).isEmpty()) { continue; }
-			if (!outputItem(recipe.getOutput(i).multiply(qtyProcessing), false)) {
-				// Some kind of strange error
-				Main.logger.log(Level.ERROR, "error.machine.process.cannot_output");
-				haltProcess();
-				return;
-			}
-		}
-		
-		for (int i = 0; i < qtyProcessing; i++) {
-			outputSecondary(recipe.getSecondary());
-		}
-	}
-	
-	@Override
-	protected void sendProcessingMesssage(boolean isProcessing) {
-		if (facemin != null && facemax != null) {
-			Main.NETWORK.sendToAll(new ProcessingStateMessage(facemin, facemax, isProcessing));
-		} else {
-			super.sendProcessingMesssage(isProcessing);
-		}
-	}
-
-	@Override
-	protected void haltProcess() {
-		super.haltProcess();
-		if (!world.isRemote) { qtyProcessing = 0; }
-	}
-	
 	public static void setMultiblock(BlockPos min, BlockPos max, boolean isMultiblock, World world, BlockPos pos) {
 		MutableBlockPos upgrade = new MutableBlockPos();
 		for (int x = min.getX(); x <= max.getX(); x++) {
@@ -278,6 +200,162 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 			}
 		}
 	}
+	
+	/* ============== *
+	 *  Machine Face  *
+	 * ============== */
+	
+	protected void scanFace() {
+		EnumFacing dir = facing.rotateAround(Axis.Y);
+		for (int x = 0; x <= 2; x++) {
+			for (int y = 0; y <= 2; y++) {
+				BlockPos pos = this.getPos().offset(dir, x).offset(EnumFacing.UP, y);
+				if (scanFaceAt(pos, 3, dir)) { buildFace(pos, 3, dir); }
+				if (x != 2 && y != 2 && scanFaceAt(pos, 2, dir)) { buildFace(pos, 2, dir); }				
+			}
+		}
+	}
+	
+	protected boolean scanFaceAt(BlockPos pos, int count, EnumFacing dir) {
+		World world = this.getWorld();
+		MaterialBase variant = world.getBlockState(getPos()).getValue(BlockMaterial.EXPANSION_VARIANT);		
+		
+		for (int x = -count; x < 2; x++) {
+			for (int y = -count; y < 2; y++) {
+				BlockPos check = pos.offset(dir, x).offset(EnumFacing.UP, y);
+				
+				boolean eval;
+				TileEntity te = world.getTileEntity(check);
+				
+				if (te != null) {
+					eval = (te instanceof IMachineFaceTE);
+					Block block = world.getBlockState(check).getBlock();
+					if (eval) { eval = world.getBlockState(check).getValue(BlockMachineBase.EXPANSION_VARIANT) == variant; }
+				} else { eval = false; }
+				
+				if (x == -count || y == -count || x == 1 || y == 1) {
+					if (eval) { return false; }
+				} else {
+					if (!eval) { return false; }
+				}
+			}
+		}
+		return true;
+	}
+	
+	protected void buildFace(BlockPos pos, int count, EnumFacing dir) {
+		int i = 0;
+		for (int x = -count+1; x < 1; x++) {
+			for (int y = -count+1; y < 1; y++) {
+				TileEntity te = world.getTileEntity(pos.offset(dir, x).offset(EnumFacing.UP, y));
+				
+				if (te instanceof IMachineFaceTE) {
+					((IMachineFaceTE)te).setMachineFace(MachineFace.build(count, -x, -y), this.getMachineType(), facing, this.getPos());
+				}
+			}
+		}
+		
+		this.facemin = pos.offset(dir, -count+1).offset(EnumFacing.UP, -count+1);
+		this.facemax = pos;
+	}	
+	
+	/* ============ *
+	 *  Processing  *
+	 * ============ */
+	
+	protected int qtyProcessing = 0;
+
+	@Override
+	public void onInputChanged(int slot, RecipeBase recipe) {
+		int qty = this.getRecipeQty(recipe);
+		if (qty <= 0) { haltProcess(); }
+		if (qty < qtyProcessing) { qtyProcessing = qty; }
+	}
+
+	public int getQtyProcessing() { return qtyProcessing; }
+	
+	@Override
+	protected boolean preProcess() {
+		boolean didSomething = super.preProcess();
+		
+		BlockPos[] tools = upgrades.getTools();
+		for (BlockPos tool : tools) {
+			TileEntity te = world.getTileEntity(tool);
+			if (te instanceof IMachineUpgradeTool) {
+				didSomething = ((IMachineUpgradeTool)te).tickUpdate(this) || didSomething;
+			}
+		}
+		
+		return didSomething;
+	}
+	
+	public void sortTools() {
+		upgrades.sortTools(world);
+	}
+	
+	public void setRedstone(boolean redstone) {
+		if (redstone) {
+			this.redstone = true;
+		}
+	}
+		
+	@Override
+	protected boolean beginProcess(RecipeBase recipe) {
+		qtyProcessing = Math.min(getRecipeQty(recipe), Math.max(upgrades.get(UpgradeType.MULTIPLY), getMultiplier()));
+		return qtyProcessing > 0;
+	}
+	
+	protected int getRecipeQty(RecipeBase recipe) {
+		return recipe.getRecipeQty(getInput(), getOutput());
+	}
+	
+	@Override
+	protected void endProcess(RecipeBase recipe) {
+		for (int i = 0; i < recipe.getInputCount(); i++) {
+			if (recipe.getInput(i).isEmpty()) { continue; }
+			if (!removeInput(recipe.getInput(i).multiply(qtyProcessing))) {
+				// Some kind of strange error
+				Main.logger.log(Level.ERROR,  "error.machine.process.cannot_input");
+				haltProcess();
+				return;
+			}
+		}
+		
+		for (int i = 0; i < recipe.getOutputCount(); i++) {
+			if (recipe.getOutput(i).isEmpty()) { continue; }
+			if (!outputItem(recipe.getOutput(i).multiply(qtyProcessing), false)) {
+				// Some kind of strange error
+				Main.logger.log(Level.ERROR, "error.machine.process.cannot_output");
+				haltProcess();
+				return;
+			}
+		}
+		
+		for (int i = 0; i < qtyProcessing; i++) {
+			outputSecondary(recipe.getSecondary());
+		}
+		
+		qtyProcessing = 0;
+	}
+	
+	@Override
+	protected void sendProcessingMesssage(boolean isProcessing) {
+		if (facemin != null && facemax != null) {
+			Main.NETWORK.sendToAll(new ProcessingStateMessage(facemin, facemax, isProcessing));
+		} else {
+			super.sendProcessingMesssage(isProcessing);
+		}
+	}
+
+	@Override
+	protected void haltProcess() {
+		super.haltProcess();
+		if (!world.isRemote) { qtyProcessing = 0; }
+	}
+	
+	/* ================= *
+	 *  Network and NBT  *
+	 * ================= */
 	
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
@@ -333,59 +411,5 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachineBase 
 			qtyProcessing = value; return;
 		}
 		super.setField(id, value);
-	}
-	
-	protected void scanFace() {
-		EnumFacing dir = facing.rotateAround(Axis.Y);
-		for (int x = 0; x <= 2; x++) {
-			for (int y = 0; y <= 2; y++) {
-				BlockPos pos = this.getPos().offset(dir, x).offset(EnumFacing.UP, y);
-				if (scanFaceAt(pos, 3, dir)) { buildFace(pos, 3, dir); }
-				if (x != 2 && y != 2 && scanFaceAt(pos, 2, dir)) { buildFace(pos, 2, dir); }				
-			}
-		}
-	}
-	
-	protected boolean scanFaceAt(BlockPos pos, int count, EnumFacing dir) {
-		World world = this.getWorld();
-		MaterialBase variant = world.getBlockState(getPos()).getValue(BlockMaterial.EXPANSION_VARIANT);		
-		
-		for (int x = -count; x < 2; x++) {
-			for (int y = -count; y < 2; y++) {
-				BlockPos check = pos.offset(dir, x).offset(EnumFacing.UP, y);
-				
-				boolean eval;
-				TileEntity te = world.getTileEntity(check);
-				
-				if (te != null) {
-					eval = (te instanceof IMachineFaceTE);
-					Block block = world.getBlockState(check).getBlock();
-					if (eval) { eval = world.getBlockState(check).getValue(BlockMachineBase.EXPANSION_VARIANT) == variant; }
-				} else { eval = false; }
-				
-				if (x == -count || y == -count || x == 1 || y == 1) {
-					if (eval) { return false; }
-				} else {
-					if (!eval) { return false; }
-				}
-			}
-		}
-		return true;
-	}
-	
-	protected void buildFace(BlockPos pos, int count, EnumFacing dir) {
-		int i = 0;
-		for (int x = -count+1; x < 1; x++) {
-			for (int y = -count+1; y < 1; y++) {
-				TileEntity te = world.getTileEntity(pos.offset(dir, x).offset(EnumFacing.UP, y));
-				
-				if (te instanceof IMachineFaceTE) {
-					((IMachineFaceTE)te).setMachineFace(MachineFace.build(count, -x, -y), this.getMachineType(), facing, this.getPos());
-				}
-			}
-		}
-		
-		this.facemin = pos.offset(dir, -count+1).offset(EnumFacing.UP, -count+1);
-		this.facemax = pos;
 	}
 }

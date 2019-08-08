@@ -33,7 +33,7 @@ public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase impl
 	}
 	public EnumFacing getFacing() {
 		return facing;
-	}
+	} 
 	
 	@Override
 	public void setMeta(int meta) {
@@ -63,7 +63,7 @@ public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase impl
 	}
 	
 	@Override
-	public void onEnergyAvailable() {
+	public void onEnergyChanged() {
 		if (parent == null) { return; }
 		TileEntity te = world.getTileEntity(parent);
 		if (te instanceof TileEntityMachineMultiblock) {
@@ -76,15 +76,15 @@ public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase impl
 		return this.transferEnergy(te.getEnergy()) > 0;
 	}
 	
-	public int transferEnergy(IEnergyStorage storage) {
+	public int transferEnergy(EnergyStorageObservable storage) {
 		int transfer;
 		
-		transfer = energy.extractEnergy(Integer.MAX_VALUE, true);
-		transfer = storage.receiveEnergy(transfer, true);
+		transfer = energy.extractEnergyInternal(Integer.MAX_VALUE, true);
+		transfer = storage.receiveEnergyInternal(transfer, true);
 		
 		if (transfer > 0) {
-			energy.extractEnergy(transfer, false);
-			storage.receiveEnergy(transfer, false);
+			energy.extractEnergyInternal(transfer, false);
+			storage.receiveEnergyInternal(transfer, false);
 		}
 		return transfer;
 	}

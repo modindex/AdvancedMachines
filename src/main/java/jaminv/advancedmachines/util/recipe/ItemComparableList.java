@@ -20,7 +20,7 @@ public class ItemComparableList  {
 	public static class ItemCompare implements Comparator<ItemComparable> {
 		@Override
 		public int compare(ItemComparable arg0, ItemComparable arg1) {
-			return Math.abs(arg0.hashCode()) - Math.abs(arg1.hashCode());
+			return arg0.toString().compareTo(arg1.toString());
 		}		
 	}	
 	
@@ -50,7 +50,7 @@ public class ItemComparableList  {
 	 */
 	public ItemComparableList add(ItemComparable item) {
 		if (item.isEmpty()) { return this; }
-		if (list.size() > 1) { sorted = false; }
+		if (list.size() > 0) { sorted = false; }
 		list.add(item);
 		return this;
 	}

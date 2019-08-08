@@ -154,6 +154,10 @@ public class RecipeInput implements Cloneable {
 		return lookup.contains(new ItemComparable(stack));		
 	}
 	
+	public boolean isValid(FluidStack stack) {
+		return lookup.contains(new ItemComparable(stack));
+	}
+	
 	public boolean isValid(ItemComparable stack) {
 		return lookup.contains(stack);
 	}
@@ -169,6 +173,10 @@ public class RecipeInput implements Cloneable {
 	 */
 	public boolean isValidWithCount(ItemStack stack) {
 		return isValid(stack) && stack.getCount() >= count;		
+	}
+	
+	public boolean isValidWithAmount(FluidStack stack) {
+		return isValid(stack) && stack.amount >= count;
 	}
 	
 	@Override

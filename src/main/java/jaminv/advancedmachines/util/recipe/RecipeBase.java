@@ -1,7 +1,12 @@
 package jaminv.advancedmachines.util.recipe;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
+import javax.annotation.Nullable;
+
+import jaminv.advancedmachines.util.ModConfig;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -18,6 +23,8 @@ public abstract class RecipeBase {
 	private RecipeOutput[] output;
 	private NonNullList<RecipeOutput> secondary;
 	private int energy;
+	
+	private int processTime = ModConfig.general.processTimeBasic;
 	
 	public RecipeBase(String id, int energy) {
 		this.recipeid = id;
@@ -77,47 +84,92 @@ public abstract class RecipeBase {
 		return energy;
 	}
 	
-	public int getOutputQty(ItemStack[] stacks) {
-		int stack = 0;
+	public RecipeBase setProcessTime(int ticks) {
+		processTime = ticks;
+		return this;
+	}
+	
+	public int getProcessTime() { return processTime; }
+	
+	public int getInputQty(@Nullable ItemStack[] items, @Nullable FluidStack[] fluids) {
+		int min = -1;
+		for (int i = 0; i < this.getInputCount(); i++) {
+			RecipeInput input = this.getInput(i);
+			if (input.isEmpty()) { continue; }
+			
+			boolean found = false;
+			
+			if (input.isFluid()) {
+				if (fluids == null) { return 0; }
+				for (FluidStack fluid : fluids) {
+					if (input.isValid(fluid)) {
+						found = true;
+						int qty = input.getQty(fluid);
+						if (min == -1 || qty < min) { min = qty; }
+					}
+				}
+			} else {
+				if (items == null) { return 0; }
+				for (ItemStack item : items) {
+					if (input.isValid(item)) {
+						found = true;
+						int qty = input.getQty(item);
+						if (min == -1 || qty < min) { min = qty; }
+					}
+				}
+			}
+			if (!found) { return 0; }
+		}
+		return min;
+	}
+	
+	public int getInputQty(ItemStack[] items) { return getInputQty(items, (FluidStack[])null); }
+	public int getInputQty(ItemStack[] items, FluidStack fluid) { return getInputQty(items, new FluidStack[]{ fluid }); }
+	
+	public int getOutputQty(ItemStack[] inventory, List<FluidTank> tanks) {
+		int slot = 0, tank = 0;
 		int min = -1;
 		for (int i = 0; i < this.getOutputCount(); i++) {
-			ItemStack output = this.getOutput(i).toItemStack();
+			RecipeOutput output = this.getOutput(i);
 			int count = 0;
-			do {
-				if (stacks[stack] == null || stacks[stack].isEmpty()) {
-					count = output.getMaxStackSize() / output.getCount(); 
-				} else if (stacks[stack].getItem().equals(output.getItem())) {
-					int left = stacks[stack].getMaxStackSize() - stacks[stack].getCount();
-					count = left / output.getCount();
-				}
-				stack++;
-			} while(count == 0 && stack < stacks.length);
+			
+			if (output.isFluid()) {
+				if (tanks == null || tanks.isEmpty()) { return 0; }
+				FluidStack stack = output.toFluidStack();
+				do {
+					if (tanks.get(tank).fillInternal(stack, false) == stack.amount) {
+						count = tanks.get(tank).getCapacity() / stack.amount;
+					}
+					tank++;
+				} while (count == 0 && tank < tanks.size());
+			} else {
+				if (inventory == null) { return 0; }
+				ItemStack stack = output.toItemStack();
+				do {
+					if (inventory[slot] == null || inventory[slot].isEmpty()) {
+						count = stack.getMaxStackSize() / stack.getCount(); 
+					} else if (inventory[slot].getItem().equals(stack.getItem())) {
+						int left = inventory[slot].getMaxStackSize() - inventory[slot].getCount();
+						count = left / stack.getCount();
+					}
+					slot++;
+				} while(count == 0 && slot < inventory.length);
+			}
 			
 			if (count == 0) { return 0; }
-
 			if (min == -1 || min > count) { min = count; }
 		}
 		return min;
 	}
 	
-	/**
-	 * In its current state, recipes only handle a single fluid output.
-	 * That will likely always remain the case.
-	 * If getOutputQty() != 1, this method returns 0.
-	 * @param tank FluidTank to fill
-	 * @return int
-	 */
-	public int getOutputQty(FluidTank tank) {
-		if (this.getOutputCount() != 1) { return 0; }
-		
-		FluidStack output = this.getOutput(0).toFluidStack();
-		
-		// Simulate a single fill to see if it will take
-		// This is an easy way to make sure all the fluid type checking occurs.
-		if (tank.fillInternal(output, false) != output.amount) { return 0; }
-		
-		int capacity = tank.getCapacity() - tank.getFluidAmount();
-		return capacity / output.amount;
+	public int getOutputQty(ItemStack[] inventory) { return getOutputQty(inventory, Collections.emptyList()); }
+	public int getOutputQty(ItemStack[] inventory, FluidTank tank) { return getOutputQty(inventory, Collections.singletonList(tank)); }
+	
+	public int getRecipeQty(ItemStack[] items, FluidStack[] fluids, ItemStack[] inventory, List<FluidTank> tanks) {
+		return Math.min(getInputQty(items, fluids), getOutputQty(inventory, tanks));
+	}
+	public int getRecipeQty(ItemStack[] items, ItemStack[] inventory) {
+		return Math.min(getInputQty(items), getOutputQty(inventory));
 	}
 	
 	/* Helpful utility methods */

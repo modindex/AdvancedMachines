@@ -69,7 +69,7 @@ public class ItemComparable {
 		// We don't hash NBT because then items with simple NBT data (like renaming in an anvil) would be rejected by the recipe.
 		return item.getRegistryName().hashCode();
 	}
-
+	
 	@Override
 	public String toString() {
 		String ret = "ItemComparable(";

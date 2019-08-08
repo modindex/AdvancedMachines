@@ -15,6 +15,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public final class ModConfig {
 	
 	@Config.Comment("General Configuration")
+	@Config.RequiresMcRestart
 	public static General general = new General();
 	public static class General {
 		@Config.Comment("Machines only run full updates every X ticks")
@@ -22,32 +23,35 @@ public final class ModConfig {
 		public int tickUpdate = 5;
 		
 		@Config.Comment("Default machine energy capacity for lowest tier")
+		@RangeInt(min = 0, max = 1000000)
 		public int defaultMachineEnergyCapacity = 50000;
 		
 		@Config.Comment("Default machine energy transfer rate for lowest tier")
+		@RangeInt(min = 0, max = 50000)
 		public int defaultMachineEnergyTransfer = 250;
 		
 		@Config.Comment("Default machine fluid capacity for lowest tier")
+		@RangeInt(min = 0, max = 128000)
 		public int defaultMachineFluidCapacity = 16000;
 		
 		@Config.Comment("Processing time for machines with no upgrages")
-		@RangeInt(min = 1)
+		@RangeInt(min = 1, max=6000)
 		public int processTimeBasic = 100;
 		
 		@Config.Comment("Default energy cost for standard furnace recipes")
-		@RangeInt(min = 0)
+		@RangeInt(min = 0, max = 1000000)
 		public int defaultFurnaceEnergyCost = 1400;
 		
 		@Config.Comment("Default energy cost for standard grinder recipes")
-		@RangeInt(min = 0)
+		@RangeInt(min = 0, max = 1000000)
 		public int defaultGrinderEnergyCost = 4000;
 		
 		@Config.Comment("Default energy cost for standard purifier recipes")
-		@RangeInt(min = 0)
+		@RangeInt(min = 0, max = 1000000)
 		public int defaultPurifierEnergyCost = 30000;
 		
 		@Config.Comment("Default energy cost for standard alloy furnace recipes")
-		@RangeInt(min = 0)
+		@RangeInt(min = 0, max = 1000000)
 		public int defaultAlloyEnergyCost = 8000;
 	}
 	

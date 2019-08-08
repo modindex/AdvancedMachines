@@ -75,7 +75,7 @@ public class ContainerMachine extends ContainerInventory {
 		
 		@Override
 		public boolean isItemValid(ItemStack stack) {
-			return recipe.isItemValid(stack, null);
+			return recipe.isItemValid(stack);
 		}
 	}
 	

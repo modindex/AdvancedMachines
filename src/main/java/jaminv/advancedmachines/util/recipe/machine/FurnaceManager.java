@@ -6,7 +6,7 @@ import java.util.Map;
 import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.helper.ItemHelper;
 import jaminv.advancedmachines.util.recipe.RecipeBase;
-import jaminv.advancedmachines.util.recipe.RecipeManagerSimple;
+import jaminv.advancedmachines.util.recipe.RecipeManager;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -25,7 +25,7 @@ public class FurnaceManager {
 		}
 	}
 	
-	public static class FurnaceRecipeManager extends RecipeManagerSimple<FurnaceRecipe> {
+	public static class FurnaceRecipeManager extends RecipeManager<FurnaceRecipe> {
 		@Override
 		protected void addRecipe(FurnaceRecipe recipe) {
 			super.addRecipe(recipe);

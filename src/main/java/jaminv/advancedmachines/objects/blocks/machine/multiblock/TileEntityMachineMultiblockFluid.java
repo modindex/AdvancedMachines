@@ -1,5 +1,7 @@
 package jaminv.advancedmachines.objects.blocks.machine.multiblock;
 
+import java.util.Collections;
+
 import jaminv.advancedmachines.objects.blocks.fluid.FluidTankObservable;
 import jaminv.advancedmachines.objects.blocks.fluid.IFluidHandlerTE;
 import jaminv.advancedmachines.objects.blocks.inventory.ItemStackHandlerObservable;
@@ -88,24 +90,10 @@ public abstract class TileEntityMachineMultiblockFluid extends TileEntityMachine
 	
 	/* Processing */
 	@Override
-	protected int beginProcess(RecipeBase recipe, ItemStack[] input) {
-		IRecipeManager mgr = getRecipeManager();
-		
-		// TODO: Fluid input
-		int maxinput = mgr.getRecipeQty(recipe, input);
-		
-		int maxoutput = 0;
-		if (recipe.getOutput(0).isFluid()) {
-			maxoutput = mgr.getOutputQty(recipe, this.getTank());
-		} else {
-			mgr.getOutputQty(recipe, this.getOutputStacks());
-		}
+	protected int getRecipeQty(RecipeBase recipe) {
+		return recipe.getRecipeQty(getInput(), (FluidStack[])null, getOutput(), Collections.singletonList(this.getTank()));
+	}
 
-		qtyProcessing = Math.min(Math.min(maxinput, maxoutput), upgrades.get(UpgradeType.MULTIPLY));
-
-		return ModConfig.general.processTimeBasic;
-	}	
-	
 	protected boolean outputItem(RecipeOutput output, boolean simulate) {
 		if (!output.isFluid()) { return super.outputItem(output, simulate); }
 		

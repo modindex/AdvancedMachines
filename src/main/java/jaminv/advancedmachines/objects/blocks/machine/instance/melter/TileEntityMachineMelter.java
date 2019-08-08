@@ -52,8 +52,8 @@ public class TileEntityMachineMelter extends TileEntityMachineMultiblockFluid {
 	}
 
 	@Override
-	protected boolean tickUpdate() {
-		boolean didSomething = super.tickUpdate();
+	protected boolean preProcess() {
+		boolean didSomething = super.preProcess();
 		
 		int i = this.getFirstOutputSlot();
 		ItemStack stack = this.getInventory().getStackInSlot(i);

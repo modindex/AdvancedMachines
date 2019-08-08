@@ -1,8 +1,6 @@
 package jaminv.advancedmachines.objects.blocks.machine;
 
-import jaminv.advancedmachines.objects.blocks.inventory.ItemStackHandlerObservable;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 

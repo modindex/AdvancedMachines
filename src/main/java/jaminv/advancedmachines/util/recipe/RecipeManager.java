@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import org.apache.logging.log4j.Level;
 
 import jaminv.advancedmachines.Main;
@@ -13,22 +15,38 @@ import jaminv.advancedmachines.util.helper.ItemHelper;
 import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager;
 import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager.PurifierRecipe;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 
 /**
  * Recipe Manager for recipes with (theoretically) any number of ingredients.
- * Use RecipeManagerSimple for single-ingredient recipes. It will be less resource-intensive.
  * 
- * This allows for up to one fluid ingredient.
+ * Although this is slightly less efficient for single-ingredient recipes, 
+ * it's still quite efficient and having a single recipe manager is easier to maintain.
+ * 
+ * This recipe manager does not support two ingredients of the same type.
+ * It adds far too much complexity and isn't really necessary when you can extract
+ * multiple items of the same type from a single slot.
  * 
  * @author Jamin VanderBerg
- * @param <T>
+ * @param <T> Recipe type
  */
-public abstract class RecipeManagerThreeIngredient<T extends RecipeBase> implements IRecipeManager<T> {  
+public abstract class RecipeManager<T extends RecipeBase> implements IRecipeManager<T> {  
 	
 	private Map<ItemComparableList, T> lookup = new HashMap<ItemComparableList, T>();
 	private Map<ItemComparable, ArrayList<T>> validInput = new HashMap<ItemComparable, ArrayList<T>>();
 	private ArrayList<T> list = new ArrayList<T>();
+	
+	/**
+	 * Returns NULL if no recipe available
+	 * @return T Recipe if found, NULL otherwise.
+	 */
+	@Override
+	public T getRecipe(ItemComparableList input) {
+		return lookup.get(input.sort());		
+	}
+	
+	public T getRecipe(ItemStack[] input) {	return getRecipe(new ItemComparableList(input)); }
 	
 	protected void addRecipe(T recipe) {
 		// Check to make sure the recipe has at least 1 ingredient and that no ingredients have error states.
@@ -102,90 +120,40 @@ public abstract class RecipeManagerThreeIngredient<T extends RecipeBase> impleme
 				ret.add(new ItemComparableList(item));
 			} else {
 				for (ItemComparableList iclist : other) {
-					ret.add(iclist.copy().add(item));
+					ret.add(iclist.copy().add(item).sort());
 				}
 			}
 		}
 		return ret;
 	}
-	
-	
-	/**
-	 * Returns NULL if no recipe available
-	 * @param stack
-	 * @return T
-	 */
-	@Override
-	public T getRecipe(ItemStack[] stack) {
-		ItemComparableList iclist = new ItemComparableList(stack);
-		
-		return lookup.get(iclist);		
+
+	public boolean isItemValid(ItemStack stack, @Nullable ItemStack[] other) {
+		return isItemValid(new ItemComparable(stack), new ItemComparableList(other));
 	}
 	
 	/**
-	 * Returns a valid recipe only if the items *and* count match,
-	 * otherwise returns null.
+	 * Checks to see if the ingredient is valid
 	 * 
-	 * @param stack
-	 * @return PurifierRecipe
+	 * Checks an ingredient and all other input ingredient to see if a recipe (any recipe)
+	 * can be built from those items. (Even an incomplete recipe).
+	 * 
+	 * Used by inventory movement routines to check to see if an item should be able to be moved
+	 * into the input grid.
+	 * 
+	 * Note that the inventory manager is expected to separately check if the item can stack
+	 * with another existing item. If this method simply returned 'true' for such instances, then
+	 * the inventory manager would simply put that item in the first available slot, not necessarily
+	 * in the stackable slot. So this method returns 'false' if `item` exists in `iclist`.
+	 * 	
+	 * @param item Item to check. Should not already be a part of `iclist`.
+	 * @param iclist Other items already in input slots.
+	 * @return true if item should be moved. false otherwise.
 	 */
-	@Override
-	public T getRecipeMatch(ItemStack[] stack) {
-		T recipe = getRecipe(stack);
-		if (recipe == null) { return null; }
-		
-		for (int i = 0; i < recipe.getInputCount(); i++) {
-			RecipeInput input = recipe.getInput(i);
-			if (input.isEmpty()) { continue; }
-			boolean found = false;
-			for (ItemStack item : stack) {
-				if (input.isValid(item)) {
-					found = true;
-					if (!input.isValidWithCount(item)) { return null; }
-				}
-			}
-			if (!found) { return null; }
-		}
-		return recipe;
-	}
-	
-	@Override
-	public int getRecipeQty(T recipe, ItemStack[] stack) {
-		int min = -1;
-		for (int i = 0; i < recipe.getInputCount(); i++) {
-			RecipeInput input = recipe.getInput(i);
-			if (input.isEmpty()) { continue; }
-			boolean found = false;
-			for (ItemStack item : stack) {
-				if (input.isValid(item)) {
-					found = true;
-					int qty = input.getQty(item);
-					if (min == -1 || qty < min) {
-						min = qty;
-					}
-				}
-			}
-			if (!found) { return 0; }
-		}
-		return min;
-	}
-	
-	@Override
-	public int getOutputQty(T recipe, ItemStack[] output) {
-		return recipe.getOutputQty(output);
-	}
-	
-	@Override
-	public int getOutputQty(T recipe, FluidTank output) {
-		return recipe.getOutputQty(output);
-	}
-
-
 	@Override
 	public boolean isItemValid(ItemComparable item, ItemComparableList iclist) {
 		if (item == null || item.isEmpty()) { return false; }
 
-		if (iclist.size() == 0) {
+		if (iclist == null || iclist.size() == 0) {
 			return validInput.containsKey(item);
 		}
 		
@@ -233,7 +201,7 @@ public abstract class RecipeManagerThreeIngredient<T extends RecipeBase> impleme
 				
 				if (!found) { 
 					notfound++; 
-					if (notfound > (3 - iclist.size())) { continue recipeloop; }
+					if (notfound > (recipe.getInputCount() - iclist.size())) { continue recipeloop; }
 				}
 			}
 			
@@ -246,7 +214,6 @@ public abstract class RecipeManagerThreeIngredient<T extends RecipeBase> impleme
 		return false;		
 	}
 	
-	@Override
 	public List<T> getRecipeList() {
 		return list;
 	}	

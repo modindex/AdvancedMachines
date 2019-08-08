@@ -4,8 +4,7 @@ import java.util.List;
 
 import jaminv.advancedmachines.util.parser.DataParser;
 import jaminv.advancedmachines.util.recipe.RecipeBase;
-import jaminv.advancedmachines.util.recipe.RecipeManagerSimple;
-import jaminv.advancedmachines.util.recipe.machine.grinder.FileHandlerGrinderRecipe;
+import jaminv.advancedmachines.util.recipe.RecipeManager;
 
 public class PurifierManager {
 	
@@ -21,7 +20,7 @@ public class PurifierManager {
 		}
 	}
 	
-	public static class PurifierRecipeManager extends RecipeManagerSimple<PurifierRecipe> {
+	public static class PurifierRecipeManager extends RecipeManager<PurifierRecipe> {
 		@Override
 		protected void addRecipe(PurifierRecipe recipe) {
 			super.addRecipe(recipe);

@@ -2,15 +2,9 @@ package jaminv.advancedmachines.util.recipe.machine.melter;
 
 import java.util.List;
 
-import org.apache.commons.lang3.text.WordUtils;
-
-import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.parser.DataParser;
 import jaminv.advancedmachines.util.recipe.RecipeBase;
-import jaminv.advancedmachines.util.recipe.RecipeInput;
-import jaminv.advancedmachines.util.recipe.RecipeManagerSimple;
-import jaminv.advancedmachines.util.recipe.RecipeOutput;
-import net.minecraftforge.oredict.OreDictionary;
+import jaminv.advancedmachines.util.recipe.RecipeManager;
 
 public class MelterManager {
 	
@@ -26,7 +20,7 @@ public class MelterManager {
 		}
 	}
 	
-	public static class MelterRecipeManager extends RecipeManagerSimple<MelterRecipe> {
+	public static class MelterRecipeManager extends RecipeManager<MelterRecipe> {
 		@Override
 		protected void addRecipe(MelterRecipe recipe) {
 			super.addRecipe(recipe);

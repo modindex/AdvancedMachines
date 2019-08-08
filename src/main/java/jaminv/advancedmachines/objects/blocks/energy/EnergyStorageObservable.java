@@ -15,7 +15,7 @@ public class EnergyStorageObservable extends EnergyStorage {
 		 * Observer doesn't track every time energy changes, that would happen to often.
 		 * Instead, it only tracks when energy is available, but previously wasn't.
 		 */
-		public void onEnergyAvailable();
+		public void onEnergyChanged();
 	}
 	
 	public EnergyStorageObservable(int capacity, int maxTransfer) {
@@ -32,9 +32,9 @@ public class EnergyStorageObservable extends EnergyStorage {
 		observers.remove(obv);
 	}
 	
-	protected void onEnergyAvailable() {
+	protected void onEnergyChanged() {
 		for (IObserver obv : observers) {
-			obv.onEnergyAvailable();
+			obv.onEnergyChanged();
 		}
 	}
 	
@@ -52,7 +52,7 @@ public class EnergyStorageObservable extends EnergyStorage {
 		
 		this.energy = value;
 		
-		if (old == 0 && value != 0) { this.onEnergyAvailable(); }
+		if (old != value) { this.onEnergyChanged(); }
 	}
 	
 	public EnergyStorageObservable setCapacity(int capacity) {
@@ -83,16 +83,37 @@ public class EnergyStorageObservable extends EnergyStorage {
 	
 	@Override
 	public int receiveEnergy(int maxReceive, boolean simulate) {
-		int energy = this.getEnergyStored();
-
 		int ret = super.receiveEnergy(maxReceive, simulate);
-
-		if (energy == 0 && ret > 0 && !simulate) {
-			onEnergyAvailable();
-		}
-		
+		if (ret > 0 && !simulate) { onEnergyChanged(); }
 		return ret;
 	}
+	
+	@Override
+	public int extractEnergy(int maxExtract, boolean simulate) {
+		int ret = super.extractEnergy(maxExtract, simulate);
+		if (ret > 0 && !simulate) { onEnergyChanged(); }
+		return ret;
+	}
+	
+	/* Internal */
+	
+    public int receiveEnergyInternal(int maxReceive, boolean simulate) {
+        int energyReceived = Math.min(capacity - energy, maxReceive);
+        if (!simulate) { energy += energyReceived; }
+        
+        if (energyReceived > 0 && !simulate) { onEnergyChanged(); }
+        
+        return energyReceived;
+    }
+
+    public int extractEnergyInternal(int maxExtract, boolean simulate) {
+        int energyExtracted = Math.min(energy, maxExtract);
+        if (!simulate) { energy -= energyExtracted; }
+        
+        if (energyExtracted > 0 && !simulate) { onEnergyChanged(); }
+        
+        return energyExtracted;
+    }	
 
 	/* NBT */
 	  

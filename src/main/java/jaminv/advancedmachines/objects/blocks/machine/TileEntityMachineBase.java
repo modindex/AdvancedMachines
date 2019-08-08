@@ -5,11 +5,9 @@ import javax.annotation.Nullable;
 import org.apache.logging.log4j.Level;
 
 import jaminv.advancedmachines.Main;
-import jaminv.advancedmachines.objects.blocks.energy.EnergyStorageObservable;
 import jaminv.advancedmachines.objects.blocks.inventory.TileEntityInventory;
 import jaminv.advancedmachines.objects.material.MaterialExpansion;
 import jaminv.advancedmachines.util.ModConfig;
-import jaminv.advancedmachines.util.helper.ItemHelper;
 import jaminv.advancedmachines.util.interfaces.ICanProcess;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
@@ -37,6 +35,10 @@ import net.minecraftforge.items.CapabilityItemHandler;
 
 public abstract class TileEntityMachineBase extends TileEntityInventory implements ITickable, IHasGui, IMachineEnergy, IRedstoneControlled, IHasMetadata, IDirectional, ICanProcess {
 
+	/* =========== *
+	 *  Inventory  *
+	 * =========== */
+	
 	public abstract int getInputCount();
 	public abstract int getOutputCount();
 	public abstract int getSecondaryCount();
@@ -47,10 +49,9 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 	public int getFirstAdditionalSlot() { return getInputCount() + getOutputCount() + getSecondaryCount(); }
 	public int getInventorySize() { return getInputCount() + getOutputCount() + getSecondaryCount() + getAdditionalCount(); }
 	
-	protected EnumFacing facing = EnumFacing.NORTH;
-	
-	public void setFacing(EnumFacing facing) { this.facing = facing; }
-	public EnumFacing getFacing() { return facing; }
+	/* ======== *
+	 *  Energy  *
+	 * ======== */
 	
 	protected MachineEnergyStorage energy;
 	
@@ -59,8 +60,9 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 	public int getMaxEnergyStored() { return energy.getMaxEnergyStored(); }
 	public MachineEnergyStorage getEnergy() { return energy; }
 	
-	private final IRecipeManager recipeManager;
-	public IRecipeManager getRecipeManager() { return recipeManager; }
+	/* ========== *
+	 *  Redstone  *
+	 * ========== */
 	
 	protected boolean redstone;
 	protected RedstoneState redstoneState = RedstoneState.IGNORE;
@@ -82,10 +84,13 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 			|| (redstoneState == RedstoneState.INACTIVE && redstone == false);
 	}
 	
-	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
-		return oldState.getBlock() != newState.getBlock();
-	}
+	public void checkRedstone() {
+		redstone = world.isBlockPowered(pos);
+	}	
+	
+	/* ============ *
+	 *  Other Data  *
+	 * ============ */
 	
 	private MaterialExpansion material;
 	public MaterialExpansion getMaterial() { return material; }
@@ -95,29 +100,79 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 		this.material = MaterialExpansion.byMetadata(meta);
 		energy.setMaterial(material);
 	}
+
+	protected EnumFacing facing = EnumFacing.NORTH;
+	
+	public void setFacing(EnumFacing facing) { this.facing = facing; }
+	public EnumFacing getFacing() { return facing; }
+	
+	private final IRecipeManager recipeManager;
+	public IRecipeManager getRecipeManager() { return recipeManager; }
 	
 	public TileEntityMachineBase(IRecipeManager recipeManager) {
 		super();
 		
 		this.energy = new MachineEnergyStorage();
 		this.recipeManager = recipeManager;
-		this.prevInput = new ItemStack[getInputCount()];
 	}
 	
-	private int tick;
-	private ItemStack[] prevInput;
-	
-	private boolean sleep = false;
-	/** Call to restart tick updates when a tile entity's state changes. */
-	public void wake() { sleep = false; }
+	/* ======== *
+	 *  Events  *
+	 * ======== */
 	
 	@Override
 	public void onInventoryContentsChanged(int slot) {
 		super.onInventoryContentsChanged(slot);
 		
 		sleep = false;
+
+		// We only care about input slots changing while processing (and only on the server)
+		if (world.isRemote || !isProcessing()) { return; }
+		if (slot < getFirstInputSlot() || slot >= getFirstInputSlot() + getInputCount()) { return; }
+
+		onInputChanged(slot, lastRecipe);
 	}
 	
+	public void onInputChanged(int slot, RecipeBase recipe) {
+		if(recipe.getRecipeQty(getInput(), getOutput()) <= 0) { haltProcess(); }		
+	}
+	
+	/* ================= *
+	 *  Processing Data  *
+	 * ================= */
+	
+	private int tick;
+	
+	private boolean sleep = false;
+	/** Call to restart tick updates when a tile entity's state changes. */
+	public void wake() { sleep = false; }
+	
+	private int processTimeRemaining = -1;
+	private int totalProcessTime = 0;
+	
+	public float getProcessPercent() {
+		if (totalProcessTime <= 0 || processTimeRemaining <= 0) { return 0.0f; }
+		return ((float)totalProcessTime - processTimeRemaining + ModConfig.general.tickUpdate) / totalProcessTime;
+	}
+	
+	private RecipeBase lastRecipe;
+	
+	public boolean isProcessing() {
+		return world.isRemote ? processingState : processTimeRemaining > 0 && this.isRedstoneActive();
+	}	
+	
+	protected boolean processingState = false;
+	public void setProcessingState(boolean state) {
+		this.processingState = state;
+	}
+	
+	/* ============ *
+	 *  Processing  *
+	 * ============ */	
+	
+	/**
+	 * Main Processing Loop
+	 */		
 	@Override
 	public void update() {
 		if (sleep) { return; }
@@ -126,24 +181,14 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 		
 		tick++;
 		if (tick < ModConfig.general.tickUpdate) { return; }
+		tick = 0;
 
 		boolean oldProcess = this.isProcessing();
 		
 		checkRedstone();
-		didSomething = tickUpdate();
-		
-		ItemStack[] input = getInput();
-		checkInventoryChanges(input);
-		
-		tick = 0;
-		if (canProcess(input)) {
-			didSomething = process(input) || didSomething;
-		} else {
-			haltProcess();
-		}
+		didSomething = preProcess() || process() || postProcess();
 		
 		if (!didSomething) { sleep = true; }
-		
 		if (world.isRemote) { return; }
 		
 		boolean newProcess = this.isProcessing();
@@ -156,58 +201,44 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 		Main.NETWORK.sendToAll(new ProcessingStateMessage(getPos(), getPos(), isProcessing));
 	}
 	
-	/** @return true if any operation was performed, false otherwise. */
-	protected boolean tickUpdate() { return false; }
+	/**
+	 * Override for pre-process tasks 
+	 * 
+	 * Default method does nothing and returns false.
+	 * @return true if any operation was performed, false otherwise. 
+	 */
+	protected boolean preProcess() { return false; }
 	
-	private int processTimeRemaining = -1;
-	private int totalProcessTime = 0;
+	/**
+	 * Override for post-process tasks.
+	 * 
+	 * Default method does nothing and returns false.
+	 * @return true if any operation was performed, false otherwise. 
+	 */
+	protected boolean postProcess() { return false; }	
 	
-	public float getProcessPercent() {
-		if (totalProcessTime <= 0 || processTimeRemaining <= 0) { return 0.0f; }
-		return ((float)totalProcessTime - processTimeRemaining + ModConfig.general.tickUpdate) / totalProcessTime;
-	}
-	
-	private RecipeInput lastInput = new RecipeInput();
-	private RecipeBase lastRecipe;
-	
-	public boolean isProcessing() {
-		return world.isRemote ? processingState : processTimeRemaining > 0 && this.isRedstoneActive();
-	}
-	
-	protected boolean processingState = false;
-	public void setProcessingState(boolean state) {
-		this.processingState = state;
-	}
-	
-	public boolean canProcess(ItemStack[] input) {
-		
-		RecipeBase recipe = recipeManager.getRecipeMatch(input);
-		if (recipe == null) { return false; }
-		
-		return outputItem(recipe.getOutput(0), true);
-	}
-
 	/** @return true if any operation was performed, false otherwise. */	
-	protected boolean process(ItemStack[] input) {
+	protected final boolean process() {
 		if (world.isRemote) { return false; }
 		
 		if (!this.isRedstoneActive()) { return false; }
 		
 		if (!isProcessing()) {
-			lastRecipe = recipeManager.getRecipe(input);
-			processTimeRemaining = totalProcessTime = beginProcess(lastRecipe, input);
+			RecipeBase recipe = recipeManager.getRecipe(getInput());
+			if (recipe == null || !beginProcess(recipe)) { return false; }
+			processTimeRemaining = totalProcessTime = recipe.getProcessTime();
+			lastRecipe = recipe;
 			return true;
-		} else if(lastRecipe == null) {
-			lastRecipe = recipeManager.getRecipe(input);
+		} else if (lastRecipe == null) {
+			// TE was just loaded from NBT
+			lastRecipe = recipeManager.getRecipe(getInput());
 		}
 
 		if (!extractEnergy(lastRecipe, totalProcessTime)) { return false; }
 		processTimeRemaining -= ModConfig.general.tickUpdate;
 		
 		if (processTimeRemaining <= 0) {
-			RecipeBase recipe = lastRecipe;
-			
-			endProcess(recipe);
+			endProcess(lastRecipe);
 			
 			processTimeRemaining = 0;
 		}
@@ -215,17 +246,17 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 		return true;
 	}
 	
-	protected int beginProcess(RecipeBase recipe, ItemStack[] input) {
-		return ModConfig.general.processTimeBasic;
+	protected boolean beginProcess(RecipeBase recipe) {
+		return recipe.getRecipeQty(getInput(), getOutput()) > 0;
 	}
 	
 	protected boolean extractEnergy(RecipeBase lastRecipe, int totalProcessTime) {
 		int amount = (lastRecipe.getEnergy() / totalProcessTime) * ModConfig.general.tickUpdate;
 		
-		int extract = energy.extractEnergy(amount, true);
+		int extract = energy.extractEnergyInternal(amount, true);
 		if (extract < amount) { return false; }
 		
-		energy.extractEnergy(amount, false);
+		energy.extractEnergyInternal(amount, false);
 		return true;
 	}
 	
@@ -259,6 +290,83 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 	protected void haltProcess() {
 		if (!world.isRemote) { processTimeRemaining = -1; }
 	}
+	
+	public ItemStack[] getInput() {
+		ItemStack[] input = new ItemStack[getInputCount()];
+		for (int i = 0; i < getInputCount(); i++) {
+			input[i] = inventory.getStackInSlot(getFirstInputSlot() + i).copy();
+		}
+		return input;
+	}
+	public ItemStack[] getOutput() {
+		ItemStack[] output = new ItemStack[getOutputCount()];
+		for (int i = 0; i < getOutputCount(); i++) {
+			output[i] = inventory.getStackInSlot(getFirstOutputSlot() + i).copy();
+		}
+		return output;
+	}
+	
+	protected boolean removeInput(RecipeInput input) {
+		for (int i = getFirstInputSlot(); i < getInputCount() + getFirstInputSlot(); i++) {
+			RecipeInput slot = new RecipeInput(inventory.getStackInSlot(i));
+			if (input.isValid(inventory.getStackInSlot(i))) {
+				inventory.extractItem(i, input.getCount(), false);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	protected boolean outputItem(RecipeOutput output, boolean simulate) {
+		ItemStack item = output.toItemStack();
+		for (int i = getFirstOutputSlot(); i < getOutputCount() + getFirstOutputSlot(); i++) {
+			if (inventory.insertItem(i, item, true).isEmpty()) {
+				if (!simulate) { inventory.insertItem(i, item, false); }
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	protected void outputSecondary(NonNullList<RecipeOutput> secondary) {		
+		for (RecipeOutput output : secondary) {
+			if (world.rand.nextInt(100) > output.getChance()) { continue; }
+			ItemStack item = output.toItemStack();
+			for(int slot = getFirstSecondarySlot(); slot < getSecondaryCount() + getFirstSecondarySlot(); slot++) {
+				if (inventory.insertItem(slot, item, true).isEmpty()) {
+					inventory.insertItem(slot, item, false);
+					break;
+				}
+			}
+		}
+	}
+	
+	/* ============== *
+	 *  Capabilities  *
+	 * ============== */
+	
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		if (capability == CapabilityEnergy.ENERGY) {
+			return true;
+		}
+		return super.hasCapability(capability, facing);
+	}
+	
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new ItemStackHandlerMachineWrapper(this, inventory));
+		}		
+		if (capability == CapabilityEnergy.ENERGY) {
+			return CapabilityEnergy.ENERGY.cast(this.energy);
+		}
+		return super.getCapability(capability, facing);
+	}		
+	
+	/* ================= *
+	 *  Network and NBT  *
+	 * ================= */
 	
 	public int getFieldCount() { return 4; }
 	public int getField(int id) {
@@ -311,8 +419,6 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 		if (compound.hasKey("redstoneState")) {
 			redstoneState = RedstoneState.fromValue(compound.getInteger("redstoneState"));
 		}
-		
-		this.prevInput = this.getInput();
 	}
 	
 	@Override
@@ -326,97 +432,7 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 		compound.setBoolean("redstone", redstone);
 		compound.setInteger("redstoneState", redstoneState.getValue());
 		return compound;
-	}
-
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		if (capability == CapabilityEnergy.ENERGY) {
-			return true;
-		}
-		return super.hasCapability(capability, facing);
-	}
-	
-	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new ItemStackHandlerMachineWrapper(this, inventory));
-		}		
-		if (capability == CapabilityEnergy.ENERGY) {
-			return CapabilityEnergy.ENERGY.cast(this.energy);
-		}
-		return super.getCapability(capability, facing);
 	}	
-	
-	public ItemStack[] getInput() {
-		ItemStack[] input = new ItemStack[getInputCount()];
-		for (int i = 0; i < getInputCount(); i++) {
-			input[i] = inventory.getStackInSlot(getFirstInputSlot() + i).copy();
-		}
-		return input;
-	}
-	
-	private void checkInventoryChanges(ItemStack[] input) {
-		for (int i = 0; i < getInputCount(); i++) {
-			if (prevInput[i] == null || input[i] == null) {
-				prevInput = input;
-				haltProcess(); return; 
-			}
-			if (!ItemHelper.itemsMatchWithCount(prevInput[i], input[i])) {
-				prevInput = input;
-				haltProcess(); return;
-			}
-		}
-		prevInput = input;
-	}
-	
-	protected boolean removeInput(RecipeInput input) {
-		for (int i = getFirstInputSlot(); i < getInputCount() + getFirstInputSlot(); i++) {
-			RecipeInput slot = new RecipeInput(inventory.getStackInSlot(i));
-			if (input.isValid(inventory.getStackInSlot(i))) {
-				inventory.extractItem(i, input.getCount(), false);
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	protected boolean outputItem(RecipeOutput output, boolean simulate) {
-		ItemStack item = output.toItemStack();
-		for (int i = getFirstOutputSlot(); i < getOutputCount() + getFirstOutputSlot(); i++) {
-			if (inventory.insertItem(i, item, true).isEmpty()) {
-				if (!simulate) { inventory.insertItem(i, item, false); }
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	protected void outputSecondary(NonNullList<RecipeOutput> secondary) {		
-		for (RecipeOutput output : secondary) {
-			if (world.rand.nextInt(100) > output.getChance()) { continue; }
-			ItemStack item = output.toItemStack();
-			for(int slot = getFirstSecondarySlot(); slot < getSecondaryCount() + getFirstSecondarySlot(); slot++) {
-				if (inventory.insertItem(slot, item, true).isEmpty()) {
-					inventory.insertItem(slot, item, false);
-					break;
-				}
-			}
-		}
-	}
-	
-	protected ItemStack[] getOutputStacks() {
-		ItemStack[] ret = new ItemStack[this.getOutputCount()];
-		int stack = 0;
-		for (int i = this.getFirstOutputSlot(); i < this.getOutputCount() + getFirstOutputSlot(); i++) {
-			ret[stack] = inventory.getStackInSlot(i);
-			stack++;
-		}
-		return ret;
-	}
-	
-	public void checkRedstone() {
-		redstone = world.isBlockPowered(pos);
-	}
     
     @Nullable
     public SPacketUpdateTileEntity getUpdatePacket()
@@ -433,5 +449,10 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		super.onDataPacket(net, pkt);
 		handleUpdateTag(pkt.getNbtCompound());
-	}	    
+	}
+	
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
+	}	
 }
