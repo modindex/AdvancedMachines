@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.INBTSerializable;
 
 public class EnergyStorageAdvanced implements IEnergyStorageAdvanced {
 
@@ -134,27 +133,21 @@ public class EnergyStorageAdvanced implements IEnergyStorageAdvanced {
     }	
 
 	/* NBT */
-    
-    
-	  
-	public void readFromNBT(NBTTagCompound compound) {
-		this.energy = compound.getInteger("energy");
-	}
-    
 	@Override
 	public NBTTagCompound serializeNBT() {
-		NBT
-		return null;
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setInteger("energy", this.energy);
+		nbt.setInteger("capacity", this.capacity);
+		nbt.setInteger("maxExtract", this.maxExtract);
+		nbt.setInteger("maxReceive", this.maxReceive);
+		return nbt;
 	}
-
-	@Override
-	public void deserializeNBT(NBTTagCompound nbt) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		compound.setInteger("energy", this.energy);		
-		return compound;
-	}	
+	
+    @Override
+    public void deserializeNBT(NBTTagCompound nbt) {
+    	this.energy = nbt.getInteger("energy");
+    	this.capacity = nbt.getInteger("capacity");
+    	this.maxExtract = nbt.getInteger("maxExtract");
+    	this.maxReceive = nbt.getInteger("maxReceive");
+    }
 }
