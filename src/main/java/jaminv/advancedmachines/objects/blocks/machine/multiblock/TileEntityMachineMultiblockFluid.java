@@ -2,16 +2,16 @@ package jaminv.advancedmachines.objects.blocks.machine.multiblock;
 
 import java.util.Collections;
 
-import jaminv.advancedmachines.objects.blocks.fluid.FluidTankObservable;
-import jaminv.advancedmachines.objects.blocks.fluid.IFluidHandlerTE;
-import jaminv.advancedmachines.objects.blocks.inventory.ItemStackHandlerObservable;
+import jaminv.advancedmachines.lib.fluid.FluidTankAdvanced;
+import jaminv.advancedmachines.lib.fluid.IFluidHandlerTE;
+import jaminv.advancedmachines.lib.inventory.ItemStackHandlerObservable;
+import jaminv.advancedmachines.lib.recipe.IRecipeManager;
+import jaminv.advancedmachines.lib.recipe.RecipeBase;
+import jaminv.advancedmachines.lib.recipe.RecipeOutput;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgrade.UpgradeType;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.objects.material.MaterialExpansion;
 import jaminv.advancedmachines.util.ModConfig;
-import jaminv.advancedmachines.util.recipe.IRecipeManager;
-import jaminv.advancedmachines.util.recipe.RecipeBase;
-import jaminv.advancedmachines.util.recipe.RecipeOutput;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -24,22 +24,36 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
-public abstract class TileEntityMachineMultiblockFluid extends TileEntityMachineMultiblock implements IFluidHandlerTE, FluidTankObservable.IObserver {
+public abstract class TileEntityMachineMultiblockFluid extends TileEntityMachineMultiblock implements FluidTankAdvanced.IObserver {
 	
 	public TileEntityMachineMultiblockFluid(IRecipeManager recipeManager) {
 		super(recipeManager);
-
-		tank = new FluidTankObservable(ModConfig.general.defaultMachineFluidCapacity * MaterialExpansion.maxMultiplier);
-		tank.addObserver(this);
+		
+		int capacity = ModConfig.general.defaultMachineFluidCapacity * MaterialExpansion.maxMultiplier;
+		
+		for (int i = 0; i < getInputTankCount(); i++) {
+			inputTank[i] = new FluidTankAdvanced(capacity);
+			inputTank[i].addObserver(this);
+		}
+		for (int i = 0; i < getOutputTankCount(); i++) {
+			outputTank[i] = new FluidTankAdvanced(capacity);
+			outputTank[i].addObserver(this);
+		}
 	}
-
-	private FluidTankObservable tank;
-	public FluidTankObservable getTank() { return tank; }
 	
+	
+
 	@Override
 	public void setMeta(int meta) {
 		super.setMeta(meta);
-		this.getTank().setCapacity(ModConfig.general.defaultMachineFluidCapacity * getMultiplier());
+		
+		int capacity = ModConfig.general.defaultMachineFluidCapacity * getMultiplier();
+		for (FluidTankAdvanced input : inputTank) {
+			input.setCapacity(capacity);
+		}
+		for (FluidTankAdvanced output : outputTank) {
+			output.setCapacity(capacity);
+		}
 	}
 
 	@Override
@@ -48,10 +62,6 @@ public abstract class TileEntityMachineMultiblockFluid extends TileEntityMachine
 		world.notifyBlockUpdate(getPos(), world.getBlockState(getPos()), world.getBlockState(getPos()), 3);
 		world.markBlockRangeForRenderUpdate(pos, pos);		
 	}
-
-	public FluidStack getFluid() { return tank.getFluid(); }
-	public int getFluidAmount() { return tank.getFluidAmount(); }
-	public int getFluidCapacity() { return tank.getCapacity(); }
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {

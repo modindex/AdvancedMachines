@@ -7,7 +7,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemHelper {
-
 	
 	public static String getOreName(ItemStack stack) {
 		int[] ids = OreDictionary.getOreIDs(stack);

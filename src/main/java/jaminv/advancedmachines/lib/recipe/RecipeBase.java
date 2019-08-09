@@ -1,12 +1,10 @@
-package jaminv.advancedmachines.util.recipe;
+package jaminv.advancedmachines.lib.recipe;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
-import jaminv.advancedmachines.util.ModConfig;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -24,9 +22,9 @@ public abstract class RecipeBase {
 	private NonNullList<RecipeOutput> secondary;
 	private int energy;
 	
-	private int processTime = ModConfig.general.processTimeBasic;
+	private int processTime;
 	
-	public RecipeBase(String id, int energy) {
+	public RecipeBase(String id, int energy, int processTime) {
 		this.recipeid = id;
 		this.input = new RecipeInput[getInputCount()];
 		this.output = new RecipeOutput[getOutputCount()];
@@ -40,6 +38,7 @@ public abstract class RecipeBase {
 		}
 		
 		this.energy = energy;
+		this.processTime = processTime;
 	}
 	
 	public String getRecipeId() { return recipeid; }

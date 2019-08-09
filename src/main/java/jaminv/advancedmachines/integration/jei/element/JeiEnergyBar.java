@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.integration.jei.element;
 
-import jaminv.advancedmachines.util.recipe.RecipeBase;
+import jaminv.advancedmachines.lib.recipe.RecipeBase;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawableAnimated;
 import net.minecraft.client.resources.I18n;

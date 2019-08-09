@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.objects.blocks.machine.expansion.tank;
 
-import jaminv.advancedmachines.objects.blocks.fluid.ContainerFluid;
+import jaminv.advancedmachines.lib.container.ContainerFluid;
 import jaminv.advancedmachines.objects.blocks.inventory.ContainerInventory;
 import jaminv.advancedmachines.objects.blocks.inventory.ContainerLayout;
 import jaminv.advancedmachines.objects.blocks.machine.dialog.DialogFluid;

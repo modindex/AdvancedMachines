@@ -3,8 +3,8 @@ package jaminv.advancedmachines.objects.blocks.machine.expansion.tank;
 import javax.annotation.Nullable;
 
 import jaminv.advancedmachines.Main;
-import jaminv.advancedmachines.objects.blocks.fluid.FluidTankObservable;
-import jaminv.advancedmachines.objects.blocks.fluid.TileEntityFluid;
+import jaminv.advancedmachines.lib.fluid.FluidTankAdvanced;
+import jaminv.advancedmachines.lib.recipe.IRecipeManager;
 import jaminv.advancedmachines.objects.blocks.inventory.ContainerInventory;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansionBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTool;
@@ -12,6 +12,7 @@ import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorde
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockHelper;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblockFluid;
+import jaminv.advancedmachines.objects.fluid.TileEntityFluid;
 import jaminv.advancedmachines.objects.material.MaterialExpansion;
 import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.helper.InventoryHelper;
@@ -20,7 +21,6 @@ import jaminv.advancedmachines.util.interfaces.IHasGui;
 import jaminv.advancedmachines.util.interfaces.IHasMetadata;
 import jaminv.advancedmachines.util.interfaces.ISwitchableIO;
 import jaminv.advancedmachines.util.message.IOStateMessage;
-import jaminv.advancedmachines.util.recipe.IRecipeManager;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -76,7 +76,7 @@ public class TileEntityMachineTank extends TileEntityFluid implements ITickable,
 	}
 
 	@Override
-	public FluidTankObservable createTank() { return new FluidTankObservable(ModConfig.general.defaultMachineFluidCapacity * MaterialExpansion.maxMultiplier); }
+	public FluidTankAdvanced createTank() { return new FluidTankAdvanced(ModConfig.general.defaultMachineFluidCapacity * MaterialExpansion.maxMultiplier); }
 	
 	public void setInputState(boolean state) {
 		this.inputState = state;
@@ -116,7 +116,7 @@ public class TileEntityMachineTank extends TileEntityFluid implements ITickable,
 		parent = pos;
 		TileEntityMachineMultiblock te = MultiblockHelper.getParent(world, pos);
 		if (te instanceof TileEntityMachineMultiblockFluid) {
-			FluidTankObservable tank = ((TileEntityMachineMultiblockFluid)te).getTank();
+			FluidTankAdvanced tank = ((TileEntityMachineMultiblockFluid)te).getTank();
 			allowInput = tank.canFill();
 			allowOutput = tank.canDrain();
 			

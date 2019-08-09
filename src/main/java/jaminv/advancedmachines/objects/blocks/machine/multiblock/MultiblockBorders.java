@@ -50,16 +50,29 @@ public class MultiblockBorders implements INBTSerializable<NBTTagCompound> {
 		if (current instanceof BlockMaterial && ((BlockMaterial)current).getMaterialType() == MaterialType.EXPANSION) {
 			MaterialBase variant = ((BlockMaterial)current).getVariant(world.getBlockState(pos));
 			
+			// Check for single borders
+			
 			for (EnumFacing facing : EnumFacing.VALUES) {
 				Block check = world.getBlockState(pos.offset(facing)).getBlock();
-				MultiblockBorderType border = MultiblockBorderType.NONE;
 				
-				 if (check instanceof BlockMaterial && ((BlockMaterial)check).getMaterialType() == MaterialType.EXPANSION) {
-					if (((BlockMaterial)check).getVariant(world.getBlockState(pos.offset(facing))) != variant) {
-						border = MultiblockBorderType.SINGLE;
-					}
+				// If block isn't a machine or upgrade, there's no chance of a single border.
+				if (!(check instanceof IMachineUpgrade) && !(check instanceof BlockMachineMultiblock)) { continue; }
+				// They all should be MaterialType.EXPANSION, but better to make sure.
+				if (!(check instanceof BlockMaterial) || ((BlockMaterial)check).getMaterialType() != MaterialType.EXPANSION) { continue; }
+				
+				MultiblockBorderType border = MultiblockBorderType.NONE;
+
+				// Variant types don't match 
+				if (((BlockMaterial)check).getVariant(world.getBlockState(pos.offset(facing))) != variant) {
+					border = MultiblockBorderType.SINGLE;
+				}
+
+				// Upgrade types don't match								
+				if (check instanceof IMachineUpgrade && current instanceof IMachineUpgrade) {
+					if (((IMachineUpgrade)current).getUpgradeType() != ((IMachineUpgrade)check).getUpgradeType()) { border = MultiblockBorderType.SINGLE; }
 				}				
 				
+				// One block is a machine and the other isn't a MULTIPLY-type expansion				
 				if (check instanceof IMachineUpgrade && !(current instanceof IMachineUpgrade)) {
 					if (((IMachineUpgrade)check).getUpgradeType() != IMachineUpgrade.UpgradeType.MULTIPLY) { border = MultiblockBorderType.SINGLE; }
 				}
@@ -67,10 +80,6 @@ public class MultiblockBorders implements INBTSerializable<NBTTagCompound> {
 				if (current instanceof IMachineUpgrade && !(check instanceof IMachineUpgrade)) {
 					if (((IMachineUpgrade)current).getUpgradeType() != IMachineUpgrade.UpgradeType.MULTIPLY) { border = MultiblockBorderType.SINGLE; }
 				}
-				
-				if (check instanceof IMachineUpgrade && current instanceof IMachineUpgrade) {
-					if (((IMachineUpgrade)current).getUpgradeType() != ((IMachineUpgrade)check).getUpgradeType()) { border = MultiblockBorderType.SINGLE; }
-				}				
 					
 				if (border != MultiblockBorderType.NONE) {		
 					switch (facing) {

@@ -10,10 +10,10 @@ import java.util.Map;
 import javax.annotation.Nullable;
 import javax.management.NotificationBroadcaster;
 
+import jaminv.advancedmachines.lib.recipe.RecipeInput;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgrade;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTileEntity;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTool;
-import jaminv.advancedmachines.util.recipe.RecipeInput;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;

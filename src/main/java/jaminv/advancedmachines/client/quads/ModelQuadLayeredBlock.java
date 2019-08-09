@@ -13,9 +13,17 @@ public class ModelQuadLayeredBlock extends ModelQuadBase {
 	private boolean inverted = false;
 	public ModelQuadLayeredBlock invert() { this.inverted = true; return this; }
 	
-	private float xoff = 0, yoff = 0, zoff = 0;
+	private float xminOff = 0, xmaxOff = 0, yminOff = 0, ymaxOff, zminOff = 0, zmaxOff = 0;
 	public ModelQuadLayeredBlock offset(float xoff, float yoff, float zoff) {
-		this.xoff = xoff; this.yoff = yoff; this.zoff = zoff;
+		this.xminOff = xoff; this.xmaxOff = xoff;
+		this.yminOff = yoff; this.ymaxOff = yoff;
+		this.zminOff = zoff; this.zmaxOff = zoff;
+		return this;
+	}
+	public ModelQuadLayeredBlock offset(float xminOff, float xmaxOff, float yminOff, float ymaxOff, float zminOff, float zmaxOff) {
+		this.xminOff = xminOff; this.xmaxOff = xmaxOff;
+		this.yminOff = yminOff; this.ymaxOff = ymaxOff;
+		this.zminOff = zminOff; this.zmaxOff = zmaxOff;
 		return this;
 	}
 
@@ -51,7 +59,7 @@ public class ModelQuadLayeredBlock extends ModelQuadBase {
 			List<TextureAtlasSprite> textures = layers.getTextures(side); 
 			
 			for (TextureAtlasSprite sprite : textures) {
-				quads.addAll((new ModelQuadBlockFace.Unit(getFormat(), sprite, side, inverted).offset(xoff, yoff, zoff)).getQuads());
+				quads.addAll((new ModelQuadBlockFace.Unit(getFormat(), sprite, side, inverted).offset(xminOff, xmaxOff, yminOff, ymaxOff, zminOff, zmaxOff)).getQuads());
 			}
 		}
 		

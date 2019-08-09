@@ -50,7 +50,6 @@ public class LayeredTextureMultiblockBase implements ILayeredTexture {
 		textures.add(getBaseTexture(variant));
 		
 		MultiblockBorders borders = new MultiblockBorders(state);
-		String root = base + "." + variant;
 		
 		switch (side) {
 		case NORTH:

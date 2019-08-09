@@ -33,7 +33,14 @@ public class ModelQuadBlockFace extends ModelQuadBase {
 		this.ymin += yoff; this.ymax -= yoff;
 		this.zmin += zoff; this.zmax -= zoff;
 		return this;
-	}	
+	}
+	
+	public ModelQuadBlockFace offset(float xminOff, float xmaxOff, float yminOff, float ymaxOff, float zminOff, float zmaxOff) {
+		this.xmin += xminOff; this.xmax -= xmaxOff;
+		this.ymin += yminOff; this.ymax -= ymaxOff;
+		this.zmin += zminOff; this.zmax -= zmaxOff;
+		return this;
+	}
 	
 	public ModelQuadBlockFace(VertexFormat format, float xmin, float xmax, float ymin, float ymax, float zmin, float zmax,
 			TextureAtlasSprite texture, EnumFacing side, boolean inverted) {

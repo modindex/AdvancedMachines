@@ -1,11 +1,14 @@
-package jaminv.advancedmachines.util.recipe;
+package jaminv.advancedmachines.lib.recipe;
 
 import java.awt.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 /**
  * Used to manage a list of ItemComparable objects that is sortable and comparable.
@@ -32,13 +35,22 @@ public class ItemComparableList  {
 		sorted = true;
 	}
 	
-	public ItemComparableList(ItemStack[] stack) {
-		if (stack == null) { return; }
-		for (ItemStack item : stack) {
-			add(new ItemComparable(item));
+	public ItemComparableList(@Nullable ItemStack[] stack, @Nullable FluidStack[] fluids) {
+		if (stack != null) {
+			for (ItemStack item : stack) {
+				add(new ItemComparable(item));
+			}
+		}
+		if (fluids != null) {
+			for (FluidStack fluid : fluids) {
+				add(new ItemComparable(fluid));				
+			}
 		}
 		if (stack.length > 1) { sort(); } else { sorted = true; }
 	}
+	
+	public ItemComparableList(ItemStack[] stack) { this(stack, (FluidStack[])null); }
+	public ItemComparableList(FluidStack[] fluids) { this((ItemStack[])null, fluids); }
 	
 	/**
 	 * Add an Item to the List

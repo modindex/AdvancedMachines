@@ -3,6 +3,7 @@ package jaminv.advancedmachines.util;
 import java.util.HashMap;
 import java.util.Map;
 
+import jaminv.advancedmachines.lib.recipe.RecipeOutput;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.RangeInt;
 import net.minecraftforge.common.config.ConfigManager;
@@ -198,6 +199,8 @@ public final class ModConfig {
 		public static void onConfigChanged(final ConfigChangedEvent.OnConfigChangedEvent event) {
 			if (event.getModID().equals(Reference.MODID)) {
 				ConfigManager.sync(Reference.MODID, Config.Type.INSTANCE);
+				
+				RecipeOutput.setOreDictionaryPreference(ModConfig.recipe.oreDictionaryPreference);
 			}
 		}
 	}	

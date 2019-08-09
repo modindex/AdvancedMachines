@@ -2,8 +2,8 @@ package jaminv.advancedmachines.util.recipe.machine;
 
 import java.util.List;
 
-import jaminv.advancedmachines.util.recipe.RecipeBase;
-import jaminv.advancedmachines.util.recipe.RecipeManager;
+import jaminv.advancedmachines.lib.recipe.RecipeBase;
+import jaminv.advancedmachines.lib.recipe.RecipeManager;
 
 public class AlloyManager {
 	

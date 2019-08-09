@@ -1,33 +1,21 @@
-package jaminv.advancedmachines.objects.blocks.fluid;
+package jaminv.advancedmachines.lib.fluid;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.IFluidTank;
 
-public class FluidTankObservable extends FluidTank {
+public class FluidTankAdvanced extends FluidTank implements IFluidTankAdvanced {
 
-	public static interface IObserver {
-		public void onTankContentsChanged();
-	}
-	
-	public FluidTankObservable(int capacity) {
+	public FluidTankAdvanced(int capacity) {
 		super(capacity);
 	}
 	
 	private List<IObserver> observers = new ArrayList<>();
+	public void addObserver(IObserver obv) { observers.add(obv); }
 	
-	public void addObserver(IObserver obv) {
-		observers.add(obv);
-	}
-	
-	public void removeObserver(IObserver obv) {
-		observers.remove(obv);
-	}
-
 	@Override
 	protected void onContentsChanged() {
 		for (IObserver obv : observers) {
@@ -49,4 +37,8 @@ public class FluidTankObservable extends FluidTank {
 	}
 	
 	public int fillTank(IFluidTank other) { return fillTank(other, Integer.MAX_VALUE); }
+	
+	public boolean isEmpty() { 
+		return fluid == null;
+	}
 }

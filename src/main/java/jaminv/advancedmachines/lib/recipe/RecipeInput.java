@@ -1,22 +1,19 @@
-package jaminv.advancedmachines.util.recipe;
+package jaminv.advancedmachines.lib.recipe;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
-import jaminv.advancedmachines.util.helper.ItemHelper;
+import jaminv.advancedmachines.lib.inventory.IItemGeneric;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class RecipeInput implements Cloneable {
+public class RecipeInput implements Cloneable, IItemGeneric {
 	
 	private int oreId = -1;
 	private Item item = Items.AIR;

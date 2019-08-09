@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.objects.blocks.machine.expansion.energy;
 
-import jaminv.advancedmachines.objects.blocks.energy.EnergyStorageObservable;
+import jaminv.advancedmachines.lib.energy.EnergyStorageAdvanced;
 import jaminv.advancedmachines.objects.blocks.machine.IMachineEnergy;
 import jaminv.advancedmachines.objects.blocks.machine.MachineEnergyStorage;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTool;
@@ -23,7 +23,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
-public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase implements IHasGui, IContainerUpdate, IMachineEnergy, IMachineUpgradeTool, IHasMetadata, IDirectional, EnergyStorageObservable.IObserver {
+public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase implements IHasGui, IContainerUpdate, IMachineEnergy, IMachineUpgradeTool, IHasMetadata, IDirectional, EnergyStorageAdvanced.IObserver {
 	
 	protected EnumFacing facing = EnumFacing.NORTH;
 	protected BlockPos parent;
@@ -49,7 +49,8 @@ public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase impl
 	
 	public TileEntityMachineEnergy() {
 		super();
-		this.energy = new MachineEnergyStorage();
+		energy = new MachineEnergyStorage();
+		energy.addObserver(this);
 	}
 	
 	@Override
@@ -76,7 +77,7 @@ public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase impl
 		return this.transferEnergy(te.getEnergy()) > 0;
 	}
 	
-	public int transferEnergy(EnergyStorageObservable storage) {
+	public int transferEnergy(EnergyStorageAdvanced storage) {
 		int transfer;
 		
 		transfer = energy.extractEnergyInternal(Integer.MAX_VALUE, true);

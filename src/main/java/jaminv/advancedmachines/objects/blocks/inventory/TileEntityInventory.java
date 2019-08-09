@@ -1,5 +1,6 @@
 package jaminv.advancedmachines.objects.blocks.inventory;
 
+import jaminv.advancedmachines.lib.inventory.ItemStackHandlerObservable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;

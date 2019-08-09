@@ -1,10 +1,10 @@
 package jaminv.advancedmachines.objects.blocks.machine;
 
+import jaminv.advancedmachines.lib.recipe.IRecipeManager;
 import jaminv.advancedmachines.objects.blocks.inventory.ContainerInventory;
 import jaminv.advancedmachines.objects.blocks.inventory.ContainerLayout;
 import jaminv.advancedmachines.objects.blocks.inventory.Layout;
 import jaminv.advancedmachines.util.helper.InventoryHelper;
-import jaminv.advancedmachines.util.recipe.IRecipeManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;

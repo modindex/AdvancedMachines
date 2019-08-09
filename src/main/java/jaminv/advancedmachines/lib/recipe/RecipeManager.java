@@ -1,4 +1,4 @@
-package jaminv.advancedmachines.util.recipe;
+package jaminv.advancedmachines.lib.recipe;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,15 +8,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import org.apache.logging.log4j.Level;
-
-import jaminv.advancedmachines.Main;
-import jaminv.advancedmachines.util.helper.ItemHelper;
-import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager;
-import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager.PurifierRecipe;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
 
 /**
  * Recipe Manager for recipes with (theoretically) any number of ingredients.

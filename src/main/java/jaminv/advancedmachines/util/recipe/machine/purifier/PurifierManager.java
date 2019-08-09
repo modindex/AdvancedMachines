@@ -2,9 +2,9 @@ package jaminv.advancedmachines.util.recipe.machine.purifier;
 
 import java.util.List;
 
+import jaminv.advancedmachines.lib.recipe.RecipeBase;
+import jaminv.advancedmachines.lib.recipe.RecipeManager;
 import jaminv.advancedmachines.util.parser.DataParser;
-import jaminv.advancedmachines.util.recipe.RecipeBase;
-import jaminv.advancedmachines.util.recipe.RecipeManager;
 
 public class PurifierManager {
 	

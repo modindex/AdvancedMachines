@@ -1,29 +1,16 @@
-package jaminv.advancedmachines.objects.blocks.inventory;
+package jaminv.advancedmachines.lib.inventory;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class ItemStackHandlerObservable extends ItemStackHandler {
-	
-	public static interface IObserver {
-		public void onInventoryContentsChanged(int slot);
-	}
-	
-	public ItemStackHandlerObservable(int size) {
-		super(size);
-	}
+public class ItemStackHandlerObservable extends ItemStackHandler implements IItemObservable {
 	
 	private List<IObserver> observers = new ArrayList<>();
-	
-	public void addObserver(IObserver obv) {
-		observers.add(obv);
-	}
-	
-	public void removeObserver(IObserver obv) {
-		observers.remove(obv);
-	}
+	public ItemStackHandlerObservable addObserver(IObserver obv) { observers.add(obv); return this; }
 	
 	@Override
 	protected void onContentsChanged(int slot) {
@@ -31,6 +18,10 @@ public class ItemStackHandlerObservable extends ItemStackHandler {
 			obv.onInventoryContentsChanged(slot);
 		}
 	}
+
+    public ItemStackHandlerObservable() { super(); }
+    public ItemStackHandlerObservable(int size) { super(size); }
+    public ItemStackHandlerObservable(NonNullList<ItemStack> stacks) { super(stacks); }
 	
 	boolean allowInsert = true;
 	boolean allowExtract = true;

@@ -1,4 +1,4 @@
-package jaminv.advancedmachines.util.recipe;
+package jaminv.advancedmachines.lib.recipe;
 
 import java.util.Arrays;
 

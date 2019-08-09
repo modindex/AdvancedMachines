@@ -4,12 +4,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import jaminv.advancedmachines.lib.recipe.RecipeInput;
+import jaminv.advancedmachines.lib.recipe.RecipeOutput;
 import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.logger.Logger;
 import jaminv.advancedmachines.util.parser.DataParserException;
 import jaminv.advancedmachines.util.parser.FileHandlerRecipe;
-import jaminv.advancedmachines.util.recipe.RecipeInput;
-import jaminv.advancedmachines.util.recipe.RecipeOutput;
 import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager.PurifierRecipe;
 import net.minecraft.util.JsonUtils;
 

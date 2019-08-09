@@ -1,8 +1,5 @@
-package jaminv.advancedmachines.util.recipe;
+package jaminv.advancedmachines.lib.recipe;
 
-import jaminv.advancedmachines.util.ModConfig;
-import jaminv.advancedmachines.util.Reference;
-import jaminv.advancedmachines.util.helper.ItemHelper;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -10,13 +7,17 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * Helper class for recipe output where the mod material may be disabled
  */
 public class RecipeOutput implements Cloneable {
+	
+	public static String[] oreDictionaryPreference = {};
+	public static void setOreDictionaryPreference(String[] preference) {
+		oreDictionaryPreference = preference;
+	}
 	
 	private String ore = "";
 	private Item item = Items.AIR;
@@ -97,8 +98,8 @@ public class RecipeOutput implements Cloneable {
 			ItemStack minvalue = null;
 			
 			for (ItemStack item : list) {
-				for (int i = 0; i < ModConfig.recipe.oreDictionaryPreference.length; i++) {
-					if (item.getItem().getRegistryName().getResourceDomain().equals(ModConfig.recipe.oreDictionaryPreference[i])) {
+				for (int i = 0; i < oreDictionaryPreference.length; i++) {
+					if (item.getItem().getRegistryName().getResourceDomain().equals(oreDictionaryPreference[i])) {
 						if (i < min) {
 							min = i;
 							minvalue = item;
@@ -111,7 +112,7 @@ public class RecipeOutput implements Cloneable {
 			
 			itemstack = minvalue.copy();
 			if (count != -1) { itemstack.setCount(count); }
-			if (ItemHelper.getMeta(itemstack) == OreDictionary.WILDCARD_VALUE) { itemstack.setItemDamage(0); }
+			if (Items.DIAMOND.getDamage(itemstack) == OreDictionary.WILDCARD_VALUE) { itemstack.setItemDamage(0); }
 			return itemstack.copy();
 		}
 		if (item == Items.AIR) { return ItemStack.EMPTY; }

@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.util.helper;
 
-import jaminv.advancedmachines.util.recipe.IRecipeManager;
+import jaminv.advancedmachines.lib.recipe.IRecipeManager;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;

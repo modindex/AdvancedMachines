@@ -1,4 +1,4 @@
-package jaminv.advancedmachines.objects.blocks.fluid;
+package jaminv.advancedmachines.lib.container;
 
 import jaminv.advancedmachines.objects.blocks.inventory.ContainerInventory;
 import jaminv.advancedmachines.objects.blocks.inventory.Layout;

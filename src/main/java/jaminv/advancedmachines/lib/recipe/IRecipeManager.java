@@ -1,4 +1,4 @@
-package jaminv.advancedmachines.util.recipe;
+package jaminv.advancedmachines.lib.recipe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 /**
  * Recipe Manager Interface Definition
@@ -26,8 +27,11 @@ public interface IRecipeManager<T extends RecipeBase> {
 	public default boolean isItemValid(ItemStack stack) {
 		return isItemValid(new ItemComparable(stack), (ItemComparableList)null);
 	}
-	public default boolean isItemValid(ItemStack stack, @Nullable ItemStack[] other) {
-		return isItemValid(new ItemComparable(stack), new ItemComparableList(other));
+	public default boolean isItemValid(ItemStack stack, @Nullable ItemStack[] other, @Nullable FluidStack[] fluids) {
+		return isItemValid(new ItemComparable(stack), new ItemComparableList(other, fluids));
+	}
+	public default boolean isItemValid(FluidStack stack, @Nullable ItemStack[] other, @Nullable FluidStack[] fluids) {
+		return isItemValid(new ItemComparable(stack), new ItemComparableList(other, fluids));
 	}
 	public boolean isItemValid(ItemComparable item, ItemComparableList iclist);	
 }

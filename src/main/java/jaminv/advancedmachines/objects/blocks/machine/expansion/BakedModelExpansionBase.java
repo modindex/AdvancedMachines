@@ -24,17 +24,17 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 
 public abstract class BakedModelExpansionBase extends BakedModelBase {
 	
-	protected abstract String getBaseTexture();
-
 	public BakedModelExpansionBase(IModelState state, VertexFormat format,
 			Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
 		super(state, format, bakedTextureGetter);
 	}
+	
+	protected String getBaseTexture() { return "expansion"; }
 
 	@Override
 	public List<IModelQuad> render(VertexFormat format, IBlockState state, EnumFacing side, long rand) {
 		return Collections.singletonList(new ModelQuadLayeredBlock(format, 
-			new LayeredTextureMultiblockBase(state, "expansion")
+			new LayeredTextureMultiblockBase(state, getBaseTexture())
 		));
 	}
 

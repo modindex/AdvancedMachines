@@ -2,8 +2,8 @@ package jaminv.advancedmachines.objects.blocks.machine.dialog;
 
 import org.lwjgl.opengl.GL11;
 
-import jaminv.advancedmachines.objects.blocks.fluid.IFluidHandlerTE;
-import jaminv.advancedmachines.objects.blocks.fluid.TileEntityFluid;
+import jaminv.advancedmachines.lib.fluid.IFluidHandlerTE;
+import jaminv.advancedmachines.objects.fluid.TileEntityFluid;
 import jaminv.advancedmachines.util.dialog.DialogBase;
 import jaminv.advancedmachines.util.dialog.control.DialogProgressBar;
 import jaminv.advancedmachines.util.dialog.struct.DialogTexture;

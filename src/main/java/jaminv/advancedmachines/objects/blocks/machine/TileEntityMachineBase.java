@@ -5,6 +5,11 @@ import javax.annotation.Nullable;
 import org.apache.logging.log4j.Level;
 
 import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.lib.inventory.MachineInventoryHandler;
+import jaminv.advancedmachines.lib.recipe.IRecipeManager;
+import jaminv.advancedmachines.lib.recipe.RecipeBase;
+import jaminv.advancedmachines.lib.recipe.RecipeInput;
+import jaminv.advancedmachines.lib.recipe.RecipeOutput;
 import jaminv.advancedmachines.objects.blocks.inventory.TileEntityInventory;
 import jaminv.advancedmachines.objects.material.MaterialExpansion;
 import jaminv.advancedmachines.util.ModConfig;
@@ -15,15 +20,12 @@ import jaminv.advancedmachines.util.interfaces.IHasMetadata;
 import jaminv.advancedmachines.util.interfaces.IRedstoneControlled;
 import jaminv.advancedmachines.util.message.ProcessingStateMessage;
 import jaminv.advancedmachines.util.message.RedstoneStateMessage;
-import jaminv.advancedmachines.util.recipe.IRecipeManager;
-import jaminv.advancedmachines.util.recipe.RecipeBase;
-import jaminv.advancedmachines.util.recipe.RecipeInput;
-import jaminv.advancedmachines.util.recipe.RecipeOutput;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
@@ -33,21 +35,21 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.CapabilityItemHandler;
 
-public abstract class TileEntityMachineBase extends TileEntityInventory implements ITickable, IHasGui, IMachineEnergy, IRedstoneControlled, IHasMetadata, IDirectional, ICanProcess {
+public abstract class TileEntityMachineBase extends TileEntity implements ITickable, IHasGui, IMachineEnergy, IRedstoneControlled, IHasMetadata, IDirectional, ICanProcess, MachineInventoryHandler.IObserver {
 
+	public TileEntityMachineBase(IRecipeManager recipeManager) {
+		super();
+	
+		inventory.addObserver(this);
+		this.energy = new MachineEnergyStorage();
+		this.recipeManager = recipeManager;
+	}
+	
 	/* =========== *
 	 *  Inventory  *
 	 * =========== */
 	
-	public abstract int getInputCount();
-	public abstract int getOutputCount();
-	public abstract int getSecondaryCount();
-	public int getAdditionalCount() { return 0; }
-	public int getFirstInputSlot() { return 0; }
-	public int getFirstOutputSlot() { return getInputCount(); }
-	public int getFirstSecondarySlot() { return getInputCount() + getOutputCount(); }
-	public int getFirstAdditionalSlot() { return getInputCount() + getOutputCount() + getSecondaryCount(); }
-	public int getInventorySize() { return getInputCount() + getOutputCount() + getSecondaryCount() + getAdditionalCount(); }
+	public MachineInventoryHandler inventory = new MachineInventoryHandler();
 	
 	/* ======== *
 	 *  Energy  *
@@ -109,26 +111,17 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 	private final IRecipeManager recipeManager;
 	public IRecipeManager getRecipeManager() { return recipeManager; }
 	
-	public TileEntityMachineBase(IRecipeManager recipeManager) {
-		super();
-		
-		this.energy = new MachineEnergyStorage();
-		this.recipeManager = recipeManager;
-	}
-	
 	/* ======== *
 	 *  Events  *
 	 * ======== */
 	
 	@Override
 	public void onInventoryContentsChanged(int slot) {
-		super.onInventoryContentsChanged(slot);
-		
 		sleep = false;
 
 		// We only care about input slots changing while processing (and only on the server)
 		if (world.isRemote || !isProcessing()) { return; }
-		if (slot < getFirstInputSlot() || slot >= getFirstInputSlot() + getInputCount()) { return; }
+		if (!inventory.isSlotInput(slot)) { return; }
 
 		onInputChanged(slot, lastRecipe);
 	}
@@ -224,14 +217,14 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 		if (!this.isRedstoneActive()) { return false; }
 		
 		if (!isProcessing()) {
-			RecipeBase recipe = recipeManager.getRecipe(getInput());
+			RecipeBase recipe = recipeManager.getRecipe(inventory.getInput());
 			if (recipe == null || !beginProcess(recipe)) { return false; }
 			processTimeRemaining = totalProcessTime = recipe.getProcessTime();
 			lastRecipe = recipe;
 			return true;
 		} else if (lastRecipe == null) {
 			// TE was just loaded from NBT
-			lastRecipe = recipeManager.getRecipe(getInput());
+			lastRecipe = recipeManager.getRecipe(inventory.getInput());
 		}
 
 		if (!extractEnergy(lastRecipe, totalProcessTime)) { return false; }
@@ -247,7 +240,7 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 	}
 	
 	protected boolean beginProcess(RecipeBase recipe) {
-		return recipe.getRecipeQty(getInput(), getOutput()) > 0;
+		return recipe.getRecipeQty(inventory.getInput(), inventory.getOutput()) > 0;
 	}
 	
 	protected boolean extractEnergy(RecipeBase lastRecipe, int totalProcessTime) {
@@ -289,21 +282,6 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 	 */
 	protected void haltProcess() {
 		if (!world.isRemote) { processTimeRemaining = -1; }
-	}
-	
-	public ItemStack[] getInput() {
-		ItemStack[] input = new ItemStack[getInputCount()];
-		for (int i = 0; i < getInputCount(); i++) {
-			input[i] = inventory.getStackInSlot(getFirstInputSlot() + i).copy();
-		}
-		return input;
-	}
-	public ItemStack[] getOutput() {
-		ItemStack[] output = new ItemStack[getOutputCount()];
-		for (int i = 0; i < getOutputCount(); i++) {
-			output[i] = inventory.getStackInSlot(getFirstOutputSlot() + i).copy();
-		}
-		return output;
 	}
 	
 	protected boolean removeInput(RecipeInput input) {
@@ -356,7 +334,7 @@ public abstract class TileEntityMachineBase extends TileEntityInventory implemen
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new ItemStackHandlerMachineWrapper(this, inventory));
+			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory));
 		}		
 		if (capability == CapabilityEnergy.ENERGY) {
 			return CapabilityEnergy.ENERGY.cast(this.energy);

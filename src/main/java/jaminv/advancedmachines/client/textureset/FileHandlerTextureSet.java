@@ -10,13 +10,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
 
+import jaminv.advancedmachines.lib.recipe.RecipeInput;
+import jaminv.advancedmachines.lib.recipe.RecipeOutput;
 import jaminv.advancedmachines.util.Reference;
 import jaminv.advancedmachines.util.logger.Logger;
 import jaminv.advancedmachines.util.parser.DataParser;
 import jaminv.advancedmachines.util.parser.DataParserException;
 import jaminv.advancedmachines.util.parser.FileHandlerBase;
-import jaminv.advancedmachines.util.recipe.RecipeInput;
-import jaminv.advancedmachines.util.recipe.RecipeOutput;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

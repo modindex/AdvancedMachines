@@ -3,14 +3,14 @@ package jaminv.advancedmachines.objects.blocks.machine.instance.melter;
 import org.apache.logging.log4j.Level;
 
 import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.lib.recipe.IRecipeManager;
+import jaminv.advancedmachines.lib.recipe.RecipeBase;
 import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgrade.UpgradeType;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblockFluid;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.util.ModConfig;
-import jaminv.advancedmachines.util.recipe.IRecipeManager;
-import jaminv.advancedmachines.util.recipe.RecipeBase;
 import jaminv.advancedmachines.util.recipe.machine.grinder.GrinderManager;
 import jaminv.advancedmachines.util.recipe.machine.melter.MelterManager;
 import net.minecraft.client.gui.inventory.GuiContainer;

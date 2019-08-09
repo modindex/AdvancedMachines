@@ -1,8 +1,10 @@
-package jaminv.advancedmachines.objects.blocks.fluid;
+package jaminv.advancedmachines.objects.fluid;
 
 import javax.annotation.Nullable;
 
-import jaminv.advancedmachines.objects.blocks.inventory.ItemStackHandlerObservable;
+import jaminv.advancedmachines.lib.fluid.FluidTankAdvanced;
+import jaminv.advancedmachines.lib.fluid.FluidTankAdvanced.IObserver;
+import jaminv.advancedmachines.lib.inventory.ItemStackHandlerObservable;
 import jaminv.advancedmachines.objects.blocks.inventory.TileEntityInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -20,7 +22,7 @@ import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 
-public abstract class TileEntityFluid extends TileEntityInventory implements IFluidHandlerTE, FluidTankObservable.IObserver {
+public abstract class TileEntityFluid extends TileEntityInventory implements FluidTankAdvanced.IObserver {
 
 	@Override
 	protected ItemStackHandlerObservable createInventory() {
@@ -35,10 +37,10 @@ public abstract class TileEntityFluid extends TileEntityInventory implements IFl
 		};
 	}
 
-	private FluidTankObservable tank;
-	protected FluidTankObservable getTank() { return tank; }
+	private FluidTankAdvanced tank;
+	protected FluidTankAdvanced getTank() { return tank; }
 	
-	public abstract FluidTankObservable createTank();
+	public abstract FluidTankAdvanced createTank();
 	
 	public TileEntityFluid() {
 		tank = createTank();

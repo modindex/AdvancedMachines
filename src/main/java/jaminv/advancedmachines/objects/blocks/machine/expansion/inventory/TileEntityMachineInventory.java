@@ -3,8 +3,9 @@ package jaminv.advancedmachines.objects.blocks.machine.expansion.inventory;
 import javax.annotation.Nullable;
 
 import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.lib.inventory.ItemStackHandlerObservable;
+import jaminv.advancedmachines.lib.recipe.IRecipeManager;
 import jaminv.advancedmachines.objects.blocks.inventory.ContainerInventory;
-import jaminv.advancedmachines.objects.blocks.inventory.ItemStackHandlerObservable;
 import jaminv.advancedmachines.objects.blocks.inventory.TileEntityInventory;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTool;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
@@ -17,7 +18,6 @@ import jaminv.advancedmachines.util.interfaces.IHasGui;
 import jaminv.advancedmachines.util.interfaces.IHasMetadata;
 import jaminv.advancedmachines.util.interfaces.ISwitchableIO;
 import jaminv.advancedmachines.util.message.IOStateMessage;
-import jaminv.advancedmachines.util.recipe.IRecipeManager;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
