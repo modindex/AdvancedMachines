@@ -87,12 +87,9 @@ public class EnergyStorageAdvanced implements IEnergyStorageAdvanced {
 		if (old != value) { this.onEnergyChanged(); }
 	}
 	
-	public EnergyStorageAdvanced setCapacity(int capacity) {
+	public void setCapacity(int capacity) {
 		this.capacity = capacity;
-		
 		if (energy > capacity) { energy = capacity; }
-		
-		return this;
 	}
 	
 	public EnergyStorageAdvanced setMaxTransfer(int maxTransfer) {
@@ -137,17 +134,11 @@ public class EnergyStorageAdvanced implements IEnergyStorageAdvanced {
 	public NBTTagCompound serializeNBT() {
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setInteger("energy", this.energy);
-		nbt.setInteger("capacity", this.capacity);
-		nbt.setInteger("maxExtract", this.maxExtract);
-		nbt.setInteger("maxReceive", this.maxReceive);
 		return nbt;
 	}
 	
     @Override
     public void deserializeNBT(NBTTagCompound nbt) {
     	this.energy = nbt.getInteger("energy");
-    	this.capacity = nbt.getInteger("capacity");
-    	this.maxExtract = nbt.getInteger("maxExtract");
-    	this.maxReceive = nbt.getInteger("maxReceive");
     }
 }

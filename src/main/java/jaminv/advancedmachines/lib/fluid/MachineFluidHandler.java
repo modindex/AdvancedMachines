@@ -3,7 +3,11 @@ package jaminv.advancedmachines.lib.fluid;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 /**
@@ -15,20 +19,9 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
  * @author Jamin VanderBerg
  */
 public class MachineFluidHandler implements IFluidHandlerMachine {
-	
-	public static interface IObserver {
-		/**
-		 * Issues one event whenever any number of tanks have changed.
-		 * 
-		 * Due to the nature of how tanks work, multiple tanks can be filled or drained at once.
-		 * Only one event is fired in such an instance.
-		 */
-		public void onTankContentsChanged();
-	}
+
 	private List<IObserver> observers = new ArrayList<>();
-	
 	public void addObserver(IObserver obv) { observers.add(obv); }
-	public void removeObserver(IObserver obv) {	observers.remove(obv); }
 	
 	public void onTankContentsChanged() {
 		for (IObserver obv : observers) {
@@ -52,7 +45,7 @@ public class MachineFluidHandler implements IFluidHandlerMachine {
 	
 	public MachineFluidHandler addInputTanks(int numTanks) {
 		for (int i = 0; i <= numTanks; i++) {
-			IFluidTankAdvanced tank = new FluidTankAdvanced(defaultCapacity);
+			IFluidTankAdvanced tank = new FluidTankAdvanced(defaultCapacity, maxFill, maxDrain);
 			input.add(tank);
 		}
 		return this;
@@ -60,7 +53,7 @@ public class MachineFluidHandler implements IFluidHandlerMachine {
 	
 	public MachineFluidHandler addOutputTanks(int numTanks) {
 		for (int i = 0; i <= numTanks; i++) {
-			IFluidTankAdvanced tank = new FluidTankAdvanced(defaultCapacity);
+			IFluidTankAdvanced tank = new FluidTankAdvanced(defaultCapacity, maxFill, maxDrain);
 			output.add(tank);
 		}
 		return this;
@@ -70,11 +63,10 @@ public class MachineFluidHandler implements IFluidHandlerMachine {
 	public MachineFluidHandler addOutputTank(FluidTankAdvanced tank) { output.add(tank); return this; }
 	
 	/** Sets capacity for ALL tanks. */
-	public MachineFluidHandler setCapacity(int capacity) {
+	public void setCapacity(int capacity) {
 		this.defaultCapacity = capacity;
 		for (IFluidTankAdvanced tank : input) { tank.setCapacity(capacity); }
 		for (IFluidTankAdvanced tank : output) { tank.setCapacity(capacity); }
-		return this;
 	}
 	
 	public MachineFluidHandler setDefaultCapacity(int capacity) { this.defaultCapacity = capacity; return this; }
@@ -139,6 +131,7 @@ public class MachineFluidHandler implements IFluidHandlerMachine {
 		return drain(new FluidStack(resource, amount), doDrain, output, false);
 	}
 	
+	@Override
 	public FluidStack drainInternal(FluidStack resource, boolean doDrain) {
 		return drain(resource, doDrain, input, true);
 	}
@@ -205,14 +198,70 @@ public class MachineFluidHandler implements IFluidHandlerMachine {
 	
 	protected FluidStack[] getStacks(List<IFluidTankAdvanced> tanks) {
 		FluidStack[] ret = new FluidStack[tanks.size()];
-		for (int i = 0; i < this.input.size(); i++) {
-			FluidStack fluid = this.input.get(i).getFluid();
+		for (int i = 0; i < tanks.size(); i++) {
+			FluidStack fluid = tanks.get(i).getFluid();
 			if (fluid == null) { ret[i] = null; } else { ret[i] = fluid.copy(); }
 		}
 		return ret;
 	}
 	
-	public FluidStack[] getInput() { return getStacks(input); }
-	public FluidStack[] getOutput() { return getStacks(output); }
+	protected IFluidTankInternal[] getTanks(List<IFluidTankAdvanced> tanks) {
+		IFluidTankInternal[] ret = new IFluidTankInternal[tanks.size()];
+		for (int i = 0; i < tanks.size(); i++) {
+			ret[i] = tanks.get(i).copy();
+		}
+		return ret;
+	}
+	
+	public FluidStack[] getInput() { return getStacks(input); }	
+	public IFluidTankInternal[] getOutput() { return getTanks(output); }
 
+	/* INBTSerializable */
+	
+	protected NBTTagList writeTankNBT(List<IFluidTankAdvanced> tanks) {
+        NBTTagList nbtTagList = new NBTTagList();
+        for (int i = 0; i < tanks.size(); i++) {
+        	NBTTagCompound tankTag = tanks.get(i).serializeNBT();
+        	tankTag.setInteger("tank", i);
+        	nbtTagList.appendTag(tankTag);
+        }
+        return nbtTagList;
+	}
+	
+	@Override
+	public NBTTagCompound serializeNBT() {
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setInteger("inputSize", input.size());
+        nbt.setInteger("outputSize", output.size());
+        nbt.setTag("input", writeTankNBT(input));
+        nbt.setTag("output", writeTankNBT(output));
+        
+        nbt.setInteger("defaultCapacity", defaultCapacity);
+        nbt.setInteger("maxDrain", maxDrain);
+        nbt.setInteger("maxFill", maxFill);
+        return nbt;
+    }
+	
+	protected void readTankNBT(NBTTagList nbt, List<IFluidTankAdvanced> tanks) {
+		for (int i = 0; i < nbt.tagCount(); i++) {
+			NBTTagCompound tankTag = nbt.getCompoundTagAt(i);
+			int tank = tankTag.getInteger("tank");
+			if (tank >= 0 && tank < tanks.size()) {
+				tanks.get(i).deserializeNBT(tankTag);
+			}
+		}
+	}
+
+	@Override
+	public void deserializeNBT(NBTTagCompound nbt) {
+		setDefaultCapacity(nbt.getInteger("defaultCapacity"));
+		setMaxDrain(nbt.getInteger("maxDrain"));
+		setMaxFill(nbt.getInteger("maxFill"));
+		
+		addInputTanks(nbt.getInteger("inputSize"));
+		addOutputTanks(nbt.getInteger("outputSize"));
+		
+		if (nbt.hasKey("input")) { readTankNBT(nbt.getTagList("input", Constants.NBT.TAG_COMPOUND), input); }
+		if (nbt.hasKey("output")) { readTankNBT(nbt.getTagList("output", Constants.NBT.TAG_COMPOUND), output); }
+	}
 }

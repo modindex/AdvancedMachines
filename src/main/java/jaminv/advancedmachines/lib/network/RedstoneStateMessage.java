@@ -1,8 +1,8 @@
-package jaminv.advancedmachines.util.message;
+package jaminv.advancedmachines.lib.network;
 
 import io.netty.buffer.ByteBuf;
-import jaminv.advancedmachines.util.interfaces.IRedstoneControlled;
-import jaminv.advancedmachines.util.interfaces.IRedstoneControlled.RedstoneState;
+import jaminv.advancedmachines.lib.machine.IRedstoneControlled;
+import jaminv.advancedmachines.lib.machine.IRedstoneControlled.RedstoneState;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;

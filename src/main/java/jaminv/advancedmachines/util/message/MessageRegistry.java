@@ -1,11 +1,13 @@
 package jaminv.advancedmachines.util.message;
 
 import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.lib.network.ProcessingStateMessage;
+import jaminv.advancedmachines.lib.network.RedstoneStateMessage;
+import jaminv.advancedmachines.lib.network.ProcessingStateMessage.ProcessingStateMessageHandler;
+import jaminv.advancedmachines.lib.network.RedstoneStateMessage.RedstoneStateMessageHandler;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockUpdateMessage;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockUpdateMessage.MultiblockUpdateMessageHandler;
 import jaminv.advancedmachines.util.message.IOStateMessage.IOMessageHandler;
-import jaminv.advancedmachines.util.message.ProcessingStateMessage.ProcessingStateMessageHandler;
-import jaminv.advancedmachines.util.message.RedstoneStateMessage.RedstoneStateMessageHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class MessageRegistry {

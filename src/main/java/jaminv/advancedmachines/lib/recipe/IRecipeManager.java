@@ -17,21 +17,12 @@ import net.minecraftforge.fluids.FluidStack;
  * 
  * External code should use `IRecipeManger` as the variable type rather than a specific implementation.
  * 
- * @author jamin
+ * @author Jamin VanderBerg
  * @param <T>
  */
-public interface IRecipeManager<T extends RecipeBase> {
-	public T getRecipe(ItemComparableList input);
-	public default T getRecipe(ItemStack[] input) {	return getRecipe(new ItemComparableList(input)); }
+public interface IRecipeManager<T extends IRecipe> {
+	public IRecipe getRecipe(@Nullable ItemStack[] input, @Nullable FluidStack[] fluids);
 
-	public default boolean isItemValid(ItemStack stack) {
-		return isItemValid(new ItemComparable(stack), (ItemComparableList)null);
-	}
-	public default boolean isItemValid(ItemStack stack, @Nullable ItemStack[] other, @Nullable FluidStack[] fluids) {
-		return isItemValid(new ItemComparable(stack), new ItemComparableList(other, fluids));
-	}
-	public default boolean isItemValid(FluidStack stack, @Nullable ItemStack[] other, @Nullable FluidStack[] fluids) {
-		return isItemValid(new ItemComparable(stack), new ItemComparableList(other, fluids));
-	}
-	public boolean isItemValid(ItemComparable item, ItemComparableList iclist);	
+	public boolean isItemValid(ItemStack stack, @Nullable ItemStack[] other, @Nullable FluidStack[] fluids);
+	public boolean isFluidValid(FluidStack stack, @Nullable ItemStack[] other, @Nullable FluidStack[] fluids);
 }

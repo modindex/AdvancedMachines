@@ -2,6 +2,9 @@ package jaminv.advancedmachines.lib.recipe;
 
 import java.util.Arrays;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
+
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -72,16 +75,15 @@ public class ItemComparable {
 	
 	@Override
 	public String toString() {
-		String ret = "ItemComparable(";
+		ToStringHelper helper = MoreObjects.toStringHelper(this);
 		if(fluid != null) {
-			ret += "fluid=" + fluid.getName();
+			helper.add("fluid", fluid.getName());
 		} else {
-			ret += "item=" + item.getRegistryName() + ":" + Integer.toString(meta);
+			helper.add("item", item.getRegistryName() + ":" + Integer.toString(meta));
 		}
 		if (nbt != null) {
-			ret += ",nbt=" + nbt.toString();
+			helper.add("nbt", nbt.toString());
 		}
-		
-		return ret + ")";
+		return helper.toString();
 	}
 }

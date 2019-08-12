@@ -1,9 +1,9 @@
 package jaminv.advancedmachines.objects.blocks.machine.dialog;
 
+import jaminv.advancedmachines.lib.machine.IRedstoneControlled;
+import jaminv.advancedmachines.lib.machine.IRedstoneControlled.RedstoneState;
 import jaminv.advancedmachines.util.dialog.DialogBase;
 import jaminv.advancedmachines.util.dialog.control.DialogToggleButton;
-import jaminv.advancedmachines.util.interfaces.IRedstoneControlled;
-import jaminv.advancedmachines.util.interfaces.IRedstoneControlled.RedstoneState;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;

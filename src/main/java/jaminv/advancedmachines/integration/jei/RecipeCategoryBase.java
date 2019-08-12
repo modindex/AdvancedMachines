@@ -2,7 +2,7 @@ package jaminv.advancedmachines.integration.jei;
 
 import java.util.List;
 
-import jaminv.advancedmachines.objects.blocks.inventory.Layout;
+import jaminv.advancedmachines.lib.container.layout.Layout;
 import jaminv.advancedmachines.objects.blocks.machine.DialogMachineBase;
 import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.Reference;

@@ -3,9 +3,9 @@ package jaminv.advancedmachines.objects.blocks.machine.expansion.inventory;
 import javax.annotation.Nullable;
 
 import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.lib.container.ContainerLayout;
 import jaminv.advancedmachines.lib.inventory.ItemStackHandlerObservable;
 import jaminv.advancedmachines.lib.recipe.IRecipeManager;
-import jaminv.advancedmachines.objects.blocks.inventory.ContainerInventory;
 import jaminv.advancedmachines.objects.blocks.inventory.TileEntityInventory;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTool;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
@@ -46,8 +46,8 @@ public class TileEntityMachineInventory extends TileEntityInventory implements I
 	}
 
 	@Override
-	public ContainerInventory createContainer(IInventory inventory) {
-		return new ContainerInventory(inventory, DialogMachineInventory.layout, this);
+	public ContainerLayout createContainer(IInventory inventory) {
+		return new ContainerLayout(inventory, DialogMachineInventory.layout, this);
 	}
 
 	@Override

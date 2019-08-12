@@ -1,5 +1,8 @@
 package jaminv.advancedmachines.lib.recipe;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
+
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -88,6 +91,7 @@ public class RecipeOutput implements Cloneable {
 	
 	private ItemStack itemstack = null;	
 	public ItemStack toItemStack() {
+		if (fluid != null) { return null; }
 		if (itemstack != null) { ItemStack ret = itemstack.copy(); ret.setCount(count); return ret; }
 		
 		if (ore != "") {
@@ -121,6 +125,7 @@ public class RecipeOutput implements Cloneable {
 	}
 	
 	public FluidStack toFluidStack() {
+		if (fluid == null) { return null; }
 		return new FluidStack(fluid, count, nbt);
 	}
 	
@@ -139,28 +144,18 @@ public class RecipeOutput implements Cloneable {
 	
 	@Override
 	public String toString() {
-		String ret = "RecipeOutput(";
+		ToStringHelper helper = MoreObjects.toStringHelper(this);
 		if (ore != "") {
-			return ret + "ore=" + ore + ", count=" + count + ")";
+			helper.add("ore", ore).add("count", count);
 		} else if(fluid != null) {
-			return ret + toFluidStack() + ")";
+			helper.add("fluid", toFluidStack());
 		} else {
-			return ret + toItemStack() + ")";
+			helper.add("item", toItemStack());
 		}
+		return helper.toString();
 	}
 	
 	public int getChance() {
 		return chance;
 	}
-	
-	public RecipeOutput multiply(int factor) {
-		RecipeOutput ret;
-		try {
-			ret = (RecipeOutput) this.clone();
-		} catch (CloneNotSupportedException e) {
-			return RecipeOutput.EMPTY;
-		}
-		ret.count = ret.count * factor;
-		return ret;
-	}	
 }

@@ -1,164 +1,62 @@
 package jaminv.advancedmachines.objects.blocks.machine;
 
-import jaminv.advancedmachines.lib.recipe.IRecipeManager;
-import jaminv.advancedmachines.objects.blocks.inventory.ContainerInventory;
-import jaminv.advancedmachines.objects.blocks.inventory.ContainerLayout;
-import jaminv.advancedmachines.objects.blocks.inventory.Layout;
-import jaminv.advancedmachines.util.helper.InventoryHelper;
+import jaminv.advancedmachines.lib.container.ISyncManager;
+import jaminv.advancedmachines.lib.container.layout.ILayoutManager;
+import jaminv.advancedmachines.lib.inventory.IItemHandlerInternal;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
 
-public class ContainerMachine extends ContainerInventory {
-	
-	public static class InputLayout extends Layout {
-		IRecipeManager recipe;
-		
-		public InputLayout(IRecipeManager recipe, int xpos, int ypos, int xspacing, int yspacing, int rows, int cols) {
-			super(xpos, ypos, xspacing, yspacing, rows, cols);
-			this.recipe = recipe;
-		}
-		public InputLayout(IRecipeManager recipe, int xpos, int ypos, int rows, int cols) {
-			super(xpos, ypos, rows, cols);
-			this.recipe = recipe;
-		}
-		public InputLayout(IRecipeManager recipe, int xpos, int ypos) {
-			super(xpos, ypos);
-			this.recipe = recipe;
-		}
-		
-		public SlotItemHandler createSlot(IItemHandler itemHandler, int slotIndex, int x, int y) {
-			return new ContainerMachine.SlotInput(recipe, itemHandler, slotIndex, x, y);
-		}
-	}
-	
-	public static class OutputLayout extends Layout {
-		public OutputLayout(int xpos, int ypos, int xspacing, int yspacing, int rows, int cols) {
-			super(xpos, ypos, xspacing, yspacing, rows, cols);
-		}
-		public OutputLayout(int xpos, int ypos, int rows, int cols) {
-			super(xpos, ypos, rows, cols);
-		}
-		public OutputLayout(int xpos, int ypos) {
-			super(xpos, ypos);
-		}		
+public class ContainerMachine extends Container {
 
-		public SlotItemHandler createSlot(IItemHandler itemHandler, int slotIndex, int x, int y) {
-			return new ContainerMachine.SlotOutput(itemHandler,slotIndex, x, y);
-		}
-	}	
+	IItemHandlerInternal inventory;
+	ISyncManager sync;
 	
-	public static class SlotOutput extends SlotItemHandler {
-
-		public SlotOutput(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
-			super(itemHandler, index, xPosition, yPosition);
-		}
-
-		@Override
-		public boolean isItemValid(ItemStack stack) {
-			return false;
-		}
-	}
-	
-	public static class SlotInput extends SlotItemHandler {
-		IRecipeManager recipe;
-		public SlotInput(IRecipeManager recipe, IItemHandler itemHandler, int index, int xPosition, int yPosition) {
-			super(itemHandler, index, xPosition, yPosition);
-			this.recipe = recipe;
-		}
-		
-		@Override
-		public boolean isItemValid(ItemStack stack) {
-			return recipe.isItemValid(stack);
-		}
-	}
-	
-	private final IRecipeManager recipeManager;
-	protected final TileEntityMachineBase machineTe;
-
-	public ContainerMachine(IInventory playerInventory, ContainerLayout layout, TileEntityMachineBase te, IRecipeManager manager) {
-		super(playerInventory, layout, te);
-		this.recipeManager = manager;
-		this.machineTe = te;
+	public ContainerMachine(ILayoutManager layout, IItemHandlerInternal inventory, IInventory playerInventory, ISyncManager sync) {
+		this.inventory = inventory;
+		this.sync = sync;
 	}	
 	
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
-		int slotIndex = 0;
-		
-		ItemStack itemstack = null;
 		Slot slot = this.inventorySlots.get(index);
+		if (slot == null || !slot.getHasStack()) { return ItemStack.EMPTY; }
+		ItemStack stack = slot.getStack().copy();
+		ItemStack result;
 		
-		if (slot == null || !slot.getHasStack()) {
-			return ItemStack.EMPTY;
-		}
-
-		ItemStack itemstack1 = slot.getStack();
-		itemstack = itemstack1.copy();
-		
-		if (index < getTileEntity().getInventorySize()) {
-			if (!this.mergeItemStack(itemstack1, machineTe.getInventorySize(), this.inventorySlots.size(), true)) {
-				return ItemStack.EMPTY;
-			}
+		if (index < inventory.getSlots()) {
+			result = inventory.extractItem(index, stack.getCount(), false);
 		} else {
-			itemstack1 = InventoryHelper.pushStack(itemstack1, machineTe.getInventory(), machineTe.getFirstInputSlot(), machineTe.getInputCount() + machineTe.getFirstInputSlot(), false);
-			
-			if (!recipeManager.isItemValid(itemstack1, machineTe.getInput())) {
-				return ItemStack.EMPTY;
-			}
-			if (!this.mergeItemStack(itemstack1, 0, machineTe.getInputCount(), false)) {
-				return ItemStack.EMPTY;
-			}
+			result = inventory.insertItem(stack, false);
 		}
 		
-		if (itemstack1.isEmpty()) {
-			slot.putStack(ItemStack.EMPTY);
-		} else {
+		if (!result.isEmpty()) {
+			stack.setCount(stack.getCount() - result.getCount());
+			slot.putStack(stack);
 			slot.onSlotChanged();
 		}
-		return itemstack;
+		return stack;
 	}
-	
-	protected int[] cachedFields;
-	
+
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		
-		boolean sendAll = false;
-		if (cachedFields == null) {
-			cachedFields = new int[machineTe.getFieldCount()];
-			sendAll = true;
+		if (sync != null) {
+			sync.detectAndSendChanges(this, listeners);
 		}
-
-        for (int i = 0; i < this.listeners.size(); ++i)
-        {
-            IContainerListener icontainerlistener = this.listeners.get(i);
-            
-            for (int f = 0; f < machineTe.getFieldCount(); f++) {
-            	if (sendAll || cachedFields[f] != this.machineTe.getField(f)) {
-            		icontainerlistener.sendWindowProperty(this, f, this.machineTe.getField(f));
-            	}
-            }
-        }
-        
-        for (int f = 0; f < this.machineTe.getFieldCount(); f++) {
-        	cachedFields[f] = this.machineTe.getField(f);
-        }
 	}
 	
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void updateProgressBar(int id, int data) {
-		if (id == 4) {
-			int a = 0;
+		if (sync != null) {
+			sync.detectAndSendChanges(this, listeners);
 		}
-		machineTe.setField(id, data);
 	}
+	
+	public boolean canInteractWith(EntityPlayer playerIn) { return true; }	
 }

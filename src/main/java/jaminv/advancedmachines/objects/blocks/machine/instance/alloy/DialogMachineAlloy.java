@@ -1,6 +1,7 @@
 package jaminv.advancedmachines.objects.blocks.machine.instance.alloy;
 
-import jaminv.advancedmachines.objects.blocks.inventory.ContainerLayout;
+import jaminv.advancedmachines.lib.container.layout.LayoutManager;
+import jaminv.advancedmachines.lib.machine.IRedstoneControlled;
 import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine;
 import jaminv.advancedmachines.objects.blocks.machine.DialogMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.dialog.DialogEnergyBar;
@@ -11,19 +12,18 @@ import jaminv.advancedmachines.objects.blocks.machine.dialog.DialogTooltipMultib
 import jaminv.advancedmachines.objects.blocks.machine.dialog.RedstoneToggleButton;
 import jaminv.advancedmachines.util.Color;
 import jaminv.advancedmachines.util.dialog.struct.DialogArea;
-import jaminv.advancedmachines.util.interfaces.IRedstoneControlled;
 import net.minecraft.inventory.Container;
 
 public class DialogMachineAlloy extends DialogMachineBase {
 	
-	public static final ContainerLayout layout = new ContainerLayout()
+	public static final LayoutManager layout = new LayoutManager()
 		.addLayout(35, 37, 1, 3)		// Input 
 		.addLayout(125, 37)				// Output		
 		.setInventoryLayout(8, 84)
 		.setHotbarLayout(8, 142);
 	
 	@Override
-	protected ContainerLayout getLayout() { return layout; }
+	protected LayoutManager getLayout() { return layout; }
 
 	public DialogMachineAlloy(Container container) {
 		super(container, "textures/gui/alloy.png", 24, 0, 176, 166);

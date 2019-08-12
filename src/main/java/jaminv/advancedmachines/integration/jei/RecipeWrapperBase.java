@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 import jaminv.advancedmachines.integration.jei.element.JeiElement;
+import jaminv.advancedmachines.lib.container.layout.Layout;
 import jaminv.advancedmachines.lib.recipe.RecipeBase;
-import jaminv.advancedmachines.objects.blocks.inventory.Layout;
 import jaminv.advancedmachines.objects.blocks.machine.DialogMachineBase;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;

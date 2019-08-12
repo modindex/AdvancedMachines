@@ -1,10 +1,10 @@
-package jaminv.advancedmachines.objects.blocks.inventory;
+package jaminv.advancedmachines.lib.container.layout;
 
 import jaminv.advancedmachines.util.dialog.struct.DialogPos;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class Layout {	
+public class Layout implements ILayout {	
 	final protected static int SLOT_X_SPACING = 18;
 	final protected static int SLOT_Y_SPACING = 18;
 	final protected static int BORDER_X_SPACING = 8;

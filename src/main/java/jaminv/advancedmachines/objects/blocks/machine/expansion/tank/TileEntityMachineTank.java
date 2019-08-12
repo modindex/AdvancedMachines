@@ -3,9 +3,9 @@ package jaminv.advancedmachines.objects.blocks.machine.expansion.tank;
 import javax.annotation.Nullable;
 
 import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.lib.container.ContainerLayout;
 import jaminv.advancedmachines.lib.fluid.FluidTankAdvanced;
 import jaminv.advancedmachines.lib.recipe.IRecipeManager;
-import jaminv.advancedmachines.objects.blocks.inventory.ContainerInventory;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansionBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTool;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
@@ -46,8 +46,8 @@ public class TileEntityMachineTank extends TileEntityFluid implements ITickable,
 	protected BlockPos parent = null;
 	
 	@Override
-	public ContainerInventory createContainer(IInventory inventory) {
-		return new ContainerInventory(inventory, DialogMachineTank.layout, this);
+	public ContainerLayout createContainer(IInventory inventory) {
+		return new ContainerLayout(inventory, DialogMachineTank.layout, this);
 	}
 	
 	@Override

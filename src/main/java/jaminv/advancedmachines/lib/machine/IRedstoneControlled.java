@@ -1,5 +1,6 @@
-package jaminv.advancedmachines.util.interfaces;
+package jaminv.advancedmachines.lib.machine;
 
+import jaminv.advancedmachines.lib.machine.IRedstoneControlled.RedstoneState;
 import jaminv.advancedmachines.util.dialog.control.DialogToggleButton.IEnumIterable;
 
 public interface IRedstoneControlled {
@@ -29,4 +30,12 @@ public interface IRedstoneControlled {
 	
 	public void setRedstoneState(RedstoneState state);
 	public RedstoneState getRedstoneState();
+	
+	public boolean isRedstoneActive();
+	
+	public static boolean isRedstoneActive(RedstoneState redstoneState, boolean redstone) {
+		return redstoneState == RedstoneState.IGNORE
+				|| (redstoneState == RedstoneState.ACTIVE && redstone == true)
+				|| (redstoneState == RedstoneState.INACTIVE && redstone == false);		
+	}
 }

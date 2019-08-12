@@ -7,6 +7,8 @@ import java.util.Comparator;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.MoreObjects;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -116,12 +118,6 @@ public class ItemComparableList  {
 
 	@Override
 	public String toString() {
-		String ret = "ItemComparableList([";
-		boolean first = true;
-		for (ItemComparable item : list) {
-			if (!first) { ret += ", "; } first = false;
-			ret += item.toString();
-		}
-		return ret + "])";
+		return MoreObjects.toStringHelper(this).add("list", list).add("sorted", sorted).toString();
 	}
 }

@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 /**
  * Recipe Manager for recipes with (theoretically) any number of ingredients.
@@ -33,12 +34,11 @@ public abstract class RecipeManager<T extends RecipeBase> implements IRecipeMana
 	 * Returns NULL if no recipe available
 	 * @return T Recipe if found, NULL otherwise.
 	 */
-	@Override
 	public T getRecipe(ItemComparableList input) {
 		return lookup.get(input.sort());		
 	}
 	
-	public T getRecipe(ItemStack[] input) {	return getRecipe(new ItemComparableList(input)); }
+	public T getRecipe(ItemStack[] input, FluidStack[] fluids) { return getRecipe(new ItemComparableList(input, fluids)); }
 	
 	protected void addRecipe(T recipe) {
 		// Check to make sure the recipe has at least 1 ingredient and that no ingredients have error states.
@@ -118,6 +118,13 @@ public abstract class RecipeManager<T extends RecipeBase> implements IRecipeMana
 		}
 		return ret;
 	}
+	
+	public boolean isItemValid(ItemStack stack, @Nullable ItemStack[] other, @Nullable FluidStack[] fluids) {
+		return isItemValid(new ItemComparable(stack), new ItemComparableList(other, fluids));
+	}
+	public boolean isFluidValid(FluidStack stack, @Nullable ItemStack[] other, @Nullable FluidStack[] fluids) {
+		return isItemValid(new ItemComparable(stack), new ItemComparableList(other, fluids));
+	}	
 
 	public boolean isItemValid(ItemStack stack, @Nullable ItemStack[] other) {
 		return isItemValid(new ItemComparable(stack), new ItemComparableList(other));
@@ -141,8 +148,7 @@ public abstract class RecipeManager<T extends RecipeBase> implements IRecipeMana
 	 * @param iclist Other items already in input slots.
 	 * @return true if item should be moved. false otherwise.
 	 */
-	@Override
-	public boolean isItemValid(ItemComparable item, ItemComparableList iclist) {
+	protected boolean isItemValid(ItemComparable item, ItemComparableList iclist) {
 		if (item == null || item.isEmpty()) { return false; }
 
 		if (iclist == null || iclist.size() == 0) {

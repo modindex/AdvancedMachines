@@ -3,8 +3,8 @@ package jaminv.advancedmachines.objects.blocks.machine;
 import java.util.ArrayList;
 
 import jaminv.advancedmachines.integration.jei.element.JeiElement;
-import jaminv.advancedmachines.objects.blocks.inventory.ContainerLayout;
-import jaminv.advancedmachines.objects.blocks.inventory.Layout;
+import jaminv.advancedmachines.lib.container.layout.LayoutManager;
+import jaminv.advancedmachines.lib.container.layout.Layout;
 import jaminv.advancedmachines.util.dialog.DialogBase;
 import jaminv.advancedmachines.util.dialog.struct.DialogArea;
 import net.minecraft.inventory.Container;
@@ -48,7 +48,7 @@ public abstract class DialogMachineBase extends DialogBase {
 		);		
 	}
 	
-	protected abstract ContainerLayout getLayout();
+	protected abstract LayoutManager getLayout();
 	
 	public Layout getJeiInputLayout() {
 		return getJeiOffset(getLayout().getLayout(0));

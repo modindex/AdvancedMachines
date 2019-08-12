@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
+
 import jaminv.advancedmachines.lib.inventory.IItemGeneric;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -178,14 +181,15 @@ public class RecipeInput implements Cloneable, IItemGeneric {
 	
 	@Override
 	public String toString() {
-		String ret = "RecipeInput(";
+		ToStringHelper helper = MoreObjects.toStringHelper(this);
 		if (oreId != -1) {
-			return ret + "oreId=" + oreId + ", ore=" + OreDictionary.getOreName(oreId) + ")";
+			helper.add("oreId", oreId).add("ore", OreDictionary.getOreName(oreId));
 		} else if (fluid != null) {
-			return ret + toFluidStack() + ")";
+			helper.add("fluid", toFluidStack());
 		} else {
-			return ret + toItemStack() + ")";
+			helper.add("item", toItemStack());
 		}
+		return helper.toString();
 	}
 	
 	public List<ItemStack> getItems() {
@@ -197,16 +201,5 @@ public class RecipeInput implements Cloneable, IItemGeneric {
 	}
 	public int getQty(FluidStack stack) {
 		return stack.amount / count;
-	}
-	
-	public RecipeInput multiply(int factor) {
-		RecipeInput ret;
-		try {
-			ret = (RecipeInput) this.clone();
-		} catch (CloneNotSupportedException e) {
-			return RecipeInput.EMPTY;
-		}
-		ret.count = ret.count * factor;
-		return ret;
 	}
 }

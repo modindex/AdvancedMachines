@@ -1,19 +1,36 @@
 package jaminv.advancedmachines.lib.recipe;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
+
+import jaminv.advancedmachines.lib.fluid.IFluidTankInternal;
+import jaminv.advancedmachines.lib.inventory.IItemGeneric;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
 
-public abstract class RecipeBase {
-	public abstract int getInputCount();
-	public abstract int getOutputCount();
+public abstract class RecipeBase implements IRecipe {
+	protected static class Input implements IInput {
+		protected List<IItemGeneric> items = new ArrayList<IItemGeneric>();
+		protected List<FluidStack> fluids = new ArrayList<FluidStack>();
+		@Override public List<IItemGeneric> getItems() { return items; }
+		@Override public List<FluidStack> getFluids() { return fluids; }
+	}	
+	
+	protected static class Output implements IOutput {
+		protected List<ItemStack> items = new ArrayList<ItemStack>();
+		protected List<FluidStack> fluids = new ArrayList<FluidStack>();
+		@Override public List<ItemStack> getItems() { return items; }
+		@Override public List<FluidStack> getFluids() { return fluids; }
+	}
 	
 	private String recipeid;
 	
@@ -41,6 +58,51 @@ public abstract class RecipeBase {
 		this.processTime = processTime;
 	}
 	
+	public abstract int getInputCount();
+	public abstract int getOutputCount();
+	
+	protected Input inputcache;
+	protected Output outputcache;
+	
+	@Override
+	public Input getInput() {
+		if (inputcache != null) { return inputcache; }
+		inputcache = new Input();
+		
+		for (RecipeInput in : this.input) {
+			if (in.isFluid()) {
+				inputcache.fluids.add(in.toFluidStack());
+			} else {
+				inputcache.items.add(in);
+			}
+		}
+		return inputcache;
+	}
+	
+	@Override
+	public Output getOutput() { 
+		if (outputcache != null) { return outputcache; }
+		return outputcache = getOutput(this.output, false); 
+	}
+	
+	@Override
+	public Output getSecondary() { return getOutput(this.secondary.toArray(this.output), true); }
+	
+	protected Output getOutput(RecipeOutput[] outputs, boolean doRandom) {
+		Output ret = new Output();
+		Random rand = new Random();
+		
+		for (RecipeOutput out : this.output) {
+			if (doRandom && rand.nextInt(100) > out.getChance()) { continue; }
+			if (out.isFluid()) {
+				ret.fluids.add(out.toFluidStack());
+			} else {
+				ret.items.add(out.toItemStack());
+			}
+		}
+		return ret;
+	}
+	
 	public String getRecipeId() { return recipeid; }
 	
 	public RecipeBase addInput(int index, RecipeInput input) {
@@ -66,19 +128,9 @@ public abstract class RecipeBase {
 		this.secondary.add(output);
 		return this;
 	}
+
 	
-	public RecipeInput getInput(int index) {
-		return input[index];
-	}
-	
-	public RecipeOutput getOutput(int index) {
-		return output[index];
-	}
-	
-	public NonNullList<RecipeOutput> getSecondary() {
-		return secondary;
-	}
-	
+	@Override
 	public int getEnergy() {
 		return energy;
 	}
@@ -88,12 +140,13 @@ public abstract class RecipeBase {
 		return this;
 	}
 	
+	@Override
 	public int getProcessTime() { return processTime; }
 	
 	public int getInputQty(@Nullable ItemStack[] items, @Nullable FluidStack[] fluids) {
 		int min = -1;
 		for (int i = 0; i < this.getInputCount(); i++) {
-			RecipeInput input = this.getInput(i);
+			RecipeInput input = this.input[i];
 			if (input.isEmpty()) { continue; }
 			
 			boolean found = false;
@@ -122,25 +175,22 @@ public abstract class RecipeBase {
 		return min;
 	}
 	
-	public int getInputQty(ItemStack[] items) { return getInputQty(items, (FluidStack[])null); }
-	public int getInputQty(ItemStack[] items, FluidStack fluid) { return getInputQty(items, new FluidStack[]{ fluid }); }
-	
-	public int getOutputQty(ItemStack[] inventory, List<FluidTank> tanks) {
+	public int getOutputQty(ItemStack[] inventory, @Nullable IFluidTankInternal[] tanks) {
 		int slot = 0, tank = 0;
 		int min = -1;
 		for (int i = 0; i < this.getOutputCount(); i++) {
-			RecipeOutput output = this.getOutput(i);
+			RecipeOutput output = this.output[i];
 			int count = 0;
 			
 			if (output.isFluid()) {
-				if (tanks == null || tanks.isEmpty()) { return 0; }
+				if (tanks == null) { return 0; }
 				FluidStack stack = output.toFluidStack();
 				do {
-					if (tanks.get(tank).fillInternal(stack, false) == stack.amount) {
-						count = tanks.get(tank).getCapacity() / stack.amount;
+					if (tanks[tank].fillInternal(stack, false) == stack.amount) {
+						count = tanks[tank].getCapacity() / stack.amount;
 					}
 					tank++;
-				} while (count == 0 && tank < tanks.size());
+				} while (count == 0 && tank < tanks.length);
 			} else {
 				if (inventory == null) { return 0; }
 				ItemStack stack = output.toItemStack();
@@ -161,14 +211,8 @@ public abstract class RecipeBase {
 		return min;
 	}
 	
-	public int getOutputQty(ItemStack[] inventory) { return getOutputQty(inventory, Collections.emptyList()); }
-	public int getOutputQty(ItemStack[] inventory, FluidTank tank) { return getOutputQty(inventory, Collections.singletonList(tank)); }
-	
-	public int getRecipeQty(ItemStack[] items, FluidStack[] fluids, ItemStack[] inventory, List<FluidTank> tanks) {
+	public int getRecipeQty(ItemStack[] items, FluidStack[] fluids, ItemStack[] inventory, IFluidTankInternal[] tanks) {
 		return Math.min(getInputQty(items, fluids), getOutputQty(inventory, tanks));
-	}
-	public int getRecipeQty(ItemStack[] items, ItemStack[] inventory) {
-		return Math.min(getInputQty(items), getOutputQty(inventory));
 	}
 	
 	/* Helpful utility methods */
@@ -196,30 +240,16 @@ public abstract class RecipeBase {
 	public RecipeBase setOutput(ItemStack stack) { return this.setOutput(new RecipeOutput(stack)); }
 	public RecipeBase setOutput(Item item, int count, int meta) { return this.setOutput(new RecipeOutput(item, count, meta)); }
 	public RecipeBase setOutput(Item item) { return this.setOutput(new RecipeOutput(item)); }
+	
 	public int getSecondaryCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return secondary.size();
 	}
+	
 	@Override
 	public String toString() {
-		String ret = getRecipeId() + " (";
-		boolean first = true;
-		for (RecipeInput i : input) {
-			if (!first) { ret += ", "; }
-			first = false;
-			
-			ret += i.toString();
-		}
-		ret += " -> ";
-		first = true;
-		for (RecipeOutput o : output) {
-			if (!first) { ret += ", "; }
-			first = false;
-			
-			ret += o.toString();
-		}
-		
-		ret += ")";
-		return ret;
+		ToStringHelper helper = MoreObjects.toStringHelper(this);
+		helper.add("input", input);
+		helper.add("output", output);
+		return helper.toString();
 	}
 }

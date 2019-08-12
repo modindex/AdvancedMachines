@@ -2,9 +2,10 @@ package jaminv.advancedmachines.objects.blocks.machine.instance.grinder;
 
 import jaminv.advancedmachines.integration.jei.element.JeiEnergyBar;
 import jaminv.advancedmachines.integration.jei.element.JeiProgressIndicator;
-import jaminv.advancedmachines.objects.blocks.inventory.ContainerLayout;
-import jaminv.advancedmachines.objects.blocks.inventory.Layout.HotbarLayout;
-import jaminv.advancedmachines.objects.blocks.inventory.Layout.InventoryLayout;
+import jaminv.advancedmachines.lib.container.layout.LayoutManager;
+import jaminv.advancedmachines.lib.container.layout.Layout.HotbarLayout;
+import jaminv.advancedmachines.lib.container.layout.Layout.InventoryLayout;
+import jaminv.advancedmachines.lib.machine.IRedstoneControlled;
 import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine;
 import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine.InputLayout;
 import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine.OutputLayout;
@@ -16,13 +17,12 @@ import jaminv.advancedmachines.objects.blocks.machine.dialog.DialogTooltipMultib
 import jaminv.advancedmachines.objects.blocks.machine.dialog.RedstoneToggleButton;
 import jaminv.advancedmachines.util.Color;
 import jaminv.advancedmachines.util.dialog.struct.DialogArea;
-import jaminv.advancedmachines.util.interfaces.IRedstoneControlled;
 import jaminv.advancedmachines.util.recipe.machine.grinder.GrinderManager;
 import net.minecraft.inventory.Container;
 
 public class DialogMachineGrinder extends DialogMachineBase {
 	
-	public static final ContainerLayout layout = new ContainerLayout()
+	public static final LayoutManager layout = new LayoutManager()
 		.addLayout(new InputLayout(GrinderManager.getRecipeManager(), 53, 26))
 		.addLayout(new OutputLayout(107, 26))
 		.addLayout(new OutputLayout(107, 52))
@@ -30,7 +30,7 @@ public class DialogMachineGrinder extends DialogMachineBase {
 		.setHotbarLayout(new HotbarLayout(8, 142));
 	
 	@Override
-	public ContainerLayout getLayout() { return layout; }
+	public LayoutManager getLayout() { return layout; }
 	
 	public DialogMachineGrinder(Container container) {
 		super(container, "textures/gui/grinder.png", 24, 0, 176, 195);

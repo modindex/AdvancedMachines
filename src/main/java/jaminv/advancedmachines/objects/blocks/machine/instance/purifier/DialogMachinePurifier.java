@@ -2,9 +2,10 @@ package jaminv.advancedmachines.objects.blocks.machine.instance.purifier;
 
 import jaminv.advancedmachines.integration.jei.element.JeiEnergyBar;
 import jaminv.advancedmachines.integration.jei.element.JeiProgressIndicator;
-import jaminv.advancedmachines.objects.blocks.inventory.ContainerLayout;
-import jaminv.advancedmachines.objects.blocks.inventory.Layout.HotbarLayout;
-import jaminv.advancedmachines.objects.blocks.inventory.Layout.InventoryLayout;
+import jaminv.advancedmachines.lib.container.layout.LayoutManager;
+import jaminv.advancedmachines.lib.container.layout.Layout.HotbarLayout;
+import jaminv.advancedmachines.lib.container.layout.Layout.InventoryLayout;
+import jaminv.advancedmachines.lib.machine.IRedstoneControlled;
 import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine;
 import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine.InputLayout;
 import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine.OutputLayout;
@@ -16,13 +17,12 @@ import jaminv.advancedmachines.objects.blocks.machine.dialog.DialogTooltipMultib
 import jaminv.advancedmachines.objects.blocks.machine.dialog.RedstoneToggleButton;
 import jaminv.advancedmachines.util.Color;
 import jaminv.advancedmachines.util.dialog.struct.DialogArea;
-import jaminv.advancedmachines.util.interfaces.IRedstoneControlled;
 import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager;
 import net.minecraft.inventory.Container;
 
 public class DialogMachinePurifier extends DialogMachineBase {
 	
-	public static final ContainerLayout layout = new ContainerLayout()
+	public static final LayoutManager layout = new LayoutManager()
 		.addLayout(new InputLayout(PurifierManager.getRecipeManager(), 53, 23))
 		.addLayout(new OutputLayout(107, 23))			// Output
 		.addLayout(new OutputLayout(35, 55, 1, 6)) 		// Secondary
@@ -30,7 +30,7 @@ public class DialogMachinePurifier extends DialogMachineBase {
 		.setHotbarLayout(new HotbarLayout(8, 142));
 	
 	@Override
-	public ContainerLayout getLayout() { return layout; }
+	public LayoutManager getLayout() { return layout; }
 	
 	public DialogMachinePurifier(Container container) {
 		super(container, "textures/gui/purifier.png", 24, 0, 176, 195);

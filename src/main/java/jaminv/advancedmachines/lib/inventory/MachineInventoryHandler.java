@@ -2,7 +2,6 @@ package jaminv.advancedmachines.lib.inventory;
 
 import java.util.Collections;
 
-import jaminv.advancedmachines.lib.recipe.RecipeInput;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -124,22 +123,22 @@ public class MachineInventoryHandler extends ItemStackHandlerObservable implemen
 		return ret;
 	}
 	
-	public int extractItem(IItemGeneric input, int count, boolean simulate) {
-		return extractInput(getFirstOutputSlot(), getLastSecondarySlot(), input, count, simulate);		
+	public int extractItem(IItemGeneric input, boolean simulate) {
+		return extractInput(getFirstOutputSlot(), getLastSecondarySlot(), input, simulate);		
 	}
 	
-	public int extractItemInternal(IItemGeneric input, int count, boolean simulate) {
-		return extractInput(getFirstInputSlot(), getLastInputSlot(), input, count, simulate);
+	public int extractItemInternal(IItemGeneric input, boolean simulate) {
+		return extractInput(getFirstInputSlot(), getLastInputSlot(), input, simulate);
 	}
 	
-	protected int extractInput(int firstSlot, int lastSlot, IItemGeneric input, int maxExtract, boolean simulate) {
+	protected int extractInput(int firstSlot, int lastSlot, IItemGeneric input, boolean simulate) {
 		int count = 0;
 		for (int i = firstSlot; i <= lastSlot; i++) {
 			if (input.isValid(stacks.get(i))) {
-				ItemStack result = extractItem(i, maxExtract, false);
+				ItemStack result = extractItem(i, input.getCount(), false);
 				count += result.getCount();
 			}
-			if (count >= maxExtract) { break; }
+			if (count >= input.getCount()) { break; }
 		}
 		
 		return count;

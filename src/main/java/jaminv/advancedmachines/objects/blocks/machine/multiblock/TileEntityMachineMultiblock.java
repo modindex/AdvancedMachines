@@ -3,6 +3,7 @@ package jaminv.advancedmachines.objects.blocks.machine.multiblock;
 import org.apache.logging.log4j.Level;
 
 import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.lib.network.ProcessingStateMessage;
 import jaminv.advancedmachines.lib.recipe.IRecipeManager;
 import jaminv.advancedmachines.lib.recipe.RecipeBase;
 import jaminv.advancedmachines.objects.blocks.BlockMaterial;
@@ -21,7 +22,6 @@ import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import jaminv.advancedmachines.util.helper.BlockHelper.BlockChecker;
 import jaminv.advancedmachines.util.helper.BlockHelper.ScanResult;
-import jaminv.advancedmachines.util.message.ProcessingStateMessage;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

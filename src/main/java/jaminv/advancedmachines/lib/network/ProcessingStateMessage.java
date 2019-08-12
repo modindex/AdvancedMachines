@@ -1,28 +1,22 @@
-package jaminv.advancedmachines.util.message;
+package jaminv.advancedmachines.lib.network;
 
 import io.netty.buffer.ByteBuf;
-import jaminv.advancedmachines.init.property.PropertyMaterial;
-import jaminv.advancedmachines.objects.blocks.BlockMaterial;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
+import jaminv.advancedmachines.lib.machine.ICanProcess;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.IMachineFaceTE;
-import jaminv.advancedmachines.objects.material.MaterialBase;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import jaminv.advancedmachines.util.helper.BlockHelper.BlockCallback;
-import jaminv.advancedmachines.util.interfaces.ICanProcess;
-import jaminv.advancedmachines.util.interfaces.IRedstoneControlled;
-import jaminv.advancedmachines.util.interfaces.IRedstoneControlled.RedstoneState;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
+/**
+ * TODO: Needs cleanup. Accesses non-lib objects.
+ */
 public class ProcessingStateMessage implements IMessage {
 	
 	public ProcessingStateMessage() {}
