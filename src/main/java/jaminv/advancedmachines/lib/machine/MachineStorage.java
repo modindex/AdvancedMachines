@@ -26,7 +26,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
  * 
  * @author JaminVanderBerg
  */
-public class MachineStorage implements IItemHandlerInternal, IFluidHandlerInternal, IEnergyStorage, INBTSerializable<NBTTagCompound> {
+public class MachineStorage implements IItemHandlerInternal, IFluidHandler, IEnergyStorage, INBTSerializable<NBTTagCompound> {
 	
 	protected final IItemHandlerMachine inventory;
 	protected final IFluidHandlerMachine fluidtank;

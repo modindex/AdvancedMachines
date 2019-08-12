@@ -1,10 +1,6 @@
 package jaminv.advancedmachines.objects.blocks.machine;
 
-import java.util.Random;
-
 import javax.annotation.Nullable;
-
-import org.apache.logging.log4j.Level;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.lib.container.ISyncSubject;
@@ -12,8 +8,6 @@ import jaminv.advancedmachines.lib.container.SyncManager;
 import jaminv.advancedmachines.lib.energy.IEnergyStorageAdvanced;
 import jaminv.advancedmachines.lib.fluid.IFluidHandlerMachine;
 import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
-import jaminv.advancedmachines.lib.inventory.MachineInventoryHandler;
-import jaminv.advancedmachines.lib.machine.ICanProcess;
 import jaminv.advancedmachines.lib.machine.IMachineTE;
 import jaminv.advancedmachines.lib.machine.IRedstoneControlled;
 import jaminv.advancedmachines.lib.machine.MachineController;
@@ -21,24 +15,18 @@ import jaminv.advancedmachines.lib.machine.MachineStorage;
 import jaminv.advancedmachines.lib.network.ProcessingStateMessage;
 import jaminv.advancedmachines.lib.network.RedstoneStateMessage;
 import jaminv.advancedmachines.lib.recipe.IRecipeManager;
-import jaminv.advancedmachines.lib.recipe.RecipeBase;
-import jaminv.advancedmachines.lib.recipe.RecipeInput;
-import jaminv.advancedmachines.lib.recipe.RecipeOutput;
-import jaminv.advancedmachines.objects.blocks.inventory.TileEntityInventory;
 import jaminv.advancedmachines.objects.material.MaterialExpansion;
 import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
 import jaminv.advancedmachines.util.interfaces.IHasMetadata;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
