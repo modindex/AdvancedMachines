@@ -1,9 +1,12 @@
 package jaminv.advancedmachines.lib.inventory;
 
 import java.util.Collections;
+import java.util.List;
 
+import jaminv.advancedmachines.lib.recipe.IItemGeneric;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 
 public class MachineInventoryHandler extends ItemStackHandlerObservable implements IItemHandlerMachine {
 	
@@ -11,6 +14,7 @@ public class MachineInventoryHandler extends ItemStackHandlerObservable implemen
 	
 	public MachineInventoryHandler() {
 		super();
+		stacks = NonNullList.create();
 	}
 	
 	public boolean isSlotInput(int slotIndex) { return slotIndex <= getLastInputSlot(); }
@@ -18,22 +22,23 @@ public class MachineInventoryHandler extends ItemStackHandlerObservable implemen
 	public boolean isSlotSecondary(int slotIndex) { return slotIndex >= getFirstSecondarySlot() && slotIndex <= getLastSecondarySlot(); }
 	public boolean isSlotAdditional(int slotIndex) { return slotIndex >= getFirstAdditionalSlot(); }
 	
-	protected int getFirstInputSlot() { return 0; }
-	protected int getFirstOutputSlot() { return inputSlots; }
-	protected int getFirstSecondarySlot() { return inputSlots + outputSlots; }
-	protected int getFirstAdditionalSlot() { return inputSlots + outputSlots + secondarySlots; }
+	public int getFirstInputSlot() { return 0; }
+	public int getFirstOutputSlot() { return inputSlots; }
+	public int getFirstSecondarySlot() { return inputSlots + outputSlots; }
+	public int getFirstAdditionalSlot() { return inputSlots + outputSlots + secondarySlots; }
 
-	protected int getLastInputSlot() { return getFirstOutputSlot() - 1; }
-	protected int getLastOutputSlot() { return getFirstSecondarySlot() - 1; }
-	protected int getLastSecondarySlot() { return getFirstAdditionalSlot() - 1; }
-	protected int getLastAdditionalSlot() { return stacks.size() - 1; }	
+	public int getLastInputSlot() { return getFirstOutputSlot() - 1; }
+	public int getLastOutputSlot() { return getFirstSecondarySlot() - 1; }
+	public int getLastSecondarySlot() { return getFirstAdditionalSlot() - 1; }
+	public int getLastAdditionalSlot() { return stacks.size() - 1; }	
 	
 	/**
 	 * Recommended that these methods be called in order (addInputSlots, addOutputSlots, addSecondarySlots, addAdditionalSlots), and only once.
 	 * It should work fine otherwise, but causes array shifting.
 	 */
 	public MachineInventoryHandler addInputSlots(int numSlots) {
-		stacks.addAll(inputSlots, Collections.nCopies(numSlots, ItemStack.EMPTY));
+		List<ItemStack> add = Collections.nCopies(numSlots, ItemStack.EMPTY);
+		if (inputSlots == 0) { stacks.addAll(add); } else { stacks.addAll(inputSlots, add); }
 		inputSlots += numSlots;
 		return this;
 	}
@@ -43,7 +48,8 @@ public class MachineInventoryHandler extends ItemStackHandlerObservable implemen
 	 * It should work fine otherwise, but causes array shifting.
 	 */
 	public MachineInventoryHandler addOutputSlots(int numSlots) {
-		stacks.addAll(inputSlots + outputSlots, Collections.nCopies(numSlots, ItemStack.EMPTY));
+		List<ItemStack> add = Collections.nCopies(numSlots, ItemStack.EMPTY);
+		stacks.addAll(inputSlots + outputSlots, add);
 		outputSlots += numSlots;
 		return this;		
 	}
@@ -53,7 +59,8 @@ public class MachineInventoryHandler extends ItemStackHandlerObservable implemen
 	 * It should work fine otherwise, but causes array shifting.
 	 */
 	public MachineInventoryHandler addSecondarySlots(int numSlots) {
-		stacks.addAll(inputSlots + outputSlots + secondarySlots, Collections.nCopies(numSlots, ItemStack.EMPTY));
+		List<ItemStack> add = Collections.nCopies(numSlots, ItemStack.EMPTY);
+		stacks.addAll(inputSlots + outputSlots + secondarySlots, add);
 		secondarySlots += numSlots;
 		return this;
 	}
@@ -63,7 +70,8 @@ public class MachineInventoryHandler extends ItemStackHandlerObservable implemen
 	 * It should work fine otherwise, but causes array shifting.
 	 */
 	public MachineInventoryHandler addAdditionalSlots(int numSlots) {
-		stacks.addAll(inputSlots + outputSlots + secondarySlots + additionalSlots, Collections.nCopies(numSlots, ItemStack.EMPTY));
+		List<ItemStack> add = Collections.nCopies(numSlots, ItemStack.EMPTY);
+		stacks.addAll(inputSlots + outputSlots + secondarySlots + additionalSlots, add);
 		additionalSlots += numSlots;
 		return this;
 	}
@@ -71,78 +79,13 @@ public class MachineInventoryHandler extends ItemStackHandlerObservable implemen
 	protected ItemStack[] getStacks(int firstSlot, int lastSlot) {
 		ItemStack[] ret = new ItemStack[lastSlot - firstSlot + 1];
 		for (int i = firstSlot; i <= lastSlot; i++) {
-			ret[i] = stacks.get(i).copy();
+			ret[i - firstSlot] = stacks.get(i).copy();
 		}
 		return ret;
 	}
 	
-	public ItemStack[] getInput() { return getStacks(getFirstInputSlot(), getLastInputSlot()); }
+	public ItemStack[] getItemInput() { return getStacks(getFirstInputSlot(), getLastInputSlot()); }
 	public ItemStack[] getOutput() { return getStacks(getFirstOutputSlot(), getLastOutputSlot()); }
-	
-	/* IItemHandler */
-	
-	@Override
-	public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-		if (!isSlotInput(slot)) {
-			return stack;
-		}
-		
-		return super.insertItem(slot, stack, simulate);
-	}
-	
-	@Override
-	public ItemStack extractItem(int slot, int amount, boolean simulate) {
-		if (!isSlotOutput(slot) && !isSlotSecondary(slot)) {
-			return ItemStack.EMPTY;
-		}
-		
-		return super.extractItem(slot, amount, simulate);
-	}
-	
-	/* Internal */
-	
-	public ItemStack insertItem(ItemStack stack, boolean simulate) {
-		return insertItem(getFirstInputSlot(), getLastInputSlot(), stack, simulate);
-	}
-	
-	public ItemStack insertItemInternal(ItemStack stack, boolean simulate) {
-		return insertItem(getFirstOutputSlot(), getLastOutputSlot(), stack, simulate);
-	}
-	
-	public ItemStack insertSecondary(ItemStack stack, boolean simulate) {
-		return insertItem(getFirstSecondarySlot(), getLastSecondarySlot(), stack, simulate);
-	}
-	
-	protected ItemStack insertItem(int firstSlot, int lastSlot, ItemStack stack, boolean simulate) {
-		ItemStack ret = stack; // We don't need a copy because insertItem() will copy
-		
-		for (int i = firstSlot; i <= lastSlot; i++) {
-			ret = insertItem(i, ret, simulate);
-		}
-		
-		return ret;
-	}
-	
-	public int extractItem(IItemGeneric input, boolean simulate) {
-		return extractInput(getFirstOutputSlot(), getLastSecondarySlot(), input, simulate);		
-	}
-	
-	public int extractItemInternal(IItemGeneric input, boolean simulate) {
-		return extractInput(getFirstInputSlot(), getLastInputSlot(), input, simulate);
-	}
-	
-	protected int extractInput(int firstSlot, int lastSlot, IItemGeneric input, boolean simulate) {
-		int count = 0;
-		for (int i = firstSlot; i <= lastSlot; i++) {
-			if (input.isValid(stacks.get(i))) {
-				ItemStack result = extractItem(i, input.getCount(), false);
-				count += result.getCount();
-			}
-			if (count >= input.getCount()) { break; }
-		}
-		
-		return count;
-	}
 	
 	/* NBT */
 
@@ -158,6 +101,7 @@ public class MachineInventoryHandler extends ItemStackHandlerObservable implemen
 
 	@Override
 	public void deserializeNBT(NBTTagCompound nbt) {
+		super.deserializeNBT(nbt);
 		if (nbt.hasKey("inputSlots")) { inputSlots = nbt.getInteger("inputSlots"); }
 		if (nbt.hasKey("outputSlots")) { outputSlots = nbt.getInteger("outputSlots"); }
 		if (nbt.hasKey("secondarySlots")) { secondarySlots = nbt.getInteger("secondarySlots"); }

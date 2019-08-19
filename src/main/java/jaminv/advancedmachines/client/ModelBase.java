@@ -55,7 +55,6 @@ public class ModelBase implements IModel {
 
 	@Override
 	public IModel smoothLighting(boolean value) {
-		// TODO Auto-generated method stub
 		return IModel.super.smoothLighting(value);
 	}
 	

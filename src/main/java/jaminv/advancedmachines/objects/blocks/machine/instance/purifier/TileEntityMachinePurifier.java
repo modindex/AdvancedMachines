@@ -1,25 +1,19 @@
 package jaminv.advancedmachines.objects.blocks.machine.instance.purifier;
 
-import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
+import jaminv.advancedmachines.lib.container.ContainerMachine;
+import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineMultiblock;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineType;
-import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager;
+import jaminv.advancedmachines.util.recipe.purifier.PurifierManager;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.IInventory;
 
 public class TileEntityMachinePurifier extends TileEntityMachineMultiblock {
 
-	@Override
-	public int getInputCount() { return 1; }
-	
-	@Override
-	public int getOutputCount() { return 1;	}
-	
-	@Override 
-	public int getSecondaryCount() { return 6; }
-	
 	public TileEntityMachinePurifier() {
-		super(PurifierManager.getRecipeManager());		
+		super(PurifierManager.getRecipeManager());
+		inventory.addInputSlots(1);
+		inventory.addOutputSlots(1);
+		inventory.addSecondarySlots(6);
 	}
 	
 	@Override
@@ -28,8 +22,8 @@ public class TileEntityMachinePurifier extends TileEntityMachineMultiblock {
 	}
 
 	@Override
-	public ContainerMachine createContainer(IInventory inventory) {
-		return new ContainerMachine(inventory, DialogMachinePurifier.layout, this, PurifierManager.getRecipeManager());
+	public ContainerMachine createContainer(IInventory playerInventory) {
+		return new ContainerMachine(DialogMachinePurifier.layout, storage, playerInventory, this.getSyncManager());
 	}
 	
 	@Override

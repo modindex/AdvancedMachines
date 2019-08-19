@@ -14,9 +14,10 @@ public class SyncManager implements ISyncManager {
 	protected int[] cachedFields;
 	protected int cachedCount = -1;
 	
-	public void addSubject(ISyncSubject subject) {
+	public SyncManager addSubject(ISyncSubject subject) {
 		this.subjects.add(subject);
 		cachedFields = null;
+		return this;
 	}
 	
 	public int getFieldCount() {
@@ -40,16 +41,18 @@ public class SyncManager implements ISyncManager {
             
 			int subject = 0, first = 0;
 			for (int i = 0; i < getFieldCount(); i++) {
-				while (i > first + subjects.get(subject).getFieldCount()) {
+				if (i == 3) {
+					int a = 0;
+				}
+				while (i >= first + subjects.get(subject).getFieldCount()) {
 					first += subjects.get(subject).getFieldCount(); subject++;
 				}
 				int value = subjects.get(subject).getField(i - first);
 				
 				if (sendAll || cachedFields[i] != value) {
 					listener.sendWindowProperty(container, i, value);
+					cachedFields[i] = value;
 				}
-				
-				if (sendAll) { cachedFields[i] = value; }
 			}
         }
 	}
@@ -58,7 +61,10 @@ public class SyncManager implements ISyncManager {
 	@SideOnly(Side.CLIENT)
 	public void updateProgressBar(int id, int data) {
 		int subject = 0, first = 0;
-		while(id > first + subjects.get(subject).getFieldCount()) {
+		if (id == 3) {
+			int a = 0;
+		}
+		while(id >= first + subjects.get(subject).getFieldCount()) {
 			first += subjects.get(subject).getFieldCount(); subject++;
 		}
 		subjects.get(subject).setField(id - first, data);

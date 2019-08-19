@@ -11,13 +11,13 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 
 import jaminv.advancedmachines.lib.fluid.IFluidTankInternal;
-import jaminv.advancedmachines.lib.inventory.IItemGeneric;
+import jaminv.advancedmachines.lib.recipe.IJeiRecipe.ISecondaryOutput;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 
-public abstract class RecipeBase implements IRecipe {
+public abstract class RecipeBase implements IJeiRecipe {
 	protected static class Input implements IInput {
 		protected List<IItemGeneric> items = new ArrayList<IItemGeneric>();
 		protected List<FluidStack> fluids = new ArrayList<FluidStack>();
@@ -30,6 +30,13 @@ public abstract class RecipeBase implements IRecipe {
 		protected List<FluidStack> fluids = new ArrayList<FluidStack>();
 		@Override public List<ItemStack> getItems() { return items; }
 		@Override public List<FluidStack> getFluids() { return fluids; }
+	}
+	
+	protected static class SecondaryOutput implements ISecondaryOutput {
+		protected List<ISecondary> items = new ArrayList<ISecondary>();
+		protected List<ISecondary> fluids = new ArrayList<ISecondary>();
+		@Override public List<ISecondary> getItems() { return items; }
+		@Override public List<ISecondary> getFluids() { return fluids; }
 	}
 	
 	private String recipeid;
@@ -61,8 +68,12 @@ public abstract class RecipeBase implements IRecipe {
 	public abstract int getInputCount();
 	public abstract int getOutputCount();
 	
+	protected RecipeInput getInput(int index) { return input[index]; }
+	protected RecipeOutput getOutput(int index) { return output[index]; }
+	
 	protected Input inputcache;
 	protected Output outputcache;
+	protected SecondaryOutput secondarycache;
 	
 	@Override
 	public Input getInput() {
@@ -86,13 +97,13 @@ public abstract class RecipeBase implements IRecipe {
 	}
 	
 	@Override
-	public Output getSecondary() { return getOutput(this.secondary.toArray(this.output), true); }
+	public Output getSecondary() { return getOutput(this.secondary.toArray(new RecipeOutput[secondary.size()]), true); }
 	
 	protected Output getOutput(RecipeOutput[] outputs, boolean doRandom) {
 		Output ret = new Output();
 		Random rand = new Random();
 		
-		for (RecipeOutput out : this.output) {
+		for (RecipeOutput out : outputs) {
 			if (doRandom && rand.nextInt(100) > out.getChance()) { continue; }
 			if (out.isFluid()) {
 				ret.fluids.add(out.toFluidStack());
@@ -103,6 +114,21 @@ public abstract class RecipeBase implements IRecipe {
 		return ret;
 	}
 	
+	@Override
+	public ISecondaryOutput getJeiSecondary() {
+		if (secondarycache != null) { return secondarycache; }
+		secondarycache = new SecondaryOutput();
+		
+		for (RecipeOutput sec : this.secondary) {
+			if (sec.isFluid()) {
+				secondarycache.fluids.add(sec);
+			} else {
+				secondarycache.items.add(sec);
+			}			
+		}
+		return secondarycache;
+	}
+
 	public String getRecipeId() { return recipeid; }
 	
 	public RecipeBase addInput(int index, RecipeInput input) {

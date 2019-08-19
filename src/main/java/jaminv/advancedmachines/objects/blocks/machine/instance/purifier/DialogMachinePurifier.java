@@ -2,13 +2,13 @@ package jaminv.advancedmachines.objects.blocks.machine.instance.purifier;
 
 import jaminv.advancedmachines.integration.jei.element.JeiEnergyBar;
 import jaminv.advancedmachines.integration.jei.element.JeiProgressIndicator;
-import jaminv.advancedmachines.lib.container.layout.LayoutManager;
+import jaminv.advancedmachines.lib.container.ContainerMachine;
 import jaminv.advancedmachines.lib.container.layout.Layout.HotbarLayout;
 import jaminv.advancedmachines.lib.container.layout.Layout.InventoryLayout;
+import jaminv.advancedmachines.lib.container.layout.LayoutManager;
+import jaminv.advancedmachines.lib.container.layout.impl.InputLayout;
+import jaminv.advancedmachines.lib.container.layout.impl.OutputLayout;
 import jaminv.advancedmachines.lib.machine.IRedstoneControlled;
-import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine;
-import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine.InputLayout;
-import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine.OutputLayout;
 import jaminv.advancedmachines.objects.blocks.machine.DialogMachineBase;
 import jaminv.advancedmachines.objects.blocks.machine.dialog.DialogEnergyBar;
 import jaminv.advancedmachines.objects.blocks.machine.dialog.DialogMultiblockQuantity;
@@ -17,7 +17,7 @@ import jaminv.advancedmachines.objects.blocks.machine.dialog.DialogTooltipMultib
 import jaminv.advancedmachines.objects.blocks.machine.dialog.RedstoneToggleButton;
 import jaminv.advancedmachines.util.Color;
 import jaminv.advancedmachines.util.dialog.struct.DialogArea;
-import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager;
+import jaminv.advancedmachines.util.recipe.purifier.PurifierManager;
 import net.minecraft.inventory.Container;
 
 public class DialogMachinePurifier extends DialogMachineBase {
@@ -46,14 +46,14 @@ public class DialogMachinePurifier extends DialogMachineBase {
 	public DialogMachinePurifier(ContainerMachine container, TileEntityMachinePurifier te) {
 		this(container);
 		
-		this.addElement(new DialogProcessBar(te, 74, 23, 24, 17, 200, 50));
-		this.addElement(new DialogEnergyBar(te, 9, 20, 14, 50, 200, 0));
+		this.addElement(new DialogProcessBar(te.getController(), 74, 23, 24, 17, 200, 50));
+		this.addElement(new DialogEnergyBar(te.getEnergy(), 9, 20, 14, 50, 200, 0));
 		this.addElement(new RedstoneToggleButton((IRedstoneControlled)te));
 		
 		this.addTooltip(new DialogTooltipMultiblock(158, 7, 11, 11, te));
 		
-		this.addText(new DialogMultiblockQuantity(te, 74, 19, 26, 26, Color.DIALOG_TEXT));
-		this.addText(new DialogMultiblockQuantity(te, 73, 18, 26, 26, Color.WHITE));
+		this.addText(new DialogMultiblockQuantity(te.getController(), 74, 19, 26, 26, Color.DIALOG_TEXT));
+		this.addText(new DialogMultiblockQuantity(te.getController(), 73, 18, 26, 26, Color.WHITE));
 	}	
 	
 	@Override

@@ -44,7 +44,7 @@ public class MachineFluidHandler implements IFluidHandlerMachine {
 	}
 	
 	public MachineFluidHandler addInputTanks(int numTanks) {
-		for (int i = 0; i <= numTanks; i++) {
+		for (int i = 0; i < numTanks; i++) {
 			IFluidTankAdvanced tank = new FluidTankAdvanced(defaultCapacity, maxFill, maxDrain);
 			input.add(tank);
 		}
@@ -52,7 +52,7 @@ public class MachineFluidHandler implements IFluidHandlerMachine {
 	}
 	
 	public MachineFluidHandler addOutputTanks(int numTanks) {
-		for (int i = 0; i <= numTanks; i++) {
+		for (int i = 0; i < numTanks; i++) {
 			IFluidTankAdvanced tank = new FluidTankAdvanced(defaultCapacity, maxFill, maxDrain);
 			output.add(tank);
 		}
@@ -62,8 +62,16 @@ public class MachineFluidHandler implements IFluidHandlerMachine {
 	public MachineFluidHandler addInputTank(FluidTankAdvanced tank) { input.add(tank); return this; }
 	public MachineFluidHandler addOutputTank(FluidTankAdvanced tank) { output.add(tank); return this; }
 	
+	@Override public int getTankCount() { return input.size() + output.size(); }
+
+	@Override
+	public IFluidTank getTank(int index) {
+		if (index >= input.size()) { return output.get(index - input.size()); }
+		return input.get(index);
+	}
+
 	/** Sets capacity for ALL tanks. */
-	public void setCapacity(int capacity) {
+	public void setFluidCapacity(int capacity) {
 		this.defaultCapacity = capacity;
 		for (IFluidTankAdvanced tank : input) { tank.setCapacity(capacity); }
 		for (IFluidTankAdvanced tank : output) { tank.setCapacity(capacity); }
@@ -103,7 +111,7 @@ public class MachineFluidHandler implements IFluidHandlerMachine {
 		
 		// First check for a tank that already contains that liquid
 		for (IFluidTankAdvanced tank : tanks) {
-			if (tank.getFluid().isFluidEqual(resource)) {
+			if (!tank.isEmpty() && tank.getFluid().isFluidEqual(resource)) {
 				int result = fill(tank, res, doFill, internal);
 				res.amount -= result;
 			
@@ -161,16 +169,19 @@ public class MachineFluidHandler implements IFluidHandlerMachine {
 	
 	protected FluidStack drain(int maxDrain, boolean doDrain, List<IFluidTankAdvanced> tanks, boolean internal) {
 		FluidStack ret = null;
+		int amount = maxDrain;
 		
 		for (IFluidTankAdvanced tank : tanks) {
-			if (ret == null && !tank.isEmpty()) {
-				ret = drain(tank, maxDrain, doDrain, internal);
+			FluidStack result;
+			if (ret != null) {
+				result = drain(tank, new FluidStack(ret, amount), doDrain, internal);
 			} else {
-				FluidStack result = drain(tank, maxDrain - ret.amount, doDrain, internal);
-				ret.amount += result.amount;
+				result = drain(tank, amount, doDrain, internal);
 			}
 			
-			if (ret.amount >= maxDrain) { break; }
+			if (result == null) { continue; }
+			amount -= result.amount;
+			if (ret == null) { ret = result; } else { ret.amount += result.amount; }
 		}
 		
 		if (doDrain && ret.amount > 0) { onTankContentsChanged(); }
@@ -213,8 +224,8 @@ public class MachineFluidHandler implements IFluidHandlerMachine {
 		return ret;
 	}
 	
-	public FluidStack[] getInput() { return getStacks(input); }	
-	public IFluidTankInternal[] getOutput() { return getTanks(output); }
+	public FluidStack[] getFluidInput() { return getStacks(input); }	
+	public IFluidTankInternal[] getFluidOutput() { return getTanks(output); }
 
 	/* INBTSerializable */
 	
@@ -258,8 +269,14 @@ public class MachineFluidHandler implements IFluidHandlerMachine {
 		setMaxDrain(nbt.getInteger("maxDrain"));
 		setMaxFill(nbt.getInteger("maxFill"));
 		
-		addInputTanks(nbt.getInteger("inputSize"));
-		addOutputTanks(nbt.getInteger("outputSize"));
+		if (nbt.getInteger("inputSize") != this.input.size()) {
+			input = new ArrayList<IFluidTankAdvanced>();
+			addInputTanks(nbt.getInteger("inputSize"));
+		}
+		if (nbt.getInteger("outputSize") != this.output.size()) {
+			output = new ArrayList<IFluidTankAdvanced>();		
+			addOutputTanks(nbt.getInteger("outputSize"));
+		}
 		
 		if (nbt.hasKey("input")) { readTankNBT(nbt.getTagList("input", Constants.NBT.TAG_COMPOUND), input); }
 		if (nbt.hasKey("output")) { readTankNBT(nbt.getTagList("output", Constants.NBT.TAG_COMPOUND), output); }

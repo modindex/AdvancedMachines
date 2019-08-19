@@ -1,5 +1,6 @@
 package jaminv.advancedmachines.integration.jei.element;
 
+import jaminv.advancedmachines.lib.recipe.IRecipe;
 import jaminv.advancedmachines.lib.recipe.RecipeBase;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
@@ -32,7 +33,7 @@ public class JeiElement {
 		drawable.draw(minecraft, x + offsetX, y + offsetY);
 	}
 	
-	public String getTooltip(RecipeBase recipe) {
+	public String getTooltip(IRecipe recipe) {
 		return null;
 	}
 }

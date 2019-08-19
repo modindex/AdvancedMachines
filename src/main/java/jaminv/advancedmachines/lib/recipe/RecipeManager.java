@@ -62,20 +62,27 @@ public abstract class RecipeManager<T extends RecipeBase> implements IRecipeMana
 			RecipeInput item = recipe.getInput(i);
 			if (item.isEmpty()) { continue; }
 			
-			for (ItemStack stack : item.getItems()) {
-				ItemComparable ic = new ItemComparable(stack);
-				ArrayList<T> recipelist = validInput.get(ic);
-				if (recipelist == null) {
-					recipelist = new ArrayList<T>();
-					recipelist.add(recipe);
-					validInput.put(ic, recipelist);
-				} else {
-					recipelist.add(recipe);
+			if (item.isFluid()) {
+				addValidInput(new ItemComparable(item.toFluidStack()), recipe);			
+			} else {
+				for (ItemStack stack : item.getItems()) {
+					addValidInput(new ItemComparable(stack), recipe);
 				}
 			}
 		}
 		
 		list.add(recipe);
+	}
+	
+	protected void addValidInput(ItemComparable item, T recipe) {
+		ArrayList<T> recipelist = validInput.get(item);
+		if (recipelist == null) {
+			recipelist = new ArrayList<T>();
+			recipelist.add(recipe);
+			validInput.put(item, recipelist);
+		} else {
+			recipelist.add(recipe);
+		}
 	}
 	
 	/**
@@ -123,6 +130,7 @@ public abstract class RecipeManager<T extends RecipeBase> implements IRecipeMana
 		return isItemValid(new ItemComparable(stack), new ItemComparableList(other, fluids));
 	}
 	public boolean isFluidValid(FluidStack stack, @Nullable ItemStack[] other, @Nullable FluidStack[] fluids) {
+		if (stack == null) { return false; }
 		return isItemValid(new ItemComparable(stack), new ItemComparableList(other, fluids));
 	}	
 

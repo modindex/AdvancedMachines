@@ -3,8 +3,10 @@ package jaminv.advancedmachines.objects.blocks.machine;
 import java.util.ArrayList;
 
 import jaminv.advancedmachines.integration.jei.element.JeiElement;
-import jaminv.advancedmachines.lib.container.layout.LayoutManager;
+import jaminv.advancedmachines.lib.container.ContainerMachine;
+import jaminv.advancedmachines.lib.container.layout.ILayout;
 import jaminv.advancedmachines.lib.container.layout.Layout;
+import jaminv.advancedmachines.lib.container.layout.LayoutManager;
 import jaminv.advancedmachines.util.dialog.DialogBase;
 import jaminv.advancedmachines.util.dialog.struct.DialogArea;
 import net.minecraft.inventory.Container;
@@ -36,15 +38,15 @@ public abstract class DialogMachineBase extends DialogBase {
 	public int getJeiAdjustX() { return getJeiTexture().getX() - getDialogArea().getX(); }
 	public int getJeiAdjustY() { return getJeiTexture().getY() - getDialogArea().getY(); }
 	
-	protected Layout getJeiOffset(Layout texture) {
+	protected Layout getJeiOffset(ILayout iLayout) {
 		DialogArea dialog = this.getDialogArea();
 		DialogArea jei = this.getJeiTexture();
 		
 		return new Layout(
-			texture.getXPos() + dialog.getX() - jei.getX() - 1,
-			texture.getYPos() + dialog.getY() - jei.getY() - 1,
-			texture.getXSpacing(), texture.getYSpacing(),
-			texture.getRows(), texture.getCols()
+			iLayout.getXPos() + dialog.getX() - jei.getX() - 1,
+			iLayout.getYPos() + dialog.getY() - jei.getY() - 1,
+			iLayout.getXSpacing(), iLayout.getYSpacing(),
+			iLayout.getRows(), iLayout.getCols()
 		);		
 	}
 	

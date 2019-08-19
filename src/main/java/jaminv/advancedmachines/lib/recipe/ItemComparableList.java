@@ -40,15 +40,17 @@ public class ItemComparableList  {
 	public ItemComparableList(@Nullable ItemStack[] stack, @Nullable FluidStack[] fluids) {
 		if (stack != null) {
 			for (ItemStack item : stack) {
+				if (item == null || item.isEmpty()) { continue; }
 				add(new ItemComparable(item));
 			}
 		}
 		if (fluids != null) {
 			for (FluidStack fluid : fluids) {
+				if (fluid == null) { continue; }
 				add(new ItemComparable(fluid));				
 			}
 		}
-		if (stack.length > 1) { sort(); } else { sorted = true; }
+		if (list.size() > 1) { sort(); } else { sorted = true; }
 	}
 	
 	public ItemComparableList(ItemStack[] stack) { this(stack, (FluidStack[])null); }

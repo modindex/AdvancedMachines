@@ -2,6 +2,7 @@ package jaminv.advancedmachines.objects.blocks.machine.multiblock;
 
 import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.objects.blocks.BlockMaterial;
+import jaminv.advancedmachines.objects.blocks.machine.BlockMachineMultiblock;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansionBase;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgrade;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineType;
@@ -22,8 +23,12 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 
 public class MultiblockBorders implements INBTSerializable<NBTTagCompound> {
-	protected MultiblockBorderType top = MultiblockBorderType.SOLID, bottom = MultiblockBorderType.SOLID, north = MultiblockBorderType.SOLID,
-		south = MultiblockBorderType.SOLID, east = MultiblockBorderType.SOLID, west = MultiblockBorderType.SOLID;
+	protected MultiblockBorderType top = MultiblockBorderType.SOLID,
+		bottom = MultiblockBorderType.SOLID,
+		north = MultiblockBorderType.SOLID,
+		south = MultiblockBorderType.SOLID,
+		east = MultiblockBorderType.SOLID,
+		west = MultiblockBorderType.SOLID;
 	
 	public static final MultiblockBorders DEFAULT = new MultiblockBorders();
 	

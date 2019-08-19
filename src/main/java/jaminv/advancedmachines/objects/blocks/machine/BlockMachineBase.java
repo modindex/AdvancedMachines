@@ -77,8 +77,8 @@ public abstract class BlockMachineBase extends BlockMaterial implements ITileEnt
         EnumFacing facing = EnumFacing.NORTH;
        	boolean active = false;
 
-        if (tileentity instanceof TileEntityMachineBase) {
-        	TileEntityMachineBase te = (TileEntityMachineBase)tileentity;
+        if (tileentity instanceof TileEntityMachine) {
+        	TileEntityMachine te = (TileEntityMachine)tileentity;
         	facing = te.getFacing();
         	active = te.isProcessing();
         }

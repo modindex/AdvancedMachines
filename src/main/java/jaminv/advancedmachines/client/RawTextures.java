@@ -31,7 +31,7 @@ import net.minecraftforge.fml.common.ModContainer;
 
 public class RawTextures {
 	
-	public final static String[] machines = { "alloy", "furnace", "grinder", "purifier" };
+	public final static String[] machines = { "alloy", "furnace", "grinder", "purifier", "melter" };
 	public final static String[] inventory = { "input", "output" };
 	public final static String[] materials = { "basic", "compressed", "quad", "improbable" };
 	public final static String[] upgrades = { "speed", "productivity" };

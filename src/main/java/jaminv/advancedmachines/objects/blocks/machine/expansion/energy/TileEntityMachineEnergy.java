@@ -1,12 +1,12 @@
 package jaminv.advancedmachines.objects.blocks.machine.expansion.energy;
 
 import jaminv.advancedmachines.lib.energy.EnergyStorageAdvanced;
-import jaminv.advancedmachines.objects.blocks.machine.IMachineEnergy;
-import jaminv.advancedmachines.objects.blocks.machine.MachineEnergyStorage;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTool;
+import jaminv.advancedmachines.lib.energy.IEnergyObservable;
+import jaminv.advancedmachines.lib.energy.IEnergyStorageInternal;
+import jaminv.advancedmachines.lib.machine.IMachineController;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachineExpansionBase;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
 import jaminv.advancedmachines.objects.material.MaterialExpansion;
+import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.dialog.container.EmptyContainer;
 import jaminv.advancedmachines.util.dialog.container.IContainerUpdate;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
@@ -16,17 +16,15 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
-public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase implements IHasGui, IContainerUpdate, IMachineEnergy, IMachineUpgradeTool, IHasMetadata, IDirectional, EnergyStorageAdvanced.IObserver {
+public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase implements IHasGui, IContainerUpdate, IMachineController.ISubController, IHasMetadata, IDirectional, IEnergyObservable.IObserver {
 	
 	protected EnumFacing facing = EnumFacing.NORTH;
-	protected BlockPos parent;
+	protected IMachineController controller;
 	
 	public void setFacing(EnumFacing facing) {
 		this.facing = facing;
@@ -38,18 +36,16 @@ public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase impl
 	@Override
 	public void setMeta(int meta) {
 		super.setMeta(meta);
-		energy.setMaterial(getMaterial());
+		energy.setEnergyCapacity(ModConfig.general.defaultMachineEnergyCapacity * this.getMultiplier());
 	}
 
-	public MachineEnergyStorage energy;
+	public EnergyStorageAdvanced energy;
 	
-	public float getEnergyPercent() { return (float)energy.getEnergyStored() / energy.getMaxEnergyStored(); }
-	public int getEnergyStored() { return energy.getEnergyStored(); }
-	public int getMaxEnergyStored() { return energy.getMaxEnergyStored(); }
+	public IEnergyStorage getEnergy() { return energy; }
 	
 	public TileEntityMachineEnergy() {
 		super();
-		energy = new MachineEnergyStorage();
+		energy = new EnergyStorageAdvanced(ModConfig.general.defaultMachineEnergyCapacity * MaterialExpansion.maxMultiplier);
 		energy.addObserver(this);
 	}
 	
@@ -65,19 +61,20 @@ public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase impl
 	
 	@Override
 	public void onEnergyChanged() {
-		if (parent == null) { return; }
-		TileEntity te = world.getTileEntity(parent);
-		if (te instanceof TileEntityMachineMultiblock) {
-			((TileEntityMachineMultiblock)te).wake();
-		}
+		if (controller != null) { controller.wake(); }
+	}
+
+	@Override
+	public void setController(IMachineController controller) {
+		this.controller = controller;
 	}
 	
 	@Override
-	public boolean tickUpdate(TileEntityMachineMultiblock te) {
-		return this.transferEnergy(te.getEnergy()) > 0;
+	public boolean preProcess(IMachineController controller) {
+		return transferEnergy(controller.getEnergy()) > 0;
 	}
 	
-	public int transferEnergy(EnergyStorageAdvanced storage) {
+	public int transferEnergy(IEnergyStorageInternal storage) {
 		int transfer;
 		
 		transfer = energy.extractEnergyInternal(Integer.MAX_VALUE, true);
@@ -88,11 +85,6 @@ public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase impl
 			storage.receiveEnergyInternal(transfer, false);
 		}
 		return transfer;
-	}
-	
-	@Override
-	public void setParent(BlockPos pos) {
-		parent = pos;
 	}
 	
 	@Override
@@ -123,7 +115,7 @@ public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase impl
 			facing = EnumFacing.byName(compound.getString("facing"));
 		}
 		if (compound.hasKey("energy")) {
-			energy.readFromNBT(compound);
+			energy.deserializeNBT(compound.getCompoundTag("energy"));
 		}
 	}
 	
@@ -131,7 +123,7 @@ public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase impl
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		compound.setString("facing", facing.getName());
-		energy.writeToNBT(compound);
+		compound.setTag("energy", energy.serializeNBT());
 		return compound;
 	}
 	

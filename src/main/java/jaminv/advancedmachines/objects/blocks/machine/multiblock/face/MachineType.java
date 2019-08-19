@@ -25,7 +25,10 @@ public enum MachineType {
 	GRINDER(2, "grinder", EnumGui.GRINDER.getId()),
 	PURIFIER(3, "purifier", EnumGui.PURIFIER.getId()),
 	ALLOY(4, "alloy", EnumGui.ALLOY.getId()),
-	MELTER(5, "melter", EnumGui.MELTER.getId());
+	MELTER(5, "melter", EnumGui.MELTER.getId()),
+	STABILIZER(6, "stabilizer", EnumGui.STABILIZER.getId()),
+	INJECTOR(7, "injector", EnumGui.INJECTOR.getId()),
+	PRESS(8, "press", EnumGui.PRESS.getId());
 	
     private final int index;
     private final String name;

@@ -3,11 +3,23 @@ package jaminv.advancedmachines.objects.blocks.machine.dialog;
 import jaminv.advancedmachines.util.dialog.DialogBase;
 import jaminv.advancedmachines.util.dialog.control.DialogToggleButton;
 import jaminv.advancedmachines.util.enums.IOState;
-import jaminv.advancedmachines.util.interfaces.ISwitchableIO;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
 
 public class DialogIOToggleButton extends DialogToggleButton<IOState> {
+	
+	public static interface ISwitchableIO {
+		public void setInputState(boolean state);
+		public void setPriority(int priority);
+		
+		public boolean getInputState();
+		public int getPriority();
+		
+		public boolean canInput();
+		public boolean canOutput();
+		
+		public boolean hasController();
+	}	
 	
 	protected final ISwitchableIO te;
 	public DialogIOToggleButton(int x, int y, int w, int h, ISwitchableIO te) {
@@ -46,7 +58,7 @@ public class DialogIOToggleButton extends DialogToggleButton<IOState> {
 	@Override
 	public String getTooltip(int mouseX, int mouseY) {
 		if (!te.canInput() && !te.canOutput()) { 
-			if (!te.hasParent()) { return I18n.format("dialog.io.no_machine"); }
+			if (!te.hasController()) { return I18n.format("dialog.io.no_machine"); }
 			else { return I18n.format("dialog.io.no_io"); } 
 		}
 		if (!te.canInput()) { return I18n.format("dialog.io.no_input"); }

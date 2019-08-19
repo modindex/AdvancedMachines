@@ -85,8 +85,8 @@ public class FluidTankAdvanced implements IFluidTankAdvanced {
     }
 
     @Override // IFluidTank
-    public int fill(FluidStack resource, boolean doFill) {
-        if (!canFill) { return 0; }
+    public int fill(@Nullable FluidStack resource, boolean doFill) {
+    	if (!canFill || resource == null) { return 0; }
         return fillInternal(new FluidStack(resource, Math.min(resource.amount, maxFill)), doFill);
     }
     

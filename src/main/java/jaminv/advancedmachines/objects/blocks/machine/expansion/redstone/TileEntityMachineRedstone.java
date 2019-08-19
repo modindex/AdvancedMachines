@@ -1,19 +1,17 @@
 package jaminv.advancedmachines.objects.blocks.machine.expansion.redstone;
 
-import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTool;
+import jaminv.advancedmachines.lib.machine.IMachineController;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachineExpansionBase;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class TileEntityMachineRedstone extends TileEntityMachineExpansionBase implements IMachineUpgradeTool {
+public class TileEntityMachineRedstone extends TileEntityMachineExpansionBase implements IMachineController.ISubController {
 	
 	protected EnumFacing facing = EnumFacing.NORTH;
-	protected BlockPos parent;
+	protected IMachineController controller;
 	
 	public void setFacing(EnumFacing facing) {
 		this.facing = facing;
@@ -32,14 +30,10 @@ public class TileEntityMachineRedstone extends TileEntityMachineExpansionBase im
 		redstone = world.isBlockPowered(pos);
 		if (oldRedstone != redstone) {
 			world.markBlockRangeForRenderUpdate(pos, pos);
-			
-			if (parent == null) { return; }
-			TileEntity te = world.getTileEntity(parent);
-			if (te instanceof TileEntityMachineMultiblock) {
-				((TileEntityMachineMultiblock)te).wake();
-			}
+			if (controller != null) { controller.wake(); }
 		}
 	}
+	
 	public boolean getRedstone() {
 		return redstone;
 	}
@@ -50,14 +44,15 @@ public class TileEntityMachineRedstone extends TileEntityMachineExpansionBase im
 	}
 	
 	@Override
-	public boolean tickUpdate(TileEntityMachineMultiblock te) {
-		te.setRedstone(redstone);
+	public boolean preProcess(IMachineController controller) {
+		// TODO: Redstone
+		//te.setRedstone(redstone);
 		return false;
 	}
 	
 	@Override
-	public void setParent(BlockPos pos) {
-		parent = pos;
+	public void setController(IMachineController controller) {
+		this.controller = controller;
 	}
 	
 	@Override

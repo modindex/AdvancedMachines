@@ -1,18 +1,16 @@
 package jaminv.advancedmachines.objects.blocks.machine.expansion.inventory;
 
-import jaminv.advancedmachines.lib.container.layout.LayoutManager;
-import jaminv.advancedmachines.lib.container.ContainerLayout;
 import jaminv.advancedmachines.lib.container.layout.ILayoutManager;
 import jaminv.advancedmachines.lib.container.layout.Layout;
+import jaminv.advancedmachines.lib.container.layout.LayoutManager;
 import jaminv.advancedmachines.objects.blocks.machine.dialog.DialogIOToggleButton;
 import jaminv.advancedmachines.util.Color;
 import jaminv.advancedmachines.util.dialog.DialogBase;
 import jaminv.advancedmachines.util.dialog.control.DialogTextBox;
 import jaminv.advancedmachines.util.dialog.control.IDialogElement;
 import jaminv.advancedmachines.util.dialog.control.IElementStateObserver;
-import jaminv.advancedmachines.util.dialog.struct.DialogTooltip;
 import jaminv.advancedmachines.util.enums.EnumComponent;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.inventory.Container;
 
 public class DialogMachineInventory extends DialogBase implements IElementStateObserver<String> {
 	
@@ -25,7 +23,7 @@ public class DialogMachineInventory extends DialogBase implements IElementStateO
 		.setInventoryLayout(8, 103)
 		.setHotbarLayout(8, 161);
 	
-	public DialogMachineInventory(ContainerLayout container, TileEntityMachineInventory te) {
+	public DialogMachineInventory(Container container, TileEntityMachineInventory te) {
 		super(container, "textures/gui/machine_inventory.png", 24, 0, 176, 185);
 		this.te = te;
 		

@@ -7,7 +7,6 @@ import java.util.List;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 
-import jaminv.advancedmachines.lib.inventory.IItemGeneric;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

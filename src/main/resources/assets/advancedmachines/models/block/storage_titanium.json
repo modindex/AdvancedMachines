@@ -1,4 +1,5 @@
 {
+    "parent": "block:cube/all",
     "textures": {
         "all": "advancedmachines:blocks/storage_titanium"
     }

@@ -1,9 +1,7 @@
 package jaminv.advancedmachines.objects.blocks.machine.expansion.tank;
 
 import jaminv.advancedmachines.init.property.Properties;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.expansion.BakedModelExpansion;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.expansion.BlockMachineExpansion;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.speed.BakedModelSpeed;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.util.enums.EnumGui;
 import jaminv.advancedmachines.util.helper.BlockHelper;
@@ -88,8 +86,8 @@ public class BlockMachineTank extends BlockMachineExpansion {
         	facing = te.getFacing();
         	input = te.getInputState();
         	borders = te.getBorders();
-        	fluid = te.getFluid();
-        	capacity = te.getFluidCapacity();
+        	fluid = te.getTank().getFluid();
+        	capacity = te.getTank().getCapacity();
         }
         
         return (IExtendedBlockState) ext.withProperty(Properties.FLUID, fluid)

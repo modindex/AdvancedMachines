@@ -1,31 +1,30 @@
 package jaminv.advancedmachines.objects.blocks.machine.dialog;
 
-import jaminv.advancedmachines.objects.blocks.machine.IMachineEnergy;
-import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
 import jaminv.advancedmachines.util.dialog.control.DialogProgressBar;
 import net.minecraft.client.resources.I18n;
+import net.minecraftforge.energy.IEnergyStorage;
 
 public class DialogEnergyBar extends DialogProgressBar {
 
-	protected final IMachineEnergy te;
+	protected final IEnergyStorage energy;
 	
-	public DialogEnergyBar(IMachineEnergy te, int x, int y, int w, int h) {
+	public DialogEnergyBar(IEnergyStorage energy, int x, int y, int w, int h) {
 		super(x, y, w, h, ProgressAxis.VERTICAL);
-		this.te = te;
+		this.energy = energy;
 	}
 	
-	public DialogEnergyBar(IMachineEnergy te, int x, int y, int w, int h, int u, int v) {
+	public DialogEnergyBar(IEnergyStorage energy, int x, int y, int w, int h, int u, int v) {
 		super(x, y, w, h, u, v, ProgressAxis.VERTICAL);
-		this.te = te;
+		this.energy = energy;
 	}
 
 	@Override
 	protected float getPercent() {
-		return te.getEnergyPercent();
+		return energy.getEnergyStored() / (float)energy.getMaxEnergyStored();
 	}
 	
 	@Override
 	public String getTooltip(int mouseX, int mouseY) {
-		return I18n.format("dialog.common.energy", te.getEnergyStored(), te.getMaxEnergyStored());
+		return I18n.format("dialog.common.energy", energy.getEnergyStored(), energy.getMaxEnergyStored());
 	}	
 }

@@ -1,7 +1,7 @@
 package jaminv.advancedmachines.lib.container.layout.impl;
 
+import jaminv.advancedmachines.lib.container.ContainerMachine;
 import jaminv.advancedmachines.lib.container.layout.Layout;
-import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;

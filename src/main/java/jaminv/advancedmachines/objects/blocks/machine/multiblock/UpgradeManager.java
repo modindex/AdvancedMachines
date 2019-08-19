@@ -1,61 +1,32 @@
 package jaminv.advancedmachines.objects.blocks.machine.multiblock;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nullable;
-import javax.management.NotificationBroadcaster;
-
-import jaminv.advancedmachines.lib.recipe.RecipeInput;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgrade;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTileEntity;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTool;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 
 public class UpgradeManager implements INBTSerializable<NBTTagCompound> {
 	protected Map<IMachineUpgrade.UpgradeType, Integer> upgrades;
-	protected List<BlockPos> tools;
-	
-	public static class ToolCompare implements Comparator<BlockPos> {
-		World world;
-		
-		public ToolCompare(World world) {
-			this.world = world;
-		}
-		
-		@Override
-		public int compare(BlockPos arg0, BlockPos arg1) {
-			TileEntity te0 = world.getTileEntity(arg0);
-			if (!(te0 instanceof IMachineUpgradeTool)) { return 1; }
-			TileEntity te1 = world.getTileEntity(arg1);
-			if (!(te1 instanceof IMachineUpgradeTool)) { return -1; }
-			
-			return ((IMachineUpgradeTool)te1).getPriority() - ((IMachineUpgradeTool)te0).getPriority();
-		}		
-	}	
-	
-	protected void reset() {
+	protected List<BlockPos> tools = new ArrayList<BlockPos>();
+
+	public void reset() {
 		upgrades = new EnumMap<IMachineUpgrade.UpgradeType, Integer>(IMachineUpgrade.UpgradeType.class);
 		tools = new ArrayList<BlockPos>();
 	}
 	
 	public boolean isValid() {
-		return (upgrades != null && upgrades.size() > 0) || (tools != null && tools.size() > 0);
+		return (upgrades != null && upgrades.size() > 0);
 	}
 	
-	protected void add(IMachineUpgrade.UpgradeType type, int add) {
+	public void add(IMachineUpgrade.UpgradeType type, int add) {
 		if (upgrades == null) { reset(); }
 		Integer qty = upgrades.get(type);
 		if (qty == null) { qty = 0; }
@@ -69,26 +40,9 @@ public class UpgradeManager implements INBTSerializable<NBTTagCompound> {
 		return qty;
 	}
 	
-	public void addTool(BlockPos pos, World world) {
-		if (tools == null) { tools = new ArrayList<BlockPos>(); }
-		tools.add(new BlockPos(pos));
-		sortTools(world);
-	}
-	
-	public void sortTools(World world) {
-		if (tools == null) { return; }
-		
-		BlockPos[] t = tools.toArray(new BlockPos[0]);
-		Arrays.sort(t, new ToolCompare(world));
-		tools = new ArrayList<BlockPos>(Arrays.asList(t));
-	}
-	
-	public BlockPos[] getTools() {
-		BlockPos[] def = new BlockPos[0];
-		if (tools == null) { return def; }
-		
-		return tools.toArray(def);
-	}
+	public void addTool(BlockPos pos) {	tools.add(pos); }	
+	public int getToolCount() { return tools.size(); }
+	public BlockPos getTool(int index) { return tools.get(index); }
 	
     @Override
     public NBTTagCompound serializeNBT()
@@ -96,7 +50,7 @@ public class UpgradeManager implements INBTSerializable<NBTTagCompound> {
         NBTTagCompound nbt = new NBTTagCompound();
 
         if (upgrades != null) {
-        	NBTTagList nbtTagList = new NBTTagList();
+        	NBTTagList nbtUpgrades = new NBTTagList();
         	int count = 0;
         	for (IMachineUpgrade.UpgradeType type : IMachineUpgrade.UpgradeType.values()) {
         		Integer qty = upgrades.get(type);
@@ -104,22 +58,24 @@ public class UpgradeManager implements INBTSerializable<NBTTagCompound> {
         			NBTTagCompound upgradeTag = new NBTTagCompound();
         			upgradeTag.setString("type", type.getName());
         			upgradeTag.setInteger("qty", qty);
-        			nbtTagList.appendTag(upgradeTag);
+        			nbtUpgrades.appendTag(upgradeTag);
         			count++;
         		}
             }
-
-            nbt.setTag("upgrades", nbtTagList);
+        	
+            nbt.setTag("upgrades", nbtUpgrades);
             nbt.setInteger("upgrade_count", count);
         }
-        if (tools != null) {
-        	NBTTagList nbtTagList = new NBTTagList();
-        	for (BlockPos pos : tools) {
-        		nbtTagList.appendTag(NBTUtil.createPosTag(pos));
-        	}
-        	nbt.setTag("tools", nbtTagList);
-        	nbt.setInteger("tool_count", tools.size());
-        }
+        
+    	if (tools != null && tools.size() > 0) {
+	        NBTTagList nbtTools = new NBTTagList();
+	    	for (BlockPos pos : tools) {
+	    		nbtTools.appendTag(NBTUtil.createPosTag(pos));
+	    	}
+	    	
+	    	nbt.setTag("tools", nbtTools);
+	    	nbt.setInteger("tool_count", tools.size());
+    	}
         return nbt;
     }
 
@@ -136,12 +92,12 @@ public class UpgradeManager implements INBTSerializable<NBTTagCompound> {
                 upgrades.put(IMachineUpgrade.UpgradeType.getType(type), qty);            	
             }
     	}
+    	
     	if (nbt.hasKey("tool_count")) {
     		int count = nbt.getInteger("tool_count");
     		NBTTagList tagList = nbt.getTagList("tools", Constants.NBT.TAG_COMPOUND);
     		for (int i = 0; i < count; i++) {
-    			NBTTagCompound toolTag = tagList.getCompoundTagAt(i);
-    			tools.add(NBTUtil.getPosFromTag(toolTag));
+    			tools.add(NBTUtil.getPosFromTag(tagList.getCompoundTagAt(i)));
     		}
     	}
     }

@@ -35,6 +35,10 @@ public final class ModConfig {
 		@RangeInt(min = 0, max = 128000)
 		public int defaultMachineFluidCapacity = 16000;
 		
+		@Config.Comment("Default machine fluid transfer rate for lowest tier")
+		@RangeInt(min = 0, max = 50000)
+		public int defaultMachineFluidTransfer = 1000;
+		
 		@Config.Comment("Processing time for machines with no upgrages")
 		@RangeInt(min = 1, max=6000)
 		public int processTimeBasic = 100;

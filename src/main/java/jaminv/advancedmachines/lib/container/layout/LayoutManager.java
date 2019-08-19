@@ -13,6 +13,10 @@ import net.minecraftforge.items.SlotItemHandler;
 
 public class LayoutManager implements ILayoutManager {
 	private List<ILayout> layouts = new ArrayList<>();
+	int inventorySlots = 0, playerSlots = 0;
+	
+	@Override public int getInventorySlots() { return inventorySlots; }
+	@Override public int getPlayerSlots() { return playerSlots; }
 	
 	public LayoutManager addLayout(ILayout layout) {
 		layouts.add(layout);
@@ -39,8 +43,8 @@ public class LayoutManager implements ILayoutManager {
 	}
 	
 	private ILayout inventory, hotbar;
-	public ILayoutManager setInventoryLayout(Layout layout) { this.inventory = layout; return this; }
-	public ILayoutManager setHotbarLayout(Layout layout) { this.hotbar = layout; return this; }
+	public LayoutManager setInventoryLayout(Layout layout) { this.inventory = layout; return this; }
+	public LayoutManager setHotbarLayout(Layout layout) { this.hotbar = layout; return this; }
 	
 	public LayoutManager setInventoryLayout(int xpos, int ypos) { this.inventory = new InventoryLayout(xpos, ypos); return this; }
 	public LayoutManager setHotbarLayout(int xpos, int ypos) { this.hotbar = new HotbarLayout(xpos, ypos); return this; }
@@ -65,7 +69,8 @@ public class LayoutManager implements ILayoutManager {
 					slotIndex++;
 				}
 			}
-		}
+		}		
+		inventorySlots = slotIndex;
 	}
 	
 	@Override
@@ -91,6 +96,7 @@ public class LayoutManager implements ILayoutManager {
 					container.addSlot(new Slot(playerInventory, c, x, y));
 				}
 			}
-		}
+		}		
+		playerSlots = slotIndex;
 	}	
 }

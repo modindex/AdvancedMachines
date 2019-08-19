@@ -18,7 +18,7 @@ import com.google.common.collect.Iterables;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.init.property.Properties;
-import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineBase;
+import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachine;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTileEntity;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.redstone.TileEntityMachineRedstone;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;

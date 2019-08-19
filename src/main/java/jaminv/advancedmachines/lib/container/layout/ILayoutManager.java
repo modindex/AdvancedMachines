@@ -5,8 +5,11 @@ import net.minecraftforge.items.IItemHandler;
 
 public interface ILayoutManager {
 
-	void addInventorySlots(ILayoutUser container, IItemHandler inventory);
+	public void addInventorySlots(ILayoutUser container, IItemHandler inventory);
 
-	void addPlayerSlots(ILayoutUser container, IInventory playerInventory);
+	public void addPlayerSlots(ILayoutUser container, IInventory playerInventory);
+	
+	public int getInventorySlots();
+	public int getPlayerSlots();
 
 }

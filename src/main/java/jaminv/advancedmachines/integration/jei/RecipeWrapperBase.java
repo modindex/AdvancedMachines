@@ -6,7 +6,11 @@ import java.util.List;
 
 import jaminv.advancedmachines.integration.jei.element.JeiElement;
 import jaminv.advancedmachines.lib.container.layout.Layout;
-import jaminv.advancedmachines.lib.recipe.RecipeBase;
+import jaminv.advancedmachines.lib.recipe.IItemGeneric;
+import jaminv.advancedmachines.lib.recipe.IJeiRecipe;
+import jaminv.advancedmachines.lib.recipe.IRecipe;
+import jaminv.advancedmachines.lib.recipe.IRecipe.IInput;
+import jaminv.advancedmachines.lib.recipe.IRecipe.IOutput;
 import jaminv.advancedmachines.objects.blocks.machine.DialogMachineBase;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
@@ -16,13 +20,14 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import scala.actors.threadpool.Arrays;
 
-public class RecipeWrapperBase<T extends RecipeBase> implements IRecipeWrapper {
+public class RecipeWrapperBase<T extends IJeiRecipe> implements IRecipeWrapper {
 
 	protected final T recipe;
 	protected final DialogMachineBase dialog;
 	
 	protected List<List<ItemStack>> inputs;
 	protected List<ItemStack> outputs;
+	protected IJeiRecipe.ISecondaryOutput secondary;
 	
 	public String getRecipeId() { return recipe.getRecipeId(); }
 	
@@ -33,16 +38,20 @@ public class RecipeWrapperBase<T extends RecipeBase> implements IRecipeWrapper {
 		this.inputs = new ArrayList<List<ItemStack>>();
 		this.outputs = new ArrayList<ItemStack>();
 		
-		for (int i = 0; i < recipe.getInputCount(); i++) {
-			this.inputs.add(recipe.getInput(i).getItems());
+		IInput input = recipe.getInput();
+		for (IItemGeneric item : input.getItems()) {
+			this.inputs.add(item.getItems());
+		}
+		// TODO: JEI Fluids
+		
+		IOutput output = recipe.getOutput();
+		for (ItemStack stack : output.getItems()) {
+			this.outputs.add(stack);
 		}
 		
-		for (int i = 0; i < recipe.getOutputCount(); i++) {
-			this.outputs.add(recipe.getOutput(i).toItemStack());
-		}
-		
-		for (int i = 0; i < recipe.getSecondary().size(); i++) {
-			this.outputs.add(recipe.getSecondary().get(i).toItemStack());
+		secondary = recipe.getJeiSecondary();
+		for (IJeiRecipe.ISecondary sec : secondary.getItems()) {
+			this.outputs.add(sec.toItemStack());
 		}
 		
 		for (JeiElement element : dialog.getJeiElements()) {
@@ -56,13 +65,13 @@ public class RecipeWrapperBase<T extends RecipeBase> implements IRecipeWrapper {
 		ingredients.setOutputs(ItemStack.class, this.outputs);
 	}
 	
-	public int getInputCount() { return recipe.getInputCount(); }
-	public int getOutputCount() { return recipe.getOutputCount(); }
-	public int getSecondaryCount() { return recipe.getSecondary().size(); }
-	
 	public int getSecondaryChance(int index) {
-		return recipe.getSecondary().get(index).getChance();
+		return secondary.getItems().get(index).getChance();
 	}
+	
+	public int getInputCount() { return inputs.size(); }
+	public int getOutputCount() { return recipe.getOutput().getItems().size(); }
+	public int getSecondaryCount() { return secondary.getItems().size(); }
 	
 	@Override
 	public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
@@ -75,8 +84,8 @@ public class RecipeWrapperBase<T extends RecipeBase> implements IRecipeWrapper {
 		int y = layout.getYPos();
 		int count = 0;
 		
-		for (int i = 0; i < recipe.getSecondary().size(); i++) {
-			String percent = I18n.format("dialog.common.percent", getSecondaryChance(i));
+		for (IJeiRecipe.ISecondary sec : secondary.getItems()) {
+			String percent = I18n.format("dialog.common.percent", sec.getChance());
 			int width = minecraft.fontRenderer.getStringWidth(percent);
 		
 			int tx, ty;

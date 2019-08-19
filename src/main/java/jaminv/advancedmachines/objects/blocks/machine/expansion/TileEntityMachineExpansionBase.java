@@ -39,9 +39,7 @@ public class TileEntityMachineExpansionBase extends TileEntity implements IMachi
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		if (compound.hasKey("meta")) {
-			material = MaterialExpansion.byMetadata(compound.getInteger("meta"));
-		}
+		setMeta(compound.getInteger("meta"));
 		if (compound.hasKey("borders")) {
 			borders.deserializeNBT(compound.getCompoundTag("borders"));
 		}
@@ -56,13 +54,11 @@ public class TileEntityMachineExpansionBase extends TileEntity implements IMachi
 	} 
 	
     @Nullable
-    public SPacketUpdateTileEntity getUpdatePacket()
-    {
+    public SPacketUpdateTileEntity getUpdatePacket() {
         return new SPacketUpdateTileEntity(this.pos, 1, this.getUpdateTag());
     }
 
-    public NBTTagCompound getUpdateTag()
-    {
+    public NBTTagCompound getUpdateTag() {
         return this.writeToNBT(new NBTTagCompound());
     }
     

@@ -1,43 +1,33 @@
 package jaminv.advancedmachines.objects.blocks.machine.instance.furnace;
 
-import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
+import jaminv.advancedmachines.lib.container.ContainerMachine;
+import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineMultiblock;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineType;
-import jaminv.advancedmachines.objects.material.MaterialExpansion;
-import jaminv.advancedmachines.util.recipe.machine.FurnaceManager;
+import jaminv.advancedmachines.util.recipe.FurnaceManager;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.IInventory;
 
 public class TileEntityMachineFurnace extends TileEntityMachineMultiblock {
-
-	@Override
-	public int getInputCount() { return 1; }
-	
-	@Override
-	public int getOutputCount() { return 1;	}
-	
-	@Override 
-	public int getSecondaryCount() { return 0; }
-	
 	
 	public TileEntityMachineFurnace() {
-		super(FurnaceManager.getRecipeManager());		
+		super(FurnaceManager.getRecipeManager());
+		inventory.addInputSlots(1);
+		inventory.addOutputSlots(1);
 	}
 
 	
 	@Override
 	public MachineType getMachineType() {
-		// TODO Auto-generated method stub
 		return MachineType.FURNACE;
 	}
 
 	@Override
-	public ContainerMachine createContainer(IInventory inventory) {
-		return new ContainerMachine(inventory, DialogMachineFurnace.layout, this, FurnaceManager.getRecipeManager());
+	public ContainerMachine createContainer(IInventory playerInventory) {
+		return new ContainerMachine(DialogMachineFurnace.layout, storage, playerInventory, this.getSyncManager());
 	}
 	
 	@Override
-	public GuiContainer createGui(IInventory inventory) {
-		return new DialogMachineFurnace(createContainer(inventory), this);
+	public GuiContainer createGui(IInventory playerInventory) {
+		return new DialogMachineFurnace(createContainer(playerInventory), this);
 	}
 }

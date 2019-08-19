@@ -7,9 +7,9 @@ import net.minecraftforge.fluids.IFluidTank;
 
 public interface IFluidHandlerMachine extends IFluidHandlerInternal, IFluidObservable, INBTSerializable<NBTTagCompound> {
 	/** Return copies of the fluids in input tanks */
-	public FluidStack[] getInput();
+	public FluidStack[] getFluidInput();
 	/** Returns COPIES of the output tanks. */
-	public IFluidTankInternal[] getOutput();
+	public IFluidTankInternal[] getFluidOutput();
 	
-	public void setCapacity(int capacity);
+	public void setFluidCapacity(int capacity);
 }

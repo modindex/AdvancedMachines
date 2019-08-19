@@ -1,5 +1,6 @@
 package jaminv.advancedmachines.integration.jei.element;
 
+import jaminv.advancedmachines.lib.recipe.IRecipe;
 import jaminv.advancedmachines.lib.recipe.RecipeBase;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawableAnimated;
@@ -13,7 +14,7 @@ public class JeiEnergyBar extends JeiElementAnimated {
 	}
 	
 	@Override
-	public String getTooltip(RecipeBase recipe) {
+	public String getTooltip(IRecipe recipe) {
 		return I18n.format("dialog.jei.energy", recipe.getEnergy());
 	}	
 }

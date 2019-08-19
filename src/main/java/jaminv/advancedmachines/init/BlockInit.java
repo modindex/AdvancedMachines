@@ -18,6 +18,7 @@ import jaminv.advancedmachines.objects.blocks.machine.instance.furnace.BlockMach
 import jaminv.advancedmachines.objects.blocks.machine.instance.grinder.BlockMachineGrinder;
 import jaminv.advancedmachines.objects.blocks.machine.instance.melter.BlockMachineMelter;
 import jaminv.advancedmachines.objects.blocks.machine.instance.purifier.BlockMachinePurifier;
+import jaminv.advancedmachines.objects.blocks.machine.instance.stabilizer.BlockMachineStabilizer;
 import jaminv.advancedmachines.objects.fluids.BlockFluidClassicBase;
 import jaminv.advancedmachines.objects.material.MaterialBase;
 import jaminv.advancedmachines.objects.material.MaterialExpansion;
@@ -50,6 +51,7 @@ public class BlockInit {
 	public static final BlockMachinePurifier MACHINE_PURIFIER = new BlockMachinePurifier("machine_purifier");
 	public static final BlockMachineAlloy MACHINE_ALLOY = new BlockMachineAlloy("machine_alloy");
 	public static final BlockMachineMelter MACHINE_MELTER = new BlockMachineMelter("machine_melter");
+	public static final BlockMachineStabilizer MACHINE_STABILIZER = new BlockMachineStabilizer("machine_stabilizer");
 	
 	public static final BlockMachineExpansion MACHINE_EXPANSION = new BlockMachineExpansion("machine_expansion");
 	public static final BlockMachineSpeed MACHINE_SPEED = new BlockMachineSpeed("machine_speed");

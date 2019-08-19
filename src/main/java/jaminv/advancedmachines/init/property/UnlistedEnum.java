@@ -25,7 +25,6 @@ public class UnlistedEnum<V> implements IUnlistedProperty<V> {
 
 	@Override
 	public Class<V> getType() {
-		// TODO Auto-generated method stub
 		return enumClass;
 	}
 

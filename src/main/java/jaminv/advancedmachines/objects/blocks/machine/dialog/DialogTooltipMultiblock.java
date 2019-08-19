@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.objects.blocks.machine.dialog;
 
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
+import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineMultiblock;
 import jaminv.advancedmachines.util.dialog.struct.DialogTooltip;
 
 public class DialogTooltipMultiblock extends DialogTooltip {

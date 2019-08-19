@@ -1,27 +1,18 @@
 package jaminv.advancedmachines.objects.blocks.machine.instance.grinder;
 
-import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
+import jaminv.advancedmachines.lib.container.ContainerMachine;
+import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineMultiblock;
 import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineType;
-import jaminv.advancedmachines.objects.material.MaterialExpansion;
-import jaminv.advancedmachines.util.recipe.machine.grinder.GrinderManager;
+import jaminv.advancedmachines.util.recipe.grinder.GrinderManager;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.IInventory;
 
 public class TileEntityMachineGrinder extends TileEntityMachineMultiblock {
-
-	@Override
-	public int getInputCount() { return 1; }
-	
-	@Override
-	public int getOutputCount() { return 1;	}
-	
-	@Override 
-	public int getSecondaryCount() { return 1; }
-	
-	
 	public TileEntityMachineGrinder() {
-		super(GrinderManager.getRecipeManager());		
+		super(GrinderManager.getRecipeManager());
+		inventory.addInputSlots(1);
+		inventory.addOutputSlots(1);
+		inventory.addSecondarySlots(1);
 	}
 	
 	@Override
@@ -30,8 +21,8 @@ public class TileEntityMachineGrinder extends TileEntityMachineMultiblock {
 	}
 
 	@Override
-	public ContainerMachine createContainer(IInventory inventory) {
-		return new ContainerMachine(inventory, DialogMachineGrinder.layout, this, GrinderManager.getRecipeManager());
+	public ContainerMachine createContainer(IInventory playerInventory) {
+		return new ContainerMachine(DialogMachineGrinder.layout, storage, playerInventory, this.getSyncManager());
 	}
 	
 	@Override

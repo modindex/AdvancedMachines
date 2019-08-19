@@ -1,8 +1,8 @@
 package jaminv.advancedmachines.lib.container.layout.impl;
 
+import jaminv.advancedmachines.lib.container.ContainerMachine;
 import jaminv.advancedmachines.lib.container.layout.Layout;
 import jaminv.advancedmachines.lib.recipe.IRecipeManager;
-import jaminv.advancedmachines.objects.blocks.machine.ContainerMachine;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -19,7 +19,7 @@ public class InputLayout extends Layout {
 		
 		@Override
 		public boolean isItemValid(ItemStack stack) {
-			return recipe.isItemValid(stack, null, null);
+			return true; //return recipe.isItemValid(stack, null, null);
 		}
 	}	
 	
@@ -37,7 +37,7 @@ public class InputLayout extends Layout {
 	}
 	
 	public SlotItemHandler createSlot(IItemHandler itemHandler, int slotIndex, int x, int y) {
-		return new SlotInput(recipe, itemHandler, slotIndex, x, y);
+		return new SlotItemHandler(itemHandler, slotIndex, x, y);
 	}
 }
 	

@@ -1,6 +1,7 @@
 package jaminv.advancedmachines.objects.blocks.machine.multiblock;
 
 import io.netty.buffer.ByteBuf;
+import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachineMultiblock;
 import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.TileEntityMachineInventory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;

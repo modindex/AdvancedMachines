@@ -167,19 +167,16 @@ public abstract class BakedModelBase implements IBakedModel {
 
 	@Override
 	public boolean isAmbientOcclusion() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean isGui3d() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean isBuiltInRenderer() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

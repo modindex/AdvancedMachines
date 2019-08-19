@@ -87,7 +87,7 @@ public class EnergyStorageAdvanced implements IEnergyStorageAdvanced {
 		if (old != value) { this.onEnergyChanged(); }
 	}
 	
-	public void setCapacity(int capacity) {
+	public void setEnergyCapacity(int capacity) {
 		this.capacity = capacity;
 		if (energy > capacity) { energy = capacity; }
 	}

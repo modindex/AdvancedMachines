@@ -1,0 +1,6 @@
+{
+    "coal": {
+        "input": { "fluid": "coal", "amount": 100 },
+        "output": { "ore": "dustCoal" }
+    }
+}

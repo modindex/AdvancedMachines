@@ -1,7 +1,8 @@
 package jaminv.advancedmachines.util.message;
 
 import io.netty.buffer.ByteBuf;
-import jaminv.advancedmachines.util.interfaces.ISwitchableIO;
+import jaminv.advancedmachines.objects.blocks.machine.dialog.DialogIOToggleButton;
+import jaminv.advancedmachines.objects.blocks.machine.dialog.DialogIOToggleButton.ISwitchableIO;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;

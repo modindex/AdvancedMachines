@@ -14,7 +14,7 @@ import jaminv.advancedmachines.objects.blocks.machine.instance.purifier.TileEnti
 import jaminv.advancedmachines.objects.material.MaterialExpansion;
 import jaminv.advancedmachines.util.dialog.container.EmptyContainer;
 import jaminv.advancedmachines.util.dialog.struct.DialogArea;
-import jaminv.advancedmachines.util.recipe.machine.purifier.PurifierManager;
+import jaminv.advancedmachines.util.recipe.purifier.PurifierManager;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModRegistry;

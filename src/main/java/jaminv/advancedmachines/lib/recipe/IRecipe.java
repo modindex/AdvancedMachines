@@ -3,7 +3,6 @@ package jaminv.advancedmachines.lib.recipe;
 import java.util.List;
 
 import jaminv.advancedmachines.lib.fluid.IFluidTankInternal;
-import jaminv.advancedmachines.lib.inventory.IItemGeneric;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -22,7 +21,9 @@ public interface IRecipe {
 	public interface IOutput {
 		public List<ItemStack> getItems();
 		public List<FluidStack> getFluids();
-	}	
+	}
+	
+	public String getRecipeId();
 	
 	public IInput getInput();	
 	public IOutput getOutput();

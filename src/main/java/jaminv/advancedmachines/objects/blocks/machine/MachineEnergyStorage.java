@@ -12,7 +12,7 @@ public class MachineEnergyStorage extends EnergyStorageAdvanced {
 	}
 
 	public void setMaterial(MaterialExpansion material) {
-		setCapacity(ModConfig.general.defaultMachineEnergyCapacity * material.getMultiplier());
+		setEnergyCapacity(ModConfig.general.defaultMachineEnergyCapacity * material.getMultiplier());
 		setMaxTransfer(ModConfig.general.defaultMachineEnergyTransfer * material.getMultiplier());
 	}
 }

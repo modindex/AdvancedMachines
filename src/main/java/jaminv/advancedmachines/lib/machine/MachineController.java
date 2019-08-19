@@ -1,64 +1,87 @@
  package jaminv.advancedmachines.lib.machine;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import jaminv.advancedmachines.lib.container.ISyncSubject;
 import jaminv.advancedmachines.lib.energy.IEnergyObservable;
 import jaminv.advancedmachines.lib.energy.IEnergyStorageAdvanced;
 import jaminv.advancedmachines.lib.energy.IEnergyStorageInternal;
-import jaminv.advancedmachines.lib.fluid.IFluidHandlerInternal;
 import jaminv.advancedmachines.lib.fluid.IFluidHandlerMachine;
 import jaminv.advancedmachines.lib.fluid.IFluidObservable;
-import jaminv.advancedmachines.lib.inventory.IItemGeneric;
-import jaminv.advancedmachines.lib.inventory.IItemHandlerInternal;
 import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
 import jaminv.advancedmachines.lib.inventory.IItemObservable;
-import jaminv.advancedmachines.lib.machine.IRedstoneControlled.RedstoneState;
+import jaminv.advancedmachines.lib.inventory.InventoryHelper;
+import jaminv.advancedmachines.lib.recipe.IItemGeneric;
 import jaminv.advancedmachines.lib.recipe.IRecipe;
 import jaminv.advancedmachines.lib.recipe.IRecipeManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.IItemHandler;
 
-public class MachineController implements IMachineController, IItemObservable.IObserver, IFluidObservable.IObserver, IEnergyObservable.IObserver, INBTSerializable<NBTTagCompound>, ISyncSubject {
+public class MachineController implements IMachineController, IItemObservable.IObserver, IFluidObservable.IObserver, IEnergyObservable.IObserver, 
+		INBTSerializable<NBTTagCompound>, ISyncSubject {
 	
 	protected final IItemHandlerMachine inventory;
 	protected final IFluidHandlerMachine fluidtank;
 	protected final IEnergyStorageAdvanced energy;
 	protected final IRecipeManager recipemanager;
 	protected final IMachineTE te;
-	protected final boolean isClient;
 	
-	public MachineController(IItemHandlerMachine inventory, IFluidHandlerMachine fluidtank, IEnergyStorageAdvanced energy, IRecipeManager recipemanager, IMachineTE te, boolean isClient) {
+	public MachineController(IItemHandlerMachine inventory, IFluidHandlerMachine fluidtank, IEnergyStorageAdvanced energy, IRecipeManager recipemanager, IMachineTE te) {
 		this.inventory = inventory;
 		this.fluidtank = fluidtank;
 		this.energy = energy;
 		this.recipemanager = recipemanager;
 		this.te = te;
-		this.isClient = isClient;
 	}
 	
-	public MachineController(MachineStorage storage, IMachineTE te, boolean isClient) {
-		inventory = storage.inventory;
-		fluidtank = storage.fluidtank;
-		energy = storage.energy;
-		recipemanager = storage.recipemanager;
+	public MachineController(IMachineStorage storage, IRecipeManager recipemanager, IMachineTE te) {
+		inventory = storage;
+		fluidtank = storage;
+		energy = storage;
+		this.recipemanager = recipemanager;
+		
+		inventory.addObserver(this);
+		fluidtank.addObserver(this);
+		energy.addObserver(this);
+		
 		this.te = te;
-		this.isClient = isClient;
 	}
 	
-	public IItemHandlerInternal getInventory() { return inventory; }
-	public IFluidHandlerInternal getFluidTank() { return fluidtank; }
+	public IItemHandlerMachine getInventory() { return inventory; }
+	public IFluidHandler getFluidTank() { return fluidtank; }
 	public IEnergyStorageInternal getEnergy() { return energy; }
 	public IRecipeManager getRecipeManager() { return recipemanager; }	
 	
-	private List<IObserver> observers = new ArrayList<>();
-	public IMachineController addObserver(IObserver obv) { observers.add(obv); return this; }
+	private List<ISubController> subcontrollers = new ArrayList<ISubController>();
+	public void addSubController(ISubController sub) { 
+		subcontrollers.add(sub);
+		sub.setController(this);
+	}
+	public void removeSubController(ISubController sub) { subcontrollers.remove(sub); }
+	public void clearSubContollers() { subcontrollers.clear(); }
+	public int getSubControllerCount() { return subcontrollers.size(); }
+	
+	private static class SubControllerCompare implements Comparator<ISubController> {
+		@Override 
+		public int compare(ISubController sub1, ISubController sub2) {
+			return sub1.getPriority() - sub2.getPriority();
+		}		
+	}
+	
+	@Override
+	public void sortSubControllers() {
+		subcontrollers.sort(new SubControllerCompare());
+	}	
 	
 	/* Base Processing Data */
-	
+
 	private boolean sleep = false;
 	/** Call to restart tick updates when a tile entity's state changes. */
 	public void wake() { sleep = false; }
@@ -69,7 +92,7 @@ public class MachineController implements IMachineController, IItemObservable.IO
 	private int totalProcessTime = 0;
 	
 	public boolean isProcessing() {
-		return isClient ? te.isProcessing() : processTimeRemaining > 0;
+		return te.isClient() ? te.isProcessing() : processTimeRemaining > 0;
 	}
 	
 	public int getQtyProcessing() { return qtyProcessing; }	
@@ -83,7 +106,7 @@ public class MachineController implements IMachineController, IItemObservable.IO
 	 * Main Processing Loop
 	 */		
 	public void tick(int ticks) {
-		if (isClient || sleep) { return; }
+		if (te.isClient() || sleep) { return; }
 
 		boolean sleep = true;
 
@@ -92,7 +115,7 @@ public class MachineController implements IMachineController, IItemObservable.IO
 		preProcess();
 		process(ticks);
 		postProcess();
-			
+		
 		boolean newProcess = this.isProcessing();
 		if (newProcess != oldProcess) {
 			te.setProcessingState(newProcess);
@@ -102,14 +125,14 @@ public class MachineController implements IMachineController, IItemObservable.IO
 	/** Send preProcess() message to observers 
 	 * @return */
 	protected void preProcess() {
-		for (IObserver obvserver : observers) {
+		for (ISubController obvserver : subcontrollers) {
 			if (obvserver.preProcess((IMachineController)this)) { wake(); }
 		}
 	}
 	
 	/** Send postProcess() message to observers */
 	protected void postProcess() {
-		for (IObserver obvserver : observers) {
+		for (ISubController obvserver : subcontrollers) {
 			if (obvserver.postProcess((IMachineController)this)) { wake(); }
 		}
 	}	
@@ -119,14 +142,15 @@ public class MachineController implements IMachineController, IItemObservable.IO
 		if (!te.isRedstoneActive()) { return; }
 		
 		if (!isProcessing()) {
-			IRecipe recipe = recipemanager.getRecipe(inventory.getInput(), fluidtank.getInput());
+			IRecipe recipe = recipemanager.getRecipe(inventory.getItemInput(), fluidtank.getFluidInput());
 			if (recipe == null || !beginProcess(recipe)) { return; }
 			processTimeRemaining = totalProcessTime = recipe.getProcessTime();
 			lastRecipe = recipe;
 			wake(); return;
 		} else if (lastRecipe == null) {
 			// TE was just loaded from NBT
-			lastRecipe = recipemanager.getRecipe(inventory.getInput(), fluidtank.getInput());
+			lastRecipe = recipemanager.getRecipe(inventory.getItemInput(), fluidtank.getFluidInput());
+			if (lastRecipe == null) { haltProcess(); return; }
 		}
 
 		if (!extractEnergy(lastRecipe, ticks)) { return; }
@@ -148,8 +172,8 @@ public class MachineController implements IMachineController, IItemObservable.IO
 	}
 	
 	protected int getRecipeQty(IRecipe recipe) {
-		return recipe.getRecipeQty(inventory.getInput(), fluidtank.getInput(),
-			inventory.getOutput(), fluidtank.getOutput());
+		return recipe.getRecipeQty(inventory.getItemInput(), fluidtank.getFluidInput(),
+			inventory.getOutput(), fluidtank.getFluidOutput());
 	}	
 	
 	protected boolean extractEnergy(IRecipe lastRecipe, int ticks) {
@@ -170,20 +194,33 @@ public class MachineController implements IMachineController, IItemObservable.IO
 
 		// Output
 		IRecipe.IOutput output = recipe.getOutput();
-		for (ItemStack item : output.getItems()) { outputItem(item); }
+		for (ItemStack item : output.getItems()) { outputItem(item, 
+			inventory.getFirstOutputSlot(), inventory.getLastOutputSlot()); }
 		for (FluidStack fluid : output.getFluids()) { outputFluid(fluid); }
 		
 		// Secondary
 		for (int i = 0; i < qtyProcessing; i++) {
 			IRecipe.IOutput secondary = recipe.getSecondary();
-			for (ItemStack item : secondary.getItems()) { outputItem(item); }
+			for (ItemStack item : secondary.getItems()) { outputItem(item, 
+				inventory.getFirstSecondarySlot(), inventory.getLastSecondarySlot()); }
 			for (FluidStack fluid : secondary.getFluids()) { outputFluid(fluid); }
 		}
+		
+		qtyProcessing = 0;
 	}
 	
 	protected void extractItem(IItemGeneric item) {
-		int count = item.getCount() * qtyProcessing;
-		inventory.extractItemInternal(new IItemGeneric.ItemGenericWrapper(item, count), false);
+		int qty = item.getCount() * qtyProcessing;
+		int count = 0;
+		
+		// I had generalized code for this, but it's really only ever used here.
+		for (int i = 0; i < inventory.getSlots(); i++) {
+			if (item.isValid(inventory.getStackInSlot(i))) {
+				ItemStack result = inventory.extractItem(i, qty, false);
+				count += result.getCount();
+			}
+			if (count >= qty) { return; }
+		}
 	}
 	
 	protected void extractFluid(FluidStack fluid) {
@@ -191,10 +228,10 @@ public class MachineController implements IMachineController, IItemObservable.IO
 		fluidtank.drainInternal(new FluidStack(fluid, amount), true);
 	}
 	
-	protected void outputItem(ItemStack item) {
+	protected void outputItem(ItemStack item, int firstSlot, int lastSlot) {
 		ItemStack copy = item.copy();
 		copy.setCount(item.getCount() * qtyProcessing);
-		inventory.insertItemInternal(copy, false);
+		InventoryHelper.pushStack(copy, inventory, firstSlot, lastSlot, false);
 	}
 	
 	protected void outputFluid(FluidStack fluid) {
@@ -204,7 +241,7 @@ public class MachineController implements IMachineController, IItemObservable.IO
 
 	/** Ends processing entirely, not just paused. */
 	protected void haltProcess() {
-		if (!isClient) { 
+		if (!te.isClient()) { 
 			processTimeRemaining = -1;
 			qtyProcessing = 0;
 			te.setProcessingState(false);
@@ -213,29 +250,35 @@ public class MachineController implements IMachineController, IItemObservable.IO
 	
 	/* Events */	
 
+	/**
+	 * CANTFIX: When a use adds items to an existing stack, MC briefly sends an inventory change event saying the slot is empty.
+	 * This resets the recipe. This doesn't happen with hoppers, etc, just human interaction. There doesn't appear to be a way to fix it.
+	 */
 	@Override
 	public void onInventoryContentsChanged(int slot) {
 		wake();
+		te.onControllerUpdate();
 
 		// We only care about input slots changing while processing (and only on the server)
-		if (!isClient || !isProcessing()) { return; }
+		if (te.isClient() || !isProcessing()) { return; }
 
 		int qty = this.getRecipeQty(lastRecipe);
 		if (qty <= 0) { haltProcess(); }
 		if (qty < qtyProcessing) { qtyProcessing = qty; }
 	}
 
-	@Override public void onEnergyChanged() { wake(); }
-	@Override public void onTankContentsChanged() { wake(); }
+	@Override public void onEnergyChanged() { wake(); te.onControllerUpdate(); }
+	@Override public void onTankContentsChanged() { wake(); te.onControllerUpdate(); }
 	
 	/* ISyncSubject */
 	
-	public int getFieldCount() { return 3; }
+	public int getFieldCount() { return 4; }
 	public int getField(int id) {
 		switch(id) {
 		case 0:	return processTimeRemaining;
 		case 1:	return totalProcessTime;
-		case 2:	return energy.getEnergyStored();
+		case 2: return qtyProcessing;
+		case 3:	return energy.getEnergyStored();
 		}
 		return 0;
 	}
@@ -244,7 +287,8 @@ public class MachineController implements IMachineController, IItemObservable.IO
 		switch(id) {
 		case 0:	processTimeRemaining = value; return;
 		case 1:	totalProcessTime = value; return;
-		case 2:	energy.setEnergy(value); return;
+		case 2: qtyProcessing = value; return;
+		case 3:	energy.setEnergy(value); return;
 		}
 	}	
 	

@@ -15,7 +15,7 @@ import net.minecraftforge.oredict.OreDictionary;
 /**
  * Helper class for recipe output where the mod material may be disabled
  */
-public class RecipeOutput implements Cloneable {
+public class RecipeOutput implements Cloneable, IJeiRecipe.ISecondary {
 	
 	public static String[] oreDictionaryPreference = {};
 	public static void setOreDictionaryPreference(String[] preference) {

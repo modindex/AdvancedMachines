@@ -3,56 +3,85 @@ package jaminv.advancedmachines.objects.blocks.machine.expansion.tank;
 import javax.annotation.Nullable;
 
 import jaminv.advancedmachines.Main;
-import jaminv.advancedmachines.lib.container.ContainerLayout;
+import jaminv.advancedmachines.lib.container.ContainerInventory;
 import jaminv.advancedmachines.lib.fluid.FluidTankAdvanced;
-import jaminv.advancedmachines.lib.recipe.IRecipeManager;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.BlockMachineExpansionBase;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTool;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockHelper;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblock;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.TileEntityMachineMultiblockFluid;
-import jaminv.advancedmachines.objects.fluid.TileEntityFluid;
+import jaminv.advancedmachines.lib.fluid.IFluidObservable;
+import jaminv.advancedmachines.lib.inventory.IItemObservable;
+import jaminv.advancedmachines.lib.inventory.ItemStackHandlerObservable;
+import jaminv.advancedmachines.lib.machine.IMachineController;
+import jaminv.advancedmachines.objects.blocks.machine.dialog.DialogIOToggleButton;
+import jaminv.advancedmachines.objects.blocks.machine.expansion.TileEntityMachineExpansionBase;
 import jaminv.advancedmachines.objects.material.MaterialExpansion;
 import jaminv.advancedmachines.util.ModConfig;
-import jaminv.advancedmachines.util.helper.InventoryHelper;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
-import jaminv.advancedmachines.util.interfaces.IHasMetadata;
-import jaminv.advancedmachines.util.interfaces.ISwitchableIO;
 import jaminv.advancedmachines.util.message.IOStateMessage;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.fluids.IFluidTank;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
-public class TileEntityMachineTank extends TileEntityFluid implements ITickable, IHasGui, IMachineUpgradeTool, IHasMetadata, IDirectional, ISwitchableIO {
+public class TileEntityMachineTank extends TileEntityMachineExpansionBase implements ITickable, IHasGui, IDirectional, 
+		IMachineController.ISubController, IItemObservable.IObserver, IFluidObservable.IObserver, DialogIOToggleButton.ISwitchableIO {
 	
 	protected EnumFacing facing = EnumFacing.NORTH;
 	protected boolean inputState = true;
 	protected int priority = 0;
-	protected MultiblockBorders borders = new MultiblockBorders();
-	protected BlockPos parent = null;
+	protected IMachineController controller;
+	
+	protected ItemStackHandlerObservable inventory = new ItemStackHandlerObservable(2) {
+		@Override protected int getStackLimit(int slot, ItemStack stack) {
+			if (FluidUtil.getFluidHandler(stack) != null) {	return 1; }
+			return super.getStackLimit(slot, stack);
+		}
+	};
+	
+	protected FluidTankAdvanced tank = new FluidTankAdvanced(ModConfig.general.defaultMachineFluidCapacity * MaterialExpansion.maxMultiplier,
+		ModConfig.general.defaultMachineFluidTransfer * MaterialExpansion.maxMultiplier);
+	public IFluidTank getTank() { return tank; }
+	
+	public TileEntityMachineTank() {
+		tank.addObserver(this);
+	}
+
+	
+    @Nullable
+    public SPacketUpdateTileEntity getUpdatePacket()
+    {
+        return new SPacketUpdateTileEntity(this.pos, 1, this.getUpdateTag());
+    }
+
+    public NBTTagCompound getUpdateTag()
+    {
+        return this.writeToNBT(new NBTTagCompound());
+    }
+    
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		super.onDataPacket(net, pkt);
+		handleUpdateTag(pkt.getNbtCompound());
+	}	
 	
 	@Override
-	public ContainerLayout createContainer(IInventory inventory) {
-		return new ContainerLayout(inventory, DialogMachineTank.layout, this);
+	public Container createContainer(IInventory playerInventory) {
+		return new ContainerInventory(DialogMachineTank.layout, inventory, playerInventory);
 	}
 	
 	@Override
-	public GuiContainer createGui(IInventory inventory) {
-		return new DialogMachineTank(createContainer(inventory), this);
+	public GuiContainer createGui(IInventory playerInventory) {
+		return new DialogMachineTank(createContainer(playerInventory), this);
 	}	
 	
 	public void setFacing(EnumFacing facing) {
@@ -66,23 +95,18 @@ public class TileEntityMachineTank extends TileEntityFluid implements ITickable,
 	public boolean getInputState() {
 		return inputState;
 	}
-	
-	private MaterialExpansion material;
 	    
 	@Override
 	public void setMeta(int meta) {
-		material = MaterialExpansion.byMetadata(meta);
-		this.getTank().setCapacity(ModConfig.general.defaultMachineFluidCapacity * material.getMultiplier());
+		super.setMeta(meta);
+		tank.setCapacity(ModConfig.general.defaultMachineFluidCapacity * this.getMultiplier());
 	}
-
-	@Override
-	public FluidTankAdvanced createTank() { return new FluidTankAdvanced(ModConfig.general.defaultMachineFluidCapacity * MaterialExpansion.maxMultiplier); }
 	
 	public void setInputState(boolean state) {
 		this.inputState = state;
 		world.markBlockRangeForRenderUpdate(this.pos, this.pos);
 		
-		MultiblockHelper.wakeParent(world, parent);
+		if (controller != null) { controller.wake(); }
 		
 		if (world.isRemote) {
 			Main.NETWORK.sendToServer(new IOStateMessage(this.getPos(), state, priority));
@@ -96,29 +120,23 @@ public class TileEntityMachineTank extends TileEntityFluid implements ITickable,
 			Main.NETWORK.sendToServer(new IOStateMessage(this.getPos(), inputState, priority));
 		}
 		
-		MultiblockHelper.sortTools(world, parent);
+		if (controller != null) { controller.sortSubControllers(); }
 	}
 	
 	boolean allowInput = false;
 	boolean allowOutput = false;
 	
-	@Override
-	public boolean canInput() { return allowInput; }
-	
-	@Override
-	public boolean canOutput() { return allowOutput; }
+	@Override public boolean canInput() { return allowInput; }
+	@Override public boolean canOutput() { return allowOutput; }
+	@Override public boolean hasController() { return controller != null; }
 
 	@Override
-	public boolean hasParent() { return parent != null; }
-
-	@Override
-	public void setParent(BlockPos pos) {
-		parent = pos;
-		TileEntityMachineMultiblock te = MultiblockHelper.getParent(world, pos);
-		if (te instanceof TileEntityMachineMultiblockFluid) {
-			FluidTankAdvanced tank = ((TileEntityMachineMultiblockFluid)te).getTank();
-			allowInput = tank.canFill();
-			allowOutput = tank.canDrain();
+	public void setController(IMachineController controller) {
+		this.controller = controller;
+		if (controller != null) {
+			// TODO: Machine Input/Output determination
+			allowInput = true; //inv.canInsert();
+			allowOutput = true; //inv.canExtract();
 			
 			if (allowInput && !allowOutput) { this.setInputState(true); }
 			if (allowOutput && !allowInput) { this.setInputState(false); }
@@ -147,142 +165,122 @@ public class TileEntityMachineTank extends TileEntityFluid implements ITickable,
 		
 		boolean didSomething = false;
 		
-		for (int i = 0; i < this.getInventorySize(); i++) {
-			ItemStack stack = this.getInventory().getStackInSlot(i);
+		for (int i = 0; i < inventory.getSlots(); i++) {
+			ItemStack stack = inventory.getStackInSlot(i);
 			if (stack == null) { continue; }
 
 			FluidActionResult result = null;
 			if (i == 0) { 
-				result = FluidUtil.tryEmptyContainer(stack, this.getTank(), 1000, null, true);
+				result = FluidUtil.tryEmptyContainer(stack, tank, 1000, null, true);
 			} else if (i == 1) {
-				result = FluidUtil.tryFillContainer(stack, this.getTank(), 1000, null, true);
+				result = FluidUtil.tryFillContainer(stack, tank, 1000, null, true);
 			}
 			
 			if (result != null && result.success) {
-				this.getInventory().extractItem(i, stack.getCount(), false);
-				this.getInventory().insertItem(i, result.getResult(), false);
+				inventory.extractItem(i, stack.getCount(), false);
+				inventory.insertItem(i, result.getResult(), false);
 				didSomething = true;
 			}
 		}
-		
-		//Fluid f = this.getTank().getFluid().getFluid();
-		//String name = FluidRegistry.getFluidName(f);
-		//String name2 = FluidRegistry.getFluidName(this.getTank().getFluid());
 		
 		if (!didSomething) { sleep = true; }
 	}
 	
 	@Override
-	public boolean tickUpdate(TileEntityMachineMultiblock te) {
-		if (!(te instanceof TileEntityMachineMultiblockFluid)) { return false; }
+	public boolean preProcess(IMachineController controller) {
 		boolean didSomething = false;
 		
 		if (inputState) {
-			//moveInput(te);
+			return moveInput(controller) > 0;
 		} else {
-			moveOutput((TileEntityMachineMultiblockFluid)te);
+			return moveOutput(controller) > 0;
 		}
+	}
+	
+	protected int moveInput(IMachineController controller) {
+		// TODO: Move fluid input
+		FluidStack stack = tank.drain(Integer.MAX_VALUE, false);
+		int amount = controller.getFluidTank().fill(stack, false);
 		
-		return didSomething;
+		if (amount > 0) {
+			stack = tank.drain(amount, true);
+			tank.fill(stack, true);
+			return amount;
+		}
+		return 0;
 	}
 	
-	protected boolean moveInput(TileEntityMachineMultiblockFluid te) {
-		//int amount = this.getTank().fillTank(te.getTank());
-		//if (amount > 0) { return true; } else { return false; }
-		return false;
-	}
-	
-	protected boolean moveOutput(TileEntityMachineMultiblockFluid te) {
-		int amount = te.getTank().fillTank(this.getTank());
-		if (amount > 0) { return true; } else { return false; }
+	protected int moveOutput(IMachineController controller) {
+		FluidStack stack = controller.getFluidTank().drain(Integer.MAX_VALUE, false);
+		int amount = tank.fill(stack, false);
+		
+		if (amount > 0) {
+			stack = controller.getFluidTank().drain(amount, true);
+			tank.fill(stack, true);
+			return amount;
+		}			
+		return 0;
 	}	
 	
 	@Override
 	public void onInventoryContentsChanged(int slot) {
-		super.onInventoryContentsChanged(slot);
 		sleep = false;
-
-		MultiblockHelper.wakeParent(world, parent);
-	}
+		if (controller != null) { controller.wake(); }	}
 	
 	@Override
 	public void onTankContentsChanged() {
-		super.onTankContentsChanged();
-		sleep = false;
-		
+		this.markDirty();
 		world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
 		world.markBlockRangeForRenderUpdate(pos, pos);
 		
-		MultiblockHelper.wakeParent(world, parent);
-	}
-
-	public void setBorders(World world, MultiblockBorders borders) {
-		this.borders = borders;
+		sleep = false;
+		if (controller != null) { controller.wake(); }
 	}
 	
-	public MultiblockBorders getBorders() {
-		return borders; 
+	public boolean canInteractWith(EntityPlayer playerIn) {
+		return !isInvalid() && playerIn.getDistanceSq(pos.add(0.5D, 0.5D, 0.5D)) <= 64D;
 	}	
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+			return true;
+		}
+		return super.hasCapability(capability, facing);
+	}
 	
 	@Override
-	public int getInventorySize() {
-		return 2;
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tank);
+		}
+		return super.getCapability(capability, facing);
 	}
-
 	
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		if (compound.hasKey("meta")) {
-			setMeta(compound.getInteger("meta"));
+		if (compound.hasKey("tank")) {
+			tank.deserializeNBT(compound.getCompoundTag("tank"));
 		}
 		if (compound.hasKey("facing")) {
 			facing = EnumFacing.byName(compound.getString("facing"));
 		}
-		if (compound.hasKey("inputState")) {
-			inputState = compound.getBoolean("inputState");
-		}
-		if (compound.hasKey("priority")) {
-			priority = compound.getInteger("priority");
-		}
-		if (compound.hasKey("borders")) {
-			borders.deserializeNBT(compound.getCompoundTag("borders"));
-		}
-		if (compound.hasKey("parent")) {
-			NBTUtil.getPosFromTag(compound.getCompoundTag("parent"));
-		}
-		if (compound.hasKey("allowInput")) {
-			allowInput = compound.getBoolean("allowInput");
-		}
-		if (compound.hasKey("allowOutput")) {
-			allowOutput = compound.getBoolean("allowOutput");
-		}
+		inputState = compound.getBoolean("inputState");
+		priority = compound.getInteger("priority");
+		allowInput = compound.getBoolean("allowInput");
+		allowOutput = compound.getBoolean("allowOutput");
 	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
-		compound.setInteger("meta", material.getMeta());
+		compound.setTag("tank", tank.serializeNBT());
 		compound.setString("facing", facing.getName());
 		compound.setBoolean("inputState", inputState);
 		compound.setInteger("priority", priority);
-		compound.setTag("borders",  borders.serializeNBT());	
-		if (parent != null) {
-			compound.setTag("parent", NBTUtil.createPosTag(parent));
-		}
 		compound.setBoolean("allowInput", allowInput);
 		compound.setBoolean("allowOutput", allowOutput);		
 		return compound;
 	}
-	
-    @Nullable
-    public SPacketUpdateTileEntity getUpdatePacket()
-    {
-        return new SPacketUpdateTileEntity(this.pos, 1, this.getUpdateTag());
-    }
-
-    public NBTTagCompound getUpdateTag()
-    {
-        return this.writeToNBT(new NBTTagCompound());
-    }
 }
