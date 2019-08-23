@@ -3,11 +3,9 @@ package jaminv.advancedmachines.lib.machine;
 import javax.annotation.Nullable;
 
 import jaminv.advancedmachines.lib.energy.IEnergyStorageInternal;
+import jaminv.advancedmachines.lib.fluid.IFluidHandlerInternal;
 import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
 import jaminv.advancedmachines.lib.recipe.IRecipeManager;
-import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.IItemHandler;
 
 /**
  * This interface is largely to prevent objects from being tightly coupled to the machine controller.
@@ -35,7 +33,7 @@ public interface IMachineController extends IMachineProcess {
 	public void sortSubControllers();
 	
 	public IItemHandlerMachine getInventory();
-	public IFluidHandler getFluidTank();
+	public IFluidHandlerInternal getFluidTank();
 	public IEnergyStorageInternal getEnergy();
 	public IRecipeManager getRecipeManager();
 }

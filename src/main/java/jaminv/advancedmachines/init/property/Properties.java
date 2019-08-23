@@ -1,10 +1,10 @@
 package jaminv.advancedmachines.init.property;
 
-import jaminv.advancedmachines.objects.blocks.machine.expansion.tank.TileEntityMachineTank;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorderType;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineFace;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.face.MachineType;
+import jaminv.advancedmachines.machine.expansion.tank.TileEntityMachineTank;
+import jaminv.advancedmachines.machine.multiblock.MultiblockBorderType;
+import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
+import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
+import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import net.minecraft.util.EnumFacing;
 
 public class Properties {

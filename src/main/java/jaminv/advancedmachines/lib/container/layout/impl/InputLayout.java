@@ -1,13 +1,13 @@
 package jaminv.advancedmachines.lib.container.layout.impl;
 
 import jaminv.advancedmachines.lib.container.ContainerMachine;
-import jaminv.advancedmachines.lib.container.layout.Layout;
+import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid;
 import jaminv.advancedmachines.lib.recipe.IRecipeManager;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class InputLayout extends Layout {
+public class InputLayout extends ItemLayoutGrid {
 	IRecipeManager recipe;
 	
 	public static class SlotInput extends SlotItemHandler {

@@ -4,21 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jaminv.advancedmachines.init.property.PropertyMaterial;
+import jaminv.advancedmachines.machine.expansion.energy.BlockMachineEnergy;
+import jaminv.advancedmachines.machine.expansion.expansion.BlockMachineExpansion;
+import jaminv.advancedmachines.machine.expansion.inventory.BlockMachineInventory;
+import jaminv.advancedmachines.machine.expansion.prodctivity.BlockMachineProductivity;
+import jaminv.advancedmachines.machine.expansion.redstone.BlockMachineRedstone;
+import jaminv.advancedmachines.machine.expansion.speed.BlockMachineSpeed;
+import jaminv.advancedmachines.machine.expansion.tank.BlockMachineTank;
+import jaminv.advancedmachines.machine.instance.alloy.BlockMachineAlloy;
+import jaminv.advancedmachines.machine.instance.furnace.BlockMachineFurnace;
+import jaminv.advancedmachines.machine.instance.grinder.BlockMachineGrinder;
+import jaminv.advancedmachines.machine.instance.injector.BlockMachineInjector;
+import jaminv.advancedmachines.machine.instance.melter.BlockMachineMelter;
+import jaminv.advancedmachines.machine.instance.purifier.BlockMachinePurifier;
+import jaminv.advancedmachines.machine.instance.stabilizer.BlockMachineStabilizer;
 import jaminv.advancedmachines.objects.blocks.BlockMaterial;
 import jaminv.advancedmachines.objects.blocks.BlockMaterialOre;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.energy.BlockMachineEnergy;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.expansion.BlockMachineExpansion;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.inventory.BlockMachineInventory;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.prodctivity.BlockMachineProductivity;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.redstone.BlockMachineRedstone;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.speed.BlockMachineSpeed;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.tank.BlockMachineTank;
-import jaminv.advancedmachines.objects.blocks.machine.instance.alloy.BlockMachineAlloy;
-import jaminv.advancedmachines.objects.blocks.machine.instance.furnace.BlockMachineFurnace;
-import jaminv.advancedmachines.objects.blocks.machine.instance.grinder.BlockMachineGrinder;
-import jaminv.advancedmachines.objects.blocks.machine.instance.melter.BlockMachineMelter;
-import jaminv.advancedmachines.objects.blocks.machine.instance.purifier.BlockMachinePurifier;
-import jaminv.advancedmachines.objects.blocks.machine.instance.stabilizer.BlockMachineStabilizer;
 import jaminv.advancedmachines.objects.fluids.BlockFluidClassicBase;
 import jaminv.advancedmachines.objects.material.MaterialBase;
 import jaminv.advancedmachines.objects.material.MaterialExpansion;
@@ -52,6 +53,7 @@ public class BlockInit {
 	public static final BlockMachineAlloy MACHINE_ALLOY = new BlockMachineAlloy("machine_alloy");
 	public static final BlockMachineMelter MACHINE_MELTER = new BlockMachineMelter("machine_melter");
 	public static final BlockMachineStabilizer MACHINE_STABILIZER = new BlockMachineStabilizer("machine_stabilizer");
+	public static final BlockMachineInjector MACHINE_INJECTOR = new BlockMachineInjector("machine_injector");
 	
 	public static final BlockMachineExpansion MACHINE_EXPANSION = new BlockMachineExpansion("machine_expansion");
 	public static final BlockMachineSpeed MACHINE_SPEED = new BlockMachineSpeed("machine_speed");
@@ -62,4 +64,5 @@ public class BlockInit {
 	public static final BlockMachineTank MACHINE_TANK = new BlockMachineTank("machine_tank");
 	
 	public static final BlockFluidClassicBase FLUID_COAL_TAR = new BlockFluidClassicBase("coal_tar", FluidInit.COAL_TAR, new MaterialLiquid(MapColor.BLACK));
+	public static final BlockFluidClassicBase FLUID_RESIN = new BlockFluidClassicBase("resin", FluidInit.RESIN, new MaterialLiquid(MapColor.BROWN));
 }

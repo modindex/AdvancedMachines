@@ -1,6 +1,7 @@
 {
     "ore_dictionary": [
-        { "item": { "item": "thermalfoundation:material", "data": 833 }, "ore": "ballTar" }
+        { "item": { "item": "thermalfoundation:material", "data": 833 }, "ore": "ballTar" },
+        { "item": { "item": "thermalfoundation:material", "data": 832 }, "ore": "ballRosin" }
     ]
 }
    

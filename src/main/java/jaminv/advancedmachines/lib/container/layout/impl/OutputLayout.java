@@ -1,14 +1,14 @@
 package jaminv.advancedmachines.lib.container.layout.impl;
 
 import jaminv.advancedmachines.lib.container.ContainerMachine;
-import jaminv.advancedmachines.lib.container.layout.Layout;
+import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class OutputLayout extends Layout {
+public class OutputLayout extends ItemLayoutGrid {
 	public static class SlotOutput extends SlotItemHandler {
 
 		public SlotOutput(IItemHandler itemHandler, int index, int xPosition, int yPosition) {

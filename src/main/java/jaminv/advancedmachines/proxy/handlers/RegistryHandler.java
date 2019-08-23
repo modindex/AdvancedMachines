@@ -6,7 +6,7 @@ import jaminv.advancedmachines.init.FluidInit;
 import jaminv.advancedmachines.init.ItemInit;
 import jaminv.advancedmachines.util.interfaces.IHasModel;
 import jaminv.advancedmachines.util.interfaces.IHasTileEntity;
-import jaminv.advancedmachines.util.message.MessageRegistry;
+import jaminv.advancedmachines.util.network.MessageRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;

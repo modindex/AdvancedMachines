@@ -60,6 +60,13 @@ public abstract class FileHandlerBase implements IFileHandler {
 		return parseConstants(JsonUtils.getJsonObject(json, memberName));
 	}
 	
+	/**
+	 * Parse an ItemStack from Json
+	 * @param json JsonElement, can be a string (item name), or an object with multiple elements that describe the item.
+	 * @param memberName Used for error logging
+	 * @return ItemStack
+	 * @throws DataParserException
+	 */
 	protected ItemStack parseItemStack(JsonElement json, String memberName) throws DataParserException {
 		if (json == null) { throw new DataParserException("Missing itemstack element: " + memberName); }
 		

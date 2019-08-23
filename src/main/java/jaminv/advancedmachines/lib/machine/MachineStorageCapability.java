@@ -1,7 +1,7 @@
 package jaminv.advancedmachines.lib.machine;
 
 import jaminv.advancedmachines.lib.energy.IEnergyStorageAdvanced;
-import jaminv.advancedmachines.lib.fluid.IFluidHandlerMachine;
+import jaminv.advancedmachines.lib.fluid.IFluidHandlerAdvanced;
 import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
 import jaminv.advancedmachines.lib.recipe.IRecipeManager;
 import net.minecraft.item.ItemStack;
@@ -23,7 +23,7 @@ public class MachineStorageCapability extends MachineStorage {
 
 	protected MachineStorage storage;
 	public MachineStorageCapability(MachineStorage storage) {
-		super(storage.getInventory(), storage, storage, storage.recipemanager);
+		super(storage.getInventory(), storage.getInputTanks(), storage.getOutputTanks(), storage, storage.recipeManager);
 		this.storage = storage;
 	}
 	

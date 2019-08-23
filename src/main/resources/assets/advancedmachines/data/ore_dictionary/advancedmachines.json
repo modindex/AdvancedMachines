@@ -1,0 +1,7 @@
+{
+    "ore_dictionary": [
+        { "item": { "item": "advancedmachines:ingredient", "data": 3 }, "ore": "itemPlastic" },
+        { "item": { "item": "advancedmachines:ingredient", "data": 4 }, "ore": "ballTar" },
+        { "item": { "item": "advancedmachines:ingredient", "data": 5 }, "ore": "ballRosin" }
+    ]
+}

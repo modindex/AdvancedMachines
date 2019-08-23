@@ -10,6 +10,8 @@ public class MaterialIngredient extends MaterialBase {
 	public static final MaterialIngredient SILVER_WIRE = new MaterialIngredient(1, "silver_wire");
 	public static final MaterialIngredient GOLD_WIRE = new MaterialIngredient(2, "gold_wire");
 	public static final MaterialIngredient PLASTIC = new MaterialIngredient(3, "plastic");
+	public static final MaterialIngredient TAR = new MaterialIngredient(4, "tar");
+	public static final MaterialIngredient ROSIN = new MaterialIngredient(5, "rosin");
 	
 	public static MaterialBase[] values() {
 		return MaterialBase.values(TYPE);

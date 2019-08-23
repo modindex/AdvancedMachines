@@ -18,10 +18,10 @@ import com.google.common.collect.Iterables;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.init.property.Properties;
-import jaminv.advancedmachines.objects.blocks.machine.TileEntityMachine;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.IMachineUpgradeTileEntity;
-import jaminv.advancedmachines.objects.blocks.machine.expansion.redstone.TileEntityMachineRedstone;
-import jaminv.advancedmachines.objects.blocks.machine.multiblock.MultiblockBorders;
+import jaminv.advancedmachines.machine.TileEntityMachine;
+import jaminv.advancedmachines.machine.expansion.IMachineUpgradeTileEntity;
+import jaminv.advancedmachines.machine.expansion.redstone.TileEntityMachineRedstone;
+import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
 import jaminv.advancedmachines.util.interfaces.IHasMetadata;
 import net.minecraft.block.Block;

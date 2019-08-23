@@ -1,9 +1,11 @@
 package jaminv.advancedmachines.lib.inventory;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import jaminv.advancedmachines.lib.recipe.IItemGeneric;
+import jaminv.advancedmachines.lib.inventory.slot.ISlotHandler;
+import jaminv.advancedmachines.lib.inventory.slot.SlotHandlerNormal;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
@@ -11,6 +13,7 @@ import net.minecraft.util.NonNullList;
 public class MachineInventoryHandler extends ItemStackHandlerObservable implements IItemHandlerMachine {
 	
 	int inputSlots = 0, outputSlots = 0, secondarySlots = 0, additionalSlots = 0;
+	List<ISlotHandler> additionalHandlers = new ArrayList<ISlotHandler>(); 
 	
 	public MachineInventoryHandler() {
 		super();
@@ -69,12 +72,50 @@ public class MachineInventoryHandler extends ItemStackHandlerObservable implemen
 	 * Recommended that these methods be called in order (addInputSlots, addOutputSlots, addSecondarySlots, addAdditionalSlots), and only once.
 	 * It should work fine otherwise, but causes array shifting.
 	 */
-	public MachineInventoryHandler addAdditionalSlots(int numSlots) {
+	public MachineInventoryHandler addAdditionalSlots(int numSlots, ISlotHandler handler) {
 		List<ItemStack> add = Collections.nCopies(numSlots, ItemStack.EMPTY);
 		stacks.addAll(inputSlots + outputSlots + secondarySlots + additionalSlots, add);
 		additionalSlots += numSlots;
+		
+		additionalHandlers.addAll(Collections.nCopies(numSlots, handler));
+		
 		return this;
 	}
+	
+	public MachineInventoryHandler addAdditionalSlots(int numSlots) {
+		return this.addAdditionalSlots(numSlots, new SlotHandlerNormal());
+	}
+	
+	/* IItemHandler */
+
+	@Override
+	public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+		if (this.isSlotAdditional(slot)) {
+			if (!additionalHandlers.get(slot - this.getFirstAdditionalSlot()).canInsert(slot, stack)) { return stack; }
+		}
+		return super.insertItem(slot, stack, simulate);
+	}
+
+	@Override
+	public ItemStack extractItem(int slot, int amount, boolean simulate) {
+		if (this.isSlotAdditional(slot)) {
+			if (!additionalHandlers.get(slot - this.getFirstAdditionalSlot()).canExtract(slot, amount, this.stacks.get(slot))) { 
+				return ItemStack.EMPTY; 
+			}
+		}
+		return super.extractItem(slot, amount, simulate);
+	}
+
+	@Override
+	protected int getStackLimit(int slot, ItemStack stack) {
+		int ret = super.getStackLimit(slot, stack);
+		if (this.isSlotAdditional(slot)) {
+			return additionalHandlers.get(slot - this.getFirstAdditionalSlot()).getStackLimit(slot, ret);
+		}
+		return ret;
+	}	
+	
+	/* IItemHandlerMachine */
 	
 	protected ItemStack[] getStacks(int firstSlot, int lastSlot) {
 		ItemStack[] ret = new ItemStack[lastSlot - firstSlot + 1];
@@ -107,5 +148,4 @@ public class MachineInventoryHandler extends ItemStackHandlerObservable implemen
 		if (nbt.hasKey("secondarySlots")) { secondarySlots = nbt.getInteger("secondarySlots"); }
 		if (nbt.hasKey("additionalSlots")) { additionalSlots = nbt.getInteger("additionalSlots"); }
 	}
-
 }

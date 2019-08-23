@@ -1,0 +1,9 @@
+{
+    "plastic": {
+        "input": [
+            { "fluid": "coal", "amount": 800 },
+            { "ore": "ballRosin" }
+        ],
+        "output": { "ore": "itemPlastic" }
+    }
+}

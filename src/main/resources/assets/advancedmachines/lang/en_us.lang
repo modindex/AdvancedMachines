@@ -38,13 +38,13 @@ item.circuit_pcb.name=PCB
 item.circuit_basic.name=Basic Processing Circuit
 item.circuit_advanced.name=Advanced Processing Circuit
 item.circuit_ender.name=Ender Processing Circuit
-item.circuit_improbable.name=Improbability Circuit
+item.circuit_improbable.name=Improbability Matrix
 
 item.ingredient_copper_wire.name=Copper Wire
 item.ingredient_silver_wire.name=Silver Wire
 item.ingredient_gold_wire.name=Gold-plated wire
 item.ingredient_plastic.name=Plastic
-item.ingredient_resin.name=Resin
+item.ingredient_tar.name=Tar
 item.ingredient_rosin.name=Rosin
 
 item.axe_titanium.name=Titanium Axe
@@ -86,31 +86,56 @@ tile.machine_grinder_improbable.name=Interdimensional Grinder
 tile.machine_alloy_basic.name=Alloy Furnace
 tile.machine_alloy_compressed.name=Compressed Alloy Furnace
 tile.machine_alloy_quad.name=Quadratic Alloy Furnace
-tile.machine_alloy_improbable.name=Interdimension Alloy Furnace
+tile.machine_alloy_improbable.name=Interdimensional Alloy Furnace
+tile.machine_melter_basic.name=Melter
+tile.machine_melter_compressed.name=Compressed Melter
+tile.machine_melter_quad.name=Quadratic Melter
+tile.machine_melter_improbable.name=Interdimensional Melter
+tile.machine_stabilizer_basic.name=Fluid Stabilizer
+tile.machine_stabilizer_compressed.name=Compressed Fluid Stabilizer
+tile.machine_stabilizer_quad.name=Quadratic Fluid Stabilizer
+tile.machine_stabilizer_improbable.name=Interdimensional Fluid Stabilizer
+tile.machine_injector_basic.name=Fluid Injector
+tile.machine_injector_compressed.name=Compressed Fluid Injector
+tile.machine_injector_quad.name=Quadratic Fluid Injector
+tile.machine_injector_improbable=Interdimensional Fluid Injector
+tile.machine_press_basic.name=Circuit Press
+tile.machine_press_compressed.name=Compressed Circuit Press
+tile.machine_press_quad.name=Quadratic Circuit Press
+tile.machine_press_improbable=Interdimensional Circuit Press
 
 tile.machine_expansion_basic.name=Machine Expansion
 tile.machine_expansion_compressed.name=Compressed Machine Expansion
 tile.machine_expansion_quad.name=Quadratic Machine Expansion
-tile.machine_expansion_improbable.name=improbable Machine Expansion
+tile.machine_expansion_improbable.name=Interdimensional Machine Expansion
 tile.machine_speed_basic.name=Machine Speed Upgrade
 tile.machine_speed_compressed.name=Compressed Machine Speed Upgrade
 tile.machine_speed_quad.name=Quadratic Machine Speed Upgrade
-tile.machine_speed_improbable.name=improbable Machine Speed Upgrade
+tile.machine_speed_improbable.name=Interdimensional Machine Speed Upgrade
+tile.machine_productivity_basic.name=Machine Productivity Upgrade
+tile.machine_productivity_compressed.name=Compressed Machine Productivity Upgrade
+tile.machine_productivity_quad.name=Quadratic Machine Productivity Upgrade
+tile.machine_productivity_improbable.name=Interdimensional Machine Productivity Upgrade
 
 tile.machine_inventory_basic.name=Machine Inventory
 tile.machine_inventory_compressed.name=Compressed Machine Inventory
 tile.machine_inventory_quad.name=Quadratic Machine Inventory
-tile.machine_inventory_improbable.name=improbable Machine Inventory
+tile.machine_inventory_improbable.name=Interdimensional Machine Inventory
+tile.machine_tank_basic.name=Machine Tank
+tile.machine_tank_compressed.name=Compressed Machine Tank
+tile.machine_tank_quad.name=Quadratic Machine Tank
+tile.machine_tank_improbable=Interdimensional Machine Tank
 tile.machine_energy_basic.name=Machine Energy Controller
 tile.machine_energy_compressed.name=Compressed Machine Energy Controller
 tile.machine_energy_quad.name=Quadratic Machine Energy Controller
-tile.machine_energy_improbable=improbable Machine Energy Controller
+tile.machine_energy_improbable=Interdimensional Machine Energy Controller
 tile.machine_redstone_basic.name=Machine Redstone Controller
 tile.machine_redstone_compressed.name=Compressed Machine Redstone Controller
 tile.machine_redstone_quad.name=Quadratic Machine Redstone Controller
 tile.machine_redstone_improbable.name=Interdimensional Machine Redstone Controller
 
 fluid.coal_tar=Coal Tar
+fluid.tree_resin=Tree Resin
 
 dialog.common.inventory=Inventory
 dialog.common.energy=%,d / %,d RF
@@ -130,6 +155,9 @@ dialog.io.no_output=Input only
 dialog.io.no_machine=No attached machine
 dialog.io.no_io=Attached machine does not intact with this storage type.
 
+dialog.bucket.input=Input bucket to tank
+dialog.bucket.output=Output tank to bucket
+
 dialog.jei.energy=%,d RF
 dialog.jei.recipe_id=Recipe ID: %s
 
@@ -138,6 +166,9 @@ dialog.purifier.title=Purification Chamber
 dialog.grinder.title=Advanced Grinder
 dialog.furnace.title=Advanced Furnace
 dialog.melter.title=Melter
+dialog.stabilizer.title=Fluid Stabilizer
+dialog.injector.title=Fluid Injector
+dialog.press.title=Circuit Press
 dialog.energy.title=Energy
 dialog.machine_inventory.title=Machine Inventory
 dialog.machine_tank.title=Fluid Tank

@@ -8,7 +8,7 @@ import jaminv.advancedmachines.lib.container.ISyncSubject;
 import jaminv.advancedmachines.lib.energy.IEnergyObservable;
 import jaminv.advancedmachines.lib.energy.IEnergyStorageAdvanced;
 import jaminv.advancedmachines.lib.energy.IEnergyStorageInternal;
-import jaminv.advancedmachines.lib.fluid.IFluidHandlerMachine;
+import jaminv.advancedmachines.lib.fluid.IFluidHandlerInternal;
 import jaminv.advancedmachines.lib.fluid.IFluidObservable;
 import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
 import jaminv.advancedmachines.lib.inventory.IItemObservable;
@@ -19,21 +19,18 @@ import jaminv.advancedmachines.lib.recipe.IRecipeManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.IItemHandler;
 
 public class MachineController implements IMachineController, IItemObservable.IObserver, IFluidObservable.IObserver, IEnergyObservable.IObserver, 
 		INBTSerializable<NBTTagCompound>, ISyncSubject {
 	
 	protected final IItemHandlerMachine inventory;
-	protected final IFluidHandlerMachine fluidtank;
+	protected final IFluidHandlerInternal fluidtank;
 	protected final IEnergyStorageAdvanced energy;
 	protected final IRecipeManager recipemanager;
 	protected final IMachineTE te;
 	
-	public MachineController(IItemHandlerMachine inventory, IFluidHandlerMachine fluidtank, IEnergyStorageAdvanced energy, IRecipeManager recipemanager, IMachineTE te) {
+	public MachineController(IItemHandlerMachine inventory, IFluidHandlerInternal fluidtank, IEnergyStorageAdvanced energy, IRecipeManager recipemanager, IMachineTE te) {
 		this.inventory = inventory;
 		this.fluidtank = fluidtank;
 		this.energy = energy;
@@ -55,7 +52,7 @@ public class MachineController implements IMachineController, IItemObservable.IO
 	}
 	
 	public IItemHandlerMachine getInventory() { return inventory; }
-	public IFluidHandler getFluidTank() { return fluidtank; }
+	public IFluidHandlerInternal getFluidTank() { return fluidtank; }
 	public IEnergyStorageInternal getEnergy() { return energy; }
 	public IRecipeManager getRecipeManager() { return recipemanager; }	
 	
@@ -142,14 +139,14 @@ public class MachineController implements IMachineController, IItemObservable.IO
 		if (!te.isRedstoneActive()) { return; }
 		
 		if (!isProcessing()) {
-			IRecipe recipe = recipemanager.getRecipe(inventory.getItemInput(), fluidtank.getFluidInput());
+			IRecipe recipe = recipemanager.getRecipe(inventory.getItemInput(), fluidtank.getStacks());
 			if (recipe == null || !beginProcess(recipe)) { return; }
 			processTimeRemaining = totalProcessTime = recipe.getProcessTime();
 			lastRecipe = recipe;
 			wake(); return;
 		} else if (lastRecipe == null) {
 			// TE was just loaded from NBT
-			lastRecipe = recipemanager.getRecipe(inventory.getItemInput(), fluidtank.getFluidInput());
+			lastRecipe = recipemanager.getRecipe(inventory.getItemInput(), fluidtank.getStacks());
 			if (lastRecipe == null) { haltProcess(); return; }
 		}
 
@@ -172,8 +169,8 @@ public class MachineController implements IMachineController, IItemObservable.IO
 	}
 	
 	protected int getRecipeQty(IRecipe recipe) {
-		return recipe.getRecipeQty(inventory.getItemInput(), fluidtank.getFluidInput(),
-			inventory.getOutput(), fluidtank.getFluidOutput());
+		return recipe.getRecipeQty(inventory.getItemInput(), fluidtank.getStacks(),
+			inventory.getOutput(), fluidtank.getTanks());
 	}	
 	
 	protected boolean extractEnergy(IRecipe lastRecipe, int ticks) {

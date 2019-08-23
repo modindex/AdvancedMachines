@@ -24,6 +24,13 @@ public class InventoryHelper {
 		return pushStack(stack, inv, inv.getFirstInputSlot(), inv.getLastInputSlot(), simulate);
 	}
 	
+	/** Push item stack (if possible) into additional slots of an inventory.
+	 * Convenience method of `pushStack`.
+	 * @return ItemStack with remaining items. */
+	public static ItemStack pushStackToAdditional(ItemStack stack, IItemHandlerMachine inv, boolean simulate) {
+		return pushStack(stack, inv, inv.getFirstAdditionalSlot(), inv.getLastAdditionalSlot(), simulate);
+	}
+	
 	/**
 	 * Move items from a single slot within an inventory (if possible) into another inventory.
 	 * Source inventory items are extracted.

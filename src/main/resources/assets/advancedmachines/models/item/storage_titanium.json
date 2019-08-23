@@ -1,3 +1,6 @@
 {
-    "parent": "advancedmachines:block/storage_titanium"
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "advancedmachines:blocks/storage_titanium"
+    }    
 }

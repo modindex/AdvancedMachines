@@ -1,7 +1,7 @@
 package jaminv.advancedmachines.lib.machine;
 
+import jaminv.advancedmachines.lib.dialog.control.DialogToggleButton.IEnumIterable;
 import jaminv.advancedmachines.lib.machine.IRedstoneControlled.RedstoneState;
-import jaminv.advancedmachines.util.dialog.control.DialogToggleButton.IEnumIterable;
 
 public interface IRedstoneControlled {
 	public static enum RedstoneState implements IEnumIterable<RedstoneState> {

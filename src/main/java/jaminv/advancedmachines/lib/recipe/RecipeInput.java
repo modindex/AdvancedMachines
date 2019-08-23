@@ -93,6 +93,7 @@ public class RecipeInput implements Cloneable, IItemGeneric {
 	
 	public RecipeInput(FluidStack stack) {
 		this(stack.getFluid(), stack.amount, stack.tag);
+		lookup.add(new ItemComparable(stack));
 	}
 	
 	List<ItemStack> itemlist = new ArrayList<ItemStack>();

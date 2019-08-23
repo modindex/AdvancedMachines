@@ -55,6 +55,13 @@ public abstract class FileHandlerRecipe extends FileHandlerBase {
 	
 	protected abstract boolean parseRecipe(Logger logger, String filename, String path, JsonObject recipe) throws DataParserException;
 	
+	/**
+	 * Parse a RecipeInput
+	 * @param input JsonElement, can be a string (item name), or an object with multiple elements that describe an item or an ore dictionary entry.
+	 * @param memberName Used for error logging
+	 * @return RecipeInput
+	 * @throws DataParserException
+	 */
 	protected RecipeInput parseInput(JsonElement input, String memberName) throws DataParserException {
 		if (input == null) { throw new DataParserException("Missing recipe element: '" + memberName + "'"); }
 		
@@ -71,6 +78,13 @@ public abstract class FileHandlerRecipe extends FileHandlerBase {
 		return new RecipeInput(ore, count);
 	}
 	
+	/**
+	 * Parse a RecipeOutput
+	 * @param output JsonElement, can be a string (item name), or an object with multiple elements that describe an item or an ore dictionary entry.
+	 * @param memberName Used for error logging
+	 * @return RecipeOutput
+	 * @throws DataParserException
+	 */
 	protected RecipeOutput parseOutput(JsonElement output, String memberName) throws DataParserException {
 		if (output == null) { throw new DataParserException("Missing recipe element: '" + memberName + "'"); }
 		
@@ -97,9 +111,16 @@ public abstract class FileHandlerRecipe extends FileHandlerBase {
 		return ret.withChance(chance);
 	}
 
-	protected int getEnergy(JsonObject obj, int def) throws DataParserException {
+	protected int getEnergy(JsonObject obj, int def) {
 		int energy = JsonUtils.getInt(obj, "energy", def);
 		int energy_percent = JsonUtils.getInt(obj, "energy_percent", 100);
+		
+		return (int)Math.floor(energy * energy_percent / 100.0f);
+	}
+	
+	protected int getTime(JsonObject obj, int def) {
+		int energy = JsonUtils.getInt(obj, "time", def);
+		int energy_percent = JsonUtils.getInt(obj, "time_percent", 100);
 		
 		return (int)Math.floor(energy * energy_percent / 100.0f);
 	}
