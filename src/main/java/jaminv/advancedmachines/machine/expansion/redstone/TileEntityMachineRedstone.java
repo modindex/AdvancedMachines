@@ -1,14 +1,14 @@
 package jaminv.advancedmachines.machine.expansion.redstone;
 
 import jaminv.advancedmachines.lib.machine.IMachineController;
-import jaminv.advancedmachines.machine.expansion.TileEntityMachineExpansionBase;
+import jaminv.advancedmachines.machine.expansion.TileEntityMachineExpansionType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class TileEntityMachineRedstone extends TileEntityMachineExpansionBase implements IMachineController.ISubController {
+public class TileEntityMachineRedstone extends TileEntityMachineExpansionType implements IMachineController.ISubController {
 	
 	protected EnumFacing facing = EnumFacing.NORTH;
 	protected IMachineController controller;

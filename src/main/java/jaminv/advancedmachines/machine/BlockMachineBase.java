@@ -2,9 +2,9 @@ package jaminv.advancedmachines.machine;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.init.property.PropertyMaterial;
-import jaminv.advancedmachines.machine.expansion.IMachineUpgrade;
-import jaminv.advancedmachines.machine.expansion.IMachineUpgradeTileEntity;
-import jaminv.advancedmachines.machine.expansion.IMachineUpgrade.UpgradeType;
+import jaminv.advancedmachines.machine.expansion.MachineUpgrade;
+import jaminv.advancedmachines.machine.expansion.MachineUpgradeTileEntity;
+import jaminv.advancedmachines.machine.expansion.MachineUpgrade.UpgradeType;
 import jaminv.advancedmachines.machine.expansion.redstone.TileEntityMachineRedstone;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.objects.blocks.BlockMaterial;
@@ -33,7 +33,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
-public abstract class BlockMachineBase extends BlockMaterial implements ITileEntityProvider, IHasTileEntity, IMachineUpgrade {
+public abstract class BlockMachineBase extends BlockMaterial implements ITileEntityProvider, IHasTileEntity, MachineUpgrade {
 	
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
     public static final PropertyBool ACTIVE = PropertyBool.create("active");

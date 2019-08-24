@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.machine.expansion.speed;
 
-import jaminv.advancedmachines.machine.expansion.BlockMachineExpansionBase;
+import jaminv.advancedmachines.machine.expansion.BlockMachineExpansionType;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.util.interfaces.IHasTileEntity;
 import net.minecraft.block.ITileEntityProvider;
@@ -8,7 +8,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockMachineSpeed extends BlockMachineExpansionBase implements ITileEntityProvider, IHasTileEntity {
+public class BlockMachineSpeed extends BlockMachineExpansionType implements ITileEntityProvider, IHasTileEntity {
 	
 	public BlockMachineSpeed(String name) {
 		super(name);

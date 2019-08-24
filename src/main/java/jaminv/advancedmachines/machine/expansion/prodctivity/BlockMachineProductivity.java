@@ -1,6 +1,7 @@
 package jaminv.advancedmachines.machine.expansion.prodctivity;
 
-import jaminv.advancedmachines.machine.expansion.BlockMachineExpansionBase;
+import jaminv.advancedmachines.lib.render.ModelBakery;
+import jaminv.advancedmachines.machine.expansion.BlockMachineExpansionType;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.util.interfaces.IHasTileEntity;
 import net.minecraft.block.ITileEntityProvider;
@@ -8,7 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockMachineProductivity extends BlockMachineExpansionBase implements ITileEntityProvider, IHasTileEntity {
+public class BlockMachineProductivity extends BlockMachineExpansionType implements ITileEntityProvider, IHasTileEntity {
 	
 	public BlockMachineProductivity(String name) {
 		super(name);
@@ -39,11 +40,11 @@ public class BlockMachineProductivity extends BlockMachineExpansionBase implemen
 		}
 	}
 	
-
-	
 	@Override
 	public void registerModels() {
-		registerCustomModel("bakedmodel_productivity", BakedModelProductivity.class);
 		registerVariantModels();
-	}		
+	}
+
+	protected static ModelBakeryProductivity bakery = new ModelBakeryProductivity();
+	@Override public ModelBakery getModelBakery() { return bakery; }
 }

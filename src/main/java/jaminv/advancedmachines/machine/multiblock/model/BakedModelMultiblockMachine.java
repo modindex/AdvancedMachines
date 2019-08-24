@@ -4,13 +4,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
-import jaminv.advancedmachines.client.BakedModelBase;
 import jaminv.advancedmachines.client.RawTextures;
-import jaminv.advancedmachines.client.quads.IModelQuad;
-import jaminv.advancedmachines.client.quads.ModelQuadBlock;
-import jaminv.advancedmachines.client.quads.ModelQuadLayeredBlock;
 import jaminv.advancedmachines.client.textureset.TextureSets;
 import jaminv.advancedmachines.init.property.Properties;
+import jaminv.advancedmachines.lib.render.BakedModelImpl;
+import jaminv.advancedmachines.lib.render.quad.QuadBuilder;
+import jaminv.advancedmachines.lib.render.quad.QuadBuilderBlock;
+import jaminv.advancedmachines.lib.render.quad.QuadBuilderLayeredBlock;
 import jaminv.advancedmachines.machine.multiblock.model.LayeredTextureMultiblockBase;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import net.minecraft.block.state.IBlockState;
@@ -21,7 +21,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
-public class BakedModelMultiblockMachine extends BakedModelBase {
+public class BakedModelMultiblockMachine extends BakedModelImpl {
 	
 	public BakedModelMultiblockMachine(IModelState state, VertexFormat format,
 			Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
@@ -34,10 +34,10 @@ public class BakedModelMultiblockMachine extends BakedModelBase {
 	}
 
 	@Override
-	public List<IModelQuad> render(VertexFormat format, IBlockState state, EnumFacing side, long rand) {
+	public List<QuadBuilder> render(VertexFormat format, IBlockState state, EnumFacing side, long rand) {
 		IExtendedBlockState ext = (IExtendedBlockState)state;
 		
-		return Collections.singletonList(new ModelQuadLayeredBlock(format,
+		return Collections.singletonList(new QuadBuilderLayeredBlock(format,
 			BlockHelper.getExtendedFacing(state),
 			new LayeredTextureMultiblockBase(state, "expansion"),
 			new LayeredTextureMultiblockMachine(state, ext.getValue(Properties.MACHINE_TYPE).getName()))

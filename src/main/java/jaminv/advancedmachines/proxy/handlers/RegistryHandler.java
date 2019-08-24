@@ -4,19 +4,37 @@ import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.init.BlockInit;
 import jaminv.advancedmachines.init.FluidInit;
 import jaminv.advancedmachines.init.ItemInit;
+import jaminv.advancedmachines.lib.render.BakedModelLoader;
+import jaminv.advancedmachines.lib.render.ModelBakeryProvider;
+import jaminv.advancedmachines.util.Reference;
 import jaminv.advancedmachines.util.interfaces.IHasModel;
 import jaminv.advancedmachines.util.interfaces.IHasTileEntity;
 import jaminv.advancedmachines.util.network.MessageRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-@EventBusSubscriber
+@EventBusSubscriber(modid = Reference.MODID)
 public class RegistryHandler {
+	protected static class CustomStateMapper extends StateMapperBase {
+		protected ModelResourceLocation loc;
+		public CustomStateMapper(ModelResourceLocation resource) {
+			this.loc = resource;			
+		}
+
+		@Override
+		protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+			return loc;
+		}
+	}	
 
 	@SubscribeEvent
 	public static void onItemRegister(RegistryEvent.Register<Item> event) {
@@ -46,6 +64,11 @@ public class RegistryHandler {
 		for (Block block : BlockInit.BLOCKS) {
 			if (block instanceof IHasModel) {
 				((IHasModel)block).registerModels();
+			}
+			
+			if (block instanceof ModelBakeryProvider) {
+				ModelLoader.setCustomStateMapper(block, new CustomStateMapper(new ModelResourceLocation(block.getRegistryName(), "normal")));
+				BakedModelLoader.register(block.getRegistryName().getResourcePath());				
 			}
 		}
 	}

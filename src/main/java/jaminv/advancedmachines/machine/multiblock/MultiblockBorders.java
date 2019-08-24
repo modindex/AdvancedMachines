@@ -2,8 +2,8 @@ package jaminv.advancedmachines.machine.multiblock;
 
 import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.machine.BlockMachineMultiblock;
-import jaminv.advancedmachines.machine.expansion.BlockMachineExpansionBase;
-import jaminv.advancedmachines.machine.expansion.IMachineUpgrade;
+import jaminv.advancedmachines.machine.expansion.BlockMachineExpansionType;
+import jaminv.advancedmachines.machine.expansion.MachineUpgrade;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.objects.blocks.BlockMaterial;
 import jaminv.advancedmachines.objects.material.MaterialBase;
@@ -61,7 +61,7 @@ public class MultiblockBorders implements INBTSerializable<NBTTagCompound> {
 				Block check = world.getBlockState(pos.offset(facing)).getBlock();
 				
 				// If block isn't a machine or upgrade, there's no chance of a single border.
-				if (!(check instanceof IMachineUpgrade) && !(check instanceof BlockMachineMultiblock)) { continue; }
+				if (!(check instanceof MachineUpgrade) && !(check instanceof BlockMachineMultiblock)) { continue; }
 				// They all should be MaterialType.EXPANSION, but better to make sure.
 				if (!(check instanceof BlockMaterial) || ((BlockMaterial)check).getMaterialType() != MaterialType.EXPANSION) { continue; }
 				
@@ -73,17 +73,17 @@ public class MultiblockBorders implements INBTSerializable<NBTTagCompound> {
 				}
 
 				// Upgrade types don't match								
-				if (check instanceof IMachineUpgrade && current instanceof IMachineUpgrade) {
-					if (((IMachineUpgrade)current).getUpgradeType() != ((IMachineUpgrade)check).getUpgradeType()) { border = MultiblockBorderType.SINGLE; }
+				if (check instanceof MachineUpgrade && current instanceof MachineUpgrade) {
+					if (((MachineUpgrade)current).getUpgradeType() != ((MachineUpgrade)check).getUpgradeType()) { border = MultiblockBorderType.SINGLE; }
 				}				
 				
 				// One block is a machine and the other isn't a MULTIPLY-type expansion				
-				if (check instanceof IMachineUpgrade && !(current instanceof IMachineUpgrade)) {
-					if (((IMachineUpgrade)check).getUpgradeType() != IMachineUpgrade.UpgradeType.MULTIPLY) { border = MultiblockBorderType.SINGLE; }
+				if (check instanceof MachineUpgrade && !(current instanceof MachineUpgrade)) {
+					if (((MachineUpgrade)check).getUpgradeType() != MachineUpgrade.UpgradeType.MULTIPLY) { border = MultiblockBorderType.SINGLE; }
 				}
 				
-				if (current instanceof IMachineUpgrade && !(check instanceof IMachineUpgrade)) {
-					if (((IMachineUpgrade)current).getUpgradeType() != IMachineUpgrade.UpgradeType.MULTIPLY) { border = MultiblockBorderType.SINGLE; }
+				if (current instanceof MachineUpgrade && !(check instanceof MachineUpgrade)) {
+					if (((MachineUpgrade)current).getUpgradeType() != MachineUpgrade.UpgradeType.MULTIPLY) { border = MultiblockBorderType.SINGLE; }
 				}
 					
 				if (border != MultiblockBorderType.NONE) {		

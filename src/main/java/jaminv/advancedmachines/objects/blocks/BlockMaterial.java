@@ -3,17 +3,11 @@ package jaminv.advancedmachines.objects.blocks;
 import org.apache.commons.lang3.text.WordUtils;
 
 import jaminv.advancedmachines.Main;
-import jaminv.advancedmachines.client.BakedModelBase;
-import jaminv.advancedmachines.client.BakedModelLoader;
-import jaminv.advancedmachines.client.quads.IModelQuad;
 import jaminv.advancedmachines.init.BlockInit;
 import jaminv.advancedmachines.init.ItemInit;
 import jaminv.advancedmachines.init.property.PropertyMaterial;
-import jaminv.advancedmachines.objects.blocks.BlockBase.CustomStateMapper;
 import jaminv.advancedmachines.objects.blocks.item.ItemBlockVariants;
 import jaminv.advancedmachines.objects.material.MaterialBase;
-import jaminv.advancedmachines.util.Reference;
-import jaminv.advancedmachines.util.helper.BlockHelper;
 import jaminv.advancedmachines.util.interfaces.IHasModel;
 import jaminv.advancedmachines.util.interfaces.IHasOreDictionary;
 import jaminv.advancedmachines.util.interfaces.IMetaName;
@@ -22,7 +16,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -31,7 +25,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.oredict.OreDictionary;
 
 public abstract class BlockMaterial extends Block implements IHasModel, IMetaName, IHasOreDictionary {
@@ -61,7 +54,11 @@ public abstract class BlockMaterial extends Block implements IHasModel, IMetaNam
 		this.oredictprefix = name;
 		
 		BlockInit.BLOCKS.add(this);
-		ItemInit.ITEMS.add(new ItemBlockVariants(this).setRegistryName(this.getRegistryName()));
+		ItemInit.ITEMS.add(getItem());
+	}
+	
+	protected Item getItem() { 
+		return new ItemBlockVariants(this).setRegistryName(this.getRegistryName());
 	}
 	
 	protected String getName() { return name; }
@@ -121,11 +118,6 @@ public abstract class BlockMaterial extends Block implements IHasModel, IMetaNam
 	public MaterialBase getVariant(IBlockState state) {
 		return (MaterialBase)state.getValue(VARIANT);
 	}
-	
-	public void registerCustomModel(String resource, Class<? extends BakedModelBase> modelClass) {
-		ModelLoader.setCustomStateMapper(this, new CustomStateMapper(new ModelResourceLocation(Reference.MODID + ":" + resource)));
-		BakedModelLoader.register(resource, modelClass);
-	}
 
 	@Override
 	public void registerModels() {
@@ -139,6 +131,13 @@ public abstract class BlockMaterial extends Block implements IHasModel, IMetaNam
 				Main.proxy.registerVariantRenderer(Item.getItemFromBlock(this), variant.getMeta(), this.name + "_" + name, "inventory");
 			}
 		}
+	}
+	
+	public void registerCustomVariantModels(TileEntityItemStackRenderer teisr) {
+		for (MaterialBase variant : MaterialBase.values(type)) {
+			String name = variant.getName();
+		}
+		Item.getItemFromBlock(this).setTileEntityItemStackRenderer(teisr);
 	}
 	
 	@Override

@@ -2,7 +2,8 @@ package jaminv.advancedmachines.machine.expansion.expansion;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.init.property.Properties;
-import jaminv.advancedmachines.machine.expansion.BlockMachineExpansionBase;
+import jaminv.advancedmachines.lib.render.ModelBakery;
+import jaminv.advancedmachines.machine.expansion.BlockMachineExpansionType;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
@@ -19,7 +20,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
-public class BlockMachineExpansion extends BlockMachineExpansionBase {
+public class BlockMachineExpansion extends BlockMachineExpansionType {
 	
 	public BlockMachineExpansion(String name) {
 		super(name);
@@ -79,9 +80,11 @@ public class BlockMachineExpansion extends BlockMachineExpansionBase {
 	public static final String MODEL_EXPANSION = "bakedmodel_expansion";
 	@Override
 	public void registerModels() {
-		registerCustomModel(MODEL_EXPANSION, BakedModelExpansion.class);
 		registerVariantModels();
 	}
+	
+	protected static ModelBakeryExpansion bakery = new ModelBakeryExpansion();
+	@Override public ModelBakery getModelBakery() { return bakery; }
 	
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
@@ -99,5 +102,5 @@ public class BlockMachineExpansion extends BlockMachineExpansionBase {
 		}
 		
 		return false;
-	}	
+	}
 }

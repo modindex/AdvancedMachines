@@ -5,10 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import jaminv.advancedmachines.client.RawTextures;
-import jaminv.advancedmachines.client.quads.ILayeredTexture;
 import jaminv.advancedmachines.client.textureset.TextureSets;
 import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.init.property.UnlistedBoolean;
+import jaminv.advancedmachines.lib.render.quad.LayeredTexture;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorderType;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.objects.blocks.BlockMaterial;
@@ -18,7 +18,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
-public class LayeredTextureMultiblockBase implements ILayeredTexture {
+public class LayeredTextureMultiblockBase implements LayeredTexture {
 	
 	private String base;
 	private IExtendedBlockState state;

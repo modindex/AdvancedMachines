@@ -1,5 +1,5 @@
 package jaminv.advancedmachines.machine.expansion.speed;
 
-import jaminv.advancedmachines.machine.expansion.TileEntityMachineExpansionBase;
+import jaminv.advancedmachines.machine.expansion.TileEntityMachineExpansionType;
 
-public class TileEntityMachineSpeed extends TileEntityMachineExpansionBase {}
+public class TileEntityMachineSpeed extends TileEntityMachineExpansionType {}

@@ -1,0 +1,7 @@
+{
+    "parent": "advancedmachines:block/cube",
+    "textures": {
+        "all": "advancedmachines:blocks/machine/expansion/basic_all",
+        "north": "advancedmachines:blocks/machine/instance/melter/inactive/basic/all"
+    }
+}

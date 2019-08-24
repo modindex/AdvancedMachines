@@ -2,8 +2,10 @@ package jaminv.advancedmachines.machine.expansion.inventory;
 
 import jaminv.advancedmachines.client.textureset.TextureSets;
 import jaminv.advancedmachines.init.property.Properties;
-import jaminv.advancedmachines.machine.expansion.BlockMachineExpansionBase;
-import jaminv.advancedmachines.machine.expansion.expansion.BakedModelExpansion;
+import jaminv.advancedmachines.lib.render.ModelBakery;
+import jaminv.advancedmachines.lib.render.ModelBakeryProvider;
+import jaminv.advancedmachines.machine.expansion.BlockMachineExpansionType;
+import jaminv.advancedmachines.machine.expansion.expansion.ModelBakeryExpansion;
 import jaminv.advancedmachines.machine.expansion.expansion.TileEntityMachineExpansion;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
@@ -32,7 +34,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
-public class BlockMachineInventory extends BlockMachineExpansionBase implements ITileEntityProvider, IHasTileEntity {
+public class BlockMachineInventory extends BlockMachineExpansionType implements ITileEntityProvider, IHasTileEntity {
 	
     public static final PropertyBool INPUT = PropertyBool.create("input");
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
@@ -105,7 +107,9 @@ public class BlockMachineInventory extends BlockMachineExpansionBase implements 
 	
 	@Override
 	public void registerModels() {
-		registerCustomModel("bakedmodel_inventory", BakedModelInventory.class);
 		registerVariantModels();
 	}
+
+	public static ModelBakeryInventory bakery = new ModelBakeryInventory();	
+	@Override public ModelBakery getModelBakery() { return bakery; }	
 }

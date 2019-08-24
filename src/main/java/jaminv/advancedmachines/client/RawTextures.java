@@ -13,6 +13,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.lib.render.TextureHelper;
 import jaminv.advancedmachines.util.Reference;
 import jaminv.advancedmachines.util.helper.StringHelper;
 import jaminv.advancedmachines.util.logger.Logger;
@@ -31,7 +32,7 @@ import net.minecraftforge.fml.common.ModContainer;
 
 public class RawTextures {
 	
-	public final static String[] machines = { "alloy", "furnace", "grinder", "purifier", "melter" };
+	public final static String[] machines = { "alloy", "furnace", "grinder", "purifier", "melter", "stabilizer", "injector" };
 	public final static String[] inventory = { "input", "output" };
 	public final static String[] materials = { "basic", "compressed", "quad", "improbable" };
 	public final static String[] upgrades = { "speed", "productivity" };
@@ -46,7 +47,7 @@ public class RawTextures {
 	public static TextureAtlasSprite get(String reference) {
 		TextureAtlasSprite ret = textures.get(reference);
 		if (ret == null) { 
-			ret = textures.get("no_texture");
+			ret = TextureHelper.getMissingTexture();
 			Main.logger.error("Error loading sprite: '" + reference + "'.");
 		}
 		return ret;
@@ -137,15 +138,9 @@ public class RawTextures {
 				}
 			}
 		}
-		
-		map.put("no_texture", register("no_texture"));
+
 		textures = map.build();
 
 		Main.logger.info("Completed - Loading raw textures");
-	}
-	
-	public static TextureAtlasSprite getFluidTexture(FluidStack fluid) {
-		if (fluid == null) { textures.get("no_texture"); }
-		return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluid.getFluid().getStill(fluid).toString());	
 	}
 }

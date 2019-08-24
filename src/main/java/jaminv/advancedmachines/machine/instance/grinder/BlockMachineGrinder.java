@@ -1,7 +1,7 @@
 package jaminv.advancedmachines.machine.instance.grinder;
 
 import jaminv.advancedmachines.machine.BlockMachineMultiblock;
-import jaminv.advancedmachines.machine.expansion.expansion.BakedModelExpansion;
+import jaminv.advancedmachines.machine.expansion.expansion.ModelBakeryExpansion;
 import jaminv.advancedmachines.objects.material.MaterialExpansion;
 import jaminv.advancedmachines.util.enums.EnumGui;
 import net.minecraft.tileentity.TileEntity;

@@ -8,7 +8,7 @@ import jaminv.advancedmachines.lib.inventory.ItemStackHandlerObservable;
 import jaminv.advancedmachines.lib.machine.IMachineController;
 import jaminv.advancedmachines.lib.machine.MachineStorageCapability;
 import jaminv.advancedmachines.machine.dialog.DialogIOToggle;
-import jaminv.advancedmachines.machine.expansion.TileEntityMachineExpansionBase;
+import jaminv.advancedmachines.machine.expansion.TileEntityMachineExpansionType;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
 import jaminv.advancedmachines.util.network.IOStateMessage;
@@ -22,7 +22,7 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 
-public class TileEntityMachineInventory extends TileEntityMachineExpansionBase implements IHasGui, IMachineController.ISubController, IDirectional, DialogIOToggle.ISwitchableIO, IItemObservable.IObserver {
+public class TileEntityMachineInventory extends TileEntityMachineExpansionType implements IHasGui, IMachineController.ISubController, IDirectional, DialogIOToggle.ISwitchableIO, IItemObservable.IObserver {
 	
 	public final int SIZE = 27;
 	protected final ItemStackHandlerObservable inventory = new ItemStackHandlerObservable(SIZE); 	

@@ -19,7 +19,7 @@ import com.google.common.collect.Iterables;
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.machine.TileEntityMachine;
-import jaminv.advancedmachines.machine.expansion.IMachineUpgradeTileEntity;
+import jaminv.advancedmachines.machine.expansion.MachineUpgradeTileEntity;
 import jaminv.advancedmachines.machine.expansion.redstone.TileEntityMachineRedstone;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
@@ -128,8 +128,8 @@ public class BlockHelper {
 	
 	public static void setBorders(World world, BlockPos pos, MultiblockBorders borders) {
 		TileEntity tileentity = world.getTileEntity(pos);
-		if (tileentity instanceof IMachineUpgradeTileEntity) {
-			((IMachineUpgradeTileEntity)tileentity).setBorders(world, borders);
+		if (tileentity instanceof MachineUpgradeTileEntity) {
+			((MachineUpgradeTileEntity)tileentity).setBorders(world, borders);
 		}
 	}
 	

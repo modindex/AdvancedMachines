@@ -6,7 +6,7 @@ import jaminv.advancedmachines.lib.energy.EnergyStorageAdvanced;
 import jaminv.advancedmachines.lib.energy.IEnergyObservable;
 import jaminv.advancedmachines.lib.energy.IEnergyStorageInternal;
 import jaminv.advancedmachines.lib.machine.IMachineController;
-import jaminv.advancedmachines.machine.expansion.TileEntityMachineExpansionBase;
+import jaminv.advancedmachines.machine.expansion.TileEntityMachineExpansionType;
 import jaminv.advancedmachines.objects.material.MaterialExpansion;
 import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
@@ -21,7 +21,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
-public class TileEntityMachineEnergy extends TileEntityMachineExpansionBase implements IHasGui, IContainerUpdate, IMachineController.ISubController, IHasMetadata, IDirectional, IEnergyObservable.IObserver {
+public class TileEntityMachineEnergy extends TileEntityMachineExpansionType implements IHasGui, IContainerUpdate, IMachineController.ISubController, IHasMetadata, IDirectional, IEnergyObservable.IObserver {
 	
 	protected EnumFacing facing = EnumFacing.NORTH;
 	protected IMachineController controller;

@@ -3,9 +3,9 @@ package jaminv.advancedmachines.machine;
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.lib.machine.IMachineController.ISubController;
 import jaminv.advancedmachines.lib.recipe.IRecipeManager;
-import jaminv.advancedmachines.machine.expansion.IMachineUpgrade;
-import jaminv.advancedmachines.machine.expansion.IMachineUpgradeTileEntity;
-import jaminv.advancedmachines.machine.expansion.IMachineUpgrade.UpgradeType;
+import jaminv.advancedmachines.machine.expansion.MachineUpgrade;
+import jaminv.advancedmachines.machine.expansion.MachineUpgradeTileEntity;
+import jaminv.advancedmachines.machine.expansion.MachineUpgrade.UpgradeType;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.machine.multiblock.MultiblockState;
 import jaminv.advancedmachines.machine.multiblock.MultiblockUpdateMessage;
@@ -31,7 +31,7 @@ import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
-public abstract class TileEntityMachineMultiblock extends TileEntityMachine implements IMachineUpgradeTileEntity, IMachineFaceTE {
+public abstract class TileEntityMachineMultiblock extends TileEntityMachine implements MachineUpgradeTileEntity, IMachineFaceTE {
 
 	public TileEntityMachineMultiblock(IRecipeManager recipeManager) {
 		super(recipeManager);
@@ -98,7 +98,7 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachine impl
 		public Action checkBlock(World world, BlockPos pos) {
 			Block block = world.getBlockState(pos).getBlock();
 			if (block instanceof BlockMachineMultiblock) { return Action.END; }
-			if (block instanceof IMachineUpgrade) { return Action.SCAN; }
+			if (block instanceof MachineUpgrade) { return Action.SCAN; }
 			return Action.SKIP;
 		}
 	}	
@@ -153,8 +153,8 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachine impl
 					check.setPos(x, y, z);
 					if (pos.equals(check)) { continue; }
 					Block block = world.getBlockState(check).getBlock();
-					if (block instanceof IMachineUpgrade) {
-						IMachineUpgrade upgrade = (IMachineUpgrade)block;
+					if (block instanceof MachineUpgrade) {
+						MachineUpgrade upgrade = (MachineUpgrade)block;
 						this.upgrades.add(upgrade.getUpgradeType(), upgrade.getUpgradeQty(world, check));
 
 						TileEntity te = world.getTileEntity(check);
@@ -196,7 +196,7 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachine impl
 					upgrade.setPos(x, y, z);
 					//if (pos.equals(upgrade)) { continue; }
 					Block block = world.getBlockState(upgrade).getBlock();
-					if (block instanceof IMachineUpgrade) { 
+					if (block instanceof MachineUpgrade) { 
 						TileEntity te = world.getTileEntity(upgrade);
 						MultiblockBorders bord;
 						if (!isMultiblock) { 
@@ -207,7 +207,7 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachine impl
 							}
 						} else { bord = new MultiblockBorders(world, upgrade, min, max); }
 						
-						((IMachineUpgrade) block).setMultiblock(world, upgrade, pos, bord);
+						((MachineUpgrade) block).setMultiblock(world, upgrade, pos, bord);
 					}
 				}
 			}

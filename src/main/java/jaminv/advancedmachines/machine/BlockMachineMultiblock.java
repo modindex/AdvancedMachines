@@ -1,12 +1,14 @@
 package jaminv.advancedmachines.machine;
 
+import jaminv.advancedmachines.client.ItemRenderer;
 import jaminv.advancedmachines.init.property.Properties;
-import jaminv.advancedmachines.machine.expansion.expansion.BakedModelExpansion;
+import jaminv.advancedmachines.machine.expansion.expansion.ModelBakeryExpansion;
 import jaminv.advancedmachines.machine.expansion.expansion.TileEntityMachineExpansion;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.machine.multiblock.face.IMachineFaceTE;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
+import jaminv.advancedmachines.machine.multiblock.model.BakedItemModelMultiblockMachine;
 import jaminv.advancedmachines.machine.multiblock.model.BakedModelMultiblockMachine;
 import jaminv.advancedmachines.objects.material.MaterialExpansion;
 import jaminv.advancedmachines.util.helper.BlockHelper;
@@ -14,7 +16,9 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -132,6 +136,6 @@ public abstract class BlockMachineMultiblock extends BlockMachineBase {
 	@Override
 	public void registerModels() {
 		registerCustomModel(BAKEDMODEL_MACHINE, BakedModelMultiblockMachine.class);
-		registerVariantModels();
+		//Item.getItemFromBlock(this).setTileEntityItemStackRenderer(this.createNewTileEntity(Minecraft.getMinecraft().world, ));
 	}	
 }

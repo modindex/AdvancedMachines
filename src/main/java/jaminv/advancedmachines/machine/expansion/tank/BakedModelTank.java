@@ -4,11 +4,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 
-import jaminv.advancedmachines.client.BakedModelBase;
-import jaminv.advancedmachines.client.quads.IModelQuad;
-import jaminv.advancedmachines.client.quads.ModelQuadFluid;
-import jaminv.advancedmachines.client.quads.ModelQuadLayeredBlock;
 import jaminv.advancedmachines.init.property.Properties;
+import jaminv.advancedmachines.lib.render.BakedModelImpl;
+import jaminv.advancedmachines.lib.render.quad.QuadBuilder;
+import jaminv.advancedmachines.lib.render.quad.QuadBuilderFluid;
+import jaminv.advancedmachines.lib.render.quad.QuadBuilderLayeredBlock;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorderType;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.machine.multiblock.model.LayeredTextureMultiblockTransparent;
@@ -21,7 +21,7 @@ import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fluids.FluidStack;
 
-public class BakedModelTank extends BakedModelBase {
+public class BakedModelTank extends BakedModelImpl {
 
 	public BakedModelTank(IModelState state, VertexFormat format,
 			Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
@@ -34,8 +34,8 @@ public class BakedModelTank extends BakedModelBase {
 	}
 
 	@Override
-	public List<IModelQuad> render(VertexFormat format, IBlockState state, EnumFacing side, long rand) {
-		List<IModelQuad> ret = new LinkedList<IModelQuad>();
+	public List<QuadBuilder> render(VertexFormat format, IBlockState state, EnumFacing side, long rand) {
+		List<QuadBuilder> ret = new LinkedList<QuadBuilder>();
 		
 		IExtendedBlockState ext = (IExtendedBlockState)state;
 		FluidStack fluid = ext.getValue(Properties.FLUID);
@@ -51,11 +51,11 @@ public class BakedModelTank extends BakedModelBase {
 		if (borders.getWest() == MultiblockBorderType.SOLID) { xmin = offset; }
 		if (borders.getEast() == MultiblockBorderType.SOLID) { xmax = offset; }
 		
-		ret.add(new ModelQuadLayeredBlock(format, new LayeredTextureMultiblockTransparent(state, "tank")));
-		ret.add(new ModelQuadLayeredBlock(format, new LayeredTextureMultiblockTransparent(state, "tank")).offset(xmin, xmax, ymin, ymax, zmin, zmax).invert());
+		ret.add(new QuadBuilderLayeredBlock(format, new LayeredTextureMultiblockTransparent(state, "tank")));
+		ret.add(new QuadBuilderLayeredBlock(format, new LayeredTextureMultiblockTransparent(state, "tank")).offset(xmin, xmax, ymin, ymax, zmin, zmax).invert());
 
 		if (fluid != null && capacity > 0) {
-			ret.add(new ModelQuadFluid(format, fluid, fluid.amount / (float)capacity).offset(0.02f,  0.02f, 0.02f)); 
+			ret.add(new QuadBuilderFluid(format, fluid, fluid.amount / (float)capacity).offset(0.02f,  0.02f, 0.02f)); 
 		}		
 
 		return ret;

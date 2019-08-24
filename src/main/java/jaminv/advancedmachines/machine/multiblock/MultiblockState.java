@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.machine.multiblock;
 
-import jaminv.advancedmachines.machine.expansion.IMachineUpgrade;
+import jaminv.advancedmachines.machine.expansion.MachineUpgrade;
 import jaminv.advancedmachines.util.helper.BlockHelper.BlockChecker;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
@@ -53,9 +53,9 @@ public abstract class MultiblockState {
 		@Override
 		public String toString() {
 			String ret = I18n.format("message.multiblock.complete", 
-				upgrades.get(IMachineUpgrade.UpgradeType.MULTIPLY),
-				upgrades.get(IMachineUpgrade.UpgradeType.SPEED),
-				upgrades.get(IMachineUpgrade.UpgradeType.PRODUCTIVITY)
+				upgrades.get(MachineUpgrade.UpgradeType.MULTIPLY),
+				upgrades.get(MachineUpgrade.UpgradeType.SPEED),
+				upgrades.get(MachineUpgrade.UpgradeType.PRODUCTIVITY)
 			);
 			
 			return ret;

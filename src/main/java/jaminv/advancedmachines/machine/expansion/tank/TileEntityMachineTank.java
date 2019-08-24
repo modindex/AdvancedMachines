@@ -10,7 +10,7 @@ import jaminv.advancedmachines.lib.inventory.IItemObservable;
 import jaminv.advancedmachines.lib.inventory.ItemStackHandlerObservable;
 import jaminv.advancedmachines.lib.machine.IMachineController;
 import jaminv.advancedmachines.machine.dialog.DialogIOToggle;
-import jaminv.advancedmachines.machine.expansion.TileEntityMachineExpansionBase;
+import jaminv.advancedmachines.machine.expansion.TileEntityMachineExpansionType;
 import jaminv.advancedmachines.objects.material.MaterialExpansion;
 import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
@@ -33,7 +33,7 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
-public class TileEntityMachineTank extends TileEntityMachineExpansionBase implements ITickable, IHasGui, IDirectional, 
+public class TileEntityMachineTank extends TileEntityMachineExpansionType implements ITickable, IHasGui, IDirectional, 
 		IMachineController.ISubController, IItemObservable.IObserver, IFluidObservable.IObserver, DialogIOToggle.ISwitchableIO {
 	
 	protected EnumFacing facing = EnumFacing.NORTH;

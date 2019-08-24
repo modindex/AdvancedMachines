@@ -1,8 +1,8 @@
 package jaminv.advancedmachines.proxy;
 
 import jaminv.advancedmachines.Main;
-import jaminv.advancedmachines.client.BakedModelLoader;
 import jaminv.advancedmachines.client.textureset.FileHandlerTextureSet;
+import jaminv.advancedmachines.lib.render.BakedModelLoader;
 import jaminv.advancedmachines.util.Reference;
 import jaminv.advancedmachines.util.parser.DataParser;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;

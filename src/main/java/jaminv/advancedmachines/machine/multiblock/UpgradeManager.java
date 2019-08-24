@@ -5,7 +5,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import jaminv.advancedmachines.machine.expansion.IMachineUpgrade;
+import jaminv.advancedmachines.machine.expansion.MachineUpgrade;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
@@ -14,11 +14,11 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 
 public class UpgradeManager implements INBTSerializable<NBTTagCompound> {
-	protected Map<IMachineUpgrade.UpgradeType, Integer> upgrades;
+	protected Map<MachineUpgrade.UpgradeType, Integer> upgrades;
 	protected List<BlockPos> tools = new ArrayList<BlockPos>();
 
 	public void reset() {
-		upgrades = new EnumMap<IMachineUpgrade.UpgradeType, Integer>(IMachineUpgrade.UpgradeType.class);
+		upgrades = new EnumMap<MachineUpgrade.UpgradeType, Integer>(MachineUpgrade.UpgradeType.class);
 		tools = new ArrayList<BlockPos>();
 	}
 	
@@ -26,14 +26,14 @@ public class UpgradeManager implements INBTSerializable<NBTTagCompound> {
 		return (upgrades != null && upgrades.size() > 0);
 	}
 	
-	public void add(IMachineUpgrade.UpgradeType type, int add) {
+	public void add(MachineUpgrade.UpgradeType type, int add) {
 		if (upgrades == null) { reset(); }
 		Integer qty = upgrades.get(type);
 		if (qty == null) { qty = 0; }
 		upgrades.put(type, qty + add);
 	}
 	
-	public int get(IMachineUpgrade.UpgradeType type) {
+	public int get(MachineUpgrade.UpgradeType type) {
 		if (upgrades == null) { return 0; }
 		Integer qty = upgrades.get(type);
 		if (qty == null) { return 0; }
@@ -52,7 +52,7 @@ public class UpgradeManager implements INBTSerializable<NBTTagCompound> {
         if (upgrades != null) {
         	NBTTagList nbtUpgrades = new NBTTagList();
         	int count = 0;
-        	for (IMachineUpgrade.UpgradeType type : IMachineUpgrade.UpgradeType.values()) {
+        	for (MachineUpgrade.UpgradeType type : MachineUpgrade.UpgradeType.values()) {
         		Integer qty = upgrades.get(type);
         		if (qty != null) {
         			NBTTagCompound upgradeTag = new NBTTagCompound();
@@ -89,7 +89,7 @@ public class UpgradeManager implements INBTSerializable<NBTTagCompound> {
                 NBTTagCompound upgradeTag = tagList.getCompoundTagAt(i);
                 String type = upgradeTag.getString("type");
                 int qty = upgradeTag.getInteger("qty");
-                upgrades.put(IMachineUpgrade.UpgradeType.getType(type), qty);            	
+                upgrades.put(MachineUpgrade.UpgradeType.getType(type), qty);            	
             }
     	}
     	

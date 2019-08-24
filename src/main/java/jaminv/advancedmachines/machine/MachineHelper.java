@@ -1,7 +1,11 @@
 package jaminv.advancedmachines.machine;
 
+import jaminv.advancedmachines.client.RawTextures;
 import jaminv.advancedmachines.lib.dialog.control.enums.IOState;
+import jaminv.advancedmachines.objects.blocks.BlockMaterial;
 import jaminv.advancedmachines.util.ModConfig;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidUtil;
@@ -28,5 +32,10 @@ public class MachineHelper {
 			return true;
 		}
 		return false;
+	}
+	
+	public static TextureAtlasSprite getParticleTexture(String type, IBlockState state) {
+		String variant = state.getValue(BlockMaterial.EXPANSION_VARIANT).getName();
+		return RawTextures.get(type + "." + variant + ".all");
 	}
 }
