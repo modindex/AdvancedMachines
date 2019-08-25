@@ -3,6 +3,8 @@ package jaminv.advancedmachines.lib.render;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -18,7 +20,7 @@ public interface ModelBakery {
 		return Collections.emptyList();
 	}
 	
-	public default TextureAtlasSprite getParticleTexture(IBlockState state) {
+	public default TextureAtlasSprite getParticleTexture(String variant) {
 		return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
 	}
 }

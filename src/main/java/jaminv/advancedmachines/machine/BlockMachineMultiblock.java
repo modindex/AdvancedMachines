@@ -21,6 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
@@ -132,7 +133,14 @@ public abstract class BlockMachineMultiblock extends BlockMachineBase implements
 		//registerCustomModel(BAKEDMODEL_MACHINE, ModelBakeryMultiblockMachine.class);
 		//Item.getItemFromBlock(this).setTileEntityItemStackRenderer(this.createNewTileEntity(Minecraft.getMinecraft().world, ));
 	}
-
+	
 	protected static ModelBakery bakery = new ModelBakeryMultiblockMachine();
 	@Override public ModelBakery getModelBakery() { return bakery; }
+
+	@Override
+	public boolean addLandingEffects(IBlockState state, WorldServer worldObj, BlockPos blockPosition,
+			IBlockState iblockstate, EntityLivingBase entity, int numberOfParticles) {
+		// TODO Auto-generated method stub
+		return super.addLandingEffects(state, worldObj, blockPosition, iblockstate, entity, numberOfParticles);
+	}
 }

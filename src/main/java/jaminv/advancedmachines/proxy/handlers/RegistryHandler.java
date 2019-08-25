@@ -21,6 +21,8 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @EventBusSubscriber(modid = Reference.MODID)
 public class RegistryHandler {
@@ -54,6 +56,7 @@ public class RegistryHandler {
 	}
 	
 	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
 	public static void onModelRegister(ModelRegistryEvent event) {
 		for (Item item : ItemInit.ITEMS) {
 			if (item instanceof IHasModel) {
@@ -67,8 +70,9 @@ public class RegistryHandler {
 			}
 			
 			if (block instanceof ModelBakeryProvider) {
-				ModelLoader.setCustomStateMapper(block, new CustomStateMapper(new ModelResourceLocation(block.getRegistryName(), "normal")));
-				BakedModelLoader.register(block.getRegistryName().getResourcePath());				
+				ModelResourceLocation resource = new ModelResourceLocation(block.getRegistryName(), "normal");
+				ModelLoader.setCustomStateMapper(block, new CustomStateMapper(resource));
+				BakedModelLoader.register(resource, ((ModelBakeryProvider)block).getModelBakery());				
 			}
 		}
 	}

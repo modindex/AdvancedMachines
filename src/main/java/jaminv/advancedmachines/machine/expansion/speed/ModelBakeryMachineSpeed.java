@@ -7,8 +7,8 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 public class ModelBakeryMachineSpeed extends ModelBakeryExpansionType {
 	@Override
-	public TextureAtlasSprite getParticleTexture(IBlockState state) {
-		return MachineHelper.getParticleTexture("speed", state);
+	public TextureAtlasSprite getParticleTexture(String variant) {
+		return MachineHelper.getParticleTexture("speed", variant);
 	}
 
 	@Override

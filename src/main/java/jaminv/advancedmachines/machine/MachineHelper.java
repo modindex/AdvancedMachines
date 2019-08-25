@@ -34,8 +34,8 @@ public class MachineHelper {
 		return false;
 	}
 	
-	public static TextureAtlasSprite getParticleTexture(String type, IBlockState state) {
-		String variant = state.getValue(BlockMaterial.EXPANSION_VARIANT).getName();
+	public static TextureAtlasSprite getParticleTexture(String type, String variant) {
+		if (variant.equals("normal")) { return RawTextures.get(type + ".basic.all"); }
 		return RawTextures.get(type + "." + variant + ".all");
 	}
 }

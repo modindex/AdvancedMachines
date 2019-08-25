@@ -32,85 +32,21 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 
 public class BakedModelImpl implements IBakedModel {
 	
-	public static BakedModelImpl INSTANCE = new BakedModelImpl();	
-	
-	private static final Map<String, IBakedModel> cache = new HashMap<String, IBakedModel>();
-	
-	public static String buildCacheKey(ItemStack stack) {
-		ToStringHelper helper = MoreObjects.toStringHelper(stack);
-		helper.add("item", Item.REGISTRY.getNameForObject(stack.getItem()).toString());
-		helper.add("meta", Items.DIAMOND.getDamage(stack));
-		helper.add("nbt", stack.getTagCompound().toString());
-		return helper.toString();
+	public final ModelBakery bakery;
+	public final String variant;
+	public BakedModelImpl(ModelBakery bakery, String variant) {
+		this.bakery = bakery;
+		this.variant = variant;
 	}
-	
-	@Nullable
-	public static IBakedModel getCachedItemModel(ItemStack stack) {
-		IBakedModel model = cache.get(buildCacheKey(stack));
-		if (model != null) { return model; }
-		return generateItemModel(stack);
-	}
-	
-	@Nullable
-	private static IBakedModel generateItemModel(ItemStack stack) {
-		Item item = stack.getItem();
-		if (item instanceof ItemBlock) {
-			Block block = Block.getBlockFromItem(item);
-			if (block instanceof ModelBakeryProvider) {
-				ModelBakery bakery = ((ModelBakeryProvider)block).getModelBakery();
-				return new BakedModelWrapper(bakery.bakeItemModel(stack), null);
-			}
-		}
-		return null;
-	}
-	
-	public static String buildCacheKey(IBlockState state) {
-		ToStringHelper helper = MoreObjects.toStringHelper(state);
-
-		helper.add("meta", state.getBlock().getMetaFromState(state)); 
-		for (Entry<IProperty<?>, Comparable<?>> entry : state.getProperties().entrySet()) {
-			helper.add(entry.getKey().getName(), entry.getValue().toString());
-		}
 		
-		if (state instanceof IExtendedBlockState) {
-			IExtendedBlockState ext = (IExtendedBlockState)state;
-			for (Entry<IUnlistedProperty<?>, Optional<?>> entry: ext.getUnlistedProperties().entrySet()) {
-				if (!entry.getValue().isPresent()) {
-					helper.add(entry.getKey().getName(), "<NULL>");
-				} else {
-					IUnlistedProperty prop = entry.getKey();
-					helper.add(prop.getName(), prop.valueToString(ext.getValue(prop)));
-				}
-			}
-		}
-		return helper.toString();
-	}	
-	
-	@Nullable
-	public static IBakedModel getCachedModel(IBlockState state) {
-		IBakedModel model = cache.get(buildCacheKey(state));
-		if (model != null) { return model; }
-		return generateModel(state);
-	}
-	
-	@Nullable
-	private static IBakedModel generateModel(IBlockState state) {
-		Block block = state.getBlock();
-		if (block instanceof ModelBakeryProvider) {
-			ModelBakery bakery = ((ModelBakeryProvider)block).getModelBakery();
-			return new BakedModelWrapper(bakery.bakeModel(state), bakery.getParticleTexture(state));
-		}
-		return null;
-	}
-	
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
-		return getCachedModel(state).getQuads(state, side, rand);
+		return BakedModelCache.getCachedModel(state).getQuads(state, side, rand);
 	}
 
 	@Override
 	public boolean isAmbientOcclusion() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -128,7 +64,7 @@ public class BakedModelImpl implements IBakedModel {
 		return new ItemOverrideList(Collections.emptyList()) {
 			@Override
 			public IBakedModel handleItemState(IBakedModel modelOld, ItemStack stack, World world, EntityLivingBase entity) {
-				IBakedModel model = BakedModelImpl.getCachedItemModel(stack);
+				IBakedModel model = BakedModelCache.getCachedItemModel(stack);
 				if (model == null) { return modelOld; }
 				return model;
 			}
@@ -137,6 +73,6 @@ public class BakedModelImpl implements IBakedModel {
 
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
-		return TextureHelper.getMissingTexture();
+		return bakery.getParticleTexture(variant);
 	}
 }

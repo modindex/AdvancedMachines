@@ -1,12 +1,16 @@
 package jaminv.advancedmachines.lib.render;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.function.Function;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
@@ -50,11 +54,16 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fluids.FluidStack;
 
 public class BakedModelWrapper implements IBakedModel {
+	
+	public static BakedModelWrapper INSTANCE = new BakedModelWrapper();
 
 	List<BakedQuad> quads;
-	TextureAtlasSprite particle;
+
+	protected BakedModelWrapper() {
+		this.quads = Collections.emptyList();
+	}
 	
-	public BakedModelWrapper(List<BakedQuad> quads, TextureAtlasSprite particle) {
+	public BakedModelWrapper(@Nonnull List<BakedQuad> quads) {
 		this.quads = quads;
 	}
 	
@@ -80,19 +89,19 @@ public class BakedModelWrapper implements IBakedModel {
 
 	@Override
 	public ItemOverrideList getOverrides() {
-		return itemHandler;
+		return new ItemOverrideList(Collections.emptyList()) {
+			@Override
+			public IBakedModel handleItemState(IBakedModel modelOld, ItemStack stack, World world, EntityLivingBase entity) {
+				IBakedModel model = BakedModelCache.getCachedItemModel(stack);
+				if (model == null) { return modelOld; }
+				return model;
+			}
+		};
 	}
-
-	private final ItemOverrideList itemHandler = new ItemOverrideList(Lists.<ItemOverride> newArrayList()) {
-		@Override
-		public IBakedModel handleItemState(IBakedModel model, ItemStack stack, World world, EntityLivingBase entity) {
-			return BakedModelWrapper.this;
-		}
-	};
 
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
-		return particle != null ? particle : TextureHelper.getMissingTexture();
+		return TextureHelper.getMissingTexture();
 	}
 
 }

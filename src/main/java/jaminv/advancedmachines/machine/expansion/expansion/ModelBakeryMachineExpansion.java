@@ -38,8 +38,8 @@ public class ModelBakeryMachineExpansion implements ModelBakery {
 	}		
 
 	@Override
-	public TextureAtlasSprite getParticleTexture(IBlockState state) {
-		return MachineHelper.getParticleTexture("expansion", state);
+	public TextureAtlasSprite getParticleTexture(String variant) {
+		return MachineHelper.getParticleTexture("expansion", variant);
 	}
 
 	@Override

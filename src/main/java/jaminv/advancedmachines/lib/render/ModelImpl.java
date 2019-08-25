@@ -13,12 +13,16 @@ import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 
 public class ModelImpl implements IModel {
-	public static ModelImpl INSTANCE = new ModelImpl();
+	protected final BakedModelImpl baked;
+	
+	public ModelImpl(ModelBakery bakery, String variant) {
+		baked = new BakedModelImpl(bakery, variant);	
+	}	
 	
 	@Override
 	public IBakedModel bake(IModelState state, VertexFormat format,
 			Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-		return BakedModelImpl.INSTANCE;
+		return baked;
 	}
 	
 	@Override
