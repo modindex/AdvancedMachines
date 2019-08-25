@@ -13,7 +13,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
-public class ModelBakeryEnergy implements ModelBakery {
+public class ModelBakeryMachineEnergy implements ModelBakery {
 
 	@Override
 	public TextureAtlasSprite getParticleTexture(IBlockState state) {

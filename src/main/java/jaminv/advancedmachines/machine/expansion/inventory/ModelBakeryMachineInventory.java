@@ -23,7 +23,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.model.IModelState;
 
-public class ModelBakeryInventory implements ModelBakery {
+public class ModelBakeryMachineInventory implements ModelBakery {
 	
 	protected static class LayeredTextureInventory extends LayeredTextureMultiblockBase {
 		public LayeredTextureInventory(IBlockState state) {	super(state, "expansion"); }

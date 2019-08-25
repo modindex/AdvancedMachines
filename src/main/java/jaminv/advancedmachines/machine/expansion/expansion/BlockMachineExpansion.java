@@ -77,13 +77,12 @@ public class BlockMachineExpansion extends BlockMachineExpansionType {
         	.withProperty(Properties.BORDER_EAST, borders.getEast()).withProperty(Properties.BORDER_WEST, borders.getWest());
 	}
 	
-	public static final String MODEL_EXPANSION = "bakedmodel_expansion";
 	@Override
 	public void registerModels() {
 		registerVariantModels();
 	}
 	
-	protected static ModelBakeryExpansion bakery = new ModelBakeryExpansion();
+	protected static ModelBakery bakery = new ModelBakeryMachineExpansion();
 	@Override public ModelBakery getModelBakery() { return bakery; }
 	
 	@Override

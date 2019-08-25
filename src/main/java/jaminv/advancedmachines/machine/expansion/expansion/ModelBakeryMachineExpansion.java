@@ -16,7 +16,7 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
-public class ModelBakeryExpansion implements ModelBakery {
+public class ModelBakeryMachineExpansion implements ModelBakery {
 	
 	protected static class LayeredTextureMultiblockMachineFace extends LayeredTextureMultiblockBase {
 

@@ -1,8 +1,9 @@
 package jaminv.advancedmachines.machine.expansion.redstone;
 
 import jaminv.advancedmachines.init.property.Properties;
+import jaminv.advancedmachines.lib.render.ModelBakery;
 import jaminv.advancedmachines.machine.expansion.BlockMachineExpansionType;
-import jaminv.advancedmachines.machine.expansion.expansion.ModelBakeryExpansion;
+import jaminv.advancedmachines.machine.expansion.expansion.ModelBakeryMachineExpansion;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.util.interfaces.IHasTileEntity;
 import net.minecraft.block.Block;
@@ -107,7 +108,9 @@ public class BlockMachineRedstone extends BlockMachineExpansionType implements I
 	
 	@Override
 	public void registerModels() {
-		registerCustomModel("bakedmodel_redstone", BakedModelRedstone.class);
 		registerVariantModels();
-	}	
+	}
+
+	protected static ModelBakery bakery = new ModelBakeryMachineRedstone();
+	@Override public ModelBakery getModelBakery() { return bakery; }	
 }

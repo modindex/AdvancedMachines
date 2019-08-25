@@ -6,13 +6,16 @@ import java.util.function.Function;
 
 import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.lib.render.BakedModelImpl;
+import jaminv.advancedmachines.lib.render.ModelBakery;
 import jaminv.advancedmachines.lib.render.quad.QuadBuilder;
 import jaminv.advancedmachines.lib.render.quad.QuadBuilderFluid;
 import jaminv.advancedmachines.lib.render.quad.QuadBuilderLayeredBlock;
+import jaminv.advancedmachines.machine.MachineHelper;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorderType;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.machine.multiblock.model.LayeredTextureMultiblockTransparent;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
@@ -21,21 +24,16 @@ import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fluids.FluidStack;
 
-public class BakedModelTank extends BakedModelImpl {
+public class ModelBakeryMachineTank implements ModelBakery {
 
-	public BakedModelTank(IModelState state, VertexFormat format,
-			Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-		super(state, format, bakedTextureGetter);
+	@Override
+	public TextureAtlasSprite getParticleTexture(IBlockState state) {
+		return MachineHelper.getParticleTexture("expansion", state);
 	}
 
 	@Override
-	public TextureAtlasSprite getParticleTexture() {
-		return getTexture("expansion.basic.all");
-	}
-
-	@Override
-	public List<QuadBuilder> render(VertexFormat format, IBlockState state, EnumFacing side, long rand) {
-		List<QuadBuilder> ret = new LinkedList<QuadBuilder>();
+	public List<BakedQuad> bakeModel(IBlockState state) {
+		List<BakedQuad> ret = new LinkedList<BakedQuad>();
 		
 		IExtendedBlockState ext = (IExtendedBlockState)state;
 		FluidStack fluid = ext.getValue(Properties.FLUID);
@@ -51,13 +49,12 @@ public class BakedModelTank extends BakedModelImpl {
 		if (borders.getWest() == MultiblockBorderType.SOLID) { xmin = offset; }
 		if (borders.getEast() == MultiblockBorderType.SOLID) { xmax = offset; }
 		
-		ret.add(new QuadBuilderLayeredBlock(format, new LayeredTextureMultiblockTransparent(state, "tank")));
-		ret.add(new QuadBuilderLayeredBlock(format, new LayeredTextureMultiblockTransparent(state, "tank")).offset(xmin, xmax, ymin, ymax, zmin, zmax).invert());
+		ret.addAll(new QuadBuilderLayeredBlock(new LayeredTextureMultiblockTransparent(state, "tank")).build());
+		ret.addAll(new QuadBuilderLayeredBlock(new LayeredTextureMultiblockTransparent(state, "tank")).offset(xmin, xmax, ymin, ymax, zmin, zmax).invert().build());
 
 		if (fluid != null && capacity > 0) {
-			ret.add(new QuadBuilderFluid(format, fluid, fluid.amount / (float)capacity).offset(0.02f,  0.02f, 0.02f)); 
+			ret.addAll(new QuadBuilderFluid(fluid, fluid.amount / (float)capacity).offset(0.02f,  0.02f, 0.02f).build()); 
 		}		
-
 		return ret;
 	}
 

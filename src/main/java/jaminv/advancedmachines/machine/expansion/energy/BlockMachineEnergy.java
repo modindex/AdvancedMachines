@@ -4,7 +4,7 @@ import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.lib.render.ModelBakery;
 import jaminv.advancedmachines.lib.render.ModelBakeryProvider;
 import jaminv.advancedmachines.machine.expansion.BlockMachineExpansionType;
-import jaminv.advancedmachines.machine.expansion.expansion.ModelBakeryExpansion;
+import jaminv.advancedmachines.machine.expansion.expansion.ModelBakeryMachineExpansion;
 import jaminv.advancedmachines.machine.expansion.expansion.TileEntityMachineExpansion;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
@@ -111,6 +111,6 @@ public class BlockMachineEnergy extends BlockMachineExpansionType implements ITi
 		registerVariantModels();
 	}
 
-	protected static ModelBakeryEnergy bakery = new ModelBakeryEnergy();
+	protected static ModelBakeryMachineEnergy bakery = new ModelBakeryMachineEnergy();
 	@Override public ModelBakery getModelBakery() { return bakery; }	
 }

@@ -1,6 +1,7 @@
 package jaminv.advancedmachines.machine.expansion.tank;
 
 import jaminv.advancedmachines.init.property.Properties;
+import jaminv.advancedmachines.lib.render.ModelBakery;
 import jaminv.advancedmachines.machine.expansion.expansion.BlockMachineExpansion;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.util.enums.EnumGui;
@@ -110,8 +111,9 @@ public class BlockMachineTank extends BlockMachineExpansion {
 
 	@Override
 	public void registerModels() {
-		registerCustomModel("bakedmodel_tank", BakedModelTank.class);
-		registerVariantModels();
-	}	
+		this.registerVariantModels();
+	}
 
+	protected static ModelBakery bakery = new ModelBakeryMachineTank();
+	@Override public ModelBakery getModelBakery() { return bakery; }
 }

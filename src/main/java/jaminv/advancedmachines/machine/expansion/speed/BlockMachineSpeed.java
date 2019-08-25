@@ -1,5 +1,6 @@
 package jaminv.advancedmachines.machine.expansion.speed;
 
+import jaminv.advancedmachines.lib.render.ModelBakery;
 import jaminv.advancedmachines.machine.expansion.BlockMachineExpansionType;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.util.interfaces.IHasTileEntity;
@@ -41,7 +42,9 @@ public class BlockMachineSpeed extends BlockMachineExpansionType implements ITil
 	
 	@Override
 	public void registerModels() {
-		registerCustomModel("bakedmodel_speed", BakedModelSpeed.class);
 		registerVariantModels();
-	}		
+	}
+
+	protected static ModelBakery bakery = new ModelBakeryMachineSpeed();
+	@Override public ModelBakery getModelBakery() { return bakery; }	
 }

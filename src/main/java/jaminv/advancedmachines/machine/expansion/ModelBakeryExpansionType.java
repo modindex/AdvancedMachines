@@ -32,9 +32,4 @@ public class ModelBakeryExpansionType implements ModelBakery {
 	public List<BakedQuad> bakeModel(IBlockState state) {
 		return (new QuadBuilderLayeredBlock(new LayeredTextureMultiblockBase(state, getBaseTexture()))).build();
 	}
-
-	@Override
-	public TextureAtlasSprite getParticleTexture(IBlockState state) {
-		return MachineHelper.getParticleTexture(state);
-	}
 }

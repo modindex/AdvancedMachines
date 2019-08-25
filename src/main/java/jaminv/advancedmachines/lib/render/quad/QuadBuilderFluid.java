@@ -13,7 +13,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidStack;
 
 public class QuadBuilderFluid extends QuadBuilderBlock {
-	public QuadBuilderFluid(VertexFormat format, FluidStack fluid, float percent) {
+	public QuadBuilderFluid(FluidStack fluid, float percent) {
 		super(0, 1, 0, percent, 0, 1, TextureHelper.getFluidTexture(fluid));
 	}
 }

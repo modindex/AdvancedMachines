@@ -45,6 +45,6 @@ public class BlockMachineProductivity extends BlockMachineExpansionType implemen
 		registerVariantModels();
 	}
 
-	protected static ModelBakeryProductivity bakery = new ModelBakeryProductivity();
+	protected static ModelBakery bakery = new ModelBakeryMachineProductivity();
 	@Override public ModelBakery getModelBakery() { return bakery; }
 }

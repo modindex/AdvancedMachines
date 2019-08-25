@@ -5,7 +5,7 @@ import jaminv.advancedmachines.machine.expansion.ModelBakeryExpansionType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
-public class ModelBakeryProductivity extends ModelBakeryExpansionType {
+public class ModelBakeryMachineProductivity extends ModelBakeryExpansionType {
 	@Override
 	public TextureAtlasSprite getParticleTexture(IBlockState state) {
 		return MachineHelper.getParticleTexture("productivity", state);

@@ -1,7 +1,7 @@
 package jaminv.advancedmachines.machine.instance.purifier;
 
 import jaminv.advancedmachines.machine.BlockMachineMultiblock;
-import jaminv.advancedmachines.machine.expansion.expansion.ModelBakeryExpansion;
+import jaminv.advancedmachines.machine.expansion.expansion.ModelBakeryMachineExpansion;
 import jaminv.advancedmachines.util.enums.EnumGui;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
