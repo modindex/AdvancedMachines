@@ -28,7 +28,7 @@ public class BakedModelCache {
 		ToStringHelper helper = MoreObjects.toStringHelper(stack);
 		helper.add("item", Item.REGISTRY.getNameForObject(stack.getItem()).toString());
 		helper.add("meta", Items.DIAMOND.getDamage(stack));
-		helper.add("nbt", stack.getTagCompound().toString());
+		if (stack.getTagCompound() != null) { helper.add("nbt", stack.getTagCompound().toString()); }
 		return helper.toString();
 	}
 	

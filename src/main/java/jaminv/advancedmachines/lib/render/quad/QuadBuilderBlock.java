@@ -11,14 +11,14 @@ import net.minecraft.util.EnumFacing;
 public class QuadBuilderBlock implements QuadBuilder {
 	
 	public static class Unit extends QuadBuilderBlock {
-		public Unit(VertexFormat format, EnumFacing facing, TextureAtlasSprite texture, TextureAtlasSprite face,
+		public Unit(EnumFacing facing, TextureAtlasSprite texture, TextureAtlasSprite face,
 				TextureAtlasSprite top, TextureAtlasSprite bottom) {
 			super(0, 1, 0, 1, 0, 1, facing, texture, face, top, bottom);
 		}
-		public Unit(VertexFormat format, EnumFacing facing, TextureAtlasSprite texture, TextureAtlasSprite face) {
+		public Unit(EnumFacing facing, TextureAtlasSprite texture, TextureAtlasSprite face) {
 			super(0, 1, 0, 1, 0, 1, facing, texture, face);
 		}
-		public Unit(VertexFormat format, TextureAtlasSprite texture) {
+		public Unit(TextureAtlasSprite texture) {
 			super(0, 1, 0, 1, 0, 1, texture);
 		}
 	}

@@ -1,5 +1,6 @@
 package jaminv.advancedmachines.machine;
 
+import akka.Main;
 import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.lib.render.ModelBakery;
 import jaminv.advancedmachines.lib.render.ModelBakeryProvider;
@@ -12,7 +13,9 @@ import jaminv.advancedmachines.util.helper.BlockHelper;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -23,6 +26,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -131,7 +135,8 @@ public abstract class BlockMachineMultiblock extends BlockMachineBase implements
 	@Override
 	public void registerModels() {
 		//registerCustomModel(BAKEDMODEL_MACHINE, ModelBakeryMultiblockMachine.class);
-		//Item.getItemFromBlock(this).setTileEntityItemStackRenderer(this.createNewTileEntity(Minecraft.getMinecraft().world, ));
+		Item item = Item.getItemFromBlock(this);
+		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "normal"));
 	}
 	
 	protected static ModelBakery bakery = new ModelBakeryMultiblockMachine();

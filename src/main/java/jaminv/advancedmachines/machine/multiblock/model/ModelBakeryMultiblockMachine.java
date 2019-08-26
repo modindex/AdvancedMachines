@@ -19,6 +19,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.model.IModelState;
@@ -40,5 +41,10 @@ public class ModelBakeryMultiblockMachine implements ModelBakery {
 			new LayeredTextureMultiblockBase(state, "expansion"),
 			new LayeredTextureMultiblockMachine(state, ext.getValue(Properties.MACHINE_TYPE).getName()))
 		.build();
+	}
+
+	@Override
+	public List<BakedQuad> bakeItemModel(ItemStack stack) {
+		return new QuadBuilderBlock.Unit(RawTextures.get("expansion.basic.all")).build();
 	}
 }

@@ -133,13 +133,6 @@ public abstract class BlockMaterial extends Block implements IHasModel, IMetaNam
 		}
 	}
 	
-	public void registerCustomVariantModels(TileEntityItemStackRenderer teisr) {
-		for (MaterialBase variant : MaterialBase.values(type)) {
-			String name = variant.getName();
-		}
-		Item.getItemFromBlock(this).setTileEntityItemStackRenderer(teisr);
-	}
-	
 	@Override
 	public void registerOreDictionary() {
 		if (oredictprefix == null) { return; }
