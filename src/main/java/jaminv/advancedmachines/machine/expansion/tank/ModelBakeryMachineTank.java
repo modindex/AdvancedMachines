@@ -2,25 +2,20 @@ package jaminv.advancedmachines.machine.expansion.tank;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Function;
 
 import jaminv.advancedmachines.init.property.Properties;
-import jaminv.advancedmachines.lib.render.BakedModelImpl;
 import jaminv.advancedmachines.lib.render.ModelBakery;
-import jaminv.advancedmachines.lib.render.quad.QuadBuilder;
+import jaminv.advancedmachines.lib.render.quad.LayeredTexture;
 import jaminv.advancedmachines.lib.render.quad.QuadBuilderFluid;
 import jaminv.advancedmachines.lib.render.quad.QuadBuilderLayeredBlock;
 import jaminv.advancedmachines.machine.MachineHelper;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorderType;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
+import jaminv.advancedmachines.machine.multiblock.face.SidedTexture;
 import jaminv.advancedmachines.machine.multiblock.model.LayeredTextureMultiblockTransparent;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -49,8 +44,11 @@ public class ModelBakeryMachineTank implements ModelBakery {
 		if (borders.getWest() == MultiblockBorderType.SOLID) { xmin = offset; }
 		if (borders.getEast() == MultiblockBorderType.SOLID) { xmax = offset; }
 		
-		ret.addAll(new QuadBuilderLayeredBlock(new LayeredTextureMultiblockTransparent(state, "tank")).build());
-		ret.addAll(new QuadBuilderLayeredBlock(new LayeredTextureMultiblockTransparent(state, "tank")).offset(xmin, xmax, ymin, ymax, zmin, zmax).invert().build());
+		LayeredTexture side = new LayeredTextureMultiblockTransparent(state, "tank");
+		LayeredTexture top = new LayeredTextureMultiblockTransparent(state, "tank").withSided(SidedTexture.TOP);
+		
+		ret.addAll(new QuadBuilderLayeredBlock(side).withTopBottom(top).build());
+		ret.addAll(new QuadBuilderLayeredBlock(side).withTopBottom(top).offset(xmin, xmax, ymin, ymax, zmin, zmax).invert().build());
 
 		if (fluid != null && capacity > 0) {
 			ret.addAll(new QuadBuilderFluid(fluid, fluid.amount / (float)capacity).offset(0.02f,  0.02f, 0.02f).build()); 

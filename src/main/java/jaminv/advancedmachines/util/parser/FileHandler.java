@@ -6,9 +6,6 @@ import com.google.gson.JsonObject;
 
 import jaminv.advancedmachines.util.logger.Logger;
 
-public interface IFileHandler {
+public interface FileHandler {
 	public boolean parseData(Logger logger, String filename, JsonObject json) throws DataParserException;
-	
-	public void setConstants(Map<String, JsonObject> constants);
-	public void setFactories(Map<String, Map<String, Class>> factories);
 }

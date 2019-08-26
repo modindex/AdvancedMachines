@@ -1,6 +1,8 @@
 package jaminv.advancedmachines.lib.render;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Map.Entry;
@@ -13,6 +15,7 @@ import com.google.common.base.MoreObjects.ToStringHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -22,7 +25,8 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 
 public class BakedModelCache {
-	private static final Map<String, IBakedModel> cache = new HashMap<String, IBakedModel>();
+	private static final Map<String, List<BakedQuad>> blockCache = new HashMap<String, List<BakedQuad>>();
+	private static final Map<String, IBakedModel> itemCache = new HashMap<String, IBakedModel>();
 	
 	public static String buildCacheKey(ItemStack stack) {
 		ToStringHelper helper = MoreObjects.toStringHelper(stack);
@@ -33,8 +37,8 @@ public class BakedModelCache {
 	}
 	
 	@Nullable
-	public static IBakedModel getCachedItemModel(ItemStack stack) {
-		IBakedModel model = cache.get(buildCacheKey(stack));
+	public static IBakedModel getItemModel(ItemStack stack) {
+		IBakedModel model = itemCache.get(buildCacheKey(stack));
 		if (model != null) { return model; }
 		return generateItemModel(stack);
 	}
@@ -46,7 +50,7 @@ public class BakedModelCache {
 			Block block = Block.getBlockFromItem(item);
 			if (block instanceof ModelBakeryProvider) {
 				ModelBakery bakery = ((ModelBakeryProvider)block).getModelBakery();
-				return new BakedModelWrapper(bakery.bakeItemModel(stack));
+				return new BakedModelWrapper(bakery.bakeItemModel(stack), bakery.getTransformationMap());
 			}
 		}
 		return null;
@@ -75,19 +79,19 @@ public class BakedModelCache {
 	}	
 	
 	@Nullable
-	public static IBakedModel getCachedModel(IBlockState state) {
-		IBakedModel model = cache.get(buildCacheKey(state));
-		if (model != null) { return model; }
-		return generateModel(state);
+	public static List<BakedQuad> getBlockModel(IBlockState state) {
+		List<BakedQuad> quads = blockCache.get(buildCacheKey(state));
+		if (quads != null) { return quads; }
+		return generateBlockModel(state);
 	}
 	
 	@Nullable
-	private static IBakedModel generateModel(IBlockState state) {
+	private static List<BakedQuad> generateBlockModel(IBlockState state) {
 		Block block = state.getBlock();
 		if (block instanceof ModelBakeryProvider) {
 			ModelBakery bakery = ((ModelBakeryProvider)block).getModelBakery();
-			return new BakedModelWrapper(bakery.bakeModel(state));
+			return bakery.bakeModel(state);
 		}
-		return null;
+		return Collections.emptyList();
 	}
 }

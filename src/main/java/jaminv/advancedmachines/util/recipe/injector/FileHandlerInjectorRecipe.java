@@ -13,8 +13,8 @@ import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.logger.Logger;
 import jaminv.advancedmachines.util.parser.DataParserException;
 import jaminv.advancedmachines.util.parser.FileHandlerRecipe;
+import jaminv.advancedmachines.util.parser.ParseUtils;
 import jaminv.advancedmachines.util.recipe.injector.InjectorManager.InjectorRecipe;
-import jaminv.advancedmachines.util.recipe.stabilizer.StabilizerManager.StabilizerRecipe;
 import net.minecraft.util.JsonUtils;
 
 public class FileHandlerInjectorRecipe extends FileHandlerRecipe {
@@ -37,7 +37,7 @@ public class FileHandlerInjectorRecipe extends FileHandlerRecipe {
 			
 			RecipeInput recipeInput;
 			if (element.isJsonObject() && ((JsonObject)element).has("fluid")) {
-				recipeInput = new RecipeInput(parseFluidStack((JsonObject)element, name));
+				recipeInput = new RecipeInput(ParseUtils.parseFluidStack((JsonObject)element, name));
 			} else {
 				recipeInput = parseInput(element, name);
 			}

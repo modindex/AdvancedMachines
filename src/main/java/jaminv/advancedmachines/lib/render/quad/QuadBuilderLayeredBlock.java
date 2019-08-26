@@ -28,21 +28,26 @@ public class QuadBuilderLayeredBlock implements QuadBuilder {
 	}
 
 	private EnumFacing facing;
-	private LayeredTexture texture, face, top, bottom;
-	public QuadBuilderLayeredBlock(EnumFacing facing, LayeredTexture texture, LayeredTexture face, LayeredTexture top, LayeredTexture bottom) {
-		this.facing = facing;
-		this.texture = texture;
-		this.face = face;
-		this.top = top;
-		this.bottom = bottom;
-	}
-	
-	public QuadBuilderLayeredBlock(EnumFacing facing, LayeredTexture texture, LayeredTexture face) {
-		this(facing, texture, face, texture, texture);
-	}
-	
+	private LayeredTexture texture, face, top, bottom; //, back, left, right; // Possibly Later
 	public QuadBuilderLayeredBlock(LayeredTexture texture) {
-		this(EnumFacing.NORTH, texture, texture, texture, texture);
+		this.facing = EnumFacing.NORTH;
+		this.texture = texture;
+		this.face = texture;
+		this.top = texture;
+		this.bottom = texture;
+	}
+	
+	public QuadBuilderLayeredBlock withFace(EnumFacing facing, LayeredTexture face) {
+		this.facing = facing;
+		this.face = face;
+		return this;
+	}
+	
+	public QuadBuilderLayeredBlock withTop(LayeredTexture top) { this.top = top; return this; }
+	public QuadBuilderLayeredBlock withBottom(LayeredTexture bottom) { this.bottom = bottom; return this; }
+	public QuadBuilderLayeredBlock withTopBottom(LayeredTexture texture) {
+		this.top = this.bottom = texture;
+		return this; 
 	}
 
 	@Override

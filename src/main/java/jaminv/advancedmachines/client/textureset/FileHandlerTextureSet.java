@@ -1,54 +1,36 @@
 package jaminv.advancedmachines.client.textureset;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BooleanSupplier;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
 
-import jaminv.advancedmachines.lib.recipe.RecipeInput;
-import jaminv.advancedmachines.lib.recipe.RecipeOutput;
-import jaminv.advancedmachines.util.Reference;
 import jaminv.advancedmachines.util.logger.Logger;
-import jaminv.advancedmachines.util.parser.DataParser;
 import jaminv.advancedmachines.util.parser.DataParserException;
-import jaminv.advancedmachines.util.parser.FileHandlerBase;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.nbt.NBTException;
-import net.minecraft.nbt.NBTTagCompound;
+import jaminv.advancedmachines.util.parser.FileHandler;
+import jaminv.advancedmachines.util.parser.ParseUtils;
 import net.minecraft.util.JsonUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.crafting.IConditionFactory;
-import net.minecraftforge.common.crafting.JsonContext;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
-public class FileHandlerTextureSet extends FileHandlerBase {
+public class FileHandlerTextureSet implements FileHandler {
 
 	@Override
 	public boolean parseData(Logger logger, String filename, JsonObject json) {
-		Map<String, JsonObject> constants = getConstants();
 		logger = logger.getLogger("texturesets");
 		
 		int i = 0, c = 0;
 		for (Map.Entry<String,JsonElement> entry : json.entrySet()) {
 			String name = entry.getKey();
 			try {
-				String path = entry.getKey();
-				if (getTextureSet(entry.getKey(), getJsonObject(entry.getValue(), entry.getKey()), logger)) { c++; }
+				String path = filename + "." + entry.getKey();
+				if (getTextureSet(path, ParseUtils.getJsonObject(entry.getValue(), entry.getKey()), logger)) { c++; }
 			} catch(DataParserException | JsonSyntaxException e) {
 				logger.error(e.getMessage());
 			}
 			i++;
 		}
 		
-		logComplete(logger, c, i, "info.parser.constant.complete", "info.parser.constant.incomplete");
+		ParseUtils.logComplete(logger, c, i, "info.parser.constant.complete", "info.parser.constant.incomplete");
 		return true;
 	}
 	
@@ -60,7 +42,7 @@ public class FileHandlerTextureSet extends FileHandlerBase {
 				if (JsonUtils.isString(json, entry.getKey())) {
 					TextureSets.put(newpath, JsonUtils.getString(json, entry.getKey()));
 				} else {
-					getTextureSet(newpath, getJsonObject(entry.getValue(), entry.getKey()), logger);
+					getTextureSet(newpath, ParseUtils.getJsonObject(entry.getValue(), entry.getKey()), logger);
 				}
 			} catch(DataParserException | JsonSyntaxException e) {
 				logger.error(e.getMessage());

@@ -33,12 +33,14 @@ public class TransformationMap {
 		
 		public Map<TransformType, TRSRTransformation> build() { return map; }
 	}
+
+	private static final TRSRTransformation flipX = new TRSRTransformation(null, null, new Vector3f(-1, 1, 1), null);
 	
-	private static TRSRTransformation blockThirdPerson = createTransform(0f, 2.5f, 0f, 75f, 45f, 0f, 0.375f);
-	private static TRSRTransformation itemThirdPerson = createTransform(0f, 3f, 1f, 0f, 0f, 0f, 0.55f);
-	private static TRSRTransformation itemFirstPerson = createTransform(1.13f, 3.2f, 1.13f, 0f, 90f, 25f, 0.68f);
+	private static final TRSRTransformation blockThirdPerson = createTransform(0f, 2.5f, 0f, 75f, 45f, 0f, 0.375f);
+	private static final TRSRTransformation itemThirdPerson = createTransform(0f, 3f, 1f, 0f, 0f, 0f, 0.55f);
+	private static final TRSRTransformation itemFirstPerson = createTransform(1.13f, 3.2f, 1.13f, 0f, 90f, 25f, 0.68f);
 	
-	public static Map<TransformType, TRSRTransformation> DEFAULT_BLOCK = new Builder()
+	public static final Map<TransformType, TRSRTransformation> DEFAULT_BLOCK = new Builder()
 		.add(TransformType.GUI, 0f, 0f, 0f, 30f, 225f, 0f, 0.625f)
 		.add(TransformType.GROUND, 0f, 3f, 0f, 0f, 0f, 0f, 0.25f)
 		.add(TransformType.FIXED, 0f, 0f, 0f, 0f, 0f, 0f, 0.5f)
@@ -48,7 +50,7 @@ public class TransformationMap {
 		.add(TransformType.FIRST_PERSON_LEFT_HAND, 0f, 0f, 0f, 0f, 225f, 0f, 0.4f)
 		.build();
 	
-	public static Map<TransformType, TRSRTransformation> DEFAULT_ITEM = new Builder()
+	public static final Map<TransformType, TRSRTransformation> DEFAULT_ITEM = new Builder()
 		.add(TransformType.GROUND, 0f, 2f, 0f, 0f, 0f, 0f, 0.5f)
 		.add(TransformType.HEAD, 1.13f, 3.2f, 1.13f, 0f, -90f, 25f, 0.68f)
 		.add(TransformType.THIRD_PERSON_RIGHT_HAND, itemThirdPerson)
@@ -64,8 +66,6 @@ public class TransformationMap {
 	public static TRSRTransformation createTransform(Vector3f transform, Vector3f roation, Vector3f scale) {
 		return TRSRTransformation.blockCenterToCorner(new TRSRTransformation(transform, TRSRTransformation.quatFromXYZDegrees(roation), scale, null));
 	}
-	
-	private static final TRSRTransformation flipX = new TRSRTransformation(null, null, new Vector3f(-1, 1, 1), null);
 
     public static TRSRTransformation flipLeft(TRSRTransformation transform) {
         return TRSRTransformation.blockCenterToCorner(flipX.compose(TRSRTransformation.blockCornerToCenter(transform)).compose(flipX));

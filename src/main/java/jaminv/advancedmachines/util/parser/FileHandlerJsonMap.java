@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BooleanSupplier;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -26,11 +27,19 @@ import net.minecraftforge.common.crafting.IConditionFactory;
 import net.minecraftforge.common.crafting.JsonContext;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
-public class FileHandlerConstants extends FileHandlerBase {
+public class FileHandlerJsonMap implements FileHandler {
+	
+	protected Map<String, JsonObject> map = new HashMap<String, JsonObject>();
+	public Map<String, JsonObject> getMap() { return ImmutableMap.copyOf(map); }
+	
+	String logName;
+	
+	public FileHandlerJsonMap(String logName) {
+		this.logName = logName;		
+	}
 	
 	@Override
 	public boolean parseData(Logger logger, String filename, JsonObject json) throws DataParserException {
-		Map<String, JsonObject> constants = getConstants();
 		logger = logger.getLogger("constants");
 		
 		int i = 0, c = 0;
@@ -38,7 +47,7 @@ public class FileHandlerConstants extends FileHandlerBase {
 			String name = entry.getKey();
 			try {
 				JsonObject constant = JsonUtils.getJsonObject(entry.getValue(), name);
-				constants.put(name, constant);
+				map.put(name, constant);
 				c++;
 			} catch(JsonSyntaxException e) {
 				logger.error(e.getMessage());
@@ -46,7 +55,7 @@ public class FileHandlerConstants extends FileHandlerBase {
 			i++;
 		}
 		
-		logComplete(logger, c, i, "%d constants added successfully.", "%d constants not added.");
+		ParseUtils.logComplete(logger, c, i, "%d constants added successfully.", "%d constants not added.");
 		return true;
 	}
 }

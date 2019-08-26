@@ -10,7 +10,7 @@ import jaminv.advancedmachines.machine.expansion.expansion.TileEntityMachineExpa
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
-import jaminv.advancedmachines.machine.multiblock.model.LayeredTextureMultiblockBase;
+import jaminv.advancedmachines.machine.multiblock.model.LayeredTextureMultiblock;
 import jaminv.advancedmachines.util.enums.EnumGui;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import jaminv.advancedmachines.util.interfaces.IHasTileEntity;

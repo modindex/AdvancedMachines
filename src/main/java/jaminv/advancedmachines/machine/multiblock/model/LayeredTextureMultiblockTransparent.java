@@ -6,12 +6,13 @@ import java.util.List;
 
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorderType;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
+import jaminv.advancedmachines.machine.multiblock.face.SidedTexture;
 import jaminv.advancedmachines.objects.blocks.BlockMaterial;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 
-public class LayeredTextureMultiblockTransparent extends LayeredTextureMultiblockBase {
+public class LayeredTextureMultiblockTransparent extends LayeredTextureMultiblock {
 
 	public LayeredTextureMultiblockTransparent(IBlockState state, String base) {
 		super(state, base);

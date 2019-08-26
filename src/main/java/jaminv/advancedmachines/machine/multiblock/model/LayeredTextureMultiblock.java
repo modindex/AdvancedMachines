@@ -11,6 +11,7 @@ import jaminv.advancedmachines.init.property.UnlistedBoolean;
 import jaminv.advancedmachines.lib.render.quad.LayeredTexture;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorderType;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
+import jaminv.advancedmachines.machine.multiblock.face.SidedTexture;
 import jaminv.advancedmachines.objects.blocks.BlockMaterial;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -18,27 +19,41 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
-public class LayeredTextureMultiblockBase implements LayeredTexture {
+public class LayeredTextureMultiblock implements LayeredTexture {
 	
-	private String base;
+	private String texture, base;
+	SidedTexture blockSide;
 	private IExtendedBlockState state;
 	
+	public String getTexture() { return texture; }
 	public String getBase() { return base; }
 	public IExtendedBlockState getState() { return state; }
 
-	public LayeredTextureMultiblockBase(IBlockState state, String base) {
+	/**
+	 * 
+	 * @param state Block state
+	 * @param texture Main texture
+	 * @param base Base texture - used for borders. Often the same as `texture`, but not always. 
+	 * @param blockSide Currently accepted values are "top" and "side"
+	 */
+	public LayeredTextureMultiblock(IBlockState state, String texture) {
 		this.state = (IExtendedBlockState)state;
-		this.base = base;		
+		this.texture = texture;
+		this.base = texture;
+		this.blockSide = SidedTexture.SIDE;
 	}
+	
+	public LayeredTextureMultiblock withBase(String base) { this.base = base; return this; }
+	public LayeredTextureMultiblock withSided(SidedTexture blockSide) { this.blockSide = blockSide; return this; }
 	
 	protected void setBorder(List<TextureAtlasSprite> list, String variant, String side, MultiblockBorderType border) {
 		if (border != MultiblockBorderType.NONE) {
-			list.add(TextureSets.get("variant", variant, "borders", border.getName(), side));
+			list.add(TextureSets.get(base, variant, blockSide.getName(), "borders", border.getName(), side));
 		}
 	}
 	
 	protected TextureAtlasSprite getBaseTexture(String variant) {
-		return RawTextures.get(base, variant, "base");
+		return TextureSets.get(texture, variant, blockSide.getName(), "base");
 	}
 
 	@Override

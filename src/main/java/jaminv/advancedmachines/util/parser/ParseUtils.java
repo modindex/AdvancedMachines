@@ -1,12 +1,15 @@
 package jaminv.advancedmachines.util.parser;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 import jaminv.advancedmachines.util.logger.Logger;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.JsonToNBT;
@@ -20,30 +23,15 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
 
-public abstract class FileHandlerBase implements IFileHandler {
+public class ParseUtils {
 	
 	public static int NO_DEFAULT = Integer.MIN_VALUE;
-	
-	private Map<String, JsonObject> constants;
-	private Map<String, Map<String, Class>> factories;
-	public Map<String, JsonObject> getConstants() { return constants; }
-	public Map<String, Map<String, Class>> getFactories() {	return factories; }
 
-	@Override
-	public void setConstants(Map<String, JsonObject> constants) {
-		this.constants = constants;
-	}
-
-	@Override
-	public void setFactories(Map<String, Map<String, Class>> factories) {
-		this.factories = factories;
-	}
-	
-	protected JsonObject parseConstants(JsonObject obj) throws DataParserException {
+	protected static JsonObject parseConstants(JsonObject obj) throws DataParserException {
 		String name = JsonUtils.getString(obj, "constant", null);
 		if (name == null) { return obj; }
 		
-		JsonObject constant = constants.get(name);
+		JsonObject constant = DataParser.getConstant(name);
 		if (constant == null) { throw new DataParserException("Constant '" + name + "' not found."); }
 		
 		for (Map.Entry<String,JsonElement> entry : constant.entrySet()) {
@@ -53,10 +41,10 @@ public abstract class FileHandlerBase implements IFileHandler {
 		return obj;
 	}
 	
-	protected JsonObject getJsonObject(JsonObject json, String memberName) throws DataParserException { 
+	public static JsonObject getJsonObject(JsonObject json, String memberName) throws DataParserException { 
 		return parseConstants(JsonUtils.getJsonObject(json, memberName)); 
 	}
-	protected JsonObject getJsonObject(JsonElement json, String memberName) throws DataParserException {
+	public static JsonObject getJsonObject(JsonElement json, String memberName) throws DataParserException {
 		return parseConstants(JsonUtils.getJsonObject(json, memberName));
 	}
 	
@@ -67,7 +55,7 @@ public abstract class FileHandlerBase implements IFileHandler {
 	 * @return ItemStack
 	 * @throws DataParserException
 	 */
-	protected ItemStack parseItemStack(JsonElement json, String memberName) throws DataParserException {
+	public static ItemStack parseItemStack(JsonElement json, String memberName) throws DataParserException {
 		if (json == null) { throw new DataParserException("Missing itemstack element: " + memberName); }
 		
 		if (JsonUtils.isString(json)) {
@@ -101,7 +89,7 @@ public abstract class FileHandlerBase implements IFileHandler {
 		return stack;
 	}
 	
-	protected FluidStack parseFluidStack(JsonElement json, String memberName) throws DataParserException {
+	public static FluidStack parseFluidStack(JsonElement json, String memberName) throws DataParserException {
 		if (json == null) { throw new DataParserException("Missing fluidstack element: " + memberName); }
 		JsonObject obj = parseConstants(getJsonObject(json, memberName));
 		
@@ -117,7 +105,7 @@ public abstract class FileHandlerBase implements IFileHandler {
 		return stack;
 	}
 	
-	protected NBTTagCompound parseNbt(JsonObject json, String memberName) throws DataParserException {
+	public static  NBTTagCompound parseNbt(JsonObject json, String memberName) throws DataParserException {
 		JsonElement jnbt = json.get(memberName);
 		if (jnbt != null) {
 			try {
@@ -129,7 +117,7 @@ public abstract class FileHandlerBase implements IFileHandler {
 		return null;
 	}
 	
-	protected void logComplete(Logger logger, int complete, int total, String complete_message, String incomplete_message) {
+	public static void logComplete(Logger logger, int complete, int total, String complete_message, String incomplete_message) {
 		logger.info(String.format(complete_message, complete));
 		if (complete < total) {
 			logger.warn(String.format(incomplete_message, total - complete));

@@ -17,6 +17,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
 import jaminv.advancedmachines.Main;
@@ -39,6 +40,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ItemOverride;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
@@ -54,22 +56,19 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 import net.minecraftforge.common.model.IModelState;
+import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fluids.FluidStack;
 
-public class BakedModelWrapper extends PerspectiveMapWrapper implements IBakedModel {
-	
-	public static BakedModelWrapper INSTANCE = new BakedModelWrapper();
+public class BakedModelWrapper implements IBakedModel {
 
 	List<BakedQuad> quads;
+	Map<TransformType, TRSRTransformation> transformationMap;
 
-	protected BakedModelWrapper() {
-		this.quads = Collections.emptyList();
-	}
-	
-	public BakedModelWrapper(@Nonnull List<BakedQuad> quads) {
+	public BakedModelWrapper(@Nonnull List<BakedQuad> quads, Map<TransformType, TRSRTransformation> transformationMap) {
 		this.quads = quads;
+		this.transformationMap = transformationMap;
 	}
 	
 	@Override
@@ -79,12 +78,12 @@ public class BakedModelWrapper extends PerspectiveMapWrapper implements IBakedMo
 	
 	@Override
 	public boolean isAmbientOcclusion() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isGui3d() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -97,7 +96,7 @@ public class BakedModelWrapper extends PerspectiveMapWrapper implements IBakedMo
 		return new ItemOverrideList(Collections.emptyList()) {
 			@Override
 			public IBakedModel handleItemState(IBakedModel modelOld, ItemStack stack, World world, EntityLivingBase entity) {
-				IBakedModel model = BakedModelCache.getCachedItemModel(stack);
+				IBakedModel model = BakedModelCache.getItemModel(stack);
 				if (model == null) { return modelOld; }
 				return model;
 			}
@@ -109,12 +108,9 @@ public class BakedModelWrapper extends PerspectiveMapWrapper implements IBakedMo
 		return TextureHelper.getMissingTexture();
 	}
 
-	@Override
-	public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType) {
-		// TODO Auto-generated method stub
-		return IBakedModel.super.handlePerspective(cameraTransformType);
-	}
-	
-	
-
+    public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType transformType) {
+        TRSRTransformation tr = transformationMap.get(transformType);
+        if (tr == null) { return Pair.of(this, null); }
+        return Pair.of(this, TRSRTransformation.blockCornerToCenter(tr).getMatrix());
+    }
 }

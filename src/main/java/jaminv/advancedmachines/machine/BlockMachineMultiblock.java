@@ -108,12 +108,7 @@ public abstract class BlockMachineMultiblock extends BlockMachineBase implements
             	.withProperty(Properties.BORDER_EAST, borders.getEast()).withProperty(Properties.BORDER_WEST, borders.getWest());
 	}
 	
-	@Override
-	@SideOnly (Side.CLIENT)
-	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
-
-		return layer == BlockRenderLayer.CUTOUT || layer == BlockRenderLayer.TRANSLUCENT;
-	}
+	public abstract MachineType getMachineType();
 	
 	@Override
 	public UpgradeType getUpgradeType() {
@@ -140,12 +135,11 @@ public abstract class BlockMachineMultiblock extends BlockMachineBase implements
 	}
 	
 	protected static ModelBakery bakery = new ModelBakeryMultiblockMachine();
-	@Override public ModelBakery getModelBakery() { return bakery; }
+	@Override @SideOnly(Side.CLIENT) public ModelBakery getModelBakery() { return bakery; }
 
 	@Override
-	public boolean addLandingEffects(IBlockState state, WorldServer worldObj, BlockPos blockPosition,
-			IBlockState iblockstate, EntityLivingBase entity, int numberOfParticles) {
-		// TODO Auto-generated method stub
-		return super.addLandingEffects(state, worldObj, blockPosition, iblockstate, entity, numberOfParticles);
+	@SideOnly (Side.CLIENT)
+	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+		return layer == BlockRenderLayer.CUTOUT || layer == BlockRenderLayer.TRANSLUCENT;
 	}
 }

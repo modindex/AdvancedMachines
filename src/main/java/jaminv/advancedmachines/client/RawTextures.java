@@ -18,7 +18,7 @@ import jaminv.advancedmachines.util.Reference;
 import jaminv.advancedmachines.util.helper.StringHelper;
 import jaminv.advancedmachines.util.logger.Logger;
 import jaminv.advancedmachines.util.parser.DataParserException;
-import jaminv.advancedmachines.util.parser.IFileHandler;
+import jaminv.advancedmachines.util.parser.FileHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;

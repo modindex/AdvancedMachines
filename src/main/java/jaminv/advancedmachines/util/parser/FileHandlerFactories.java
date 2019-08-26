@@ -8,7 +8,7 @@ import com.google.gson.JsonObject;
 
 import jaminv.advancedmachines.util.logger.Logger;
 
-public class FileHandlerFactories extends FileHandlerBase {
+public class FileHandlerFactories implements FileHandler {
 	
 	@Override
 	public boolean parseData(Logger logger, String filename, JsonObject json) throws DataParserException {
@@ -25,7 +25,7 @@ public class FileHandlerFactories extends FileHandlerBase {
 			i++;
 		}
 		
-		logComplete(logger, c, i, "info.parser.constant.complete", "info.parser.constant.incomplete");
+		ParseUtils.logComplete(logger, c, i, "info.parser.constant.complete", "info.parser.constant.incomplete");
 		return true;
 	}
 	

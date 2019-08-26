@@ -5,11 +5,13 @@ import java.util.List;
 import jaminv.advancedmachines.client.RawTextures;
 import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.lib.render.ModelBakery;
+import jaminv.advancedmachines.lib.render.quad.LayeredTexture;
 import jaminv.advancedmachines.lib.render.quad.QuadBuilderLayeredBlock;
 import jaminv.advancedmachines.machine.MachineHelper;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
-import jaminv.advancedmachines.machine.multiblock.model.LayeredTextureMultiblockBase;
+import jaminv.advancedmachines.machine.multiblock.face.SidedTexture;
+import jaminv.advancedmachines.machine.multiblock.model.LayeredTextureMultiblock;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -18,7 +20,7 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 
 public class ModelBakeryMachineExpansion implements ModelBakery {
 	
-	protected static class LayeredTextureMultiblockMachineFace extends LayeredTextureMultiblockBase {
+	protected static class LayeredTextureMultiblockMachineFace extends LayeredTextureMultiblock {
 
 		public LayeredTextureMultiblockMachineFace(IBlockState state) {	super(state, "expansion"); }
 
@@ -44,11 +46,10 @@ public class ModelBakeryMachineExpansion implements ModelBakery {
 
 	@Override
 	public List<BakedQuad> bakeModel(IBlockState state) {
-		return (new QuadBuilderLayeredBlock( 
-			BlockHelper.getExtendedFacing(state),
-			new LayeredTextureMultiblockBase(state, "expansion"),
-			new LayeredTextureMultiblockMachineFace(state)
-		)).build();
+		return new QuadBuilderLayeredBlock(new LayeredTextureMultiblock(state, "expansion"))
+			.withFace(BlockHelper.getExtendedFacing(state),	new LayeredTextureMultiblockMachineFace(state))
+			.withTopBottom(new LayeredTextureMultiblock(state, "expansion").withSided(SidedTexture.TOP))
+		.build();
 	}
 
 }

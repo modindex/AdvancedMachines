@@ -41,7 +41,7 @@ public class BakedModelImpl implements IBakedModel {
 		
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
-		return BakedModelCache.getCachedModel(state).getQuads(state, side, rand);
+		return BakedModelCache.getBlockModel(state);
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class BakedModelImpl implements IBakedModel {
 		return new ItemOverrideList(Collections.emptyList()) {
 			@Override
 			public IBakedModel handleItemState(IBakedModel modelOld, ItemStack stack, World world, EntityLivingBase entity) {
-				IBakedModel model = BakedModelCache.getCachedItemModel(stack);
+				IBakedModel model = BakedModelCache.getItemModel(stack);
 				if (model == null) { return modelOld; }
 				return model;
 			}

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import jaminv.advancedmachines.client.RawTextures;
+import jaminv.advancedmachines.lib.render.TextureHelper;
 import jaminv.advancedmachines.util.helper.StringHelper;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
@@ -20,7 +21,7 @@ public class TextureSets {
 	
 	public static TextureAtlasSprite get(String key) {
 		TextureAtlasSprite sprite = set.get(key);
-		if (sprite == null) { return RawTextures.get("no_texture"); }
+		if (sprite == null) { return TextureHelper.getMissingTexture(); }
 		return sprite;
 	}
 	

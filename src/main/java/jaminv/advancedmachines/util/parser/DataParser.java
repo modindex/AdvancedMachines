@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -27,7 +28,18 @@ public class DataParser {
  	
 	public static final String LOG_PATH = "logs/" + Reference.FILENAME + ".parser.log";
 	private static Map<String, JsonObject> constants = null;
+	private static Map<String, JsonObject> functions = null;
 	private static Map<String, Map<String, Class>> factories = null;
+	
+	public static JsonObject getConstant(String key) {
+		if (constants == null) { return null; }
+		return constants.get(key);
+	}
+	
+	public static JsonObject getFunction(String key) {
+		if (functions == null) { return null; }
+		return functions.get(key);
+	}
 	
 	public static void parseConstants() {
 		constants = new HashMap<String, JsonObject>();
@@ -35,10 +47,12 @@ public class DataParser {
 		
 		(new Logger(LOG_PATH, "parser", false)).close();
 		
-		FileHandlerConstants chandler = new FileHandlerConstants();
+		FileHandlerJsonMap chandler = new FileHandlerJsonMap("constants");
 		parseFolder("data", chandler, "_constants.json");
+		constants = chandler.getMap();
+		
+		//FileHandlerFunctions fhandler = new 
 
-		constants = chandler.getConstants();
 		
 		//FileHandlerFactories fhandler = new FileHandlerFactories();
 		//parseFolder("data", fhandler, "_factories.json");
@@ -46,14 +60,12 @@ public class DataParser {
 		//factories = fhandler.getFactories();				
 	}
 	
-	public static void parseFolder(String path, IFileHandler handler) {
+	public static void parseFolder(String path, FileHandler handler) {
 		parseFolder(path, handler, null);
 	}
 	
-	public static void parseFolder(String path, IFileHandler handler, String findFilename) {
+	public static void parseFolder(String path, FileHandler handler, String findFilename) {
 		ModContainer mod = FMLCommonHandler.instance().findContainerFor(Reference.MODID);
-		handler.setConstants(constants);
-		handler.setFactories(factories);
 
 		Logger logger = new Logger(LOG_PATH, "parser");
 		

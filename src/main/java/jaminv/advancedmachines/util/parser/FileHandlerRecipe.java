@@ -26,7 +26,7 @@ import net.minecraftforge.common.crafting.IConditionFactory;
 import net.minecraftforge.common.crafting.JsonContext;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
-public abstract class FileHandlerRecipe extends FileHandlerBase {
+public abstract class FileHandlerRecipe implements FileHandler {
 	
 	protected HashMap<String, IConditionFactory>condition_factories = new HashMap<String, IConditionFactory>();
 	protected void addConditionFactory(String name, IConditionFactory factory) { condition_factories.put(name, factory); }
@@ -38,7 +38,7 @@ public abstract class FileHandlerRecipe extends FileHandlerBase {
 		int i = 0, c = 0;
 		for (Map.Entry<String,JsonElement> entry : json.entrySet()) {
 			String name = entry.getKey();
-			JsonObject recipe = getJsonObject(json, entry.getKey());
+			JsonObject recipe = ParseUtils.getJsonObject(json, entry.getKey());
 			
 			try {
 				if (parseRecipe(logger, filename, name, recipe)) { c++; }
@@ -48,7 +48,7 @@ public abstract class FileHandlerRecipe extends FileHandlerBase {
 			i++;
 		}
 
-		logComplete(logger, c, i, "%d recipes added successfully.", "%d recipes not added.");
+		ParseUtils.logComplete(logger, c, i, "%d recipes added successfully.", "%d recipes not added.");
 		
 		return true;
 	}
@@ -66,11 +66,11 @@ public abstract class FileHandlerRecipe extends FileHandlerBase {
 		if (input == null) { throw new DataParserException("Missing recipe element: '" + memberName + "'"); }
 		
 		if (JsonUtils.isString(input)) {
-			return new RecipeInput(parseItemStack(input, memberName));
+			return new RecipeInput(ParseUtils.parseItemStack(input, memberName));
 		}
-		JsonObject inputob = getJsonObject(input, memberName);
+		JsonObject inputob = ParseUtils.getJsonObject(input, memberName);
 		if (!inputob.has("ore")) {
-			return new RecipeInput(parseItemStack(input, memberName));
+			return new RecipeInput(ParseUtils.parseItemStack(input, memberName));
 		}
 		
 		int count = JsonUtils.getInt(inputob, "count", 1);
@@ -89,11 +89,11 @@ public abstract class FileHandlerRecipe extends FileHandlerBase {
 		if (output == null) { throw new DataParserException("Missing recipe element: '" + memberName + "'"); }
 		
 		if (JsonUtils.isString(output)) {
-			return new RecipeOutput(parseItemStack(output, memberName));
+			return new RecipeOutput(ParseUtils.parseItemStack(output, memberName));
 		}
-		JsonObject outputob = getJsonObject(output, memberName);
+		JsonObject outputob = ParseUtils.getJsonObject(output, memberName);
 		if (!outputob.has("ore")) {
-			return new RecipeOutput(parseItemStack(output, memberName));
+			return new RecipeOutput(ParseUtils.parseItemStack(output, memberName));
 		}
 		
 		int count = JsonUtils.getInt(outputob, "count", 1);
@@ -106,7 +106,7 @@ public abstract class FileHandlerRecipe extends FileHandlerBase {
 		if (JsonUtils.isString(output)) { return parseOutput(output, memberName); }
 		
 		RecipeOutput ret = parseOutput(output, memberName);
-		JsonObject outputob = getJsonObject(output, memberName);
+		JsonObject outputob = ParseUtils.getJsonObject(output, memberName);
 		int chance = JsonUtils.getInt(outputob, "chance", 100);
 		return ret.withChance(chance);
 	}
@@ -131,7 +131,7 @@ public abstract class FileHandlerRecipe extends FileHandlerBase {
 		
 		int i = 0;
 		for (JsonElement condition : list) {
-			JsonObject ob = getJsonObject(condition, key + "[" + i + "]");
+			JsonObject ob = ParseUtils.getJsonObject(condition, key + "[" + i + "]");
 			String value = JsonUtils.getString(ob, "type");
 			
 			// TODO: Add Factories
