@@ -14,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.client.model.ModelLoader;
 
+// TODO: Get rid of BlockBase
 public class BlockBase extends Block implements IHasModel {
 
 	public BlockBase(String name, Material material) {

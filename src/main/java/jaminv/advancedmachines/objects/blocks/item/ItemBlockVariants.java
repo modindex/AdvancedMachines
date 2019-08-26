@@ -5,6 +5,8 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
+// TODO: Ick. Just Ick. Get rid of this or encapsulate it better.
+// TODO: There is nothing forcing Block to implement IMetaName (ick again), but it's cast to it without checking.
 public class ItemBlockVariants extends ItemBlock {
 
 	public ItemBlockVariants(Block block) {

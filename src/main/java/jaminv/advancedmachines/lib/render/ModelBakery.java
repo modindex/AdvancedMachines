@@ -13,20 +13,26 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformT
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.model.TRSRTransformation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public interface ModelBakery {
+	@SideOnly (Side.CLIENT)
 	public default List<BakedQuad> bakeModel(IBlockState state) {
 		return Collections.emptyList();
 	}
 	
+	@SideOnly (Side.CLIENT)
 	public default List<BakedQuad> bakeItemModel(ItemStack stack) {
 		return Collections.emptyList();
 	}
 	
+	@SideOnly (Side.CLIENT)
 	public default TextureAtlasSprite getParticleTexture(String variant) {
 		return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
 	}
 	
+	@SideOnly (Side.CLIENT)	
 	public default Map<TransformType, TRSRTransformation> getTransformationMap() {
 		return TransformationMap.DEFAULT_BLOCK;
 	}

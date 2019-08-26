@@ -6,6 +6,7 @@ import jaminv.advancedmachines.util.interfaces.IHasModel;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 
+// TODO: Get rid of ItemBase
 public class ItemBase extends Item implements IHasModel {
 
 	public ItemBase(String name) {

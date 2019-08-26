@@ -53,10 +53,12 @@ public abstract class BlockMaterial extends Block implements IHasModel, IMetaNam
 		this.name = name;
 		this.oredictprefix = name;
 		
+		//TODO: Remove
 		BlockInit.BLOCKS.add(this);
 		ItemInit.ITEMS.add(getItem());
 	}
 	
+	//TODO: Remove
 	protected Item getItem() { 
 		return new ItemBlockVariants(this).setRegistryName(this.getRegistryName());
 	}
@@ -119,6 +121,7 @@ public abstract class BlockMaterial extends Block implements IHasModel, IMetaNam
 		return (MaterialBase)state.getValue(VARIANT);
 	}
 
+	// TODO: Remove registerModels() and registerVariantModels()
 	@Override
 	public void registerModels() {
 		registerVariantModels();
