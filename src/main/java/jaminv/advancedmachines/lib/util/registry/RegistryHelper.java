@@ -1,127 +1,49 @@
 package jaminv.advancedmachines.lib.util.registry;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.google.common.collect.ImmutableList;
-
+import jaminv.advancedmachines.lib.LibReference;
 import jaminv.advancedmachines.lib.render.ModelBakery;
+import jaminv.advancedmachines.lib.render.ModelBakeryProvider;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.DefaultStateMapper;
-import net.minecraft.client.renderer.block.statemap.IStateMapper;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.SidedProxy;
 
 public class RegistryHelper {
 	
-	protected static List<Block> blockRegistry = new ArrayList<Block>();
-	protected static List<Item> itemRegistry = new ArrayList<Item>();
-	protected static List<ModelRegistryData> modelRegistry = new ArrayList<ModelRegistryData>();
-	protected static List<BakedModelRegistryData> bakedModelRegistry = new ArrayList<BakedModelRegistryData>();
+	@SidedProxy(clientSide=LibReference.CLIENT_REGISTRY, serverSide=LibReference.COMMON_REGISTRY)
+	public static CommonRegistry proxy;
+	// %1.13%:
+	//public static CommonRegistry proxy = DistExecutor.runForDist(() -> ClientRegistry::new, () -> CommonRegistry::new);
 	
-	protected static class ModelRegistryData {
-		final Item item;
-		final int meta;
-		final ModelResourceLocation resource;
-		
-		public ModelRegistryData(Item item, int meta, ModelResourceLocation loc) {
-			this.item = item;
-			this.meta = meta;
-			this.resource = loc;
-		}
+	public static void registerBlocks(RegistryEvent.Register<Block> event) {
+		proxy.registerBlocks(event);
 	}
 	
-	protected static class BakedModelRegistryData {
-		final Block block;
-		final IStateMapper stateMapper;
-		final ModelResourceLocation resource;
-		final ModelBakery bakery;
-		
-		public BakedModelRegistryData(Block block, IStateMapper stateMapper, ModelResourceLocation loc, ModelBakery bakery) {
-			this.block = block;
-			this.stateMapper = stateMapper;
-			this.resource = loc;
-			this.bakery = bakery;
-		}
+	public static void registerItems(RegistryEvent.Register<Item> event) {
+		proxy.registerItems(event);
 	}
 	
-	/*
-	 * Block Registry
-	 */
-	
-	public static void registerBlock(Block block, String registryName) {
-		//block.setRegistryName(registryName);
-		//block.setUnlocalizedName(block.getRegistryName().toString());
-		blockRegistry.add(block);
-	}
-	
-	public static void registerBlockWithItem(Block block, String registryName) {
-		registerBlock(block, registryName);
-		registerItem(new ItemBlock(block), registryName);
-	}
-	
-	public static void registryBlockWithVariantItem(Block block, ItemBlock item, String registryName) {
-		registerBlock(block, registryName);
-		registerItemWithoutModel(item, registryName);
-		
-		StateMapperBase mapper = new DefaultStateMapper();
-		BlockStateContainer stateCont = block.getBlockState();
-		ImmutableList<IBlockState> validStates = stateCont.getValidStates();
-		
-		for (IBlockState state : validStates) {
-			String variant = mapper.getPropertyString(state.getProperties());
-			registerItemModel(item, block.getMetaFromState(state), variant);
-		}
-	}
-	
-	public static void registerBlockWithBakedModel(Block block, String registryName, ModelBakery bakery) {
-		registerBlockWithItem(block, registryName);
-		
-		ModelResourceLocation resource = new ModelResourceLocation(block.getRegistryName(), "normal");
-		bakedModelRegistry.add(new BakedModelRegistryData(block, new BypassStateMapper(resource), resource, bakery));		
-	}
-	
-	/*
-	 * Item Registry
-	 */
-	
-	public static void registerItemWithoutModel(Item item, String registryName) {
-		item.setRegistryName(registryName);
-		item.setUnlocalizedName(item.getRegistryName().toString());
-		itemRegistry.add(item);
-	}
-	
-	public static void registerItem(Item item, String registryName) {
-		registerItemWithoutModel(item, registryName);
-		registerItemModel(item);
-	}
-
-	public static <T extends MetaVariant> void registerItemWithVariant(Item item, String registryName, T variant) {
-		registerItemWithoutModel(item, registryName);
-		String variantName = variant.getId();
-		NonNullList<ItemStack> subItems = NonNullList.create();
-		item.getSubItems(CreativeTabs.SEARCH, subItems);
-		for (ItemStack stack : subItems) {
-			registerItemModel(item, stack.getMetadata(), variantName + "=" + variant.byMetadata(stack.getMetadata()).getName());
-		}
-	}
-	
-	/*
-	 * Model Registry
-	 */
-
-	public static void registerItemModel(Item item) {
-		registerItemModel(item, 0, "normal");
-	}
-	
-	public static void registerItemModel(Item item, int meta, String variant) {
-		modelRegistry.add(new ModelRegistryData(item, meta, new ModelResourceLocation(item.getRegistryName(), variant)));
+	public static void registerModels() {
+		proxy.registerModels();
 	}		
+	
+	public static void addBlock(Block block, String registryName) {
+		proxy.addBlock(block, registryName);
+	}
+	
+	public static void addBlockWithItem(Block block, String registryName) {
+		proxy.addBlockWithItem(block, registryName);
+	}
+	
+	public static void addBlockWithBakedModel(Block block, ModelBakeryProvider provider, String registryName) {
+		proxy.addBlockWithBakedModel(block, provider, registryName);
+	}
+	
+	public static <T extends Block & ModelBakeryProvider>void addBlockWithBakedModel(T block, String registryName) {
+		proxy.addBlockWithBakedModel(block, block, registryName);	
+	}
+	
+	public static void addItem(Item item, String registryName) {
+		proxy.addItem(item, registryName);
+	}	
 }

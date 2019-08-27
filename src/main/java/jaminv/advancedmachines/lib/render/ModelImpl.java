@@ -15,8 +15,8 @@ import net.minecraftforge.common.model.TRSRTransformation;
 public class ModelImpl implements IModel {
 	protected final BakedModelImpl baked;
 	
-	public ModelImpl(ModelBakery bakery, String variant) {
-		baked = new BakedModelImpl(bakery, variant);	
+	public ModelImpl(ModelBakery bakery) {
+		baked = new BakedModelImpl(bakery);	
 	}	
 	
 	@Override

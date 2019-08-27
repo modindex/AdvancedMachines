@@ -1,7 +1,7 @@
 package jaminv.advancedmachines.objects.blocks;
 
-import jaminv.advancedmachines.objects.material.MaterialBase;
-import jaminv.advancedmachines.objects.material.MaterialBaseOre;
+import jaminv.advancedmachines.objects.variant.MaterialBase;
+import jaminv.advancedmachines.objects.variant.MaterialBaseOre;
 import net.minecraft.block.material.Material;
 
 public abstract class BlockMaterialOre extends BlockMaterial {

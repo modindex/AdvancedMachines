@@ -3,7 +3,7 @@ package jaminv.advancedmachines.machine.expansion;
 import javax.annotation.Nullable;
 
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
-import jaminv.advancedmachines.objects.material.MaterialExpansion;
+import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.interfaces.IHasMetadata;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -13,13 +13,13 @@ import net.minecraft.world.World;
 
 public class TileEntityMachineExpansionType extends TileEntity implements MachineUpgradeTileEntity, IHasMetadata {
 
-	private MaterialExpansion material = MaterialExpansion.BASIC;
-	public MaterialExpansion getMaterial() { return material; }
+	private VariantExpansion material = VariantExpansion.BASIC;
+	public VariantExpansion getMaterial() { return material; }
 	public int getMultiplier() { return material.getMultiplier(); }
 	
 	@Override
 	public void setMeta(int meta) {
-		material = MaterialExpansion.byMetadata(meta);
+		material = VariantExpansion.byMetadata(meta);
 	}
 	
 	public TileEntityMachineExpansionType() {

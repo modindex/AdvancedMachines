@@ -21,9 +21,9 @@ import jaminv.advancedmachines.machine.instance.stabilizer.BlockMachineStabilize
 import jaminv.advancedmachines.objects.blocks.BlockMaterial;
 import jaminv.advancedmachines.objects.blocks.BlockMaterialOre;
 import jaminv.advancedmachines.objects.fluids.BlockFluidClassicBase;
-import jaminv.advancedmachines.objects.material.MaterialBase;
-import jaminv.advancedmachines.objects.material.MaterialExpansion;
-import jaminv.advancedmachines.objects.material.MaterialMod;
+import jaminv.advancedmachines.objects.variant.MaterialBase;
+import jaminv.advancedmachines.objects.variant.VariantExpansion;
+import jaminv.advancedmachines.objects.variant.MaterialMod;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -32,7 +32,7 @@ import net.minecraft.block.material.MaterialLiquid;
 public class BlockInit {
 	// Force these objects to load before referencing them
 	private static MaterialMod MOD_BLOCK = MaterialMod.TITANIUM;
-	private static MaterialExpansion EXPANSION_BLOCK = MaterialExpansion.BASIC;
+	private static VariantExpansion EXPANSION_BLOCK = VariantExpansion.BASIC;
 	
 	public static final List<Block> BLOCKS = new ArrayList<Block>();
 	

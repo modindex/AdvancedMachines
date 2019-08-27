@@ -18,7 +18,8 @@ import jaminv.advancedmachines.lib.machine.MachineController;
 import jaminv.advancedmachines.lib.machine.MachineStorage;
 import jaminv.advancedmachines.lib.machine.MachineStorageCapability;
 import jaminv.advancedmachines.lib.recipe.IRecipeManager;
-import jaminv.advancedmachines.objects.material.MaterialExpansion;
+import jaminv.advancedmachines.objects.variant.NeedsVariant;
+import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
@@ -41,18 +42,18 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
-public abstract class TileEntityMachine extends TileEntity implements ITickable, IHasGui, IMachineTE, IHasMetadata, IDirectional, ISyncSubject {
+public abstract class TileEntityMachine extends TileEntity implements ITickable, IHasGui, IMachineTE, NeedsVariant<VariantExpansion>, IDirectional, ISyncSubject {
 
 	protected final MachineStorage storage;
 	protected final MachineController controller;
 	protected final SyncManager sync = new SyncManager();
 	
 	protected final MachineInventoryHandler inventory = new MachineInventoryHandler();
-	protected final FluidHandler inputTanks = new FluidHandler(ModConfig.general.defaultMachineFluidCapacity * MaterialExpansion.maxMultiplier,
-		ModConfig.general.defaultMachineFluidTransfer * MaterialExpansion.maxMultiplier);
-	protected final FluidHandler outputTanks = new FluidHandler(ModConfig.general.defaultMachineFluidCapacity * MaterialExpansion.maxMultiplier,
-			ModConfig.general.defaultMachineFluidTransfer * MaterialExpansion.maxMultiplier);
-	protected final EnergyStorageAdvanced energy = new EnergyStorageAdvanced(ModConfig.general.defaultMachineEnergyCapacity * MaterialExpansion.maxMultiplier);
+	protected final FluidHandler inputTanks = new FluidHandler(ModConfig.general.defaultMachineFluidCapacity * VariantExpansion.maxMultiplier,
+		ModConfig.general.defaultMachineFluidTransfer * VariantExpansion.maxMultiplier);
+	protected final FluidHandler outputTanks = new FluidHandler(ModConfig.general.defaultMachineFluidCapacity * VariantExpansion.maxMultiplier,
+			ModConfig.general.defaultMachineFluidTransfer * VariantExpansion.maxMultiplier);
+	protected final EnergyStorageAdvanced energy = new EnergyStorageAdvanced(ModConfig.general.defaultMachineEnergyCapacity * VariantExpansion.maxMultiplier);
 	
 	public TileEntityMachine(IRecipeManager recipeManager) {
 		super();
@@ -77,12 +78,13 @@ public abstract class TileEntityMachine extends TileEntity implements ITickable,
 	
 	/* Base machine data */
 	
-	private MaterialExpansion material = MaterialExpansion.BASIC;
-	public MaterialExpansion getMaterial() { return material; }
-	public int getMultiplier() { return material.getMultiplier(); }
+	private VariantExpansion variant = VariantExpansion.BASIC;
+	public VariantExpansion getVariant() { return variant; }
+	public int getMultiplier() { return variant.getMultiplier(); }
 	
-	public void setMeta(int meta) {
-		this.material = MaterialExpansion.byMetadata(meta);
+	public void setVariant(VariantExpansion variant) {
+		if (variant == null) { return; } // FIXME: Backwards compatibility
+		this.variant = variant;
 		this.energy.setEnergyCapacity(ModConfig.general.defaultMachineEnergyCapacity * getMultiplier());
 		this.inputTanks.setFluidCapacity(ModConfig.general.defaultMachineFluidCapacity * getMultiplier());
 		this.outputTanks.setFluidCapacity(ModConfig.general.defaultMachineFluidCapacity * getMultiplier());
@@ -213,7 +215,7 @@ public abstract class TileEntityMachine extends TileEntity implements ITickable,
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		setMeta(compound.getInteger("meta"));
+		setVariant(VariantExpansion.lookup(compound.getString("variant")));
 		if (compound.hasKey("facing")) {
 			facing = EnumFacing.byName(compound.getString("facing"));
 		}
@@ -231,7 +233,7 @@ public abstract class TileEntityMachine extends TileEntity implements ITickable,
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
-		compound.setInteger("meta", material.getMeta());
+		compound.setString("variant", variant.getName());
 		compound.setString("facing", facing.getName());
 		compound.setInteger("redstoneState", redstoneState.getValue());
 		compound.setBoolean("processingState", processingState);

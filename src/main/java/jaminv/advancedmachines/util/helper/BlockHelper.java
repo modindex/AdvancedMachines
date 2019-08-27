@@ -1,33 +1,21 @@
 package jaminv.advancedmachines.util.helper;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Optional;
-
-import javax.annotation.Nullable;
-
-import com.google.common.base.Function;
-import com.google.common.base.MoreObjects;
-import com.google.common.base.MoreObjects.ToStringHelper;
-import com.google.common.collect.ImmutableCollection;
-import com.google.common.collect.Iterables;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.init.property.Properties;
-import jaminv.advancedmachines.machine.TileEntityMachine;
+import jaminv.advancedmachines.machine.ExpansionTile;
 import jaminv.advancedmachines.machine.expansion.MachineUpgradeTileEntity;
-import jaminv.advancedmachines.machine.expansion.redstone.TileEntityMachineRedstone;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
+import jaminv.advancedmachines.objects.variant.NeedsVariant;
+import jaminv.advancedmachines.objects.variant.Variant;
+import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
 import jaminv.advancedmachines.util.interfaces.IHasMetadata;
-import net.minecraft.block.Block;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -40,7 +28,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.property.IExtendedBlockState;
-import net.minecraftforge.common.property.IUnlistedProperty;
 
 public class BlockHelper {
 	
@@ -82,10 +69,19 @@ public class BlockHelper {
 		return ((IExtendedBlockState)state).getValue(Properties.FACING);
 	}
 	
+	// FIXME: Remove
+	@Deprecated // Use setMaterial() instead
 	public static void setMeta(World worldIn, BlockPos pos, ItemStack stack) {
 		TileEntity te = worldIn.getTileEntity(pos);
 		if (te instanceof IHasMetadata) {
 			((IHasMetadata)te).setMeta(ItemHelper.getMeta(stack));
+		}
+	}
+	
+	public static <T extends Variant> void setVariant(World worldIn, BlockPos pos, T variant) {
+		TileEntity te = worldIn.getTileEntity(pos);
+		if (te instanceof NeedsVariant) {
+			((NeedsVariant)te).setVariant(variant);
 		}
 	}
 	

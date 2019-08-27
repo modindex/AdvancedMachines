@@ -5,15 +5,19 @@ import jaminv.advancedmachines.machine.multiblock.MultiblockBorderType;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
+import jaminv.advancedmachines.objects.variant.MaterialBase;
+import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import net.minecraft.util.EnumFacing;
 
 public class Properties {
 	
 	/* 
-	 * Although many of these are finite, they need to be unlisted to prevent Minecraft from scanning through every possible combination
+	 * Although many of these are finite, they need to be unlisted to prevent Minecraft from scanning through every possible combination.
 	 * There are tens of thousands of possible combinations for some blocks. 
 	 */
 
+	public static final UnlistedEnum<VariantExpansion> EXPANSION_VARIANT = new UnlistedEnum<VariantExpansion>("variant", VariantExpansion.class);
+	
 	public static final UnlistedEnum<MultiblockBorderType> BORDER_TOP 		= new UnlistedEnum<MultiblockBorderType>("border_top", MultiblockBorderType.class);
 	public static final UnlistedEnum<MultiblockBorderType> BORDER_BOTTOM 	= new UnlistedEnum<MultiblockBorderType>("border_bottom", MultiblockBorderType.class);
 	public static final UnlistedEnum<MultiblockBorderType> BORDER_NORTH 	= new UnlistedEnum<MultiblockBorderType>("border_north", MultiblockBorderType.class);

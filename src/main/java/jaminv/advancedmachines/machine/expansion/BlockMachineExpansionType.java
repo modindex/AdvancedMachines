@@ -12,8 +12,8 @@ import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.objects.blocks.BlockMaterial;
-import jaminv.advancedmachines.objects.material.MaterialBase;
-import jaminv.advancedmachines.objects.material.MaterialExpansion;
+import jaminv.advancedmachines.objects.variant.MaterialBase;
+import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import jaminv.advancedmachines.util.helper.BlockHelper.ScanResult;
 import jaminv.advancedmachines.util.interfaces.IHasTileEntity;
@@ -125,7 +125,7 @@ public class BlockMachineExpansionType extends BlockMaterial implements MachineU
 
 	@Override
 	public int getUpgradeQty(World world, BlockPos pos) {
-		return MaterialExpansion.byMetadata(this.getMetaFromState(world.getBlockState(pos))).getMultiplier();
+		return VariantExpansion.byMetadata(this.getMetaFromState(world.getBlockState(pos))).getMultiplier();
 	}
 	
 	@Override

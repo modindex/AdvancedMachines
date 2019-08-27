@@ -33,10 +33,8 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 public class BakedModelImpl implements IBakedModel {
 	
 	public final ModelBakery bakery;
-	public final String variant;
-	public BakedModelImpl(ModelBakery bakery, String variant) {
+	public BakedModelImpl(ModelBakery bakery) {
 		this.bakery = bakery;
-		this.variant = variant;
 	}
 		
 	@Override
@@ -73,6 +71,6 @@ public class BakedModelImpl implements IBakedModel {
 
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
-		return bakery.getParticleTexture(variant);
+		return bakery.getParticleTexture();
 	}
 }

@@ -7,9 +7,9 @@ import java.util.Map;
 
 import com.google.common.base.Optional;
 
-import jaminv.advancedmachines.objects.material.MaterialBase;
-import jaminv.advancedmachines.objects.material.MaterialBase.MaterialRegistry;
-import jaminv.advancedmachines.objects.material.MaterialBase.MaterialType;
+import jaminv.advancedmachines.objects.variant.MaterialBase;
+import jaminv.advancedmachines.objects.variant.MaterialBase.MaterialRegistry;
+import jaminv.advancedmachines.objects.variant.MaterialBase.MaterialType;
 import net.minecraft.block.properties.IProperty;
 import scala.actors.threadpool.Arrays;
 

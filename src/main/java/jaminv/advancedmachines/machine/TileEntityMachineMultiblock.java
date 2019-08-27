@@ -1,21 +1,23 @@
 package jaminv.advancedmachines.machine;
 
 import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.lib.machine.IMachineController.ISubController;
 import jaminv.advancedmachines.lib.recipe.IRecipeManager;
 import jaminv.advancedmachines.machine.expansion.MachineUpgrade;
-import jaminv.advancedmachines.machine.expansion.MachineUpgradeTileEntity;
 import jaminv.advancedmachines.machine.expansion.MachineUpgrade.UpgradeType;
+import jaminv.advancedmachines.machine.expansion.MachineUpgradeTileEntity;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.machine.multiblock.MultiblockState;
+import jaminv.advancedmachines.machine.multiblock.MultiblockState.MultiblockNull;
 import jaminv.advancedmachines.machine.multiblock.MultiblockUpdateMessage;
 import jaminv.advancedmachines.machine.multiblock.UpgradeManager;
-import jaminv.advancedmachines.machine.multiblock.MultiblockState.MultiblockNull;
 import jaminv.advancedmachines.machine.multiblock.face.IMachineFaceTE;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
-import jaminv.advancedmachines.objects.blocks.BlockMaterial;
-import jaminv.advancedmachines.objects.material.MaterialBase;
+import jaminv.advancedmachines.objects.variant.HasVariant;
+import jaminv.advancedmachines.objects.variant.Variant;
+import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import jaminv.advancedmachines.util.helper.BlockHelper.BlockChecker;
 import jaminv.advancedmachines.util.helper.BlockHelper.ScanResult;
@@ -231,7 +233,11 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachine impl
 	
 	protected boolean scanFaceAt(BlockPos pos, int count, EnumFacing dir) {
 		World world = this.getWorld();
-		MaterialBase variant = world.getBlockState(getPos()).getValue(BlockMaterial.EXPANSION_VARIANT);		
+		Block block = world.getBlockState(getPos()).getBlock();		
+		Variant variant = null;
+		if (block instanceof HasVariant) {
+			variant = ((HasVariant)block).getVariant();
+		}
 		
 		for (int x = -count; x < 2; x++) {
 			for (int y = -count; y < 2; y++) {
@@ -242,8 +248,8 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachine impl
 				
 				if (te != null) {
 					eval = (te instanceof IMachineFaceTE);
-					Block block = world.getBlockState(check).getBlock();
-					if (eval) { eval = world.getBlockState(check).getValue(BlockMachineBase.EXPANSION_VARIANT) == variant; }
+					Block checkBlock = world.getBlockState(check).getBlock();
+					if (eval) { eval = (checkBlock instanceof HasVariant) && ((HasVariant)checkBlock).getVariant() == variant; }
 				} else { eval = false; }
 				
 				if (x == -count || y == -count || x == 1 || y == 1) {

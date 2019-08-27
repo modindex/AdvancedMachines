@@ -3,28 +3,24 @@ package jaminv.advancedmachines.machine.instance.furnace;
 import jaminv.advancedmachines.machine.BlockMachineMultiblock;
 import jaminv.advancedmachines.machine.expansion.expansion.ModelBakeryMachineExpansion;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
-import jaminv.advancedmachines.objects.material.MaterialExpansion;
+import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.enums.EnumGui;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 public class BlockMachineFurnace extends BlockMachineMultiblock {
 
-	public BlockMachineFurnace(String name) {
-		super(name);
+	public BlockMachineFurnace(VariantExpansion variant) {
+		super(variant);
 	}
 	
 	@Override public MachineType getMachineType() { return MachineType.FURNACE; }	
 	
 	protected int getGuiId() { return EnumGui.FURNACE.getId(); }
-	
+
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
+	public TileEntity createTileEntity(World world, IBlockState state) {
 		return new TileEntityMachineFurnace();
-	}
-	
-	@Override
-	public Class<? extends TileEntity> getTileEntityClass() {
-		return TileEntityMachineFurnace.class;
 	}
 }	

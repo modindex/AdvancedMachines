@@ -11,7 +11,7 @@ import jaminv.advancedmachines.lib.inventory.ItemStackHandlerObservable;
 import jaminv.advancedmachines.lib.machine.IMachineController;
 import jaminv.advancedmachines.machine.dialog.DialogIOToggle;
 import jaminv.advancedmachines.machine.expansion.TileEntityMachineExpansionType;
-import jaminv.advancedmachines.objects.material.MaterialExpansion;
+import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
@@ -48,8 +48,8 @@ public class TileEntityMachineTank extends TileEntityMachineExpansionType implem
 		}
 	};
 	
-	protected FluidTankAdvanced tank = new FluidTankAdvanced(ModConfig.general.defaultMachineFluidCapacity * MaterialExpansion.maxMultiplier,
-		ModConfig.general.defaultMachineFluidTransfer * MaterialExpansion.maxMultiplier);
+	protected FluidTankAdvanced tank = new FluidTankAdvanced(ModConfig.general.defaultMachineFluidCapacity * VariantExpansion.maxMultiplier,
+		ModConfig.general.defaultMachineFluidTransfer * VariantExpansion.maxMultiplier);
 	public IFluidTank getTank() { return tank; }
 	
 	public TileEntityMachineTank() {

@@ -7,7 +7,7 @@ import jaminv.advancedmachines.init.BlockInit;
 import jaminv.advancedmachines.init.ItemInit;
 import jaminv.advancedmachines.init.property.PropertyMaterial;
 import jaminv.advancedmachines.objects.blocks.item.ItemBlockVariants;
-import jaminv.advancedmachines.objects.material.MaterialBase;
+import jaminv.advancedmachines.objects.variant.MaterialBase;
 import jaminv.advancedmachines.util.interfaces.IHasModel;
 import jaminv.advancedmachines.util.interfaces.IHasOreDictionary;
 import jaminv.advancedmachines.util.interfaces.IMetaName;
@@ -76,6 +76,7 @@ public abstract class BlockMaterial extends Block implements IHasModel, IMetaNam
 		this.oredictprefix = oredictprefix;
 	}
 	
+	// TODO: needed with flat blocks?	
 	@Override
 	public int damageDropped(IBlockState state) {
 		return ((MaterialBase)state.getValue(VARIANT)).getMeta();
@@ -90,7 +91,8 @@ public abstract class BlockMaterial extends Block implements IHasModel, IMetaNam
 	public IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState().withProperty(VARIANT, MaterialBase.MaterialRegistry.lookupMeta(type, meta));
 	}
-	 
+	
+	// TODO: Needed with flat blocks?
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos,
 			EntityPlayer player) {

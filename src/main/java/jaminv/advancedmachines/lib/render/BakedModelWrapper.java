@@ -31,7 +31,7 @@ import jaminv.advancedmachines.machine.multiblock.face.IMachineFaceTE;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.objects.blocks.BlockMaterial;
-import jaminv.advancedmachines.objects.material.MaterialBase;
+import jaminv.advancedmachines.objects.variant.MaterialBase;
 import jaminv.advancedmachines.util.Reference;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import net.minecraft.block.Block;

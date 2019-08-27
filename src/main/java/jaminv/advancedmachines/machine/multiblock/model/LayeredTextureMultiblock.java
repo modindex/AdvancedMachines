@@ -61,7 +61,7 @@ public class LayeredTextureMultiblock implements LayeredTexture {
 		
 		LinkedList<TextureAtlasSprite> textures = new LinkedList<TextureAtlasSprite>();
 		
-		String variant = state.getValue(BlockMaterial.EXPANSION_VARIANT).getName();
+		String variant = state.getValue(Properties.EXPANSION_VARIANT).getName();
 		textures.add(getBaseTexture(variant));
 		
 		MultiblockBorders borders = new MultiblockBorders(state);

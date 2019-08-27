@@ -2,7 +2,7 @@ package jaminv.advancedmachines.util.network;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.machine.multiblock.MultiblockUpdateMessage;
-import jaminv.advancedmachines.machine.multiblock.MultiblockUpdateMessageHandler;
+import jaminv.advancedmachines.machine.multiblock.MultiblockUpdateMessage.MultiblockUpdateMessageHandler;
 import jaminv.advancedmachines.util.network.BucketStateMessage.BucketStateMessageHandler;
 import jaminv.advancedmachines.util.network.IOStateMessage.IOMessageHandler;
 import jaminv.advancedmachines.util.network.ProcessingStateMessage.ProcessingStateMessageHandler;

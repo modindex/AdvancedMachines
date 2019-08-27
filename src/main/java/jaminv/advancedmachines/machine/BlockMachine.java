@@ -1,26 +1,22 @@
 package jaminv.advancedmachines.machine;
 
-import jaminv.advancedmachines.Main;
-import jaminv.advancedmachines.init.property.PropertyMaterial;
+import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.machine.expansion.MachineUpgrade;
-import jaminv.advancedmachines.machine.expansion.MachineUpgradeTileEntity;
-import jaminv.advancedmachines.machine.expansion.MachineUpgrade.UpgradeType;
-import jaminv.advancedmachines.machine.expansion.redstone.TileEntityMachineRedstone;
-import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
-import jaminv.advancedmachines.objects.blocks.BlockMaterial;
-import jaminv.advancedmachines.objects.blocks.DirectionalBlock;
-import jaminv.advancedmachines.objects.material.MaterialBase;
-import jaminv.advancedmachines.objects.material.MaterialExpansion;
+import jaminv.advancedmachines.objects.variant.HasVariant;
+import jaminv.advancedmachines.objects.variant.MaterialBase;
+import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.helper.BlockHelper;
-import jaminv.advancedmachines.util.helper.ItemHelper;
 import jaminv.advancedmachines.util.interfaces.IHasTileEntity;
+import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -28,26 +24,33 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.property.IExtendedBlockState;
 
-public abstract class BlockMachineBase extends BlockMaterial implements ITileEntityProvider, IHasTileEntity, MachineUpgrade {
+/**
+ * I'm not sure that this class is strictly necessary.
+ * There are currently no objects that derive from this class.
+ * 
+ * Potential TODO: Push this class into BlockMachineMultiblock
+ */
+
+public abstract class BlockMachine extends Block implements HasVariant<VariantExpansion> {
 	
-    public static final PropertyDirection FACING = PropertyDirection.create("facing");
-    public static final PropertyBool ACTIVE = PropertyBool.create("active");
+    protected VariantExpansion variant;
 
-	public BlockMachineBase(String name) {
-		super(name, MaterialBase.MaterialType.EXPANSION, Material.IRON, 3.5f);
+	public BlockMachine(VariantExpansion variant) {		
+		super(Material.IRON);
+		setCreativeTab(CreativeTabs.DECORATIONS);
+		setHardness(3.5f);
+		setSoundType(SoundType.STONE);
+		
+		this.variant = variant;
 	}
+
+	protected abstract int getGuiId();
 	
-	protected int getGuiId() { return -1; }
-	
-	@Override
-	protected PropertyMaterial getVariant() {
-		return BlockMaterial.EXPANSION_VARIANT;
-	}	
+	public VariantExpansion getVariant() { return variant; }
 		
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
@@ -61,28 +64,39 @@ public abstract class BlockMachineBase extends BlockMaterial implements ITileEnt
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 		
 		BlockHelper.setDirectional(worldIn, pos, placer, false);
-		BlockHelper.setMeta(worldIn, pos, stack);
+		BlockHelper.setVariant(worldIn, pos, variant);
 	}
 	
 	@Override
 	protected BlockStateContainer createBlockState() {
-		VARIANT = this.getVariant();		
-		return new BlockStateContainer(this, new IProperty[] { VARIANT, FACING, ACTIVE });
+		BlockStateContainer.Builder builder = new BlockStateContainer.Builder(this);
+		return builder.add(Properties.EXPANSION_VARIANT)
+			.add(Properties.FACING, Properties.ACTIVE)
+			.build();
 	}	
 	
 	@Override
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		IExtendedBlockState ext = (IExtendedBlockState)state;		
         TileEntity tileentity = BlockHelper.getTileEntity(worldIn, pos);
 
+        VariantExpansion variant = VariantExpansion.BASIC;
         EnumFacing facing = EnumFacing.NORTH;
        	boolean active = false;
 
         if (tileentity instanceof TileEntityMachine) {
         	TileEntityMachine te = (TileEntityMachine)tileentity;
+        	variant = te.getVariant();
         	facing = te.getFacing();
         	active = te.isProcessing();
         }
         
-        return state.withProperty(FACING, facing).withProperty(ACTIVE, active);
+        return (IExtendedBlockState) ext.withProperty(Properties.EXPANSION_VARIANT, variant)
+            	.withProperty(Properties.FACING, facing).withProperty(Properties.ACTIVE, active);
+	}
+
+	@Override
+	public boolean hasTileEntity(IBlockState state) {
+		return true;
 	}
 }

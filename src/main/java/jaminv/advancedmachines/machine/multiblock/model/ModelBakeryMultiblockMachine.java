@@ -14,7 +14,7 @@ import jaminv.advancedmachines.machine.BlockMachineMultiblock;
 import jaminv.advancedmachines.machine.MachineHelper;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.machine.multiblock.face.SidedTexture;
-import jaminv.advancedmachines.objects.material.MaterialExpansion;
+import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -27,10 +27,15 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
 public class ModelBakeryMultiblockMachine implements ModelBakery {
+	
+	String variant;
+	public ModelBakeryMultiblockMachine(String variant) {
+		this.variant = variant;
+	}
 
 	@Override
-	public TextureAtlasSprite getParticleTexture(String variant) {
-		return MachineHelper.getParticleTexture("expansion", variant);
+	public TextureAtlasSprite getParticleTexture() {
+		return MachineHelper.getParticleTexture("expansion", this.variant);
 	}
 
 	@Override
@@ -47,14 +52,15 @@ public class ModelBakeryMultiblockMachine implements ModelBakery {
 	@Override
 	public List<BakedQuad> bakeItemModel(ItemStack stack) {
 		TextureAtlasSprite face = TextureHelper.getMissingTexture();
-		String variant = MaterialExpansion.byMetadata(stack.getMetadata()).getName();
+		String variant = VariantExpansion.BASIC.getName();
 		
 		Item item = stack.getItem();
 		if (item instanceof ItemBlock) {
 			Block block = Block.getBlockFromItem(item);
 			if (block instanceof BlockMachineMultiblock) {
-				MachineType type = ((BlockMachineMultiblock)block).getMachineType();
-				face = RawTextures.get(type.getName(), "inactive", variant, "all");
+				BlockMachineMultiblock machine = ((BlockMachineMultiblock)block);
+				variant = machine.getVariant().getName();
+				face = RawTextures.get(machine.getMachineType().getName(), "inactive", variant, "all");
 			}
 		}
 		TextureAtlasSprite top = TextureSets.get("expansion", variant, SidedTexture.TOP.getName(), "all");

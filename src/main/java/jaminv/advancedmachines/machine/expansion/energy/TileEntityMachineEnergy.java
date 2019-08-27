@@ -7,7 +7,7 @@ import jaminv.advancedmachines.lib.energy.IEnergyObservable;
 import jaminv.advancedmachines.lib.energy.IEnergyStorageInternal;
 import jaminv.advancedmachines.lib.machine.IMachineController;
 import jaminv.advancedmachines.machine.expansion.TileEntityMachineExpansionType;
-import jaminv.advancedmachines.objects.material.MaterialExpansion;
+import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
 import jaminv.advancedmachines.util.interfaces.IHasGui;
@@ -45,7 +45,7 @@ public class TileEntityMachineEnergy extends TileEntityMachineExpansionType impl
 	
 	public TileEntityMachineEnergy() {
 		super();
-		energy = new EnergyStorageAdvanced(ModConfig.general.defaultMachineEnergyCapacity * MaterialExpansion.maxMultiplier);
+		energy = new EnergyStorageAdvanced(ModConfig.general.defaultMachineEnergyCapacity * VariantExpansion.maxMultiplier);
 		energy.addObserver(this);
 	}
 	

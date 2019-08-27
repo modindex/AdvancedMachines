@@ -4,11 +4,12 @@ import akka.Main;
 import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.lib.render.ModelBakery;
 import jaminv.advancedmachines.lib.render.ModelBakeryProvider;
+import jaminv.advancedmachines.machine.expansion.MachineUpgrade;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.machine.multiblock.model.ModelBakeryMultiblockMachine;
-import jaminv.advancedmachines.objects.material.MaterialExpansion;
+import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
@@ -31,7 +32,7 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class BlockMachineMultiblock extends BlockMachineBase implements ModelBakeryProvider {
+public abstract class BlockMachineMultiblock extends BlockMachine implements MachineUpgrade, ModelBakeryProvider {
 	
 	public static final PropertyBool BORDER_TOP = PropertyBool.create("border_top");
 	public static final PropertyBool BORDER_BOTTOM = PropertyBool.create("border_bottom");
@@ -40,8 +41,8 @@ public abstract class BlockMachineMultiblock extends BlockMachineBase implements
 	public static final PropertyBool BORDER_EAST = PropertyBool.create("border_east");
 	public static final PropertyBool BORDER_WEST = PropertyBool.create("border_west");	
 
-	public BlockMachineMultiblock(String name) {
-		super(name);
+	public BlockMachineMultiblock(VariantExpansion variant) {
+		super(variant);
 	}
 
 	@Override
@@ -70,9 +71,8 @@ public abstract class BlockMachineMultiblock extends BlockMachineBase implements
 	
 	@Override
 	protected BlockStateContainer createBlockState() {
-		VARIANT = this.getVariant();
 		BlockStateContainer.Builder builder = new BlockStateContainer.Builder(this);
-		return builder.add(VARIANT)
+		return builder.add(Properties.EXPANSION_VARIANT)
 			.add(Properties.BORDER_TOP, Properties.BORDER_BOTTOM) 
 			.add(Properties.BORDER_NORTH, Properties.BORDER_SOUTH)
 			.add(Properties.BORDER_EAST, Properties.BORDER_WEST)
@@ -86,6 +86,7 @@ public abstract class BlockMachineMultiblock extends BlockMachineBase implements
 		IExtendedBlockState ext = (IExtendedBlockState)state;
         TileEntity tileentity = worldIn instanceof ChunkCache ? ((ChunkCache)worldIn).getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK) : worldIn.getTileEntity(pos);
 
+        VariantExpansion variant = VariantExpansion.BASIC;
         EnumFacing facing = EnumFacing.NORTH;
         boolean active = false;
         MultiblockBorders borders = MultiblockBorders.DEFAULT;
@@ -94,6 +95,7 @@ public abstract class BlockMachineMultiblock extends BlockMachineBase implements
 
         if (tileentity instanceof TileEntityMachineMultiblock) {
         	TileEntityMachineMultiblock te = (TileEntityMachineMultiblock)tileentity;
+        	variant = te.getVariant();
         	facing = te.getFacing();
         	active = te.isProcessing();
         	borders = te.getBorders();
@@ -102,6 +104,7 @@ public abstract class BlockMachineMultiblock extends BlockMachineBase implements
         }
         
         return (IExtendedBlockState) ext.withProperty(Properties.MACHINE_FACE, face).withProperty(Properties.MACHINE_TYPE, type)
+        		.withProperty(Properties.EXPANSION_VARIANT, variant)
             	.withProperty(Properties.FACING, facing).withProperty(Properties.ACTIVE, active)
             	.withProperty(Properties.BORDER_TOP, borders.getTop()).withProperty(Properties.BORDER_BOTTOM, borders.getBottom())
             	.withProperty(Properties.BORDER_NORTH, borders.getNorth()).withProperty(Properties.BORDER_SOUTH, borders.getSouth())
@@ -117,7 +120,7 @@ public abstract class BlockMachineMultiblock extends BlockMachineBase implements
 
 	@Override
 	public int getUpgradeQty(World world, BlockPos pos) {
-		return MaterialExpansion.byMetadata(this.getMetaFromState(world.getBlockState(pos))).getMultiplier();
+		return getVariant().getMultiplier();
 	}
 	
 	@Override
@@ -125,17 +128,7 @@ public abstract class BlockMachineMultiblock extends BlockMachineBase implements
 		BlockHelper.setBorders(world, pos, borders);
 	}
 
-	public static final String BAKEDMODEL_MACHINE = "bakedmodel_machine";
-	
-	@Override
-	public void registerModels() {
-		//registerCustomModel(BAKEDMODEL_MACHINE, ModelBakeryMultiblockMachine.class);
-		Item item = Item.getItemFromBlock(this);
-		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "normal"));
-	}
-	
-	protected static ModelBakery bakery = new ModelBakeryMultiblockMachine();
-	@Override @SideOnly(Side.CLIENT) public ModelBakery getModelBakery() { return bakery; }
+	@Override @SideOnly(Side.CLIENT) public ModelBakery getModelBakery() { return new ModelBakeryMultiblockMachine(variant.getName()); }
 
 	@Override
 	@SideOnly (Side.CLIENT)

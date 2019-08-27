@@ -16,7 +16,7 @@ public class BakedModelLoader implements ICustomModelLoader {
 	private static HashMap<String, ModelBakery> resources = new HashMap<String, ModelBakery>();
 	
 	public static void register(ResourceLocation modelLocation, ModelBakery bakery) {
-		resources.put(modelLocation.toString(), bakery);
+		resources.put(modelLocation.getResourcePath(), bakery);
 	}
 
 	@Override
@@ -24,21 +24,17 @@ public class BakedModelLoader implements ICustomModelLoader {
 
 	@Override
 	public boolean accepts(ResourceLocation modelLocation) {
+		// FIXME: Present for debugging only, remove
 		if (modelLocation.getResourceDomain().equals(Reference.MODID)) {
 			int a = 0;
 		}
+		// End FIXME
 		return modelLocation.getResourceDomain().equals(Reference.MODID) &&
-			resources.containsKey(modelLocation.toString());
+			resources.containsKey(modelLocation.getResourcePath());
 	}
 
 	@Override
 	public IModel loadModel(ResourceLocation modelLocation) throws Exception {
-		ModelBakery bakery = resources.get(modelLocation.toString());
-		String variant = "normal";
-		
-		if (modelLocation instanceof ModelResourceLocation) {
-			variant = ((ModelResourceLocation)modelLocation).getVariant();
-		}
-		return new ModelImpl(bakery, variant);
+		return new ModelImpl(resources.get(modelLocation.getResourcePath()));
 	}
 }

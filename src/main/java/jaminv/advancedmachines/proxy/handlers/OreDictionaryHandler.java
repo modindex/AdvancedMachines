@@ -10,7 +10,7 @@ import net.minecraft.item.Item;
 public class OreDictionaryHandler {
 	
 	public static void registerOreDictionary() {
-		for (Item item : ItemInit.ITEMS) {
+		/*for (Item item : ItemInit.ITEMS) {
 			if (item instanceof IHasOreDictionary) {
 				((IHasOreDictionary)item).registerOreDictionary();
 			}
@@ -20,7 +20,7 @@ public class OreDictionaryHandler {
 			if (block instanceof IHasOreDictionary) {
 				((IHasOreDictionary)block).registerOreDictionary();
 			}
-		}
+		}*/
 		
 		DataParser.parseFolder("data/ore_dictionary", new FileHandlerOreDictionary()); 
 	}

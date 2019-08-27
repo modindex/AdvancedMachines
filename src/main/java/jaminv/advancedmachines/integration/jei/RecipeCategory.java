@@ -22,7 +22,7 @@ import jaminv.advancedmachines.machine.instance.grinder.DialogMachineGrinder;
 import jaminv.advancedmachines.machine.instance.grinder.TileEntityMachineGrinder;
 import jaminv.advancedmachines.machine.instance.purifier.DialogMachinePurifier;
 import jaminv.advancedmachines.machine.instance.purifier.TileEntityMachinePurifier;
-import jaminv.advancedmachines.objects.material.MaterialExpansion;
+import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.recipe.grinder.GrinderManager;
 import jaminv.advancedmachines.util.recipe.purifier.PurifierManager;
 import mezz.jei.api.IGuiHelper;
@@ -63,10 +63,11 @@ public class RecipeCategory extends JeiRecipeCategory {
 	}
 	
 	public static void createRecipeCatalyst(IModRegistry registry, String recipeUid, Block machineBlock) {
-		registry.addRecipeCatalyst(new ItemStack(machineBlock, 1, MaterialExpansion.BASIC.getMeta()), recipeUid);
-		registry.addRecipeCatalyst(new ItemStack(machineBlock, 1, MaterialExpansion.COMPRESSED.getMeta()), recipeUid);
-		registry.addRecipeCatalyst(new ItemStack(machineBlock, 1, MaterialExpansion.QUAD.getMeta()), recipeUid);
-		registry.addRecipeCatalyst(new ItemStack(machineBlock, 1, MaterialExpansion.IMPROBABLE.getMeta()), recipeUid);
+		// FIXME: Jei Recipe Catalysts
+		//registry.addRecipeCatalyst(new ItemStack(machineBlock, 1, VariantExpansion.BASIC.getMeta()), recipeUid);
+		//registry.addRecipeCatalyst(new ItemStack(machineBlock, 1, VariantExpansion.COMPRESSED.getMeta()), recipeUid);
+		//registry.addRecipeCatalyst(new ItemStack(machineBlock, 1, VariantExpansion.QUAD.getMeta()), recipeUid);
+		//registry.addRecipeCatalyst(new ItemStack(machineBlock, 1, VariantExpansion.IMPROBABLE.getMeta()), recipeUid);
 	}
 	
 	public static void createRecipeClickArea(IModRegistry registry, String recipeUid, IJeiDialog dialog, Class<? extends GuiContainer> dialogClass) {

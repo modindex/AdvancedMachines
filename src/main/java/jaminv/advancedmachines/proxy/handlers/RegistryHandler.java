@@ -8,6 +8,8 @@ import jaminv.advancedmachines.lib.render.BakedModelLoader;
 import jaminv.advancedmachines.lib.render.ModelBakeryProvider;
 import jaminv.advancedmachines.lib.util.registry.RegistryHelper;
 import jaminv.advancedmachines.machine.instance.furnace.BlockMachineFurnace;
+import jaminv.advancedmachines.machine.instance.furnace.TileEntityMachineFurnace;
+import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.Reference;
 import jaminv.advancedmachines.util.interfaces.IHasModel;
 import jaminv.advancedmachines.util.interfaces.IHasTileEntity;
@@ -17,6 +19,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
@@ -42,28 +45,34 @@ public class RegistryHandler {
 
 	@SubscribeEvent
 	public static void onItemRegister(RegistryEvent.Register<Item> event) {
-		event.getRegistry().registerAll(ItemInit.ITEMS.toArray(new Item[0]));
+		//event.getRegistry().registerAll(ItemInit.ITEMS.toArray(new Item[0]));
+		RegistryHelper.registerItems(event);
 	}
 	
 	@SubscribeEvent
 	public static void onBlockRegister(RegistryEvent.Register<Block> event) {
-		FluidInit.registerFluids();
+		/*FluidInit.registerFluids();
 		event.getRegistry().registerAll(BlockInit.BLOCKS.toArray(new Block[0]));
 		
 		for (Block block : BlockInit.BLOCKS) {
 			if (block instanceof IHasTileEntity) {
 				GameRegistry.registerTileEntity(((IHasTileEntity)block).getTileEntityClass(), block.getUnlocalizedName());
 			}
-		}
+		}*/
 		
-		BlockMachineFurnace furnace = new BlockMachineFurnace("machine_furnace23");
-		//RegistryHelper.registerBlockWithBakedModel(furnace, "machine_furnace2", furnace.getModelBakery());
+		//BlockMachineFurnace furnace = new BlockMachineFurnace("machine_furnace23");
+		for (VariantExpansion variant : VariantExpansion.values()) {
+			RegistryHelper.addBlockWithBakedModel(new BlockMachineFurnace(variant), "machine_furnace_" + variant.getName());
+		}
+		GameRegistry.registerTileEntity(TileEntityMachineFurnace.class, new ResourceLocation("tile_machine_furnace"));
+		
+		RegistryHelper.registerBlocks(event);
 	}
 	
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public static void onModelRegister(ModelRegistryEvent event) {
-		for (Item item : ItemInit.ITEMS) {
+		/*for (Item item : ItemInit.ITEMS) {
 			if (item instanceof IHasModel) {
 				((IHasModel)item).registerModels();
 			}
@@ -79,7 +88,9 @@ public class RegistryHandler {
 				ModelLoader.setCustomStateMapper(block, new CustomStateMapper(resource));
 				BakedModelLoader.register(resource, ((ModelBakeryProvider)block).getModelBakery());				
 			}
-		}
+		}*/
+		
+		RegistryHelper.registerModels();
 	}
 	
 	public static void otherRegistries() {

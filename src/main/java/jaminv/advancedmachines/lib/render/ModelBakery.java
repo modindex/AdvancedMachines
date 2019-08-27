@@ -28,7 +28,7 @@ public interface ModelBakery {
 	}
 	
 	@SideOnly (Side.CLIENT)
-	public default TextureAtlasSprite getParticleTexture(String variant) {
+	public default TextureAtlasSprite getParticleTexture() {
 		return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
 	}
 	
