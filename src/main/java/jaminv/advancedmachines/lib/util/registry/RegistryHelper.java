@@ -5,10 +5,7 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
-import jaminv.advancedmachines.lib.render.BakedModelLoader;
 import jaminv.advancedmachines.lib.render.ModelBakery;
-import jaminv.advancedmachines.lib.render.ModelBakeryProvider;
-import jaminv.advancedmachines.proxy.handlers.RegistryHandler.CustomStateMapper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -21,7 +18,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.client.model.ModelLoader;
 
 public class RegistryHelper {
 	
@@ -61,8 +57,8 @@ public class RegistryHelper {
 	 */
 	
 	public static void registerBlock(Block block, String registryName) {
-		block.setRegistryName(registryName);
-		block.setUnlocalizedName(block.getRegistryName().toString());
+		//block.setRegistryName(registryName);
+		//block.setUnlocalizedName(block.getRegistryName().toString());
 		blockRegistry.add(block);
 	}
 	
@@ -85,13 +81,11 @@ public class RegistryHelper {
 		}
 	}
 	
-	public static <T extends Block & ModelBakeryProvider> void registerBlockWithBakedModel(T block, String registryName, ModelBakery bakery) {
+	public static void registerBlockWithBakedModel(Block block, String registryName, ModelBakery bakery) {
 		registerBlockWithItem(block, registryName);
 		
-		bakedModelRegistry.add(new BakedModelRegistryData(block, new BypassStateMapper(resource), ))
 		ModelResourceLocation resource = new ModelResourceLocation(block.getRegistryName(), "normal");
-		ModelLoader.setCustomStateMapper(block, );
-		BakedModelLoader.register(resource, ((ModelBakeryProvider)block).getModelBakery());				
+		bakedModelRegistry.add(new BakedModelRegistryData(block, new BypassStateMapper(resource), resource, bakery));		
 	}
 	
 	/*

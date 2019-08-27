@@ -6,6 +6,8 @@ import jaminv.advancedmachines.init.FluidInit;
 import jaminv.advancedmachines.init.ItemInit;
 import jaminv.advancedmachines.lib.render.BakedModelLoader;
 import jaminv.advancedmachines.lib.render.ModelBakeryProvider;
+import jaminv.advancedmachines.lib.util.registry.RegistryHelper;
+import jaminv.advancedmachines.machine.instance.furnace.BlockMachineFurnace;
 import jaminv.advancedmachines.util.Reference;
 import jaminv.advancedmachines.util.interfaces.IHasModel;
 import jaminv.advancedmachines.util.interfaces.IHasTileEntity;
@@ -53,6 +55,9 @@ public class RegistryHandler {
 				GameRegistry.registerTileEntity(((IHasTileEntity)block).getTileEntityClass(), block.getUnlocalizedName());
 			}
 		}
+		
+		BlockMachineFurnace furnace = new BlockMachineFurnace("machine_furnace23");
+		//RegistryHelper.registerBlockWithBakedModel(furnace, "machine_furnace2", furnace.getModelBakery());
 	}
 	
 	@SubscribeEvent

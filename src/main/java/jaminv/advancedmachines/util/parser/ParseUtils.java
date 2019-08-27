@@ -58,7 +58,7 @@ public class ParseUtils {
 	public static ItemStack parseItemStack(JsonElement json, String memberName) throws DataParserException {
 		if (json == null) { throw new DataParserException("Missing itemstack element: " + memberName); }
 		
-		if (JsonUtils.isString(json)) {
+		if (json.isJsonPrimitive()) {
 			String itemname = JsonUtils.getString(json, memberName);
 
 			Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemname));

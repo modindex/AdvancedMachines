@@ -23,6 +23,6 @@ public class BlockFluidClassicBase extends BlockFluidClassic implements IHasMode
 	
 	@Override
 	public void registerModels() {
-		ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(LEVEL).build());
+		//ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(LEVEL).build());
 	}
 }

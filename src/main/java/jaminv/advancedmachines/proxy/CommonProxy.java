@@ -22,7 +22,6 @@ public class CommonProxy {
 	public static Configuration config;
 	
 	public void preInit(FMLPreInitializationEvent e) {
-		MinecraftForge.EVENT_BUS.register(EventHandlerClient.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(RegistryHandler.class);
 		
 		Main.logger.info("Other registries");

@@ -65,7 +65,7 @@ public abstract class FileHandlerRecipe implements FileHandler {
 	protected RecipeInput parseInput(JsonElement input, String memberName) throws DataParserException {
 		if (input == null) { throw new DataParserException("Missing recipe element: '" + memberName + "'"); }
 		
-		if (JsonUtils.isString(input)) {
+		if (input.isJsonPrimitive()) {
 			return new RecipeInput(ParseUtils.parseItemStack(input, memberName));
 		}
 		JsonObject inputob = ParseUtils.getJsonObject(input, memberName);
@@ -88,7 +88,7 @@ public abstract class FileHandlerRecipe implements FileHandler {
 	protected RecipeOutput parseOutput(JsonElement output, String memberName) throws DataParserException {
 		if (output == null) { throw new DataParserException("Missing recipe element: '" + memberName + "'"); }
 		
-		if (JsonUtils.isString(output)) {
+		if (output.isJsonPrimitive()) {
 			return new RecipeOutput(ParseUtils.parseItemStack(output, memberName));
 		}
 		JsonObject outputob = ParseUtils.getJsonObject(output, memberName);
@@ -103,7 +103,7 @@ public abstract class FileHandlerRecipe implements FileHandler {
 	
 	protected RecipeOutput parseOutputWithChance(JsonElement output, String memberName) throws DataParserException {
 		if (output == null) { return null; }
-		if (JsonUtils.isString(output)) { return parseOutput(output, memberName); }
+		if (output.isJsonPrimitive()) { return parseOutput(output, memberName); }
 		
 		RecipeOutput ret = parseOutput(output, memberName);
 		JsonObject outputob = ParseUtils.getJsonObject(output, memberName);
