@@ -2,24 +2,14 @@ package jaminv.advancedmachines.machine.multiblock;
 
 import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.machine.BlockMachineMultiblock;
-import jaminv.advancedmachines.machine.expansion.BlockMachineExpansionType;
 import jaminv.advancedmachines.machine.expansion.MachineUpgrade;
-import jaminv.advancedmachines.machine.multiblock.face.MachineType;
-import jaminv.advancedmachines.objects.blocks.BlockMaterial;
-import jaminv.advancedmachines.objects.variant.MaterialBase;
-import jaminv.advancedmachines.objects.variant.MaterialBase.MaterialType;
+import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 
 public class MultiblockBorders implements INBTSerializable<NBTTagCompound> {
@@ -52,8 +42,8 @@ public class MultiblockBorders implements INBTSerializable<NBTTagCompound> {
 		if (min.getX() == pos.getX()) { west = MultiblockBorderType.SOLID; } else { west = MultiblockBorderType.NONE; }
 		
 		Block current = world.getBlockState(pos).getBlock();
-		if (current instanceof BlockMaterial && ((BlockMaterial)current).getMaterialType() == MaterialType.EXPANSION) {
-			MaterialBase variant = ((BlockMaterial)current).getVariant(world.getBlockState(pos));
+		if (current instanceof VariantExpansion.Has) {
+			VariantExpansion variant = ((VariantExpansion.Has)current).getVariant();
 			
 			// Check for single borders
 			
@@ -63,12 +53,12 @@ public class MultiblockBorders implements INBTSerializable<NBTTagCompound> {
 				// If block isn't a machine or upgrade, there's no chance of a single border.
 				if (!(check instanceof MachineUpgrade) && !(check instanceof BlockMachineMultiblock)) { continue; }
 				// They all should be MaterialType.EXPANSION, but better to make sure.
-				if (!(check instanceof BlockMaterial) || ((BlockMaterial)check).getMaterialType() != MaterialType.EXPANSION) { continue; }
+				if (!(check instanceof VariantExpansion.Has)) { continue; }
 				
 				MultiblockBorderType border = MultiblockBorderType.NONE;
 
 				// Variant types don't match 
-				if (((BlockMaterial)check).getVariant(world.getBlockState(pos.offset(facing))) != variant) {
+				if (((VariantExpansion.Has)check).getVariant() != variant) {
 					border = MultiblockBorderType.SINGLE;
 				}
 

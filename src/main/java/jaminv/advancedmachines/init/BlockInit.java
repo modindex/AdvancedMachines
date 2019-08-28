@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jaminv.advancedmachines.init.property.PropertyMaterial;
+import jaminv.advancedmachines.machine.expansion.BlockMachineProductivity;
+import jaminv.advancedmachines.machine.expansion.BlockMachineSpeed;
 import jaminv.advancedmachines.machine.expansion.energy.BlockMachineEnergy;
-import jaminv.advancedmachines.machine.expansion.expansion.BlockMachineExpansion;
 import jaminv.advancedmachines.machine.expansion.inventory.BlockMachineInventory;
-import jaminv.advancedmachines.machine.expansion.prodctivity.BlockMachineProductivity;
+import jaminv.advancedmachines.machine.expansion.multiply.BlockMachineMultiply;
 import jaminv.advancedmachines.machine.expansion.redstone.BlockMachineRedstone;
-import jaminv.advancedmachines.machine.expansion.speed.BlockMachineSpeed;
 import jaminv.advancedmachines.machine.expansion.tank.BlockMachineTank;
 import jaminv.advancedmachines.machine.instance.alloy.BlockMachineAlloy;
 import jaminv.advancedmachines.machine.instance.furnace.BlockMachineFurnace;
@@ -55,7 +55,7 @@ public class BlockInit {
 	public static final BlockMachineStabilizer MACHINE_STABILIZER = new BlockMachineStabilizer("machine_stabilizer");
 	public static final BlockMachineInjector MACHINE_INJECTOR = new BlockMachineInjector("machine_injector");
 	
-	public static final BlockMachineExpansion MACHINE_EXPANSION = new BlockMachineExpansion("machine_expansion");
+	public static final BlockMachineMultiply MACHINE_EXPANSION = new BlockMachineMultiply("machine_expansion");
 	public static final BlockMachineSpeed MACHINE_SPEED = new BlockMachineSpeed("machine_speed");
 	public static final BlockMachineProductivity MACHINE_PRODUCTIVITY = new BlockMachineProductivity("machine_productivity");
 	public static final BlockMachineInventory MACHINE_INVENTORY = new BlockMachineInventory("machine_inventory");

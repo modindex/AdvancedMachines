@@ -8,11 +8,13 @@ import java.util.Map;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
 
 public enum VariantExpansion implements Variant {
-	
 	BASIC("basic", 1),
 	COMPRESSED("compressed", 2),
 	QUAD("quad", 4),
 	IMPROBABLE("improbable", 8);
+
+	public static interface Has extends HasVariant<VariantExpansion> { };
+	public static interface Needs extends NeedsVariant<VariantExpansion> { };		
 	
 	protected static Map<String, VariantExpansion> nameLookup = new HashMap<>();	
 	

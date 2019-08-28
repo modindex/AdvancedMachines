@@ -4,26 +4,27 @@ import java.util.LinkedList;
 import java.util.List;
 
 import jaminv.advancedmachines.init.property.Properties;
-import jaminv.advancedmachines.lib.render.ModelBakery;
+import jaminv.advancedmachines.lib.render.quad.Cuboid;
 import jaminv.advancedmachines.lib.render.quad.LayeredTexture;
 import jaminv.advancedmachines.lib.render.quad.QuadBuilderFluid;
 import jaminv.advancedmachines.lib.render.quad.QuadBuilderLayeredBlock;
-import jaminv.advancedmachines.machine.MachineHelper;
+import jaminv.advancedmachines.machine.expansion.ModelBakeryMachineExpansion;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorderType;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
-import jaminv.advancedmachines.machine.multiblock.face.SidedTexture;
 import jaminv.advancedmachines.machine.multiblock.model.LayeredTextureMultiblockTransparent;
+import jaminv.advancedmachines.machine.multiblock.model.MultiblockTextureBase;
+import jaminv.advancedmachines.machine.multiblock.model.QuadBuilderMultiblockItem;
+import jaminv.advancedmachines.machine.multiblock.model.TextureSide;
+import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fluids.FluidStack;
 
-public class ModelBakeryMachineTank implements ModelBakery {
-
-	@Override
-	public TextureAtlasSprite getParticleTexture(String variant) {
-		return MachineHelper.getParticleTexture("expansion", variant);
+public class ModelBakeryMachineTank extends ModelBakeryMachineExpansion {
+	public ModelBakeryMachineTank(VariantExpansion variant) {
+		super(MultiblockTextureBase.TANK, variant);
 	}
 
 	@Override
@@ -44,16 +45,20 @@ public class ModelBakeryMachineTank implements ModelBakery {
 		if (borders.getWest() == MultiblockBorderType.SOLID) { xmin = offset; }
 		if (borders.getEast() == MultiblockBorderType.SOLID) { xmax = offset; }
 		
-		LayeredTexture side = new LayeredTextureMultiblockTransparent(state, "tank");
-		LayeredTexture top = new LayeredTextureMultiblockTransparent(state, "tank").withSided(SidedTexture.TOP);
+		LayeredTexture side = new LayeredTextureMultiblockTransparent(state, base);
+		LayeredTexture top = new LayeredTextureMultiblockTransparent(state, base).withSided(TextureSide.TOP);
 		
 		ret.addAll(new QuadBuilderLayeredBlock(side).withTopBottom(top).build());
-		ret.addAll(new QuadBuilderLayeredBlock(side).withTopBottom(top).offset(xmin, xmax, ymin, ymax, zmin, zmax).invert().build());
+		ret.addAll(new QuadBuilderLayeredBlock(side).withTopBottom(top).withCuboid(Cuboid.UNIT.offset(xmin, xmax, ymin, ymax, zmin, zmax)).invert().build());
 
 		if (fluid != null && capacity > 0) {
-			ret.addAll(new QuadBuilderFluid(fluid, fluid.amount / (float)capacity).offset(0.02f,  0.02f, 0.02f).build()); 
+			ret.addAll(new QuadBuilderFluid(fluid, fluid.amount / (float)capacity).withCuboid(Cuboid.UNIT.offset(0.02f,  0.02f, 0.02f)).build()); 
 		}		
 		return ret;
 	}
 
+	@Override
+	public List<BakedQuad> bakeItemModel(ItemStack stack) {
+		return new QuadBuilderMultiblockItem(stack, base).build();
+	}
 }

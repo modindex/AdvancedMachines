@@ -2,11 +2,11 @@ package jaminv.advancedmachines.machine.multiblock.model;
 
 import java.util.List;
 
+import jaminv.advancedmachines.client.RawTextures;
 import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.lib.render.ModelBakery;
 import jaminv.advancedmachines.lib.render.quad.QuadBuilderLayeredBlock;
 import jaminv.advancedmachines.machine.MachineHelper;
-import jaminv.advancedmachines.machine.multiblock.face.SidedTexture;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -30,15 +30,14 @@ public class ModelBakeryMultiblockMachine implements ModelBakery {
 	public List<BakedQuad> bakeModel(IBlockState state) {
 		IExtendedBlockState ext = (IExtendedBlockState)state;
 		
-		return new QuadBuilderLayeredBlock(new LayeredTextureMultiblock(state, "expansion"))
-			.withFace(BlockHelper.getExtendedFacing(state), 
-				new LayeredTextureMultiblockMachine(state, ext.getValue(Properties.MACHINE_TYPE).getName()).withBase("expansion"))
-			.withTopBottom(new LayeredTextureMultiblock(state, "expansion").withSided(SidedTexture.TOP))
-		.build();
+		TextureAtlasSprite face = RawTextures.get(ext.getValue(Properties.MACHINE_TYPE).getName(),
+				ext.getValue(Properties.ACTIVE) ? "active" : "inactive");
+		
+		return new QuadBuilderMultiblock(state, MultiblockTextureBase.MULTIPLY).withFace(face).build();
 	}
 
 	@Override
 	public List<BakedQuad> bakeItemModel(ItemStack stack) {
-		return new QuadBuilderMultiblockItem("expansion", stack).build();
+		return new QuadBuilderMultiblockItem(stack, MultiblockTextureBase.MULTIPLY).build();
 	}
 }

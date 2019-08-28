@@ -1,7 +1,0 @@
-{
-    "parent": "advancedmachines:block/machine_purifier",
-    "textures": {
-        "all": "advancedmachines:blocks/machine/expansion/quad_all",
-        "north": "advancedmachines:blocks/machine/instance/purifier/inactive/quad/all"
-    }
-}

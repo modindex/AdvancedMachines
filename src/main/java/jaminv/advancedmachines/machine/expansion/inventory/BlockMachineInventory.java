@@ -4,13 +4,15 @@ import jaminv.advancedmachines.client.textureset.TextureSets;
 import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.lib.render.ModelBakery;
 import jaminv.advancedmachines.lib.render.ModelBakeryProvider;
-import jaminv.advancedmachines.machine.expansion.BlockMachineExpansionType;
-import jaminv.advancedmachines.machine.expansion.expansion.ModelBakeryMachineExpansion;
-import jaminv.advancedmachines.machine.expansion.expansion.TileEntityMachineExpansion;
+import jaminv.advancedmachines.machine.MachineHelper;
+import jaminv.advancedmachines.machine.expansion.BlockMachineExpansion;
+import jaminv.advancedmachines.machine.expansion.multiply.ModelBakeryMachineMultiply;
+import jaminv.advancedmachines.machine.expansion.multiply.TileMachineMultiply;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.machine.multiblock.model.LayeredTextureMultiblock;
+import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.enums.EnumGui;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import jaminv.advancedmachines.util.interfaces.IHasTileEntity;
@@ -33,14 +35,13 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockMachineInventory extends BlockMachineExpansionType implements ITileEntityProvider, IHasTileEntity {
-	
-    public static final PropertyBool INPUT = PropertyBool.create("input");
-    public static final PropertyDirection FACING = PropertyDirection.create("facing");
+public class BlockMachineInventory extends BlockMachineExpansion {
 
-	public BlockMachineInventory(String name) {
-		super(name);
+	public BlockMachineInventory(VariantExpansion variant) {
+		super(variant);
 	}
 	
 	protected int getGuiId() { return EnumGui.MACHINE_INVENTORY.getId(); }
@@ -50,7 +51,7 @@ public class BlockMachineInventory extends BlockMachineExpansionType implements 
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 		
 		BlockHelper.setDirectional(worldIn, pos, placer);
-		BlockHelper.setMeta(worldIn, pos, stack);
+		BlockHelper.setVariant(worldIn, pos, variant);
 	}		 
 	
 	@Override
@@ -59,57 +60,37 @@ public class BlockMachineInventory extends BlockMachineExpansionType implements 
 		
 		return BlockHelper.openGui(worldIn, pos, playerIn, getGuiId());
 	}
-	
+
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityMachineInventory();
-	}
-	
-	@Override
-	public Class<? extends TileEntity> getTileEntityClass() {
-		return TileEntityMachineInventory.class;
+	public TileEntity createTileEntity(World world, IBlockState state) {
+		return new TileMachineInventory();
 	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		VARIANT = this.getVariant();
-		BlockStateContainer.Builder builder = new BlockStateContainer.Builder(this);
-		return builder.add(VARIANT)
+		return MachineHelper.addCommonProperties(new BlockStateContainer.Builder(this))
 			.add(Properties.INPUT, Properties.FACING)
-			.add(Properties.BORDER_TOP, Properties.BORDER_BOTTOM) 
-			.add(Properties.BORDER_NORTH, Properties.BORDER_SOUTH)
-			.add(Properties.BORDER_EAST, Properties.BORDER_WEST)
-			.add(Properties.MACHINE_FACE, Properties.MACHINE_TYPE)
 			.build();
 	}
 	
 	@Override
 	public IExtendedBlockState getExtendedState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-		IExtendedBlockState ext = (IExtendedBlockState)state;
-		TileEntity tileentity = worldIn instanceof ChunkCache ? ((ChunkCache)worldIn).getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK) : worldIn.getTileEntity(pos);
+		TileEntity tileentity = BlockHelper.getTileEntity(worldIn, pos);
 
         EnumFacing facing = EnumFacing.NORTH;
         boolean input = true;
         MultiblockBorders borders = MultiblockBorders.DEFAULT;
 
-        if (tileentity instanceof TileEntityMachineInventory) {
-        	TileEntityMachineInventory te = (TileEntityMachineInventory)tileentity;
+        if (tileentity instanceof TileMachineInventory) {
+        	TileMachineInventory te = (TileMachineInventory)tileentity;
         	facing = te.getFacing();
         	input = te.getInputState();
         	borders = te.getBorders();
         }
         
-        return (IExtendedBlockState) ext.withProperty(Properties.FACING, facing).withProperty(Properties.INPUT, input)
-            	.withProperty(Properties.BORDER_TOP, borders.getTop()).withProperty(Properties.BORDER_BOTTOM, borders.getBottom())
-            	.withProperty(Properties.BORDER_NORTH, borders.getNorth()).withProperty(Properties.BORDER_SOUTH, borders.getSouth())
-            	.withProperty(Properties.BORDER_EAST, borders.getEast()).withProperty(Properties.BORDER_WEST, borders.getWest());
-	}
-	
-	@Override
-	public void registerModels() {
-		registerVariantModels();
+        return (IExtendedBlockState) MachineHelper.withCommonProperties((IExtendedBlockState)state, variant, borders)
+        	.withProperty(Properties.FACING, facing).withProperty(Properties.INPUT, input);
 	}
 
-	protected static ModelBakery bakery = new ModelBakeryMachineInventory();	
-	@Override public ModelBakery getModelBakery() { return bakery; }	
+	@Override @SideOnly(Side.CLIENT) public ModelBakery getModelBakery() { return new ModelBakeryMachineInventory(variant); }
 }

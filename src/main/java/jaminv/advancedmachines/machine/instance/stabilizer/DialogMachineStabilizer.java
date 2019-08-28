@@ -44,7 +44,7 @@ public class DialogMachineStabilizer extends JeiDialog {
 		addJeiElement(new JeiProgressIndicator(76, 38, 24, 17, 200, 50));
 	}
 	
-	public DialogMachineStabilizer(ContainerMachine container, TileEntityMachineStabilizer te) {
+	public DialogMachineStabilizer(ContainerMachine container, TileMachineStabilizer te) {
 		this(container);
 		
 		this.addElement(new DialogProcessBar(te.getController(), 76, 38, 24, 17, 200, 50));

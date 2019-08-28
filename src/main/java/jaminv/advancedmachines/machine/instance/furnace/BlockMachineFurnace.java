@@ -1,7 +1,7 @@
 package jaminv.advancedmachines.machine.instance.furnace;
 
 import jaminv.advancedmachines.machine.BlockMachineMultiblock;
-import jaminv.advancedmachines.machine.expansion.expansion.ModelBakeryMachineExpansion;
+import jaminv.advancedmachines.machine.expansion.multiply.ModelBakeryMachineMultiply;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.enums.EnumGui;
@@ -21,6 +21,6 @@ public class BlockMachineFurnace extends BlockMachineMultiblock {
 
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
-		return new TileEntityMachineFurnace();
+		return new TileMachineFurnace();
 	}
 }	

@@ -1,11 +1,8 @@
 package jaminv.advancedmachines.lib.render;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 import jaminv.advancedmachines.util.Reference;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ICustomModelLoader;
@@ -24,11 +21,6 @@ public class BakedModelLoader implements ICustomModelLoader {
 
 	@Override
 	public boolean accepts(ResourceLocation modelLocation) {
-		// FIXME: Present for debugging only, remove
-		if (modelLocation.getResourceDomain().equals(Reference.MODID)) {
-			int a = 0;
-		}
-		// End FIXME
 		return modelLocation.getResourceDomain().equals(Reference.MODID) &&
 			resources.containsKey(modelLocation.getResourcePath());
 	}

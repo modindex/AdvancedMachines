@@ -46,7 +46,7 @@ public class DialogMachineInjector extends JeiDialog {
 		addJeiElement(new JeiProgressIndicator(76, 22, 24, 17, 200, 50));
 	}
 	
-	public DialogMachineInjector(ContainerMachine container, TileEntityMachineInjector te) {
+	public DialogMachineInjector(ContainerMachine container, TileMachineInjector te) {
 		this(container);
 		
 		this.addElement(new DialogProcessBar(te.getController(), 76, 22, 24, 17, 200, 50));

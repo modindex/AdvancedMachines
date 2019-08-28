@@ -36,7 +36,7 @@ public class DialogMachineFurnace extends JeiDialog {
 	}
 	
 
-	public DialogMachineFurnace(ContainerMachine container, TileEntityMachineFurnace te) {
+	public DialogMachineFurnace(ContainerMachine container, TileMachineFurnace te) {
 		this(container);
 	
 		this.addElement(new DialogProcessBar(te.getController(), 74, 37, 24, 17, 200, 50));

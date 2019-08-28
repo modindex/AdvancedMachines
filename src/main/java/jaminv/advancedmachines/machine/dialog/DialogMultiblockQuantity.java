@@ -2,7 +2,7 @@ package jaminv.advancedmachines.machine.dialog;
 
 import jaminv.advancedmachines.lib.dialog.control.DialogText;
 import jaminv.advancedmachines.lib.machine.IMachineProcess;
-import jaminv.advancedmachines.machine.TileEntityMachineMultiblock;
+import jaminv.advancedmachines.machine.TileMachineMultiblock;
 
 public class DialogMultiblockQuantity extends DialogText {
 

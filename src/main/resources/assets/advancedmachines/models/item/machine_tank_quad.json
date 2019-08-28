@@ -1,6 +1,0 @@
-{
-    "parent": "advancedmachines:block/machine_alloy",
-    "textures": {
-        "all": "advancedmachines:blocks/machine/tank/quad_all"
-    }
-}

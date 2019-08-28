@@ -1,17 +1,17 @@
 package jaminv.advancedmachines.machine.instance.grinder;
 
 import jaminv.advancedmachines.machine.BlockMachineMultiblock;
-import jaminv.advancedmachines.machine.expansion.expansion.ModelBakeryMachineExpansion;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.enums.EnumGui;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 public class BlockMachineGrinder extends BlockMachineMultiblock {
 
-	public BlockMachineGrinder(String name) {
-		super(name);
+	public BlockMachineGrinder(VariantExpansion variant) {
+		super(variant);
 	}
 	
 	@Override public MachineType getMachineType() { return MachineType.GRINDER; }	
@@ -19,12 +19,7 @@ public class BlockMachineGrinder extends BlockMachineMultiblock {
 	protected int getGuiId() { return EnumGui.GRINDER.getId(); }
 	
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityMachineGrinder();
-	}
-	
-	@Override
-	public Class<? extends TileEntity> getTileEntityClass() {
-		return TileEntityMachineGrinder.class;
+	public TileEntity createTileEntity(World worldIn, IBlockState state) {
+		return new TileMachineGrinder();
 	}
 }

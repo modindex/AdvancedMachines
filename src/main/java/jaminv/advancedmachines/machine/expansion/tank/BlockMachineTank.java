@@ -2,14 +2,18 @@ package jaminv.advancedmachines.machine.expansion.tank;
 
 import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.lib.render.ModelBakery;
-import jaminv.advancedmachines.machine.expansion.expansion.BlockMachineExpansion;
+import jaminv.advancedmachines.machine.MachineHelper;
+import jaminv.advancedmachines.machine.expansion.BlockMachineExpansion;
+import jaminv.advancedmachines.machine.expansion.multiply.BlockMachineMultiply;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
+import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.enums.EnumGui;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -27,8 +31,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockMachineTank extends BlockMachineExpansion {
 
-	public BlockMachineTank(String name) {
-		super(name);
+	public BlockMachineTank(VariantExpansion variant) {
+		super(variant);
 	}
 
 	protected int getGuiId() { return EnumGui.MACHINE_TANK.getId(); }
@@ -45,36 +49,24 @@ public class BlockMachineTank extends BlockMachineExpansion {
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 		
 		BlockHelper.setDirectional(worldIn, pos, placer);
-		BlockHelper.setMeta(worldIn, pos, stack);
 	}		
 	
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityMachineTank();
-	}
-	
-	@Override
-	public Class<? extends TileEntity> getTileEntityClass() {
-		return TileEntityMachineTank.class;
+	public TileEntity createTileEntity(World world, IBlockState state) {
+		return new TileMachineTank();
 	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		VARIANT = this.getVariant();
-		BlockStateContainer.Builder builder = new BlockStateContainer.Builder(this);
-		return builder.add(VARIANT).add(Properties.FLUID, Properties.CAPACITY)
+		return MachineHelper.addCommonProperties(new BlockStateContainer.Builder(this))
+			.add(Properties.FLUID, Properties.CAPACITY)
 			.add(Properties.INPUT, Properties.FACING)
-			.add(Properties.BORDER_TOP, Properties.BORDER_BOTTOM) 
-			.add(Properties.BORDER_NORTH, Properties.BORDER_SOUTH)
-			.add(Properties.BORDER_EAST, Properties.BORDER_WEST)				
 			.build();
 	}
 
 	@Override
 	public IExtendedBlockState getExtendedState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-		IExtendedBlockState ext = (IExtendedBlockState)state;
-		
-        TileEntity tileentity = worldIn instanceof ChunkCache ? ((ChunkCache)worldIn).getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK) : worldIn.getTileEntity(pos);
+        TileEntity tileentity = BlockHelper.getTileEntity(worldIn, pos);
 
         EnumFacing facing = EnumFacing.NORTH;
         boolean input = true;
@@ -82,8 +74,8 @@ public class BlockMachineTank extends BlockMachineExpansion {
         FluidStack fluid = null;
         int capacity = 0;
 
-        if (tileentity instanceof TileEntityMachineTank) {
-        	TileEntityMachineTank te = (TileEntityMachineTank)tileentity;
+        if (tileentity instanceof TileMachineTank) {
+        	TileMachineTank te = (TileMachineTank)tileentity;
         	facing = te.getFacing();
         	input = te.getInputState();
         	borders = te.getBorders();
@@ -91,11 +83,9 @@ public class BlockMachineTank extends BlockMachineExpansion {
         	capacity = te.getTank().getCapacity();
         }
         
-        return (IExtendedBlockState) ext.withProperty(Properties.FLUID, fluid)
-            	.withProperty(Properties.FACING, facing).withProperty(Properties.INPUT, input).withProperty(Properties.CAPACITY, capacity)
-            	.withProperty(Properties.BORDER_TOP, borders.getTop()).withProperty(Properties.BORDER_BOTTOM, borders.getBottom())
-            	.withProperty(Properties.BORDER_NORTH, borders.getNorth()).withProperty(Properties.BORDER_SOUTH, borders.getSouth())
-            	.withProperty(Properties.BORDER_EAST, borders.getEast()).withProperty(Properties.BORDER_WEST, borders.getWest());        
+        return (IExtendedBlockState) MachineHelper.withCommonProperties((IExtendedBlockState)state, variant, borders)
+    		.withProperty(Properties.FLUID, fluid).withProperty(Properties.CAPACITY, capacity)
+        	.withProperty(Properties.FACING, facing).withProperty(Properties.INPUT, input);
 	}
 	
 	@Override
@@ -103,17 +93,24 @@ public class BlockMachineTank extends BlockMachineExpansion {
 	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
 		return layer == BlockRenderLayer.CUTOUT || layer == BlockRenderLayer.TRANSLUCENT;
 	}
-
+	
+	// %1.13% Remove
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
-
+	
 	@Override
-	public void registerModels() {
-		this.registerVariantModels();
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.TRANSLUCENT;
 	}
 
-	protected static ModelBakery bakery = new ModelBakeryMachineTank();
-	@Override public ModelBakery getModelBakery() { return bakery; }
+	/* %1.13%
+	@Override
+	public BlockRenderLayer getRenderLayer() {
+		return BlockRenderLayer.TRANSLUCENT;
+	}
+	*/
+
+	@Override @SideOnly(Side.CLIENT) public ModelBakery getModelBakery() { return new ModelBakeryMachineTank(variant); }
 }

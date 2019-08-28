@@ -1,8 +1,8 @@
 package jaminv.advancedmachines.machine.multiblock;
 
 import io.netty.buffer.ByteBuf;
-import jaminv.advancedmachines.machine.TileEntityMachineMultiblock;
-import jaminv.advancedmachines.machine.expansion.inventory.TileEntityMachineInventory;
+import jaminv.advancedmachines.machine.TileMachineMultiblock;
+import jaminv.advancedmachines.machine.expansion.inventory.TileMachineInventory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -53,7 +53,7 @@ public class MultiblockUpdateMessage implements IMessage {
 			  if (!world.isBlockLoaded(pos)) { return null; }
 			  
 			  Minecraft.getMinecraft().addScheduledTask(() -> {
-				  TileEntityMachineMultiblock.setMultiblock(min, max, false, world, pos);
+				  TileMachineMultiblock.setMultiblock(min, max, false, world, pos);
 				  world.markBlockRangeForRenderUpdate(min, max);
 			  });
 			  return null;

@@ -12,7 +12,7 @@ import net.minecraft.inventory.Container;
 
 public class DialogMachineTank extends Dialog {
 	
-	TileEntityMachineTank te;
+	TileMachineTank te;
 	DialogTextBox priority;
 	
 	public static final ILayoutManager layout = new LayoutManager()
@@ -21,7 +21,7 @@ public class DialogMachineTank extends Dialog {
 		.setInventoryLayout(8, 84)
 		.setHotbarLayout(8, 142);
 	
-	public DialogMachineTank(Container container, TileEntityMachineTank te) {
+	public DialogMachineTank(Container container, TileMachineTank te) {
 		super(container, "textures/gui/tank.png", 24, 0, 176, 185);
 		this.te = te;
 		

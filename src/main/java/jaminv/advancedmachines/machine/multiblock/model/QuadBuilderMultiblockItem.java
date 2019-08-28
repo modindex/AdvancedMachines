@@ -4,10 +4,11 @@ import java.util.List;
 
 import jaminv.advancedmachines.client.RawTextures;
 import jaminv.advancedmachines.client.textureset.TextureSets;
+import jaminv.advancedmachines.lib.render.quad.LayeredTexture;
 import jaminv.advancedmachines.lib.render.quad.QuadBuilder;
 import jaminv.advancedmachines.lib.render.quad.QuadBuilderBlock;
+import jaminv.advancedmachines.lib.render.quad.QuadBuilderLayeredBlock;
 import jaminv.advancedmachines.machine.BlockMachineMultiblock;
-import jaminv.advancedmachines.machine.multiblock.face.SidedTexture;
 import jaminv.advancedmachines.objects.variant.HasVariant;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import net.minecraft.block.Block;
@@ -21,41 +22,38 @@ import net.minecraft.util.EnumFacing;
 public class QuadBuilderMultiblockItem implements QuadBuilder {
 
 	ItemStack stack;
-	String base, face;
-	public QuadBuilderMultiblockItem(String base, ItemStack stack) {
+	MultiblockTextureBase base; 
+	TextureAtlasSprite face;
+	
+	public QuadBuilderMultiblockItem(ItemStack stack, MultiblockTextureBase base) {
 		this.stack = stack;
 		this.base = base;
 	}
 	
-	public QuadBuilderMultiblockItem withFace(String face) {
+	public QuadBuilderMultiblockItem withFace(TextureAtlasSprite face) {
 		this.face = face;
 		return this;
 	}
 	
 	@Override
 	public List<BakedQuad> build() {
-		String variant = VariantExpansion.BASIC.getName();
-		TextureAtlasSprite faceTexture = null;
-		
+		VariantExpansion variant = VariantExpansion.BASIC;
 		Item item = stack.getItem();
 		if (item instanceof ItemBlock) {
 			Block block = Block.getBlockFromItem(item);
-			if (block instanceof HasVariant) {
-				variant = ((HasVariant)block).getVariant().getName();
+			if (block instanceof VariantExpansion.Has) {
+				variant = ((VariantExpansion.Has)block).getVariant();
 			}
 			if (block instanceof BlockMachineMultiblock) {
 				BlockMachineMultiblock machine = ((BlockMachineMultiblock)block);
-				variant = machine.getVariant().getName();
-				faceTexture = RawTextures.get(machine.getMachineType().getName(), "inactive", variant, "all");
+				face = RawTextures.get(machine.getMachineType().getName(), "inactive");
 			}
 		}
-		if (faceTexture == null && this.face != null) {
-			faceTexture = RawTextures.get(face, variant, "all");
-		}
-		TextureAtlasSprite top = TextureSets.get(base, variant, SidedTexture.TOP.getName(), "all");
+		TextureAtlasSprite side = base.getItemTexture(variant, TextureSide.SIDE);
+		TextureAtlasSprite top = base.getItemTexture(variant, TextureSide.TOP);
 		
-		QuadBuilderBlock quad = new QuadBuilderBlock(TextureSets.get(base, variant, SidedTexture.SIDE.getName(), "all")).withTopBottom(top);
-		if (faceTexture != null) { quad.withFace(EnumFacing.NORTH, faceTexture); }
+		QuadBuilderLayeredBlock quad = new QuadBuilderLayeredBlock(LayeredTexture.of(side)).withTopBottom(LayeredTexture.of(top));
+		if (face != null) { quad.withFace(EnumFacing.NORTH, LayeredTexture.of(side, face)); }
 		return quad.build();
 	}
 }

@@ -8,6 +8,10 @@ import net.minecraft.util.EnumFacing;
 
 public interface LayeredTexture {
 	
-	public List<TextureAtlasSprite> getTextures(EnumFacing side); 
-
+	public static LayeredTexture of(TextureAtlasSprite ... sprites) {
+		return new LayeredTextureList(sprites);
+	}
+	
+	public List<TextureAtlasSprite> getTextures(EnumFacing side);
+	public LayeredTexture copy();
 }

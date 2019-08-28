@@ -1,7 +1,0 @@
-{
-    "parent": "advancedmachines:block/machine_energy",
-    "textures": {
-        "all": "advancedmachines:blocks/machine/expansion/improbable_all",
-        "north": "advancedmachines:blocks/machine/energy/improbable_all"
-    }
-}

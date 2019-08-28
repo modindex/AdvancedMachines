@@ -44,7 +44,7 @@ public class DialogMachineMelter extends JeiDialog {
 		addJeiElement(new JeiProgressIndicator(76, 38, 24, 17, 200, 50));
 	}
 	
-	public DialogMachineMelter(ContainerMachine container, TileEntityMachineMelter te) {
+	public DialogMachineMelter(ContainerMachine container, TileMachineMelter te) {
 		this(container);
 		
 		this.addElement(new DialogProcessBar(te.getController(), 76, 38, 24, 17, 200, 50));

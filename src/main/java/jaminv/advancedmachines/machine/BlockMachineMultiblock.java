@@ -59,9 +59,9 @@ public abstract class BlockMachineMultiblock extends BlockMachine implements Mac
 	
 	protected void scanMultiblock(World worldIn, BlockPos pos, boolean destroy) {
 		TileEntity te = worldIn.getTileEntity(pos);
-		if (!(te instanceof TileEntityMachineMultiblock)) { return; }
+		if (!(te instanceof TileMachineMultiblock)) { return; }
 		
-		((TileEntityMachineMultiblock)te).scanMultiblock(destroy);		
+		((TileMachineMultiblock)te).scanMultiblock(destroy);		
 	}
 	
 	@Override
@@ -87,8 +87,8 @@ public abstract class BlockMachineMultiblock extends BlockMachine implements Mac
         MachineFace face = MachineFace.NONE;
         MachineType type = MachineType.NONE;
 
-        if (tileentity instanceof TileEntityMachineMultiblock) {
-        	TileEntityMachineMultiblock te = (TileEntityMachineMultiblock)tileentity;
+        if (tileentity instanceof TileMachineMultiblock) {
+        	TileMachineMultiblock te = (TileMachineMultiblock)tileentity;
         	facing = te.getFacing();
         	active = te.isProcessing();
         	borders = te.getBorders();

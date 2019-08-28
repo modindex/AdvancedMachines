@@ -1,7 +1,0 @@
-{
-    "parent": "advancedmachines:block/machine_inventory",
-    "textures": {
-        "all": "advancedmachines:blocks/machine/expansion/improbable_all",
-        "north": "advancedmachines:blocks/machine/inventory/input/improbable_all"
-    }
-}

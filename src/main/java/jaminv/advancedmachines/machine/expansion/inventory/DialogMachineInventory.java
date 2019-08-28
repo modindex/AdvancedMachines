@@ -15,7 +15,7 @@ import net.minecraft.inventory.Container;
 public class DialogMachineInventory extends Dialog implements IElementStateObserver<String> {
 	
 	
-	TileEntityMachineInventory te;
+	TileMachineInventory te;
 	DialogTextBox priority;
 	
 	public static final ILayoutManager layout = new LayoutManager()
@@ -23,7 +23,7 @@ public class DialogMachineInventory extends Dialog implements IElementStateObser
 		.setInventoryLayout(8, 103)
 		.setHotbarLayout(8, 161);
 	
-	public DialogMachineInventory(Container container, TileEntityMachineInventory te) {
+	public DialogMachineInventory(Container container, TileMachineInventory te) {
 		super(container, "textures/gui/machine_inventory.png", 24, 0, 176, 185);
 		this.te = te;
 		

@@ -1,0 +1,50 @@
+{
+    "basic": {
+        "side": {
+            "all": "productivity.basic.all",
+            "base": "productivity.basic.base",
+            "constant": "border_gray"
+        },
+        "top": {
+            "all": "productivity.compressed.all",
+            "base": "productivity.compressed.base",
+            "constant": "border_dark"
+        }
+    },
+    "compressed": {
+        "side": {
+            "all": "productivity.compressed.all",
+            "base": "productivity.compressed.base",
+            "constant": "border_dark"
+        },
+        "top": {
+            "all": "productivity.quad.all",
+            "base": "productivity.quad.base",
+            "constant": "border_dark"
+        }
+    },
+    "quad": {
+        "side": {
+            "all": "productivity.quad.all",
+            "base": "productivity.quad.base",
+            "constant": "border_dark"
+        },
+        "top": {
+            "all": "productivity.improbable.all",
+            "base": "productivity.improbable.base",
+            "constant": "border_dark"
+        }
+    },
+    "improbable": {
+        "side": {
+            "all": "productivity.improbable.all",
+            "base": "productivity.improbable.base",
+            "constant": "border_dark"
+        },
+        "top": {
+            "all": "productivity.improbable.all",
+            "base": "productivity.improbable.base",
+            "constant": "border_dark"
+        }
+    }
+}

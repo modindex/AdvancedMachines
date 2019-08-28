@@ -1,5 +1,6 @@
 package jaminv.advancedmachines.lib.render.quad;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -43,11 +44,12 @@ public class QuadBuilderLayeredBlock implements QuadBuilder {
 		
 		for (EnumFacing side : EnumFacing.values()) {
 			LayeredTexture layers = texture;
-			if (side == facing) { layers = face; }
 			if (side == EnumFacing.UP) { layers = top; }
 			if (side == EnumFacing.DOWN) { layers = bottom; }
 			
-			List<TextureAtlasSprite> textures = layers.getTextures(side); 
+			List<TextureAtlasSprite> textures = new ArrayList<TextureAtlasSprite>();
+			textures.addAll(layers.getTextures(side));
+			if (side == facing) { textures.addAll(face.getTextures(side)); }
 			
 			for (TextureAtlasSprite sprite : textures) {
 				quads.addAll(new QuadBuilderBlockFace(sprite, side).withCuboid(cuboid).invert(inverted).build());

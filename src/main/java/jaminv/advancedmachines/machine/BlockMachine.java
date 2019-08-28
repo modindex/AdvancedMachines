@@ -28,7 +28,7 @@ import net.minecraftforge.common.property.IExtendedBlockState;
  * Potential TODO: Push this class into BlockMachineMultiblock
  */
 
-public abstract class BlockMachine extends Block implements HasVariant<VariantExpansion> {
+public abstract class BlockMachine extends Block implements VariantExpansion.Has {
 	
     protected VariantExpansion variant;
 
@@ -74,8 +74,8 @@ public abstract class BlockMachine extends Block implements HasVariant<VariantEx
         EnumFacing facing = EnumFacing.NORTH;
        	boolean active = false;
 
-        if (tileentity instanceof TileEntityMachine) {
-        	TileEntityMachine te = (TileEntityMachine)tileentity;
+        if (tileentity instanceof TileMachine) {
+        	TileMachine te = (TileMachine)tileentity;
         	facing = te.getFacing();
         	active = te.isProcessing();
         }

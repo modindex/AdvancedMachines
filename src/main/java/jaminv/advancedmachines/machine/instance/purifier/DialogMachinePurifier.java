@@ -44,7 +44,7 @@ public class DialogMachinePurifier extends JeiDialog {
 		addJeiElement(new JeiSecondaryChance.Above(getLayout()));
 	}
 	
-	public DialogMachinePurifier(ContainerMachine container, TileEntityMachinePurifier te) {
+	public DialogMachinePurifier(ContainerMachine container, TileMachinePurifier te) {
 		this(container);
 		
 		this.addElement(new DialogProcessBar(te.getController(), 74, 23, 24, 17, 200, 50));

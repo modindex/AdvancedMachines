@@ -42,7 +42,7 @@ public class DialogMachineGrinder extends JeiDialog {
 		addJeiElement(new JeiSecondaryChance.Left(getLayout()));
 	}
 	
-	public DialogMachineGrinder(ContainerMachine container, TileEntityMachineGrinder te) {
+	public DialogMachineGrinder(ContainerMachine container, TileMachineGrinder te) {
 		this(container);
 		
 		this.addElement(new DialogProcessBar(te.getController(), 74, 27, 24, 17, 200, 50));

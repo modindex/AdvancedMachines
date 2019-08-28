@@ -1,107 +1,93 @@
 package jaminv.advancedmachines.machine.multiblock.model;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import jaminv.advancedmachines.client.RawTextures;
-import jaminv.advancedmachines.client.textureset.TextureSets;
 import jaminv.advancedmachines.init.property.Properties;
-import jaminv.advancedmachines.init.property.UnlistedBoolean;
 import jaminv.advancedmachines.lib.render.quad.LayeredTexture;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorderType;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
-import jaminv.advancedmachines.machine.multiblock.face.SidedTexture;
-import jaminv.advancedmachines.objects.blocks.BlockMaterial;
+import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
 public class LayeredTextureMultiblock implements LayeredTexture {
 	
-	private String texture, base;
-	SidedTexture blockSide;
-	private IExtendedBlockState state;
+	protected VariantExpansion variant;
+	protected MultiblockBorders borders;
+	protected MultiblockTextureBase base;
+	protected TextureAtlasSprite face = null;
+	protected TextureSide side = TextureSide.SIDE;
 	
-	public String getTexture() { return texture; }
-	public String getBase() { return base; }
-	public IExtendedBlockState getState() { return state; }
-
-	/**
-	 * 
-	 * @param state Block state
-	 * @param texture Main texture
-	 * @param base Base texture - used for borders. Often the same as `texture`, but not always. 
-	 * @param blockSide Currently accepted values are "top" and "side"
-	 */
-	public LayeredTextureMultiblock(IBlockState state, String texture) {
-		this.state = (IExtendedBlockState)state;
-		this.texture = texture;
-		this.base = texture;
-		this.blockSide = SidedTexture.SIDE;
+	public LayeredTextureMultiblock(IBlockState state, MultiblockTextureBase base) {
+		variant = ((IExtendedBlockState)state).getValue(Properties.EXPANSION_VARIANT);
+		borders = new MultiblockBorders((IExtendedBlockState)state);
+		this.base = base;
 	}
 	
-	public LayeredTextureMultiblock withBase(String base) { this.base = base; return this; }
-	public LayeredTextureMultiblock withSided(SidedTexture blockSide) { this.blockSide = blockSide; return this; }
-	
-	protected void setBorder(List<TextureAtlasSprite> list, String variant, String side, MultiblockBorderType border) {
-		if (border != MultiblockBorderType.NONE) {
-			list.add(TextureSets.get(base, variant, blockSide.getName(), "borders", border.getName(), side));
-		}
+	private LayeredTextureMultiblock(VariantExpansion variant, MultiblockBorders borders, 
+			MultiblockTextureBase base, TextureAtlasSprite face, TextureSide side) {
+		this.variant = variant;
+		this.borders = borders;
+		this.base = base;
+		this.face = face;
+		this.side = side;
 	}
 	
-	protected TextureAtlasSprite getBaseTexture(String variant) {
-		return TextureSets.get(texture, variant, blockSide.getName(), "base");
+	public LayeredTextureMultiblock copy() { return new LayeredTextureMultiblock(variant, borders, base, face, side); }
+	
+	public LayeredTextureMultiblock withFace(TextureAtlasSprite face) { this.face = face; return this; }
+	public LayeredTextureMultiblock withSided(TextureSide side) { this.side = side; return this; }
+	
+	protected void setBorder(List<TextureAtlasSprite> list, VariantExpansion variant, MultiblockBorderType border, String edge) {
+		TextureAtlasSprite texture = base.getBorder(variant, side, border, edge);
+		if (texture != null) { list.add(texture); }
 	}
 
 	@Override
-	public List<TextureAtlasSprite> getTextures(EnumFacing side) {
-		
+	public List<TextureAtlasSprite> getTextures(EnumFacing facing) {
 		LinkedList<TextureAtlasSprite> textures = new LinkedList<TextureAtlasSprite>();
+		textures.add(base.getTexture(variant, side));
+		if (face != null) { textures.add(face); }
 		
-		String variant = state.getValue(Properties.EXPANSION_VARIANT).getName();
-		textures.add(getBaseTexture(variant));
-		
-		MultiblockBorders borders = new MultiblockBorders(state);
-		
-		switch (side) {
+		switch (facing) {
 		case NORTH:
-			setBorder(textures, variant, "top", borders.getTop());
-			setBorder(textures, variant, "bottom", borders.getBottom());
-			setBorder(textures, variant, "left", borders.getEast());
-			setBorder(textures, variant, "right", borders.getWest());
+			setBorder(textures, variant, borders.getTop(), "top");
+			setBorder(textures, variant, borders.getBottom(), "bottom");
+			setBorder(textures, variant, borders.getEast(), "left");
+			setBorder(textures, variant, borders.getWest(), "right");
 			break;
 		case SOUTH:
-			setBorder(textures, variant, "top", borders.getTop());
-			setBorder(textures, variant, "bottom", borders.getBottom());
-			setBorder(textures, variant, "left", borders.getWest());
-			setBorder(textures, variant, "right", borders.getEast());
+			setBorder(textures, variant, borders.getTop(), "top");
+			setBorder(textures, variant, borders.getBottom(), "bottom");
+			setBorder(textures, variant, borders.getWest(), "left");
+			setBorder(textures, variant, borders.getEast(), "right");
 			break;
 		case EAST:
-			setBorder(textures, variant, "top", borders.getTop());
-			setBorder(textures, variant, "bottom", borders.getBottom());
-			setBorder(textures, variant, "left", borders.getSouth());
-			setBorder(textures, variant, "right", borders.getNorth());
+			setBorder(textures, variant, borders.getTop(), "top");
+			setBorder(textures, variant, borders.getBottom(), "bottom");
+			setBorder(textures, variant, borders.getSouth(), "left");
+			setBorder(textures, variant, borders.getNorth(), "right");
 			break;
 		case WEST:
-			setBorder(textures, variant, "top", borders.getTop());
-			setBorder(textures, variant, "bottom", borders.getBottom());
-			setBorder(textures, variant, "left", borders.getNorth());
-			setBorder(textures, variant, "right", borders.getSouth());
+			setBorder(textures, variant, borders.getTop(), "top");
+			setBorder(textures, variant, borders.getBottom(), "bottom");
+			setBorder(textures, variant, borders.getNorth(), "left");
+			setBorder(textures, variant, borders.getSouth(), "right");
 			break;
 		case UP:
-			setBorder(textures, variant, "top", borders.getEast());
-			setBorder(textures, variant, "bottom", borders.getWest());
-			setBorder(textures, variant, "left", borders.getNorth());
-			setBorder(textures, variant, "right", borders.getSouth());
+			setBorder(textures, variant, borders.getEast(), "top");
+			setBorder(textures, variant, borders.getWest(), "bottom");
+			setBorder(textures, variant, borders.getNorth(), "left");
+			setBorder(textures, variant, borders.getSouth(), "right");
 			break;
 		case DOWN:
-			setBorder(textures, variant, "top", borders.getWest());
-			setBorder(textures, variant, "bottom", borders.getEast());
-			setBorder(textures, variant, "left", borders.getNorth());
-			setBorder(textures, variant, "right", borders.getSouth());
+			setBorder(textures, variant, borders.getWest(), "top");
+			setBorder(textures, variant, borders.getEast(), "bottom");
+			setBorder(textures, variant, borders.getNorth(), "left");
+			setBorder(textures, variant, borders.getSouth(), "right");
 			break;
 		default:
 			break;
@@ -109,5 +95,4 @@ public class LayeredTextureMultiblock implements LayeredTexture {
 
 		return textures;
 	}
-
 }

@@ -14,8 +14,8 @@ import com.google.gson.JsonParseException;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.lib.render.TextureHelper;
+import jaminv.advancedmachines.lib.util.helper.StringHelper;
 import jaminv.advancedmachines.util.Reference;
-import jaminv.advancedmachines.util.helper.StringHelper;
 import jaminv.advancedmachines.util.logger.Logger;
 import jaminv.advancedmachines.util.parser.DataParserException;
 import jaminv.advancedmachines.util.parser.FileHandler;
@@ -32,12 +32,12 @@ import net.minecraftforge.fml.common.ModContainer;
 
 public class RawTextures {
 	
-	public final static String[] machines = { "alloy", "furnace", "grinder", "purifier", "melter", "stabilizer", "injector" };
-	public final static String[] inventory = { "input", "output" };
-	public final static String[] materials = { "basic", "compressed", "quad", "improbable" };
-	public final static String[] upgrades = { "speed", "productivity" };
-	public final static String[] states = { "active", "inactive" };
+	public final static String[] bases = { "multiply", "speed", "productivity", "tank" };
+	public final static String[] variants = { "basic", "compressed", "quad", "improbable" };
 	public final static String[] files = { "base", "all" };
+
+	public final static String[] machines = { "alloy", "furnace", "grinder", "purifier", "melter", "stabilizer", "injector" };
+	public final static String[] states = { "active", "inactive" };
 	
 	public final static String[] border_types = { "single", "solid_dark", "solid_gray" };
 	public final static String[] borders = { "top", "left", "right", "bottom" };
@@ -73,11 +73,11 @@ public class RawTextures {
 		
 		ModContainer mod = FMLCommonHandler.instance().findContainerFor(Reference.MODID);
 		
-		for (String mat : materials) {
-			for (String file : files) {
-				map.put("expansion." + mat + "." + file, register("blocks/machine/expansion/" + mat + "_" + file));
-				map.put("energy." + mat + "." + file, register("blocks/machine/energy/" + mat + "_" + file));
-				map.put("tank." + mat + "." + file, register("blocks/machine/tank/" + mat + "_" + file));
+		for (String base : bases) {
+			for (String variant : variants) {
+				for (String file : files) {
+					map.put(StringHelper.buildString(base, variant, file), register("blocks/machine/base/" + base + "/" + variant + "_" + file));
+				}
 			}
 		}
 		
@@ -87,42 +87,18 @@ public class RawTextures {
 			}
 		}
 		
-		for (String inv : inventory) {
-			for (String mat : materials) {
-				for (String file : files) {
-					map.put(StringHelper.buildString("inventory", inv, mat, file), 
-						register("blocks/machine/inventory/" + inv + "/" + mat + "_" + file));
-				}
-			}
-		}
+		map.put("inventory.input", register("blocks/machine/expansion/inventory_input"));
+		map.put("inventory.output", register("blocks/machine/expansion/inventory_output"));
+		map.put("energy", register("blocks/machine/expansion/energy"));
+		map.put("redstone.active", register("blocks/machine/expansion/redstone_active"));
+		map.put("redstone.inactive", register("blocks/machine/expansion/redstone_inactive"));
 		
-		for (String state : states) {
-			for (String material : materials) {
-				for (String file : files) {
-					map.put("redstone." + state + "." + material + "." + file,
-						register("blocks/machine/redstone/" + state + "/" + material + "_" + file));
-				}
-			}
-		}	
-		
-		for (String upgrade : upgrades) {
-			for (String material : materials) {
-				for (String file : files) {
-					map.put(upgrade + "." + material + "." + file,
-						register("blocks/machine/" + upgrade + "/" + material + "_" + file));
-				}
-			}
-		}
 		
 		for (String machine : machines) {
 			for (String state : states) {
-				for (String material : materials) {
-					for (String file : files) {
-						map.put(machine + "." + state + "." + material + "." + file, 
-							register("blocks/machine/instance/" + machine + "/" + state + "/" + material + "/" + file));
-					}
+				map.put(machine + "." + state, register("blocks/machine/instance/" + machine + "/" + state));
 
-					for (int x = 0; x < 3; x++) {
+/*					for (int x = 0; x < 3; x++) {
 						for (int y = 0; y < 3; y++) {
 							map.put(machine + "." + state + "." + material + "." + "f3x3p" + Integer.toString(x) + Integer.toString(y),
 								register("blocks/machine/instance/" + machine + "/" + state + "/" + material + "/f3x3p" + x + y));
@@ -133,9 +109,8 @@ public class RawTextures {
 						for (int y = 0; y < 2; y++) {
 							map.put(machine + "." + state + "." + material + "." + "f2x2p" + Integer.toString(x) + Integer.toString(y),
 								register("blocks/machine/instance/" + machine + "/" + state + "/" + material + "/f2x2p" + x + y));
-						}
-					}
 				}
+			*/
 			}
 		}
 

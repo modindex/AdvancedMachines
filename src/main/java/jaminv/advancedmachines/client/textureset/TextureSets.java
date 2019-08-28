@@ -5,7 +5,7 @@ import java.util.Map;
 
 import jaminv.advancedmachines.client.RawTextures;
 import jaminv.advancedmachines.lib.render.TextureHelper;
-import jaminv.advancedmachines.util.helper.StringHelper;
+import jaminv.advancedmachines.lib.util.helper.StringHelper;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 public class TextureSets {

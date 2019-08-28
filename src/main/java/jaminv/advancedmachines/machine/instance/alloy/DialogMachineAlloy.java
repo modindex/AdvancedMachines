@@ -38,7 +38,7 @@ public class DialogMachineAlloy extends JeiDialog {
 		addJeiElement(new JeiProgressIndicator(92, 37, 24, 17, 200, 50));		
 	}
 	
-	public DialogMachineAlloy(ContainerMachine container, TileEntityMachineAlloy te) {
+	public DialogMachineAlloy(ContainerMachine container, TileMachineAlloy te) {
 		this(container);
 
 		this.addElement(new DialogProcessBar(te.getController(), 92, 37, 24, 17, 200, 50));

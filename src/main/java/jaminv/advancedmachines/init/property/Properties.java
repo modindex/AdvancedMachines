@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.init.property;
 
-import jaminv.advancedmachines.machine.expansion.tank.TileEntityMachineTank;
+import jaminv.advancedmachines.machine.expansion.tank.TileMachineTank;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorderType;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFace;

@@ -7,12 +7,10 @@ import java.util.Map;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.init.property.Properties;
-import jaminv.advancedmachines.machine.ExpansionTile;
-import jaminv.advancedmachines.machine.expansion.MachineUpgradeTileEntity;
+import jaminv.advancedmachines.machine.expansion.MachineUpgradeTile;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.objects.variant.NeedsVariant;
 import jaminv.advancedmachines.objects.variant.Variant;
-import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
 import jaminv.advancedmachines.util.interfaces.IHasMetadata;
 import net.minecraft.block.state.IBlockState;
@@ -63,12 +61,6 @@ public class BlockHelper {
 		return state.getUnlistedProperties().containsKey(property);
 	}
 	
-	
-	public static EnumFacing getExtendedFacing(IBlockState state) {
-		if (!(state instanceof IExtendedBlockState)) { return null; }
-		return ((IExtendedBlockState)state).getValue(Properties.FACING);
-	}
-	
 	// FIXME: Remove
 	@Deprecated // Use setMaterial() instead
 	public static void setMeta(World worldIn, BlockPos pos, ItemStack stack) {
@@ -78,6 +70,16 @@ public class BlockHelper {
 		}
 	}
 	
+	/**
+	 * Find the TileEntity at a position and set the variant
+	 * 
+	 * Note: This isn't strongly typed. It doesn't (can't) check the type T at runtime,
+	 * and will fail if T doesn't match the expected type. This shouldn't come up much, though.
+	 * Just make sure that you're calling this from the block that coincides with the tile entity.
+	 * @param worldIn
+	 * @param pos
+	 * @param variant
+	 */
 	public static <T extends Variant> void setVariant(World worldIn, BlockPos pos, T variant) {
 		TileEntity te = worldIn.getTileEntity(pos);
 		if (te instanceof NeedsVariant) {
@@ -124,11 +126,19 @@ public class BlockHelper {
 	
 	public static void setBorders(World world, BlockPos pos, MultiblockBorders borders) {
 		TileEntity tileentity = world.getTileEntity(pos);
-		if (tileentity instanceof MachineUpgradeTileEntity) {
-			((MachineUpgradeTileEntity)tileentity).setBorders(world, borders);
+		if (tileentity instanceof MachineUpgradeTile) {
+			((MachineUpgradeTile)tileentity).setBorders(world, borders);
 		}
 	}
 	
+	/**
+	 * Get Tile Entity from world position
+	 * 
+	 * Intended for use in Block.getExtendedState(), where you need to check if world is a ChunkCache
+	 * @param worldIn
+	 * @param pos
+	 * @return
+	 */
 	public static TileEntity getTileEntity(IBlockAccess worldIn, BlockPos pos) {
         return worldIn instanceof ChunkCache ? ((ChunkCache)worldIn).getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK) : worldIn.getTileEntity(pos);
 	}
