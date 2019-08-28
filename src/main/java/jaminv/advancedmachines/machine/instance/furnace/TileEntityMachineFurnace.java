@@ -14,7 +14,6 @@ public class TileEntityMachineFurnace extends TileEntityMachineMultiblock {
 		inventory.addInputSlots(1);
 		inventory.addOutputSlots(1);
 	}
-
 	
 	@Override
 	public MachineType getMachineType() {

@@ -1,18 +1,13 @@
 package jaminv.advancedmachines.proxy.handlers;
 
 import jaminv.advancedmachines.Main;
-import jaminv.advancedmachines.init.BlockInit;
-import jaminv.advancedmachines.init.FluidInit;
-import jaminv.advancedmachines.init.ItemInit;
-import jaminv.advancedmachines.lib.render.BakedModelLoader;
-import jaminv.advancedmachines.lib.render.ModelBakeryProvider;
 import jaminv.advancedmachines.lib.util.registry.RegistryHelper;
+import jaminv.advancedmachines.machine.expansion.expansion.BlockMachineExpansion;
+import jaminv.advancedmachines.machine.expansion.expansion.TileEntityMachineExpansion;
 import jaminv.advancedmachines.machine.instance.furnace.BlockMachineFurnace;
 import jaminv.advancedmachines.machine.instance.furnace.TileEntityMachineFurnace;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.Reference;
-import jaminv.advancedmachines.util.interfaces.IHasModel;
-import jaminv.advancedmachines.util.interfaces.IHasTileEntity;
 import jaminv.advancedmachines.util.network.MessageRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -21,7 +16,6 @@ import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -63,8 +57,10 @@ public class RegistryHandler {
 		//BlockMachineFurnace furnace = new BlockMachineFurnace("machine_furnace23");
 		for (VariantExpansion variant : VariantExpansion.values()) {
 			RegistryHelper.addBlockWithBakedModel(new BlockMachineFurnace(variant), "machine_furnace_" + variant.getName());
+			RegistryHelper.addBlockWithBakedModel(new BlockMachineExpansion(variant), "machine_expansion_" + variant.getName());
 		}
 		GameRegistry.registerTileEntity(TileEntityMachineFurnace.class, new ResourceLocation("tile_machine_furnace"));
+		GameRegistry.registerTileEntity(TileEntityMachineExpansion.class, new ResourceLocation("tile_machine_expansion"));
 		
 		RegistryHelper.registerBlocks(event);
 	}

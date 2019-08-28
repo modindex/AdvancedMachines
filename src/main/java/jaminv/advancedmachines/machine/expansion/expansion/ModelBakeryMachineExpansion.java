@@ -5,7 +5,6 @@ import java.util.List;
 import jaminv.advancedmachines.client.RawTextures;
 import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.lib.render.ModelBakery;
-import jaminv.advancedmachines.lib.render.quad.LayeredTexture;
 import jaminv.advancedmachines.lib.render.quad.QuadBuilderLayeredBlock;
 import jaminv.advancedmachines.machine.MachineHelper;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
@@ -20,6 +19,12 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 
 public class ModelBakeryMachineExpansion implements ModelBakery {
 	
+	protected String variant;
+	
+	public ModelBakeryMachineExpansion(String variant) {
+		this.variant = variant;
+	}
+
 	protected static class LayeredTextureMultiblockMachineFace extends LayeredTextureMultiblock {
 
 		public LayeredTextureMultiblockMachineFace(IBlockState state) {	super(state, "expansion"); }
@@ -40,7 +45,7 @@ public class ModelBakeryMachineExpansion implements ModelBakery {
 	}		
 
 	@Override
-	public TextureAtlasSprite getParticleTexture(String variant) {
+	public TextureAtlasSprite getParticleTexture() {
 		return MachineHelper.getParticleTexture("expansion", variant);
 	}
 
@@ -51,5 +56,4 @@ public class ModelBakeryMachineExpansion implements ModelBakery {
 			.withTopBottom(new LayeredTextureMultiblock(state, "expansion").withSided(SidedTexture.TOP))
 		.build();
 	}
-
 }

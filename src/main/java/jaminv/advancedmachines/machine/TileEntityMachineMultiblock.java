@@ -1,7 +1,6 @@
 package jaminv.advancedmachines.machine;
 
 import jaminv.advancedmachines.Main;
-import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.lib.machine.IMachineController.ISubController;
 import jaminv.advancedmachines.lib.recipe.IRecipeManager;
 import jaminv.advancedmachines.machine.expansion.MachineUpgrade;
@@ -17,7 +16,6 @@ import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.objects.variant.HasVariant;
 import jaminv.advancedmachines.objects.variant.Variant;
-import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import jaminv.advancedmachines.util.helper.BlockHelper.BlockChecker;
 import jaminv.advancedmachines.util.helper.BlockHelper.ScanResult;
@@ -40,14 +38,8 @@ public abstract class TileEntityMachineMultiblock extends TileEntityMachine impl
 	}
 	
 	protected MultiblockBorders borders = new MultiblockBorders();
-	
-	public void setBorders(World world, MultiblockBorders borders) {
-		this.borders = borders;
-	}
-	
-	public MultiblockBorders getBorders() {
-		return borders; 
-	}
+	public void setBorders(World world, MultiblockBorders borders) { this.borders = borders; }
+	public MultiblockBorders getBorders() {	return borders;	}
 	
 	@Override
 	protected boolean preProcess() {

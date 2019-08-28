@@ -3,27 +3,24 @@ package jaminv.advancedmachines.machine.expansion;
 import javax.annotation.Nullable;
 
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
+import jaminv.advancedmachines.objects.variant.NeedsVariant;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
-import jaminv.advancedmachines.util.interfaces.IHasMetadata;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class TileEntityMachineExpansionType extends TileEntity implements MachineUpgradeTileEntity, IHasMetadata {
+public class TileEntityMachineExpansionType extends TileEntity implements MachineUpgradeTileEntity, NeedsVariant<VariantExpansion> {
 
-	private VariantExpansion material = VariantExpansion.BASIC;
-	public VariantExpansion getMaterial() { return material; }
-	public int getMultiplier() { return material.getMultiplier(); }
+	private VariantExpansion variant = VariantExpansion.BASIC;
+	public VariantExpansion getVariant() { return variant; }
+	public int getMultiplier() { return variant.getMultiplier(); }
 	
 	@Override
-	public void setMeta(int meta) {
-		material = VariantExpansion.byMetadata(meta);
-	}
-	
-	public TileEntityMachineExpansionType() {
-		super();
+	public void setVariant(VariantExpansion variant) {
+		if (variant == null) { return; } // FIXME: Backwards Compatibility
+		this.variant = variant;
 	}
 	
 	protected MultiblockBorders borders = new MultiblockBorders();
@@ -39,7 +36,7 @@ public class TileEntityMachineExpansionType extends TileEntity implements Machin
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		setMeta(compound.getInteger("meta"));
+		setVariant(VariantExpansion.lookup(compound.getString("variant")));
 		if (compound.hasKey("borders")) {
 			borders.deserializeNBT(compound.getCompoundTag("borders"));
 		}
@@ -48,7 +45,7 @@ public class TileEntityMachineExpansionType extends TileEntity implements Machin
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
-		compound.setInteger("meta", material.getMeta());
+		compound.setString("variant", variant.getName());
 		compound.setTag("borders",  borders.serializeNBT());
 		return compound;
 	} 

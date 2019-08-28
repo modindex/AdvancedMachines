@@ -13,10 +13,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 public class TileEntityMachineExpansion extends TileEntityMachineExpansionType implements IMachineFaceTE {
-	
-	public TileEntityMachineExpansion() {
-		super();
-	}
 
 	protected MachineFace face = MachineFace.NONE;
 	protected MachineType parent = MachineType.NONE;

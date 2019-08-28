@@ -1,6 +1,5 @@
 package jaminv.advancedmachines.machine;
 
-import akka.Main;
 import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.lib.render.ModelBakery;
 import jaminv.advancedmachines.lib.render.ModelBakeryProvider;
@@ -14,9 +13,7 @@ import jaminv.advancedmachines.util.helper.BlockHelper;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -25,9 +22,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -86,7 +81,6 @@ public abstract class BlockMachineMultiblock extends BlockMachine implements Mac
 		IExtendedBlockState ext = (IExtendedBlockState)state;
         TileEntity tileentity = worldIn instanceof ChunkCache ? ((ChunkCache)worldIn).getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK) : worldIn.getTileEntity(pos);
 
-        VariantExpansion variant = VariantExpansion.BASIC;
         EnumFacing facing = EnumFacing.NORTH;
         boolean active = false;
         MultiblockBorders borders = MultiblockBorders.DEFAULT;
@@ -95,7 +89,6 @@ public abstract class BlockMachineMultiblock extends BlockMachine implements Mac
 
         if (tileentity instanceof TileEntityMachineMultiblock) {
         	TileEntityMachineMultiblock te = (TileEntityMachineMultiblock)tileentity;
-        	variant = te.getVariant();
         	facing = te.getFacing();
         	active = te.isProcessing();
         	borders = te.getBorders();

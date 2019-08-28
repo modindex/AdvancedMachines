@@ -1,73 +1,63 @@
 package jaminv.advancedmachines.machine.expansion;
 
 import jaminv.advancedmachines.init.property.Properties;
-import jaminv.advancedmachines.init.property.PropertyMaterial;
 import jaminv.advancedmachines.lib.render.ModelBakery;
 import jaminv.advancedmachines.lib.render.ModelBakeryProvider;
-import jaminv.advancedmachines.machine.TileEntityMachine;
 import jaminv.advancedmachines.machine.TileEntityMachineMultiblock;
-import jaminv.advancedmachines.machine.expansion.expansion.TileEntityMachineExpansion;
-import jaminv.advancedmachines.machine.expansion.inventory.TileEntityMachineInventory;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
-import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
-import jaminv.advancedmachines.machine.multiblock.face.MachineType;
-import jaminv.advancedmachines.objects.blocks.BlockMaterial;
-import jaminv.advancedmachines.objects.variant.MaterialBase;
+import jaminv.advancedmachines.objects.blocks.properties.BlockProperties;
+import jaminv.advancedmachines.objects.variant.HasVariant;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import jaminv.advancedmachines.util.helper.BlockHelper.ScanResult;
-import jaminv.advancedmachines.util.interfaces.IHasTileEntity;
-import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ChunkCache;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockMachineExpansionType extends BlockMaterial implements MachineUpgrade, ITileEntityProvider, IHasTileEntity, ModelBakeryProvider {
+public class BlockMachineExpansionType extends Block implements HasVariant<VariantExpansion>, MachineUpgrade, ModelBakeryProvider {
 	
-	public BlockMachineExpansionType(String name) {
-		super(name, MaterialBase.MaterialType.EXPANSION, null, Material.IRON, 5.0f);
+	protected final VariantExpansion variant;
+	
+	public BlockMachineExpansionType(VariantExpansion variant) {
+		super(Material.IRON);
+		BlockProperties.MACHINE.apply(this);
+		setSoundType(SoundType.METAL);
+		this.variant = variant;
 	}
 
-
 	@Override
-	public Class<? extends TileEntity> getTileEntityClass() {
-		return TileEntityMachineExpansionType.class;
+	public boolean hasTileEntity(IBlockState state) {
+		return true;
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
+	public TileEntity createTileEntity(World world, IBlockState state) {
 		return new TileEntityMachineExpansionType();
 	}	
 	
 	@Override
-	protected PropertyMaterial getVariant() {
-		return BlockMaterial.EXPANSION_VARIANT;
-	}
+	public VariantExpansion getVariant() { return variant; }
 	
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
 			ItemStack stack) {
 		scanMultiblock(worldIn, pos);
-		BlockHelper.setMeta(worldIn, pos, stack);
+		BlockHelper.setVariant(worldIn, pos, variant);
 	}	
 	
 	@Override
@@ -82,11 +72,9 @@ public class BlockMachineExpansionType extends BlockMaterial implements MachineU
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		VARIANT = this.getVariant();
-		
 		BlockStateContainer.Builder builder = new BlockStateContainer.Builder(this);
-		builder.add(VARIANT);
-		return builder.add(Properties.BORDER_TOP, Properties.BORDER_BOTTOM,
+		return builder.add(Properties.EXPANSION_VARIANT,
+				Properties.BORDER_TOP, Properties.BORDER_BOTTOM,
 				Properties.BORDER_NORTH, Properties.BORDER_SOUTH,
 				Properties.BORDER_EAST, Properties.BORDER_WEST).build();
 	}
@@ -102,7 +90,8 @@ public class BlockMachineExpansionType extends BlockMaterial implements MachineU
         	borders = te.getBorders();
         }
         
-        return (IExtendedBlockState) ext.withProperty(Properties.BORDER_TOP, borders.getTop()).withProperty(Properties.BORDER_BOTTOM, borders.getBottom())
+        return (IExtendedBlockState) ext.withProperty(Properties.EXPANSION_VARIANT, variant)
+        	.withProperty(Properties.BORDER_TOP, borders.getTop()).withProperty(Properties.BORDER_BOTTOM, borders.getBottom())
         	.withProperty(Properties.BORDER_NORTH, borders.getNorth()).withProperty(Properties.BORDER_SOUTH, borders.getSouth())
         	.withProperty(Properties.BORDER_EAST, borders.getEast()).withProperty(Properties.BORDER_WEST, borders.getWest());
 	}	
@@ -125,7 +114,7 @@ public class BlockMachineExpansionType extends BlockMaterial implements MachineU
 
 	@Override
 	public int getUpgradeQty(World world, BlockPos pos) {
-		return VariantExpansion.byMetadata(this.getMetaFromState(world.getBlockState(pos))).getMultiplier();
+		return variant.getMultiplier();
 	}
 	
 	@Override
@@ -137,12 +126,10 @@ public class BlockMachineExpansionType extends BlockMaterial implements MachineU
 	}
 	
 	@Override
-	@SideOnly (Side.CLIENT)
+	@SideOnly(Side.CLIENT)
 	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
-
 		return layer == BlockRenderLayer.CUTOUT || layer == BlockRenderLayer.TRANSLUCENT;
 	}
 
-	public static ModelBakeryExpansionType bakery = new ModelBakeryExpansionType();
-	@Override public ModelBakery getModelBakery() { return bakery; }
+	@Override @SideOnly(Side.CLIENT) public ModelBakery getModelBakery() { return new ModelBakeryExpansionType(variant.getName()); }
 } 
