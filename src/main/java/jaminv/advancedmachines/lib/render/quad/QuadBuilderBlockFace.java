@@ -3,7 +3,6 @@ package jaminv.advancedmachines.lib.render.quad;
 import java.util.Collections;
 import java.util.List;
 
-import jaminv.advancedmachines.lib.render.BakedModelImpl;
 import jaminv.advancedmachines.lib.render.ModelBakeryHelper;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -16,54 +15,30 @@ public class QuadBuilderBlockFace implements QuadBuilder {
 
 	TextureAtlasSprite texture;
 	EnumFacing side;
-	boolean inverted;
+	boolean inverted = false;
 	
-	float xmin, xmax, ymin, ymax, zmin, zmax;
+	Cuboid cuboid = Cuboid.UNIT;
 	
-	public static class Unit extends QuadBuilderBlockFace {
-		public Unit(TextureAtlasSprite texture, EnumFacing side, boolean inverted) {
-			super(0, 1, 0, 1, 0, 1, texture, side, inverted);
-		}		
-		
-		public Unit(TextureAtlasSprite texture, EnumFacing side) {
-			super(0, 1, 0, 1, 0, 1, texture, side);
-		}
-	}
-	
-	public QuadBuilderBlockFace offset(float xoff, float yoff, float zoff) {
-		this.xmin += xoff; this.xmax -= xoff;
-		this.ymin += yoff; this.ymax -= yoff;
-		this.zmin += zoff; this.zmax -= zoff;
-		return this;
-	}
-	
-	public QuadBuilderBlockFace offset(float xminOff, float xmaxOff, float yminOff, float ymaxOff, float zminOff, float zmaxOff) {
-		this.xmin += xminOff; this.xmax -= xmaxOff;
-		this.ymin += yminOff; this.ymax -= ymaxOff;
-		this.zmin += zminOff; this.zmax -= zmaxOff;
-		return this;
-	}
-	
-	public QuadBuilderBlockFace(float xmin, float xmax, float ymin, float ymax, float zmin, float zmax,
-			TextureAtlasSprite texture, EnumFacing side, boolean inverted) {
+	public QuadBuilderBlockFace(TextureAtlasSprite texture, EnumFacing side) {
 		this.texture = texture;
 		this.side = side;
-		this.inverted = inverted;
-		
-		this.xmin = xmin; this.xmax = xmax;
-		this.ymin = ymin; this.ymax = ymax;
-		this.zmin = zmin; this.zmax = zmax;
 	}
 	
-	public QuadBuilderBlockFace(float xmin, float xmax, float ymin, float ymax, float zmin, float zmax, 
-			TextureAtlasSprite texture, EnumFacing side) {
-		this(xmin, xmax, ymin, ymax, zmin, zmax, texture, side, false);
+	public QuadBuilderBlockFace withCuboid(Cuboid cuboid) {
+		this.cuboid = cuboid; return this;
 	}
+	public Cuboid getCuboid() { return cuboid; }
+	
+	public QuadBuilderBlockFace invert() { this.inverted = true; return this; }
+	public QuadBuilderBlockFace invert(boolean invert) { this.inverted = invert; return this; }	
 
 	@Override
 	public List<BakedQuad> build() {
 		BakedQuad quad;
 		VertexFormat format = DefaultVertexFormats.ITEM;
+		float xmin = cuboid.getXMin(), xmax = cuboid.getXMax();
+		float ymin = cuboid.getYMin(), ymax = cuboid.getYMax();
+		float zmin = cuboid.getZMin(), zmax = cuboid.getZMax();
 		
 		int xm = Math.round(xmin * 16), xx = Math.round(xmax * 16);
 		int ym = Math.round(ymin * 16), yx = Math.round(ymax * 16);

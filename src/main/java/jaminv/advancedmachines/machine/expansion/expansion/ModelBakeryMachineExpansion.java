@@ -11,10 +11,12 @@ import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.machine.multiblock.face.SidedTexture;
 import jaminv.advancedmachines.machine.multiblock.model.LayeredTextureMultiblock;
+import jaminv.advancedmachines.machine.multiblock.model.QuadBuilderMultiblockItem;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
 public class ModelBakeryMachineExpansion implements ModelBakery {
@@ -55,5 +57,10 @@ public class ModelBakeryMachineExpansion implements ModelBakery {
 			.withFace(BlockHelper.getExtendedFacing(state),	new LayeredTextureMultiblockMachineFace(state))
 			.withTopBottom(new LayeredTextureMultiblock(state, "expansion").withSided(SidedTexture.TOP))
 		.build();
+	}
+
+	@Override
+	public List<BakedQuad> bakeItemModel(ItemStack stack) {
+		return new QuadBuilderMultiblockItem("expansion", stack).build();
 	}
 }

@@ -2,28 +2,16 @@ package jaminv.advancedmachines.machine.multiblock.model;
 
 import java.util.List;
 
-import jaminv.advancedmachines.client.RawTextures;
-import jaminv.advancedmachines.client.textureset.TextureSets;
 import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.lib.render.ModelBakery;
-import jaminv.advancedmachines.lib.render.TextureHelper;
-import jaminv.advancedmachines.lib.render.quad.LayeredTexture;
-import jaminv.advancedmachines.lib.render.quad.QuadBuilderBlock;
 import jaminv.advancedmachines.lib.render.quad.QuadBuilderLayeredBlock;
-import jaminv.advancedmachines.machine.BlockMachineMultiblock;
 import jaminv.advancedmachines.machine.MachineHelper;
-import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.machine.multiblock.face.SidedTexture;
-import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.helper.BlockHelper;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
 public class ModelBakeryMultiblockMachine implements ModelBakery {
@@ -51,19 +39,6 @@ public class ModelBakeryMultiblockMachine implements ModelBakery {
 
 	@Override
 	public List<BakedQuad> bakeItemModel(ItemStack stack) {
-		TextureAtlasSprite face = TextureHelper.getMissingTexture();
-		String variant = VariantExpansion.BASIC.getName();
-		
-		Item item = stack.getItem();
-		if (item instanceof ItemBlock) {
-			Block block = Block.getBlockFromItem(item);
-			if (block instanceof BlockMachineMultiblock) {
-				BlockMachineMultiblock machine = ((BlockMachineMultiblock)block);
-				variant = machine.getVariant().getName();
-				face = RawTextures.get(machine.getMachineType().getName(), "inactive", variant, "all");
-			}
-		}
-		TextureAtlasSprite top = TextureSets.get("expansion", variant, SidedTexture.TOP.getName(), "all");
-		return new QuadBuilderBlock.Unit(EnumFacing.NORTH, TextureSets.get("expansion", variant, SidedTexture.SIDE.getName(), "all"), face, top, top).build();
+		return new QuadBuilderMultiblockItem("expansion", stack).build();
 	}
 }

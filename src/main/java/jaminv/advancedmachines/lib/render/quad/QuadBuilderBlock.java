@@ -5,59 +5,35 @@ import java.util.List;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 
 public class QuadBuilderBlock implements QuadBuilder {
-	
-	public static class Unit extends QuadBuilderBlock {
-		public Unit(EnumFacing facing, TextureAtlasSprite texture, TextureAtlasSprite face,
-				TextureAtlasSprite top, TextureAtlasSprite bottom) {
-			super(0, 1, 0, 1, 0, 1, facing, texture, face, top, bottom);
-		}
-		public Unit(EnumFacing facing, TextureAtlasSprite texture, TextureAtlasSprite face) {
-			super(0, 1, 0, 1, 0, 1, facing, texture, face);
-		}
-		public Unit(TextureAtlasSprite texture) {
-			super(0, 1, 0, 1, 0, 1, texture);
-		}
-	}
 
-	private EnumFacing facing;
 	private TextureAtlasSprite texture, face, top, bottom;
+	private EnumFacing facing = EnumFacing.NORTH;
+	private Cuboid cuboid = Cuboid.UNIT;
 	
-	public QuadBuilderBlock offset(float xoff, float yoff, float zoff) {
-		this.xmin += xoff; this.xmax -= xoff;
-		this.ymin += yoff; this.ymax -= yoff;
-		this.zmin += zoff; this.zmax -= zoff;
+	public QuadBuilderBlock(TextureAtlasSprite texture) {
+		this.texture = this.face = this.top = this.bottom = texture;
+		facing = EnumFacing.NORTH;
+	}
+			
+	public QuadBuilderBlock withFace(EnumFacing facing, TextureAtlasSprite face) {
+		this.facing = facing;
+		this.face = face;
 		return this;
 	}
 	
-	float xmin, xmax, ymin, ymax, zmin, zmax;
-	
-	public QuadBuilderBlock(float xmin, float xmax, float ymin, float ymax, float zmin, float zmax,
-			EnumFacing facing, TextureAtlasSprite texture, TextureAtlasSprite face, TextureAtlasSprite top, TextureAtlasSprite bottom) {
-		this.facing = facing;
-		this.texture = texture;
-		this.face = face;
-		this.top = top;
-		this.bottom = bottom;
-
-		this.xmin = xmin; this.xmax = xmax;
-		this.ymin = ymin; this.ymax = ymax;
-		this.zmin = zmin; this.zmax = zmax;	
+	public QuadBuilderBlock withTop(TextureAtlasSprite top) { this.top = top; return this; }
+	public QuadBuilderBlock withBottom(TextureAtlasSprite bottom) { this.bottom = bottom; return this; }
+	public QuadBuilderBlock withTopBottom(TextureAtlasSprite texture) {
+		this.top = this.bottom = texture;
+		return this; 
 	}
 	
-	public QuadBuilderBlock(float xmin, float xmax, float ymin, float ymax, float zmin, float zmax,
-			EnumFacing facing, TextureAtlasSprite texture, TextureAtlasSprite face) {
-		this(xmin, xmax, ymin, ymax, zmin, zmax, facing, texture, face, texture, texture);
-	}
+	public QuadBuilderBlock withCuboid(Cuboid cuboid) { this.cuboid = cuboid; return this; }
+	public Cuboid getCuboid() { return cuboid; }
 	
-	public QuadBuilderBlock(float xmin, float xmax, float ymin, float ymax, float zmin, float zmax,
-			TextureAtlasSprite texture) {
-		this(xmin, xmax, ymin, ymax, zmin, zmax, EnumFacing.NORTH, texture, texture, texture, texture);
-	}
-
 	@Override
 	public List<BakedQuad> build() {
 		List<BakedQuad> quads = new LinkedList<BakedQuad>();
@@ -68,7 +44,7 @@ public class QuadBuilderBlock implements QuadBuilder {
 			if (side == EnumFacing.UP) { sprite = top; }
 			if (side == EnumFacing.DOWN) { sprite = bottom; }
 			
-			quads.addAll((new QuadBuilderBlockFace(xmin, xmax, ymin, ymax, zmin, zmax, sprite, side)).build());
+			quads.addAll((new QuadBuilderBlockFace(sprite, side)).withCuboid(cuboid).build());
 		}
 		
 		return quads;
