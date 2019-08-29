@@ -269,13 +269,12 @@ public class MachineController implements IMachineController, IItemObservable.IO
 	
 	/* ISyncSubject */
 	
-	public int getFieldCount() { return 4; }
+	public int getFieldCount() { return 3; }
 	public int getField(int id) {
 		switch(id) {
 		case 0:	return processTimeRemaining;
 		case 1:	return totalProcessTime;
 		case 2: return qtyProcessing;
-		case 3:	return energy.getEnergyStored();
 		}
 		return 0;
 	}
@@ -285,7 +284,6 @@ public class MachineController implements IMachineController, IItemObservable.IO
 		case 0:	processTimeRemaining = value; return;
 		case 1:	totalProcessTime = value; return;
 		case 2: qtyProcessing = value; return;
-		case 3:	energy.setEnergy(value); return;
 		}
 	}	
 	

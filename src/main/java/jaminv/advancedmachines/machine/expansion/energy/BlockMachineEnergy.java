@@ -6,10 +6,8 @@ import jaminv.advancedmachines.machine.MachineHelper;
 import jaminv.advancedmachines.machine.expansion.BlockMachineExpansion;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
-import jaminv.advancedmachines.util.enums.EnumGui;
+import jaminv.advancedmachines.proxy.GuiProxy;
 import jaminv.advancedmachines.util.helper.BlockHelper;
-import jaminv.advancedmachines.util.interfaces.IHasTileEntity;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -20,10 +18,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -36,7 +32,7 @@ public class BlockMachineEnergy extends BlockMachineExpansion {
 		super(variant);
 	}
 	
-	protected int getGuiId() { return EnumGui.MACHINE_POWER.getId(); }
+	protected int getGuiId() { return GuiProxy.MACHINE_ENERGY; }
 	
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {

@@ -3,7 +3,6 @@ package jaminv.advancedmachines.machine.expansion.redstone;
 import java.util.List;
 
 import jaminv.advancedmachines.client.RawTextures;
-import jaminv.advancedmachines.lib.render.quad.Texture;
 import jaminv.advancedmachines.machine.expansion.ModelBakeryMachineExpansion;
 import jaminv.advancedmachines.machine.multiblock.model.MultiblockTextureBase;
 import jaminv.advancedmachines.machine.multiblock.model.QuadBuilderMultiblock;
@@ -24,7 +23,7 @@ public class ModelBakeryMachineRedstone extends ModelBakeryMachineExpansion {
 	@Override
 	public List<BakedQuad> bakeModel(IBlockState state) {
 		return new QuadBuilderMultiblock(state, base)
-			.withFace(new Texture(RawTextures.get("alloy.active.3x3")).withUV(16/3f, 16/3f, 32/3f, 32/3f))
+			.withFace(RawTextures.get("alloy.active.3x3"))
 					//RawTextures.get("redstone", ((IExtendedBlockState)state).getValue(Properties.ACTIVE) ? "active" : "inactive"))
 			.build();
 	}
@@ -32,7 +31,7 @@ public class ModelBakeryMachineRedstone extends ModelBakeryMachineExpansion {
 	@Override
 	public List<BakedQuad> bakeItemModel(ItemStack stack) {
 		return new QuadBuilderMultiblockItem(stack, base)
-			.withFace(new Texture(RawTextures.get("alloy.active.3x3")).withUV(16/3f, 16/3f, 32/3f, 32/3f))
+			.withFace(RawTextures.get("alloy.active.3x3"))
 			.build();
 	}
 }

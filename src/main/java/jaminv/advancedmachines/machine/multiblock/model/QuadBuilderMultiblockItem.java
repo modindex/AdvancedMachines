@@ -43,11 +43,11 @@ public class QuadBuilderMultiblockItem implements QuadBuilder {
 			}
 			if (block instanceof BlockMachineMultiblock) {
 				BlockMachineMultiblock machine = ((BlockMachineMultiblock)block);
-				face = new Texture(RawTextures.get(machine.getMachineType().getName(), "inactive"));
+				face = RawTextures.get(machine.getMachineType().getName(), "inactive");
 			}
 		}
-		Texture side = new Texture(base.getItemTexture(variant, TextureSide.SIDE));
-		Texture top = new Texture(base.getItemTexture(variant, TextureSide.TOP));
+		Texture side = base.getItemTexture(variant, TextureSide.SIDE);
+		Texture top = base.getItemTexture(variant, TextureSide.TOP);
 		
 		QuadBuilderLayeredBlock quad = new QuadBuilderLayeredBlock(new LayeredTextureList(side)).withTopBottom(new LayeredTextureList(top));
 		if (face != null) { quad.withFace(EnumFacing.NORTH, new LayeredTextureList(side, face)); }

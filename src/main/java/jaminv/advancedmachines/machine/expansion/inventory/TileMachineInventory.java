@@ -2,27 +2,31 @@ package jaminv.advancedmachines.machine.expansion.inventory;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.lib.container.ContainerInventory;
+import jaminv.advancedmachines.lib.container.layout.ILayoutManager;
+import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid;
+import jaminv.advancedmachines.lib.container.layout.LayoutManager;
 import jaminv.advancedmachines.lib.inventory.IItemObservable;
 import jaminv.advancedmachines.lib.inventory.InventoryHelper;
 import jaminv.advancedmachines.lib.inventory.ItemStackHandlerObservable;
 import jaminv.advancedmachines.lib.machine.IMachineController;
-import jaminv.advancedmachines.lib.machine.MachineStorageCapability;
 import jaminv.advancedmachines.machine.dialog.DialogIOToggle;
 import jaminv.advancedmachines.machine.expansion.TileMachineExpansion;
+import jaminv.advancedmachines.proxy.HasGui;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
-import jaminv.advancedmachines.util.interfaces.IHasGui;
 import jaminv.advancedmachines.util.network.IOStateMessage;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 
-public class TileMachineInventory extends TileMachineExpansion implements IHasGui, IMachineController.ISubController, IDirectional, DialogIOToggle.ISwitchableIO, IItemObservable.IObserver {
+public class TileMachineInventory extends TileMachineExpansion implements HasGui, IMachineController.ISubController, IDirectional, DialogIOToggle.ISwitchableIO, IItemObservable.IObserver {
+
+	public static final ILayoutManager layout = new LayoutManager()
+		.addLayout(new ItemLayoutGrid.InventoryLayout(8, 38))
+		.setInventoryLayout(8, 103)
+		.setHotbarLayout(8, 161);	
 	
 	public final int SIZE = 27;
 	protected final ItemStackHandlerObservable inventory = new ItemStackHandlerObservable(SIZE); 	
@@ -36,16 +40,11 @@ public class TileMachineInventory extends TileMachineExpansion implements IHasGu
 		inventory.addObserver(this);
 	}
 
+	/* IHasGui */
+	
 	@Override
 	public Container createContainer(IInventory playerInventory) {
-		return new ContainerInventory(DialogMachineInventory.layout, inventory, playerInventory);
-	}
-	
-	/* IHasGui */
-
-	@Override
-	public GuiContainer createGui(IInventory playerInventory) {
-		return new DialogMachineInventory(createContainer(playerInventory), this);
+		return new ContainerInventory(layout, inventory, playerInventory);
 	}
 	
 	/* IDirectional */

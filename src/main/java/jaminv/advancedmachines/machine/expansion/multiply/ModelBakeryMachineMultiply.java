@@ -2,6 +2,7 @@ package jaminv.advancedmachines.machine.expansion.multiply;
 
 import java.util.List;
 
+import jaminv.advancedmachines.machine.MachineHelper;
 import jaminv.advancedmachines.machine.expansion.ModelBakeryMachineExpansion;
 import jaminv.advancedmachines.machine.multiblock.model.MultiblockTextureBase;
 import jaminv.advancedmachines.machine.multiblock.model.QuadBuilderMultiblock;
@@ -39,7 +40,9 @@ public class ModelBakeryMachineMultiply extends ModelBakeryMachineExpansion {
 
 	@Override
 	public List<BakedQuad> bakeModel(IBlockState state) {
-		return new QuadBuilderMultiblock(state, MultiblockTextureBase.MULTIPLY).build();
+		return new QuadBuilderMultiblock(state, MultiblockTextureBase.MULTIPLY)
+			.withFace(MachineHelper.getMachineFace(state))
+			.build();
 	}
 
 	@Override

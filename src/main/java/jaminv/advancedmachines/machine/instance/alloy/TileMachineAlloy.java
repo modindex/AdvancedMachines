@@ -1,13 +1,19 @@
 package jaminv.advancedmachines.machine.instance.alloy;
 
 import jaminv.advancedmachines.lib.container.ContainerMachine;
+import jaminv.advancedmachines.lib.container.layout.JeiLayoutManager;
 import jaminv.advancedmachines.machine.TileMachineMultiblock;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.util.recipe.AlloyManager;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.IInventory;
 
 public class TileMachineAlloy extends TileMachineMultiblock {
+	
+	public static final JeiLayoutManager layout = new JeiLayoutManager()
+			.setItemInputLayout(AlloyManager.getRecipeManager(), 35, 37, 1, 3) 
+			.setItemOutputLayout(125, 37)		
+			.setInventoryLayout(8, 84)
+			.setHotbarLayout(8, 142);	
 	
 	public TileMachineAlloy() {
 		super(AlloyManager.getRecipeManager());
@@ -22,11 +28,6 @@ public class TileMachineAlloy extends TileMachineMultiblock {
 
 	@Override
 	public ContainerMachine createContainer(IInventory playerInventory) {
-		return new ContainerMachine(DialogMachineAlloy.layout, storage, playerInventory, this.getSyncManager());
-	}
-	
-	@Override
-	public GuiContainer createGui(IInventory playerInventory) {
-		return new DialogMachineAlloy(createContainer(playerInventory), this);
+		return new ContainerMachine(layout, storage, playerInventory, this.getSyncManager());
 	}
 }

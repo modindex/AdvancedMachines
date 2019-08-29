@@ -1,15 +1,11 @@
 package jaminv.advancedmachines.machine.multiblock;
 
 import io.netty.buffer.ByteBuf;
+import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.machine.TileMachineMultiblock;
-import jaminv.advancedmachines.machine.expansion.inventory.TileMachineInventory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -44,7 +40,7 @@ public class MultiblockUpdateMessage implements IMessage {
 
 		  @Override
 		  public IMessage onMessage(MultiblockUpdateMessage message, MessageContext ctx) {
-			  WorldClient world = Minecraft.getMinecraft().world;
+			  World world = Main.proxy.getMessageWorld(ctx);
 			  
 			  BlockPos pos = message.pos;
 			  BlockPos min = message.min;

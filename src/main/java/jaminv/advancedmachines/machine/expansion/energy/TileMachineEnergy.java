@@ -8,11 +8,9 @@ import jaminv.advancedmachines.lib.energy.IEnergyStorageInternal;
 import jaminv.advancedmachines.lib.machine.IMachineController;
 import jaminv.advancedmachines.machine.expansion.TileMachineExpansion;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
+import jaminv.advancedmachines.proxy.HasGui;
 import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
-import jaminv.advancedmachines.util.interfaces.IHasGui;
-import jaminv.advancedmachines.util.interfaces.IHasMetadata;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,7 +19,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
-public class TileMachineEnergy extends TileMachineExpansion implements IHasGui, IContainerUpdate, IMachineController.ISubController, IDirectional, IEnergyObservable.IObserver {
+public class TileMachineEnergy extends TileMachineExpansion implements HasGui, IContainerUpdate, IMachineController.ISubController, IDirectional, IEnergyObservable.IObserver {
 	
 	protected EnumFacing facing = EnumFacing.NORTH;
 	protected IMachineController controller;
@@ -54,11 +52,6 @@ public class TileMachineEnergy extends TileMachineExpansion implements IHasGui, 
 		return new EmptyContainer(this);
 	}
 
-	@Override
-	public GuiScreen createGui(IInventory inventory) {
-		return new DialogMachineEnergy(createContainer(inventory), this);
-	}
-	
 	@Override
 	public void onEnergyChanged() {
 		if (controller != null) { controller.wake(); }

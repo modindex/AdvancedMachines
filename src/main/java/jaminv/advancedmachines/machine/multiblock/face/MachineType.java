@@ -1,34 +1,21 @@
 package jaminv.advancedmachines.machine.multiblock.face;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
-import com.google.common.base.Optional;
-import com.google.common.collect.Maps;
-
-import jaminv.advancedmachines.util.enums.EnumGui;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.Vec3i;
-import scala.actors.threadpool.Arrays;
+import jaminv.advancedmachines.proxy.GuiProxy;
 
 public enum MachineType {
 	
 	NONE(0, "none", -1),
-	FURNACE(1, "furnace", EnumGui.FURNACE.getId()),
-	GRINDER(2, "grinder", EnumGui.GRINDER.getId()),
-	PURIFIER(3, "purifier", EnumGui.PURIFIER.getId()),
-	ALLOY(4, "alloy", EnumGui.ALLOY.getId()),
-	MELTER(5, "melter", EnumGui.MELTER.getId()),
-	STABILIZER(6, "stabilizer", EnumGui.STABILIZER.getId()),
-	INJECTOR(7, "injector", EnumGui.INJECTOR.getId()),
-	PRESS(8, "press", EnumGui.PRESS.getId());
+	FURNACE(1, "furnace", GuiProxy.FURNACE),
+	GRINDER(2, "grinder", GuiProxy.GRINDER),
+	PURIFIER(3, "purifier", GuiProxy.PURIFIER),
+	ALLOY(4, "alloy", GuiProxy.ALLOY),
+	MELTER(5, "melter", GuiProxy.MELTER),
+	STABILIZER(6, "stabilizer", GuiProxy.STABILIZER),
+	INJECTOR(7, "injector", GuiProxy.INJECTOR),
+	PRESS(8, "press", GuiProxy.PRESS);
 	
     private final int index;
     private final String name;

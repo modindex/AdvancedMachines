@@ -15,11 +15,6 @@ public enum EnumGui {
 	PRIORITY(101);
 	
 	private final int id;
-	private EnumGui(int id) {
-		this.id = id;
-	}
-	
-	public int getId() {
-		return id;
-	}
-}
+	private EnumGui(int id) { this.id = id; }
+	public int getId() { return id;	}
+}	

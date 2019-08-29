@@ -1,14 +1,23 @@
 package jaminv.advancedmachines.machine.instance.purifier;
 
 import jaminv.advancedmachines.lib.container.ContainerMachine;
+import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.HotbarLayout;
+import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.InventoryLayout;
+import jaminv.advancedmachines.lib.container.layout.JeiLayoutManager;
 import jaminv.advancedmachines.machine.TileMachineMultiblock;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.util.recipe.purifier.PurifierManager;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.IInventory;
 
 public class TileMachinePurifier extends TileMachineMultiblock {
-
+	
+	public static final JeiLayoutManager layout = new JeiLayoutManager()
+		.setItemInputLayout(PurifierManager.getRecipeManager(), 53, 23)
+		.setItemOutputLayout(107, 23)
+		.setItemSecondaryLayout(35, 55, 1, 6)
+		.setInventoryLayout(new InventoryLayout(8, 84))
+		.setHotbarLayout(new HotbarLayout(8, 142));
+	
 	public TileMachinePurifier() {
 		super(PurifierManager.getRecipeManager());
 		inventory.addInputSlots(1);
@@ -23,11 +32,7 @@ public class TileMachinePurifier extends TileMachineMultiblock {
 
 	@Override
 	public ContainerMachine createContainer(IInventory playerInventory) {
-		return new ContainerMachine(DialogMachinePurifier.layout, storage, playerInventory, this.getSyncManager());
+		return new ContainerMachine(layout, storage, playerInventory, this.getSyncManager());
 	}
-	
-	@Override
-	public GuiContainer createGui(IInventory inventory) {
-		return new DialogMachinePurifier(createContainer(inventory), this);
-	}
+
 }

@@ -2,34 +2,24 @@ package jaminv.advancedmachines.machine.instance.grinder;
 
 import jaminv.advancedmachines.lib.container.ContainerMachine;
 import jaminv.advancedmachines.lib.container.layout.IJeiLayoutManager;
-import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.HotbarLayout;
-import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.InventoryLayout;
 import jaminv.advancedmachines.lib.jei.JeiDialog;
 import jaminv.advancedmachines.lib.jei.element.JeiEnergyBar;
 import jaminv.advancedmachines.lib.jei.element.JeiProgressIndicator;
 import jaminv.advancedmachines.lib.jei.element.JeiSecondaryChance;
-import jaminv.advancedmachines.lib.container.layout.JeiLayoutManager;
 import jaminv.advancedmachines.lib.machine.IRedstoneControlled;
 import jaminv.advancedmachines.lib.util.coord.CoordRect;
+import jaminv.advancedmachines.machine.TileMachineMultiblock;
 import jaminv.advancedmachines.machine.dialog.DialogEnergyBar;
 import jaminv.advancedmachines.machine.dialog.DialogMultiblockQuantity;
 import jaminv.advancedmachines.machine.dialog.DialogProcessBar;
 import jaminv.advancedmachines.machine.dialog.DialogTooltipMultiblock;
 import jaminv.advancedmachines.machine.dialog.RedstoneToggleButton;
 import jaminv.advancedmachines.util.Color;
-import jaminv.advancedmachines.util.recipe.grinder.GrinderManager;
 import net.minecraft.inventory.Container;
 
 public class DialogMachineGrinder extends JeiDialog {
-	
-	public static final JeiLayoutManager layout = new JeiLayoutManager()
-		.setItemInputLayout(GrinderManager.getRecipeManager(), 53, 26)
-		.setItemOutputLayout(107, 26)
-		.setItemSecondaryLayout(107, 52)
-		.setInventoryLayout(new InventoryLayout(8, 84))
-		.setHotbarLayout(new HotbarLayout(8, 142));
-	
-	@Override public IJeiLayoutManager getLayout() { return layout; }
+
+	@Override public IJeiLayoutManager getLayout() { return TileMachineGrinder.layout; }
 	
 	public DialogMachineGrinder(Container container) {
 		super(container, "textures/gui/grinder.png", 24, 0, 176, 195);
@@ -42,7 +32,7 @@ public class DialogMachineGrinder extends JeiDialog {
 		addJeiElement(new JeiSecondaryChance.Left(getLayout()));
 	}
 	
-	public DialogMachineGrinder(ContainerMachine container, TileMachineGrinder te) {
+	public DialogMachineGrinder(ContainerMachine container, TileMachineMultiblock te) {
 		this(container);
 		
 		this.addElement(new DialogProcessBar(te.getController(), 74, 27, 24, 17, 200, 50));

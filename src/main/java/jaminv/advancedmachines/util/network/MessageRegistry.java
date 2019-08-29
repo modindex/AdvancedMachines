@@ -16,9 +16,6 @@ public class MessageRegistry {
 		Main.NETWORK.registerMessage(IOMessageHandler.class, IOStateMessage.class, discriminator++, Side.SERVER);
 		Main.NETWORK.registerMessage(RedstoneStateMessageHandler.class, RedstoneStateMessage.class, discriminator++, Side.SERVER);
 		Main.NETWORK.registerMessage(BucketStateMessageHandler.class, BucketStateMessage.class, discriminator++, Side.SERVER);
-	}
-	
-	public static void registerClient() {
 		Main.NETWORK.registerMessage(MultiblockUpdateMessageHandler.class, MultiblockUpdateMessage.class, discriminator++, Side.CLIENT);
 		Main.NETWORK.registerMessage(ProcessingStateMessageHandler.class, ProcessingStateMessage.class, discriminator++, Side.CLIENT);
 	}

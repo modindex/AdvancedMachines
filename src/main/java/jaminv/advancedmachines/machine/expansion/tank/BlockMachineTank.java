@@ -4,26 +4,22 @@ import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.lib.render.ModelBakery;
 import jaminv.advancedmachines.machine.MachineHelper;
 import jaminv.advancedmachines.machine.expansion.BlockMachineExpansion;
-import jaminv.advancedmachines.machine.expansion.multiply.BlockMachineMultiply;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
-import jaminv.advancedmachines.util.enums.EnumGui;
+import jaminv.advancedmachines.proxy.GuiProxy;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
@@ -35,7 +31,7 @@ public class BlockMachineTank extends BlockMachineExpansion {
 		super(variant);
 	}
 
-	protected int getGuiId() { return EnumGui.MACHINE_TANK.getId(); }
+	protected int getGuiId() { return GuiProxy.MACHINE_TANK; }
 	
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,

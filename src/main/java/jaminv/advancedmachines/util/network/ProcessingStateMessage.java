@@ -1,12 +1,12 @@
 package jaminv.advancedmachines.util.network;
 
 import io.netty.buffer.ByteBuf;
+import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.lib.machine.ICanProcess;
 import jaminv.advancedmachines.machine.multiblock.face.IMachineFaceTE;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import jaminv.advancedmachines.util.helper.BlockHelper.BlockCallback;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -44,7 +44,7 @@ public class ProcessingStateMessage implements IMessage {
 	
 		@Override
 		public IMessage onMessage(ProcessingStateMessage message, MessageContext ctx) {
-			WorldClient world = Minecraft.getMinecraft().world;
+			World world = Main.proxy.getMessageWorld(ctx);
 			  
 			BlockPos min = message.min;
 			BlockPos max = message.max;

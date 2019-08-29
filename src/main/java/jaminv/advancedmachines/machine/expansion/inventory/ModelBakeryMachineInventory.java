@@ -4,7 +4,6 @@ import java.util.List;
 
 import jaminv.advancedmachines.client.RawTextures;
 import jaminv.advancedmachines.init.property.Properties;
-import jaminv.advancedmachines.lib.render.quad.Texture;
 import jaminv.advancedmachines.machine.expansion.ModelBakeryMachineExpansion;
 import jaminv.advancedmachines.machine.multiblock.model.MultiblockTextureBase;
 import jaminv.advancedmachines.machine.multiblock.model.QuadBuilderMultiblock;
@@ -24,12 +23,12 @@ public class ModelBakeryMachineInventory extends ModelBakeryMachineExpansion {
 	@Override
 	public List<BakedQuad> bakeModel(IBlockState state) {
 		return new QuadBuilderMultiblock(state, base)
-			.withFace(new Texture(RawTextures.get("inventory", ((IExtendedBlockState)state).getValue(Properties.INPUT) ? "input" : "output")))
+			.withFace(RawTextures.get("inventory", ((IExtendedBlockState)state).getValue(Properties.INPUT) ? "input" : "output"))
 			.build();
 	}
 
 	@Override
 	public List<BakedQuad> bakeItemModel(ItemStack stack) {
-		return new QuadBuilderMultiblockItem(stack, base).withFace(new Texture(RawTextures.get("inventory.input"))).build();
+		return new QuadBuilderMultiblockItem(stack, base).withFace(RawTextures.get("inventory.input")).build();
 	}
 }

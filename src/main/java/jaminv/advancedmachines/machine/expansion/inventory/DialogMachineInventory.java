@@ -1,8 +1,5 @@
 package jaminv.advancedmachines.machine.expansion.inventory;
 
-import jaminv.advancedmachines.lib.container.layout.ILayoutManager;
-import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid;
-import jaminv.advancedmachines.lib.container.layout.LayoutManager;
 import jaminv.advancedmachines.lib.dialog.Dialog;
 import jaminv.advancedmachines.lib.dialog.control.DialogTextBox;
 import jaminv.advancedmachines.lib.dialog.control.IDialogElement;
@@ -14,14 +11,8 @@ import net.minecraft.inventory.Container;
 
 public class DialogMachineInventory extends Dialog implements IElementStateObserver<String> {
 	
-	
 	TileMachineInventory te;
 	DialogTextBox priority;
-	
-	public static final ILayoutManager layout = new LayoutManager()
-		.addLayout(new ItemLayoutGrid.InventoryLayout(8, 38))
-		.setInventoryLayout(8, 103)
-		.setHotbarLayout(8, 161);
 	
 	public DialogMachineInventory(Container container, TileMachineInventory te) {
 		super(container, "textures/gui/machine_inventory.png", 24, 0, 176, 185);

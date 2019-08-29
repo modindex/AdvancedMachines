@@ -16,7 +16,7 @@ public class ModelBakeryHelper {
 	        putVertex(format, builder, normal, tex, v1.x, v1.y, v1.z, umin, vmin);
 	        putVertex(format, builder, normal, tex, v2.x, v2.y, v2.z, umin, vmax);
 	        putVertex(format, builder, normal, tex, v3.x, v3.y, v3.z, umax, vmax);
-	        putVertex(format, builder, normal, tex, v4.x, v4.y, v4.z, umax, umin);
+	        putVertex(format, builder, normal, tex, v4.x, v4.y, v4.z, umax, vmin);
         } else {
 	        putVertex(format, builder, normal, tex, v1.x, v1.y, v1.z, umin, vmin);
 	        putVertex(format, builder, normal, tex, v4.x, v4.y, v4.z, umax, vmin);

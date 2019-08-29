@@ -5,13 +5,13 @@ import java.util.Map;
 
 import jaminv.advancedmachines.client.RawTextures;
 import jaminv.advancedmachines.lib.render.TextureHelper;
+import jaminv.advancedmachines.lib.render.quad.Texture;
 import jaminv.advancedmachines.lib.util.helper.StringHelper;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 public class TextureSets {
-	private static Map<String, TextureAtlasSprite> set = new HashMap<String, TextureAtlasSprite>();
+	private static Map<String, Texture> set = new HashMap<String, Texture>();
 	
-	public static void put(String key, TextureAtlasSprite sprite) {
+	public static void put(String key, Texture sprite) {
 		set.put(key, sprite);
 	}
 	
@@ -19,17 +19,17 @@ public class TextureSets {
 		set.put(key, RawTextures.get(reference));
 	}
 	
-	public static TextureAtlasSprite get(String key) {
-		TextureAtlasSprite sprite = set.get(key);
-		if (sprite == null) { return TextureHelper.getMissingTexture(); }
+	public static Texture get(String key) {
+		Texture sprite = set.get(key);
+		if (sprite == null) { return new Texture(TextureHelper.getMissingTexture()); }
 		return sprite;
 	}
 	
-	public static TextureAtlasSprite get(String set, String key) {
+	public static Texture get(String set, String key) {
 		return get(set + "." + key);
 	}
 	
-	public static TextureAtlasSprite get(String...strings) {
+	public static Texture get(String...strings) {
 		return get(StringHelper.buildString(strings));
 	}
 

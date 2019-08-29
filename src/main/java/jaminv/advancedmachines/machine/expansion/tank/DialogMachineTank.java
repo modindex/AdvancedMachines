@@ -1,8 +1,5 @@
 package jaminv.advancedmachines.machine.expansion.tank;
 
-import jaminv.advancedmachines.lib.container.layout.ILayoutManager;
-import jaminv.advancedmachines.lib.container.layout.LayoutManager;
-import jaminv.advancedmachines.lib.container.layout.impl.BucketLayout;
 import jaminv.advancedmachines.lib.dialog.Dialog;
 import jaminv.advancedmachines.lib.dialog.control.DialogTextBox;
 import jaminv.advancedmachines.machine.dialog.DialogFluid;
@@ -14,12 +11,6 @@ public class DialogMachineTank extends Dialog {
 	
 	TileMachineTank te;
 	DialogTextBox priority;
-	
-	public static final ILayoutManager layout = new LayoutManager()
-		.addLayout(new BucketLayout(44, 37))
-		.addLayout(new BucketLayout(116, 37))
-		.setInventoryLayout(8, 84)
-		.setHotbarLayout(8, 142);
 	
 	public DialogMachineTank(Container container, TileMachineTank te) {
 		super(container, "textures/gui/tank.png", 24, 0, 176, 185);

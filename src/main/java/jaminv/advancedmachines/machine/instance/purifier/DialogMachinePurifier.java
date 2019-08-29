@@ -1,11 +1,7 @@
 package jaminv.advancedmachines.machine.instance.purifier;
 
 import jaminv.advancedmachines.lib.container.ContainerMachine;
-import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.HotbarLayout;
-import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.InventoryLayout;
 import jaminv.advancedmachines.lib.container.layout.JeiLayoutManager;
-import jaminv.advancedmachines.lib.container.layout.impl.InputLayout;
-import jaminv.advancedmachines.lib.container.layout.impl.OutputLayout;
 import jaminv.advancedmachines.lib.jei.JeiDialog;
 import jaminv.advancedmachines.lib.jei.element.JeiEnergyBar;
 import jaminv.advancedmachines.lib.jei.element.JeiProgressIndicator;
@@ -18,20 +14,12 @@ import jaminv.advancedmachines.machine.dialog.DialogProcessBar;
 import jaminv.advancedmachines.machine.dialog.DialogTooltipMultiblock;
 import jaminv.advancedmachines.machine.dialog.RedstoneToggleButton;
 import jaminv.advancedmachines.util.Color;
-import jaminv.advancedmachines.util.recipe.purifier.PurifierManager;
 import net.minecraft.inventory.Container;
 
 public class DialogMachinePurifier extends JeiDialog {
 	
-	public static final JeiLayoutManager layout = new JeiLayoutManager()
-		.setItemInputLayout(PurifierManager.getRecipeManager(), 53, 23)
-		.setItemOutputLayout(107, 23)
-		.setItemSecondaryLayout(35, 55, 1, 6)
-		.setInventoryLayout(new InventoryLayout(8, 84))
-		.setHotbarLayout(new HotbarLayout(8, 142));
-	
 	@Override
-	public JeiLayoutManager getLayout() { return layout; }
+	public JeiLayoutManager getLayout() { return TileMachinePurifier.layout; }
 	
 	public DialogMachinePurifier(Container container) {
 		super(container, "textures/gui/purifier.png", 24, 0, 176, 195);

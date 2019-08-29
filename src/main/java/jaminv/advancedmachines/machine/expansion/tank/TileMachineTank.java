@@ -4,6 +4,9 @@ import javax.annotation.Nullable;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.lib.container.ContainerInventory;
+import jaminv.advancedmachines.lib.container.layout.ILayoutManager;
+import jaminv.advancedmachines.lib.container.layout.LayoutManager;
+import jaminv.advancedmachines.lib.container.layout.impl.BucketLayout;
 import jaminv.advancedmachines.lib.fluid.FluidTankAdvanced;
 import jaminv.advancedmachines.lib.fluid.IFluidObservable;
 import jaminv.advancedmachines.lib.inventory.IItemObservable;
@@ -12,11 +15,10 @@ import jaminv.advancedmachines.lib.machine.IMachineController;
 import jaminv.advancedmachines.machine.dialog.DialogIOToggle;
 import jaminv.advancedmachines.machine.expansion.TileMachineExpansion;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
+import jaminv.advancedmachines.proxy.HasGui;
 import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
-import jaminv.advancedmachines.util.interfaces.IHasGui;
 import jaminv.advancedmachines.util.network.IOStateMessage;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -33,8 +35,14 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
-public class TileMachineTank extends TileMachineExpansion implements ITickable, IHasGui, IDirectional, 
+public class TileMachineTank extends TileMachineExpansion implements ITickable, HasGui, IDirectional, 
 		IMachineController.ISubController, IItemObservable.IObserver, IFluidObservable.IObserver, DialogIOToggle.ISwitchableIO {
+	
+	public static final ILayoutManager layout = new LayoutManager()
+		.addLayout(new BucketLayout(44, 37))
+		.addLayout(new BucketLayout(116, 37))
+		.setInventoryLayout(8, 84)
+		.setHotbarLayout(8, 142);	
 	
 	protected EnumFacing facing = EnumFacing.NORTH;
 	protected boolean inputState = true;
@@ -77,13 +85,8 @@ public class TileMachineTank extends TileMachineExpansion implements ITickable, 
 	
 	@Override
 	public Container createContainer(IInventory playerInventory) {
-		return new ContainerInventory(DialogMachineTank.layout, inventory, playerInventory);
+		return new ContainerInventory(layout, inventory, playerInventory);
 	}
-	
-	@Override
-	public GuiContainer createGui(IInventory playerInventory) {
-		return new DialogMachineTank(createContainer(playerInventory), this);
-	}	
 	
 	public void setFacing(EnumFacing facing) {
 		this.facing = facing;

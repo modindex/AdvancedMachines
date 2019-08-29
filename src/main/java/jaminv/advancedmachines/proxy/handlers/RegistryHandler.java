@@ -1,6 +1,5 @@
 package jaminv.advancedmachines.proxy.handlers;
 
-import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.lib.util.registry.RegistryHelper;
 import jaminv.advancedmachines.machine.expansion.BlockMachineProductivity;
 import jaminv.advancedmachines.machine.expansion.BlockMachineSpeed;
@@ -31,7 +30,6 @@ import jaminv.advancedmachines.machine.instance.stabilizer.BlockMachineStabilize
 import jaminv.advancedmachines.machine.instance.stabilizer.TileMachineStabilizer;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.Reference;
-import jaminv.advancedmachines.util.network.MessageRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -134,15 +132,5 @@ public class RegistryHandler {
 		}*/
 		
 		RegistryHelper.registerModels();
-	}
-	
-	public static void otherRegistries() {
-		Main.logger.info("Message Registry");
-		MessageRegistry.register();
-		Main.logger.info("Complete - Message Registry");
-
-		Main.logger.info("World Generation Registry");
-		//GameRegistry.registerWorldGenerator(new WorldGenCustomOres(), 0);
-		Main.logger.info("Complete - World Generation Registry");
 	}
 }

@@ -1,13 +1,24 @@
 package jaminv.advancedmachines.machine.instance.stabilizer;
 
 import jaminv.advancedmachines.lib.container.ContainerMachine;
+import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.HotbarLayout;
+import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.InventoryLayout;
+import jaminv.advancedmachines.lib.container.layout.JeiLayoutManager;
+import jaminv.advancedmachines.lib.container.layout.impl.BucketLayout;
 import jaminv.advancedmachines.machine.TileMachineMultiblock;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.util.recipe.stabilizer.StabilizerManager;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.IInventory;
 
 public class TileMachineStabilizer extends TileMachineMultiblock {
+	
+	public static final JeiLayoutManager layout = new JeiLayoutManager()
+		.addFluidInputLayout(53, 21, 16, 48)
+		.setItemOutputLayout(107, 37)
+		.setItemAdditionalLayout(new BucketLayout(152, 59))
+		.setInventoryLayout(new InventoryLayout(8, 84))
+		.setHotbarLayout(new HotbarLayout(8, 142));
+
 	public TileMachineStabilizer() {
 		super(StabilizerManager.getRecipeManager());
 		inventory.addOutputSlots(1);
@@ -22,14 +33,9 @@ public class TileMachineStabilizer extends TileMachineMultiblock {
 
 	@Override
 	public ContainerMachine createContainer(IInventory playerInventory) {
-		return new ContainerMachine(DialogMachineStabilizer.layout, storage, playerInventory, this.getSyncManager());
+		return new ContainerMachine(layout, storage, playerInventory, this.getSyncManager());
 	}
 	
-	@Override
-	public GuiContainer createGui(IInventory inventory) {
-		return new DialogMachineStabilizer(createContainer(inventory), this);
-	}
-
 	/*
 	 * TODO: Stabilizer output into and out of bucket 
 	@Override

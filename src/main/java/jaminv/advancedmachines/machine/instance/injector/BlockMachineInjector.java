@@ -3,7 +3,7 @@ package jaminv.advancedmachines.machine.instance.injector;
 import jaminv.advancedmachines.machine.BlockMachineMultiblock;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
-import jaminv.advancedmachines.util.enums.EnumGui;
+import jaminv.advancedmachines.proxy.GuiProxy;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -16,7 +16,7 @@ public class BlockMachineInjector extends BlockMachineMultiblock {
 	
 	@Override public MachineType getMachineType() { return MachineType.INJECTOR; }	
 	
-	protected int getGuiId() { return EnumGui.INJECTOR.getId(); }
+	protected int getGuiId() { return GuiProxy.INJECTOR; }
 	
 	@Override
 	public TileEntity createTileEntity(World worldIn, IBlockState state) {

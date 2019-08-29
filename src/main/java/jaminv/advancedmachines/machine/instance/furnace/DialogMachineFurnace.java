@@ -2,10 +2,7 @@ package jaminv.advancedmachines.machine.instance.furnace;
 
 import jaminv.advancedmachines.lib.container.ContainerMachine;
 import jaminv.advancedmachines.lib.container.layout.IJeiLayoutManager;
-import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.HotbarLayout;
-import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.InventoryLayout;
 import jaminv.advancedmachines.lib.jei.JeiDialog;
-import jaminv.advancedmachines.lib.container.layout.JeiLayoutManager;
 import jaminv.advancedmachines.lib.machine.IRedstoneControlled;
 import jaminv.advancedmachines.lib.util.coord.CoordRect;
 import jaminv.advancedmachines.machine.dialog.DialogEnergyBar;
@@ -14,19 +11,12 @@ import jaminv.advancedmachines.machine.dialog.DialogProcessBar;
 import jaminv.advancedmachines.machine.dialog.DialogTooltipMultiblock;
 import jaminv.advancedmachines.machine.dialog.RedstoneToggleButton;
 import jaminv.advancedmachines.util.Color;
-import jaminv.advancedmachines.util.recipe.FurnaceManager;
 import net.minecraft.inventory.Container;
 
 public class DialogMachineFurnace extends JeiDialog {
 	
-	public static final JeiLayoutManager layout = new JeiLayoutManager()
-		.setItemInputLayout(FurnaceManager.getRecipeManager(), 53, 37)
-		.setItemOutputLayout(107, 37)
-		.setInventoryLayout(new InventoryLayout(8, 84))
-		.setHotbarLayout(new HotbarLayout(8, 142));
-	
 	@Override
-	public IJeiLayoutManager getLayout() { return layout; }
+	public IJeiLayoutManager getLayout() { return TileMachineFurnace.layout; }
 	
 	public DialogMachineFurnace(Container container) {
 		super(container, "textures/gui/furnace.png", 24, 0, 176, 195);

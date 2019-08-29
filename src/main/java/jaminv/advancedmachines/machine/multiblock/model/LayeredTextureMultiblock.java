@@ -3,6 +3,8 @@ package jaminv.advancedmachines.machine.multiblock.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.lib.render.quad.LayeredTexture;
 import jaminv.advancedmachines.lib.render.quad.Texture;
@@ -10,7 +12,6 @@ import jaminv.advancedmachines.machine.multiblock.MultiblockBorderType;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
@@ -39,18 +40,18 @@ public class LayeredTextureMultiblock implements LayeredTexture {
 	
 	public LayeredTextureMultiblock copy() { return new LayeredTextureMultiblock(variant, borders, base, face, side); }
 	
-	public LayeredTextureMultiblock withFace(Texture face) { this.face = face; return this; }
+	public LayeredTextureMultiblock withFace(@Nullable Texture face) { this.face = face; return this; }
 	public LayeredTextureMultiblock withSided(TextureSide side) { this.side = side; return this; }
 	
 	protected void setBorder(List<Texture> list, VariantExpansion variant, MultiblockBorderType border, String edge) {
-		TextureAtlasSprite texture = base.getBorder(variant, side, border, edge);
-		if (texture != null) { list.add(new Texture(texture)); }
+		Texture texture = base.getBorder(variant, side, border, edge);
+		if (texture != null) { list.add(texture); }
 	}
 
 	@Override
 	public List<Texture> getTextures(EnumFacing facing) {
 		LinkedList<Texture> textures = new LinkedList<Texture>();
-		textures.add(new Texture(base.getTexture(variant, side)));
+		textures.add(base.getTexture(variant, side));
 		if (face != null) { textures.add(face); }
 		
 		switch (facing) {

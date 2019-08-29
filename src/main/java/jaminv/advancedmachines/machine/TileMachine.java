@@ -10,6 +10,7 @@ import jaminv.advancedmachines.lib.energy.EnergyStorageAdvanced;
 import jaminv.advancedmachines.lib.energy.IEnergyStorageInternal;
 import jaminv.advancedmachines.lib.fluid.FluidHandler;
 import jaminv.advancedmachines.lib.fluid.IFluidHandlerAdvanced;
+import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
 import jaminv.advancedmachines.lib.inventory.MachineInventoryHandler;
 import jaminv.advancedmachines.lib.machine.IMachineController;
 import jaminv.advancedmachines.lib.machine.IMachineTE;
@@ -19,9 +20,9 @@ import jaminv.advancedmachines.lib.machine.MachineStorage;
 import jaminv.advancedmachines.lib.machine.MachineStorageCapability;
 import jaminv.advancedmachines.lib.recipe.IRecipeManager;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
+import jaminv.advancedmachines.proxy.HasGui;
 import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.interfaces.IDirectional;
-import jaminv.advancedmachines.util.interfaces.IHasGui;
 import jaminv.advancedmachines.util.network.ProcessingStateMessage;
 import jaminv.advancedmachines.util.network.RedstoneStateMessage;
 import net.minecraft.block.state.IBlockState;
@@ -38,9 +39,8 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 
-public abstract class TileMachine extends TileEntity implements ITickable, IHasGui, IMachineTE, VariantExpansion.Needs, IDirectional, ISyncSubject {
+public abstract class TileMachine extends TileEntity implements ITickable, HasGui, IMachineTE, VariantExpansion.Needs, IDirectional, ISyncSubject {
 
 	protected final MachineStorage storage;
 	protected final MachineController controller;
@@ -64,7 +64,7 @@ public abstract class TileMachine extends TileEntity implements ITickable, IHasG
 	}
 	
 	public IMachineController getController() { return controller; }
-	public IItemHandler getInventory() { return inventory; }
+	public IItemHandlerMachine getInventory() { return inventory; }
 	public IFluidHandlerAdvanced getInputTanks() { return inputTanks; }
 	public IFluidHandlerAdvanced getOutputTanks() { return outputTanks; }
 	public IEnergyStorageInternal getEnergy() { return energy; }

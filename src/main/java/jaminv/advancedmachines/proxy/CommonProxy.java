@@ -1,13 +1,13 @@
 package jaminv.advancedmachines.proxy;
 
+
 import jaminv.advancedmachines.Main;
-import jaminv.advancedmachines.client.textureset.FileHandlerTextureSet;
 import jaminv.advancedmachines.init.RecipeInit;
-import jaminv.advancedmachines.proxy.handlers.EventHandlerClient;
 import jaminv.advancedmachines.proxy.handlers.OreDictionaryHandler;
 import jaminv.advancedmachines.proxy.handlers.RegistryHandler;
+import jaminv.advancedmachines.util.network.MessageRegistry;
 import jaminv.advancedmachines.util.parser.DataParser;
-import net.minecraft.item.Item;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -15,6 +15,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 @EventBusSubscriber
 public class CommonProxy {
@@ -26,7 +27,9 @@ public class CommonProxy {
 		
 		Main.logger.info("Other registries");
 		
-		RegistryHandler.otherRegistries();
+		MessageRegistry.register();
+		// FIXME: World Gen
+		//GameRegistry.registerWorldGenerator(new WorldGenCustomOres(), 0);
 		
 		Main.logger.info("Completed - Other registries");
 	}
@@ -40,9 +43,7 @@ public class CommonProxy {
 		NetworkRegistry.INSTANCE.registerGuiHandler(Main.instance, new GuiProxy());
 	}
 
-	public void postInit(FMLPostInitializationEvent e) {
-	}
+	public void postInit(FMLPostInitializationEvent e) {}
 	
-	public void registerItemRenderer(Item item, int meta, String id) {}	
-	public void registerVariantRenderer(Item item, int meta, String filename, String id) {}
+	public World getMessageWorld(MessageContext ctx) { return null; }
 }

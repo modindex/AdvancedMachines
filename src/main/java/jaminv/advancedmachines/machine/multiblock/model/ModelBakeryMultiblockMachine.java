@@ -2,16 +2,13 @@ package jaminv.advancedmachines.machine.multiblock.model;
 
 import java.util.List;
 
-import jaminv.advancedmachines.client.RawTextures;
-import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.lib.render.ModelBakery;
-import jaminv.advancedmachines.lib.render.quad.Texture;
+import jaminv.advancedmachines.machine.MachineHelper;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.property.IExtendedBlockState;
 
 public class ModelBakeryMultiblockMachine implements ModelBakery {
 	
@@ -27,12 +24,9 @@ public class ModelBakeryMultiblockMachine implements ModelBakery {
 
 	@Override
 	public List<BakedQuad> bakeModel(IBlockState state) {
-		IExtendedBlockState ext = (IExtendedBlockState)state;
-		
-		Texture face = new Texture(RawTextures.get(ext.getValue(Properties.MACHINE_TYPE).getName(),
-				ext.getValue(Properties.ACTIVE) ? "active" : "inactive"));
-		
-		return new QuadBuilderMultiblock(state, MultiblockTextureBase.MULTIPLY).withFace(face).build();
+		return new QuadBuilderMultiblock(state, MultiblockTextureBase.MULTIPLY)
+			.withFace(MachineHelper.getMachineFace(state))
+			.build();
 	}
 
 	@Override

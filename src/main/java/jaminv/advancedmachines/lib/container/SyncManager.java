@@ -61,7 +61,7 @@ public class SyncManager implements ISyncManager {
 	@SideOnly(Side.CLIENT)
 	public void updateProgressBar(int id, int data) {
 		int subject = 0, first = 0;
-		if (id == 3) {
+		if (id == 4) {
 			int a = 0;
 		}
 		while(id >= first + subjects.get(subject).getFieldCount()) {
