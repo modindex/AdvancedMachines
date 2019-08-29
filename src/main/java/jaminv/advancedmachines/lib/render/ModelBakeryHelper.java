@@ -7,9 +7,9 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 
 public class ModelBakeryHelper {
-    public static BakedQuad createQuad(VertexFormat format, Vec3d v1, Vec3d v2, Vec3d v3, Vec3d v4, TextureAtlasSprite tex, int umin, int umax, int vmin, int vmax, boolean inverted) {
+    public static BakedQuad createQuad(VertexFormat format, Vec3d v1, Vec3d v2, Vec3d v3, Vec3d v4, TextureAtlasSprite tex, float umin, float umax, float vmin, float vmax, boolean inverted) {
         Vec3d normal = v3.subtract(v2).crossProduct(v1.subtract(v2)).normalize();
-
+     
         UnpackedBakedQuad.Builder builder = new UnpackedBakedQuad.Builder(format);
         builder.setTexture(tex);
         if (!inverted) {

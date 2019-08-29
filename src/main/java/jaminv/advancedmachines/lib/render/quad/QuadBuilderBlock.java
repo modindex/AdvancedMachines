@@ -4,29 +4,22 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 
 public class QuadBuilderBlock implements QuadBuilder {
 
-	private TextureAtlasSprite texture, face, top, bottom;
+	private Texture texture, top, bottom;
 	private EnumFacing facing = EnumFacing.NORTH;
 	private Cuboid cuboid = Cuboid.UNIT;
 	
-	public QuadBuilderBlock(TextureAtlasSprite texture) {
-		this.texture = this.face = this.top = this.bottom = texture;
+	public QuadBuilderBlock(Texture texture) {
+		this.texture = this.top = this.bottom = texture;
 		facing = EnumFacing.NORTH;
 	}
-			
-	public QuadBuilderBlock withFace(EnumFacing facing, TextureAtlasSprite face) {
-		this.facing = facing;
-		this.face = face;
-		return this;
-	}
 	
-	public QuadBuilderBlock withTop(TextureAtlasSprite top) { this.top = top; return this; }
-	public QuadBuilderBlock withBottom(TextureAtlasSprite bottom) { this.bottom = bottom; return this; }
-	public QuadBuilderBlock withTopBottom(TextureAtlasSprite texture) {
+	public QuadBuilderBlock withTop(Texture top) { this.top = top; return this; }
+	public QuadBuilderBlock withBottom(Texture bottom) { this.bottom = bottom; return this; }
+	public QuadBuilderBlock withTopBottom(Texture texture) {
 		this.top = this.bottom = texture;
 		return this; 
 	}
@@ -39,8 +32,7 @@ public class QuadBuilderBlock implements QuadBuilder {
 		List<BakedQuad> quads = new LinkedList<BakedQuad>();
 		
 		for (EnumFacing side : EnumFacing.values()) {
-			TextureAtlasSprite sprite = texture;
-			if (side == facing) { sprite = face; }
+			Texture sprite = texture;
 			if (side == EnumFacing.UP) { sprite = top; }
 			if (side == EnumFacing.DOWN) { sprite = bottom; }
 			

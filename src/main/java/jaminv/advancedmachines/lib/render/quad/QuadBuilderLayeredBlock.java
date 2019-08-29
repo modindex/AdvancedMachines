@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
 
 public class QuadBuilderLayeredBlock implements QuadBuilder {
@@ -47,11 +46,11 @@ public class QuadBuilderLayeredBlock implements QuadBuilder {
 			if (side == EnumFacing.UP) { layers = top; }
 			if (side == EnumFacing.DOWN) { layers = bottom; }
 			
-			List<TextureAtlasSprite> textures = new ArrayList<TextureAtlasSprite>();
+			List<Texture> textures = new ArrayList<Texture>();
 			textures.addAll(layers.getTextures(side));
 			if (side == facing) { textures.addAll(face.getTextures(side)); }
 			
-			for (TextureAtlasSprite sprite : textures) {
+			for (Texture sprite : textures) {
 				quads.addAll(new QuadBuilderBlockFace(sprite, side).withCuboid(cuboid).invert(inverted).build());
 			}
 		}

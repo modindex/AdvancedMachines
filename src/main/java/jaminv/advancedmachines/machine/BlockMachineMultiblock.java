@@ -121,7 +121,7 @@ public abstract class BlockMachineMultiblock extends BlockMachine implements Mac
 		BlockHelper.setBorders(world, pos, borders);
 	}
 
-	@Override @SideOnly(Side.CLIENT) public ModelBakery getModelBakery() { return new ModelBakeryMultiblockMachine(variant.getName()); }
+	@Override @SideOnly(Side.CLIENT) public ModelBakery getModelBakery() { return new ModelBakeryMultiblockMachine(variant); }
 
 	@Override
 	@SideOnly (Side.CLIENT)

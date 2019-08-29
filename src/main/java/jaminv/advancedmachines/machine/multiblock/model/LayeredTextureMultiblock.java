@@ -5,6 +5,7 @@ import java.util.List;
 
 import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.lib.render.quad.LayeredTexture;
+import jaminv.advancedmachines.lib.render.quad.Texture;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorderType;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
@@ -18,7 +19,7 @@ public class LayeredTextureMultiblock implements LayeredTexture {
 	protected VariantExpansion variant;
 	protected MultiblockBorders borders;
 	protected MultiblockTextureBase base;
-	protected TextureAtlasSprite face = null;
+	protected Texture face = null;
 	protected TextureSide side = TextureSide.SIDE;
 	
 	public LayeredTextureMultiblock(IBlockState state, MultiblockTextureBase base) {
@@ -28,7 +29,7 @@ public class LayeredTextureMultiblock implements LayeredTexture {
 	}
 	
 	private LayeredTextureMultiblock(VariantExpansion variant, MultiblockBorders borders, 
-			MultiblockTextureBase base, TextureAtlasSprite face, TextureSide side) {
+			MultiblockTextureBase base, Texture face, TextureSide side) {
 		this.variant = variant;
 		this.borders = borders;
 		this.base = base;
@@ -38,18 +39,18 @@ public class LayeredTextureMultiblock implements LayeredTexture {
 	
 	public LayeredTextureMultiblock copy() { return new LayeredTextureMultiblock(variant, borders, base, face, side); }
 	
-	public LayeredTextureMultiblock withFace(TextureAtlasSprite face) { this.face = face; return this; }
+	public LayeredTextureMultiblock withFace(Texture face) { this.face = face; return this; }
 	public LayeredTextureMultiblock withSided(TextureSide side) { this.side = side; return this; }
 	
-	protected void setBorder(List<TextureAtlasSprite> list, VariantExpansion variant, MultiblockBorderType border, String edge) {
+	protected void setBorder(List<Texture> list, VariantExpansion variant, MultiblockBorderType border, String edge) {
 		TextureAtlasSprite texture = base.getBorder(variant, side, border, edge);
-		if (texture != null) { list.add(texture); }
+		if (texture != null) { list.add(new Texture(texture)); }
 	}
 
 	@Override
-	public List<TextureAtlasSprite> getTextures(EnumFacing facing) {
-		LinkedList<TextureAtlasSprite> textures = new LinkedList<TextureAtlasSprite>();
-		textures.add(base.getTexture(variant, side));
+	public List<Texture> getTextures(EnumFacing facing) {
+		LinkedList<Texture> textures = new LinkedList<Texture>();
+		textures.add(new Texture(base.getTexture(variant, side)));
 		if (face != null) { textures.add(face); }
 		
 		switch (facing) {

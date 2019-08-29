@@ -1,32 +1,15 @@
 package jaminv.advancedmachines.client;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.nio.file.Files;
-
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.lib.render.TextureHelper;
 import jaminv.advancedmachines.lib.util.helper.StringHelper;
 import jaminv.advancedmachines.util.Reference;
-import jaminv.advancedmachines.util.logger.Logger;
-import jaminv.advancedmachines.util.parser.DataParserException;
-import jaminv.advancedmachines.util.parser.FileHandler;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.ModContainer;
 
@@ -113,6 +96,13 @@ public class RawTextures {
 			*/
 			}
 		}
+		
+		
+		TextureAtlasSprite sprite = register("blocks/machine/instance/alloy/active3x3");
+		sprite.setIconHeight(48);
+		sprite.setIconWidth(48);
+		sprite.initSprite(16, 16, 16, 16, false);
+		map.put("alloy.active.3x3", sprite);
 
 		textures = map.build();
 
