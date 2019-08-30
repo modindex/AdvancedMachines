@@ -9,48 +9,33 @@ def setVisibleByName(img, layername, vis):
 
 def python_fu_Machine(img, drawable, path):
 
+    normal = [
+        ["basic", ["Basic"], "Gray"],
+        ["compressed", ["Compressed"], "Dark"],
+        ["quad", ["Quad"], "Dark"],
+        ["improbable", ["Impossible"], "Black"],
+    ]
+    
+    tank = [
+        ["basic", ["Basic copy", "Tank Border", "Tank Glass"], "Gray"],
+        ["compressed", ["Compressed copy", "Tank Border", "Tank Glass"], "Dark"],
+        ["quad", ["Quad copy", "Tank Border", "Tank Glass"], "Dark"],
+        ["improbable", ["Impossible copy", "Tank Border", "Tank Glass"], "Black"],        
+    ]
+
     machines = [
-        ["expansion", []],
-        ["speed", ["Upgrade Frame", "Speed"]],
-        ["productivity", ["Upgrade Frame", "Productivity"]],
-        ["instance\\furnace\\inactive", ["Furnace Inactive"]],
-        ["instance\\furnace\\active", ["Furnace Active"]],
-        ["instance\\grinder\\inactive", ["Grinder Inactive", "Grinder Shadow Top", "Grinder Shadow Bottom"]],
-        ["instance\\grinder\\active", ["Grinder Active", "Grinder Shadow Top", "Grinder Shadow Bottom"]],
-        ["instance\\purifier\\inactive", ["Purifier Inactive"]],
-        ["instance\\purifier\\active", ["Purifier Active"]],
-        ["instance\\alloy\\inactive", ["Alloy Inactive", "Alloy Shadows"]],
-        ["instance\\alloy\\active", ["Alloy Active", "Alloy Shadows"]],
-        ["instance\\melter\\inactive", ["Melter Inactive", "Melter Corners"]],
-        ["instance\\melter\\active", ["Melter Active", "Melter Corners"]],
-        ["instance\\injector\\inactive", ["Injector Inactive", "Injector Shadows"]],
-        ["instance\\injector\\active", ["Injector Inactive", "Injector Active", "Injector Shadows"]],
-        ["instance\\stabilizer\\inactive", ["Stabilizer Inactive", "Stabilizer Shadows"]],
-        ["instance\\stabilizer\\active", ["Stabilizer Inactive", "Stabilizer Active", "Stabilizer Shadows"]],
-        ["inventory\\input", ["IO", "Input"]],
-        ["inventory\\output", ["IO", "Output"]],
-        ["energy", ["IO", "RF Energy"]],
-        ["redstone\\inactive", ["Redstone Inactive"]],
-        ["redstone\\active", ["Redstone Active", "Redstone Inactive"]]        
+        ["multiply", [], normal],
+        ["speed", ["Upgrade Frame", "Speed"], normal],
+        ["productivity", ["Upgrade Frame", "Productivity"], normal],
+        ["tank", ["Tank Border", "Tank Glass"], tank]
     ]
 
-    types = [
-        ["basic", "Basic", "Gray"],
-        ["compressed", "Compressed", "Dark"],
-        ["quad", "Quad", "Dark"],
-        ["improbable", "Impossible", "Black"],
-    ]
-
-    config = [
-        ["all", [ "Border Top", "Border Left", "Border Right", "Border Bottom"]],
-        ["base", []]
-    ]
+    all = [ "Border Top", "Border Left", "Border Right", "Border Bottom"]
     
     old = [False for x in range(len(img.layers))]
     for i in range(len(img.layers)):
         old[i] = img.layers[i].visible
         img.layers[i].visible = False
-        
 
     gimp.context_push()
     img.undo_group_start()
@@ -60,29 +45,34 @@ def python_fu_Machine(img, drawable, path):
         for layername in machinedata[1]:
             setVisibleByName(img, layername, True)
             
-        for typedata in types:
+        if not os.path.exists(path + "\\base\\" + machinepath):
+            os.makedirs(path + "\\base\\" + machinepath)
+
+        for typedata in machinedata[2]:
             typename = typedata[0]
-            setVisibleByName(img, typedata[1], True)
-
-            if not os.path.exists(path + "\\" + machinepath + "\\" + typename):
-                os.makedirs(path + "\\" + machinepath + "\\" + typename)
-
-            for filedata in config:
-                file = filedata[0]
-                for layername in filedata[1]:
-                    setVisibleByName(img, layername, True)
-                    setVisibleByName(img, layername + " " + typedata[2], True)
+            for layername in typedata[1]:
+                setVisibleByName(img, layername, True)
                 
-                new_image = pdb.gimp_image_duplicate(img)
-                layer = pdb.gimp_image_merge_visible_layers(new_image, CLIP_TO_IMAGE)
-                pdb.gimp_file_save(new_image, layer, path + "\\" + machinepath + "\\" + typename + "\\" + file + ".png", '?')
-                pdb.gimp_image_delete
+            new_image = pdb.gimp_image_duplicate(img)
+            layer = pdb.gimp_image_merge_visible_layers(new_image, CLIP_TO_IMAGE)
+            pdb.gimp_file_save(new_image, layer, path + "\\base\\" + machinepath + "\\" + typename + "_base.png", '?')
+            pdb.gimp_image_delete                
 
-                for layername in filedata[1]:
-                    setVisibleByName(img, layername, False)
-                    setVisibleByName(img, layername + " " + typedata[2], False)
+            for layername in all:
+                setVisibleByName(img, layername, True)
+                setVisibleByName(img, layername + " " + typedata[2], True)
+            
+            new_image = pdb.gimp_image_duplicate(img)
+            layer = pdb.gimp_image_merge_visible_layers(new_image, CLIP_TO_IMAGE)
+            pdb.gimp_file_save(new_image, layer, path + "\\base\\" + machinepath + "\\" + typename + "_all.png", '?')
+            pdb.gimp_image_delete
 
-            setVisibleByName(img, typedata[1], False)
+            for layername in all:
+                setVisibleByName(img, layername, False)
+                setVisibleByName(img, layername + " " + typedata[2], False)
+
+            for layername in typedata[1]:
+                setVisibleByName(img, layername, False)
 
         for layername in machinedata[1]:
             setVisibleByName(img, layername, False)
