@@ -1,5 +1,6 @@
 package jaminv.advancedmachines.proxy.handlers;
 
+import jaminv.advancedmachines.lib.util.blocks.BlockProperties;
 import jaminv.advancedmachines.lib.util.registry.RegistryHelper;
 import jaminv.advancedmachines.machine.expansion.BlockMachineProductivity;
 import jaminv.advancedmachines.machine.expansion.BlockMachineSpeed;
@@ -28,12 +29,14 @@ import jaminv.advancedmachines.machine.instance.purifier.BlockMachinePurifier;
 import jaminv.advancedmachines.machine.instance.purifier.TileMachinePurifier;
 import jaminv.advancedmachines.machine.instance.stabilizer.BlockMachineStabilizer;
 import jaminv.advancedmachines.machine.instance.stabilizer.TileMachineStabilizer;
+import jaminv.advancedmachines.objects.blocks.BlockPropertiesMod;
+import jaminv.advancedmachines.objects.blocks.render.BlockLayeredBaked;
+import jaminv.advancedmachines.objects.blocks.render.ModelBakeryProviderMachineFrame;
+import jaminv.advancedmachines.objects.variant.Variant;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
+import jaminv.advancedmachines.objects.variant.VariantResource;
 import jaminv.advancedmachines.util.Reference;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -46,17 +49,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @EventBusSubscriber(modid = Reference.MODID)
 public class RegistryHandler {
-	protected static class CustomStateMapper extends StateMapperBase {
-		protected ModelResourceLocation loc;
-		public CustomStateMapper(ModelResourceLocation resource) {
-			this.loc = resource;			
-		}
-
-		@Override
-		protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
-			return loc;
-		}
-	}	
+	
+	@FunctionalInterface
+	protected static interface VariantIterator<T extends Variant> {
+		void iterate(T var);
+	}
+	
+	protected static <T extends Variant> void forVariant(T[] values, VariantIterator<T> iterator) {
+		for (T var : values) { iterator.iterate(var); }
+	}
+	
+	protected static String getVariantName(String name, Variant variant) { return name + "_" + variant.getName(); }
 
 	@SubscribeEvent
 	public static void onItemRegister(RegistryEvent.Register<Item> event) {
@@ -75,22 +78,41 @@ public class RegistryHandler {
 			}
 		}*/
 		
+		forVariant(VariantResource.values(), var -> {
+			BlockProperties props = BlockProperties.ORE.withHarvestLevel("pickaxe", var.getHarvestLevel());
+			RegistryHelper.addBlockWithItem(new BlockProperties.Block(props), getVariantName("ore", var));
+		});
+		
+		forVariant(VariantResource.values(), var -> {
+			RegistryHelper.addBlockWithItem(new BlockProperties.Block(BlockProperties.STORAGE), getVariantName("storage", var));
+		});
+		
+		forVariant(VariantExpansion.values(), var -> {
+			RegistryHelper.addBlockWithBakedModel(new BlockLayeredBaked(BlockPropertiesMod.MACHINE),
+				new ModelBakeryProviderMachineFrame(var), getVariantName("machine_frame", var));
+		});	
+		
 		for (VariantExpansion variant : VariantExpansion.values()) {
-			RegistryHelper.addBlockWithBakedModel(new BlockMachineMultiply(variant), "machine_expansion_" + variant.getName());
+			if (variant != VariantExpansion.IMPROBABLE) {
+				RegistryHelper.addBlockWithBakedModel(new BlockMachineMultiply(variant), "machine_expansion_" + variant.getName());
+			}
 			RegistryHelper.addBlockWithBakedModel(new BlockMachineSpeed(variant), "machine_speed_" + variant.getName());
 			RegistryHelper.addBlockWithBakedModel(new BlockMachineProductivity(variant), "machine_productivity_" + variant.getName());
-			RegistryHelper.addBlockWithBakedModel(new BlockMachineInventory(variant), "machine_inventory_" + variant.getName());
-			RegistryHelper.addBlockWithBakedModel(new BlockMachineEnergy(variant), "machine_energy_" + variant.getName());
-			RegistryHelper.addBlockWithBakedModel(new BlockMachineRedstone(variant), "machine_redstone_" + variant.getName());
-			RegistryHelper.addBlockWithBakedModel(new BlockMachineTank(variant), "machine_tank_" + variant.getName());
 			
-			RegistryHelper.addBlockWithBakedModel(new BlockMachineFurnace(variant), "machine_furnace_" + variant.getName());
-			RegistryHelper.addBlockWithBakedModel(new BlockMachineGrinder(variant), "machine_grinder_" + variant.getName());
-			RegistryHelper.addBlockWithBakedModel(new BlockMachineAlloy(variant), "machine_alloy_" + variant.getName());
-			RegistryHelper.addBlockWithBakedModel(new BlockMachinePurifier(variant), "machine_purifier_" + variant.getName());
-			RegistryHelper.addBlockWithBakedModel(new BlockMachineMelter(variant), "machine_melter_" + variant.getName());
-			RegistryHelper.addBlockWithBakedModel(new BlockMachineStabilizer(variant), "machine_stabilizer_" + variant.getName());
-			RegistryHelper.addBlockWithBakedModel(new BlockMachineInjector(variant), "machine_injector_" + variant.getName());
+			if (variant != VariantExpansion.IMPROBABLE) {
+				RegistryHelper.addBlockWithBakedModel(new BlockMachineInventory(variant), "machine_inventory_" + variant.getName());
+				RegistryHelper.addBlockWithBakedModel(new BlockMachineEnergy(variant), "machine_energy_" + variant.getName());
+				RegistryHelper.addBlockWithBakedModel(new BlockMachineRedstone(variant), "machine_redstone_" + variant.getName());
+				RegistryHelper.addBlockWithBakedModel(new BlockMachineTank(variant), "machine_tank_" + variant.getName());
+				
+				RegistryHelper.addBlockWithBakedModel(new BlockMachineFurnace(variant), "machine_furnace_" + variant.getName());
+				RegistryHelper.addBlockWithBakedModel(new BlockMachineGrinder(variant), "machine_grinder_" + variant.getName());
+				RegistryHelper.addBlockWithBakedModel(new BlockMachineAlloy(variant), "machine_alloy_" + variant.getName());
+				RegistryHelper.addBlockWithBakedModel(new BlockMachinePurifier(variant), "machine_purifier_" + variant.getName());
+				RegistryHelper.addBlockWithBakedModel(new BlockMachineMelter(variant), "machine_melter_" + variant.getName());
+				RegistryHelper.addBlockWithBakedModel(new BlockMachineStabilizer(variant), "machine_stabilizer_" + variant.getName());
+				RegistryHelper.addBlockWithBakedModel(new BlockMachineInjector(variant), "machine_injector_" + variant.getName());
+			}
 		}
 		GameRegistry.registerTileEntity(TileMachineMultiply.class, new ResourceLocation("tile_machine_expansion"));
 		GameRegistry.registerTileEntity(TileMachineExpansion.class, new ResourceLocation("tile_machine_expansion_type"));

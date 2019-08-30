@@ -1,19 +1,15 @@
 package jaminv.advancedmachines.machine.expansion;
 
-import jaminv.advancedmachines.init.property.Properties;
-import jaminv.advancedmachines.lib.render.ModelBakery;
 import jaminv.advancedmachines.lib.render.ModelBakeryProvider;
+import jaminv.advancedmachines.lib.util.blocks.BlockProperties;
 import jaminv.advancedmachines.machine.MachineHelper;
 import jaminv.advancedmachines.machine.TileMachineMultiblock;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
-import jaminv.advancedmachines.objects.blocks.properties.BlockProperties;
-import jaminv.advancedmachines.objects.variant.HasVariant;
+import jaminv.advancedmachines.objects.blocks.BlockPropertiesMod;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import jaminv.advancedmachines.util.helper.BlockHelper.ScanResult;
 import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -21,11 +17,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ChunkCache;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -34,10 +28,12 @@ public abstract class BlockMachineExpansion extends Block implements VariantExpa
 	
 	protected final VariantExpansion variant;
 	
-	public BlockMachineExpansion(VariantExpansion variant) {
-		super(Material.IRON);
-		BlockProperties.MACHINE.apply(this);
-		setSoundType(SoundType.METAL);
+    protected static final BlockProperties props = BlockPropertiesMod.MACHINE;
+
+	public BlockMachineExpansion(VariantExpansion variant) {		
+		super(props.getMaterial());
+		props.apply(this);
+		setSoundType(props.getSoundType());	
 		this.variant = variant;
 	}
 

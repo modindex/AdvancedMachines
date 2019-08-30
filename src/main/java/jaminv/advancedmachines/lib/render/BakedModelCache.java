@@ -12,14 +12,11 @@ import javax.annotation.Nullable;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
@@ -30,37 +27,31 @@ public class BakedModelCache {
 	
 	public static String buildCacheKey(ItemStack stack) {
 		ToStringHelper helper = MoreObjects.toStringHelper(stack);
-		helper.add("item", Item.REGISTRY.getNameForObject(stack.getItem()).toString());
+		helper.add("item", stack.getItem().getRegistryName().toString());
 		helper.add("meta", Items.DIAMOND.getDamage(stack));
 		if (stack.getTagCompound() != null) { helper.add("nbt", stack.getTagCompound().toString()); }
 		return helper.toString();
 	}
 	
 	@Nullable
-	public static IBakedModel getItemModel(ItemStack stack) {
+	public static IBakedModel getItemModel(ItemStack stack, ModelBakery bakery) {
 		String key = buildCacheKey(stack);
 		IBakedModel model = itemCache.get(key);
 		if (model != null) { return model; }
-		return itemCache.put(key, generateItemModel(stack));
+		model = generateItemModel(stack, bakery);
+		itemCache.put(key, model);
+		return model;
 	}
 	
 	@Nullable
-	private static IBakedModel generateItemModel(ItemStack stack) {
-		Item item = stack.getItem();
-		if (item instanceof ItemBlock) {
-			Block block = Block.getBlockFromItem(item);
-			if (block instanceof ModelBakeryProvider) {
-				ModelBakery bakery = ((ModelBakeryProvider)block).getModelBakery();
-				return new BakedModelWrapper(bakery.bakeItemModel(stack), bakery.getTransformationMap());
-			}
-		}
-		return null;
+	private static IBakedModel generateItemModel(ItemStack stack, ModelBakery bakery) {
+		return new BakedModelWrapper(bakery.bakeItemModel(stack), bakery);
 	}
 	
 	public static String buildCacheKey(IBlockState state) {
 		ToStringHelper helper = MoreObjects.toStringHelper(state);
 
-		helper.add("meta", state.getBlock().getMetaFromState(state)); 
+		helper.add("block", state.getBlock().getRegistryName().toString()); 
 		for (Entry<IProperty<?>, Comparable<?>> entry : state.getProperties().entrySet()) {
 			helper.add(entry.getKey().getName(), entry.getValue().toString());
 		}
@@ -80,21 +71,18 @@ public class BakedModelCache {
 	}	
 	
 	@Nullable
-	public static List<BakedQuad> getBlockModel(IBlockState state) {
+	public static List<BakedQuad> getBlockModel(IBlockState state, ModelBakery bakery) {
 		if (state == null) { return Collections.emptyList(); }
 		String key = buildCacheKey(state);
 		List<BakedQuad> quads = blockCache.get(key);
 		if (quads != null) { return quads; }
-		return blockCache.put(key, generateBlockModel(state));
+		quads = generateBlockModel(state, bakery);
+		blockCache.put(key, quads);
+		return quads;
 	}
 	
 	@Nullable
-	private static List<BakedQuad> generateBlockModel(IBlockState state) {
-		Block block = state.getBlock();
-		if (block instanceof ModelBakeryProvider) {
-			ModelBakery bakery = ((ModelBakeryProvider)block).getModelBakery();
-			return bakery.bakeModel(state);
-		}
-		return Collections.emptyList();
+	private static List<BakedQuad> generateBlockModel(IBlockState state, ModelBakery bakery) {
+		return bakery.bakeModel(state);
 	}
 }

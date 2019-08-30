@@ -37,12 +37,12 @@
     },
     "improbable": {
         "side": { 
-            "all": "tank.improbable.add",
+            "all": "tank.improbable.all",
             "base": "tank.improbable.base",
             "constant": "border"
         },
         "top": {
-            "all": "tank.improbable.top.add",
+            "all": "tank.improbable.top.all",
             "base": "tank.improbable.top.base",
             "constant": "border"
         }

@@ -1,6 +1,7 @@
 package jaminv.advancedmachines.lib.render.quad;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,7 +13,8 @@ public class QuadBuilderLayeredBlock implements QuadBuilder {
 	private boolean inverted = false;
 	protected Cuboid cuboid = Cuboid.UNIT;
 	private EnumFacing facing = EnumFacing.NORTH;
-	private LayeredTexture texture, face, top, bottom; //, back, left, right; // Possibly Later
+	private LayeredTexture texture, top, bottom; //, back, left, right; // Possibly Later
+	private LayeredTexture face = new LayeredTextureList(Collections.emptyList());
 	
 	public QuadBuilderLayeredBlock(LayeredTexture texture) {
 		this.texture = this.face = this.top = this.bottom = texture;

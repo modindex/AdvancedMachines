@@ -12,23 +12,23 @@ def python_fu_Machine(img, drawable, path):
     normal = [
         ["basic", ["Basic"], "Gray"],
         ["compressed", ["Compressed"], "Dark"],
-        ["quad", ["Quad"], "Dark"],
-        ["improbable", ["Impossible"], "Black"],
+        ["quad", ["Impossible"], "Dark"],
+        ["improbable", ["Quad"], "Black"],
 	    ["basic_top", ["Basic", "Top"], "Gray"],
-        ["compressed_top", ["Compressed", "Top"], "Dark"],
-        ["quad_top", ["Quad", "Top"], "Dark"],
-        ["improbable_top", ["Impossible", "Top"], "Black"],	
+        ["compressed_top", ["Compressed", "Top Compressed"], "Dark"],
+        ["quad_top", ["Impossible", "Top Quad"], "Dark"],
+        ["improbable_top", ["Quad", "Top Compressed"], "Black"],	
     ]
     
     tank = [
         ["basic", ["Basic copy", "Tank Border", "Tank Glass"], "Gray"],
         ["compressed", ["Compressed copy", "Tank Border", "Tank Glass"], "Dark"],
-        ["quad", ["Quad copy", "Tank Border", "Tank Glass"], "Dark"],
-        ["improbable", ["Impossible copy", "Tank Border", "Tank Glass"], "Black"], 
+        ["quad", ["Impossible copy", "Tank Border", "Tank Glass"], "Dark"],
+        ["improbable", ["Quad copy", "Tank Border", "Tank Glass"], "Black"], 
 		["basic_top", ["Basic copy", "Tank Border", "Tank Glass", "Top Tank"], "Gray"],
-        ["compressed_top", ["Compressed copy", "Tank Border", "Tank Glass", "Top Tank"], "Dark"],
-        ["quad_top", ["Quad copy", "Tank Border", "Tank Glass", "Top Tank"], "Dark"],
-        ["improbable_top", ["Impossible copy", "Tank Border", "Tank Glass", "Top Tank"], "Black"],   
+        ["compressed_top", ["Compressed copy", "Tank Border", "Tank Glass", "Top Tank Compressed"], "Dark"],
+        ["quad_top", ["Impossible copy", "Tank Border", "Tank Glass", "Top Tank Quad"], "Dark"],
+        ["improbable_top", ["Quad copy", "Tank Border", "Tank Glass", "Top Tank Compressed"], "Black"],   
     ]
 
     machines = [

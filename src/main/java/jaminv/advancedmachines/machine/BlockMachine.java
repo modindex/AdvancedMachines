@@ -1,13 +1,11 @@
 package jaminv.advancedmachines.machine;
 
 import jaminv.advancedmachines.init.property.Properties;
-import jaminv.advancedmachines.objects.blocks.properties.BlockProperties;
-import jaminv.advancedmachines.objects.variant.HasVariant;
+import jaminv.advancedmachines.lib.util.blocks.BlockProperties;
+import jaminv.advancedmachines.objects.blocks.BlockPropertiesMod;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -31,11 +29,13 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 public abstract class BlockMachine extends Block implements VariantExpansion.Has {
 	
     protected VariantExpansion variant;
+    
+    protected static final BlockProperties props = BlockPropertiesMod.MACHINE;
 
 	public BlockMachine(VariantExpansion variant) {		
-		super(Material.IRON);
-		BlockProperties.MACHINE.apply(this);
-		setSoundType(SoundType.STONE);		
+		super(props.getMaterial());
+		props.apply(this);
+		setSoundType(props.getSoundType());		
 		this.variant = variant;
 	}
 

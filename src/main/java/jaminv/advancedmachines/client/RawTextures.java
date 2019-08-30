@@ -76,7 +76,6 @@ public class RawTextures {
 		map.put("redstone.active", new Texture(register("blocks/machine/expansion/redstone_active")));
 		map.put("redstone.inactive", new Texture(register("blocks/machine/expansion/redstone_inactive")));
 		
-		
 		for (String machine : machines) {
 			for (String state : states) {
 				TextureAtlasSprite sprite = register("blocks/machine/instance/" + machine + "/" + state);
@@ -100,12 +99,8 @@ public class RawTextures {
 			}
 		}
 		
-		
-		TextureAtlasSprite sprite = register("blocks/machine/instance/alloy/active3x3");
-		sprite.setIconHeight(48);
-		sprite.setIconWidth(48);
-		sprite.initSprite(16, 16, 16, 16, false);
-		map.put("alloy.active.3x3", new Texture(sprite).withUV(16/3f, 16/3f, 32/3f, 32/3f));
+		map.put("machine_frame", new Texture(register("blocks/machine/frame")));
+		map.put("machine_frame.top", new Texture(register("blocks/machine/frame_top")));
 
 		textures = map.build();
 
