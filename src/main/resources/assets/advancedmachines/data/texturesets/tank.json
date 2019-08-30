@@ -6,8 +6,8 @@
            "constant": "border_gray"
        },
        "top": {
-           "all": "tank.compressed.all",
-           "base": "tank.compressed.base",
+           "all": "tank.basic.top.all",
+           "base": "tank.basic.top.base",
            "constant": "border_dark"
        }
     },
@@ -18,8 +18,8 @@
            "constant": "border_dark"
        },
        "top": {
-           "all": "tank.quad.all",
-           "base": "tank.quad.base",
+           "all": "tank.compressed.top.all",
+           "base": "tank.compressed.top.base",
            "constant": "border_dark"
        }
     },
@@ -30,8 +30,8 @@
             "constant": "border_dark"
         },
         "top": {
-            "all": "tank.improbable.all",
-            "base": "tank.improbable.base",
+            "all": "tank.quad.top.all",
+            "base": "tank.quad.top.base",
             "constant": "border_dark"
         }
     },
@@ -42,8 +42,8 @@
             "constant": "border_dark"
         },
         "top": {
-            "all": "tank.improbable.add",
-            "base": "tank.improbable.base",
+            "all": "tank.improbable.top.add",
+            "base": "tank.improbable.top.base",
             "constant": "border_dark"
         }
     }      

@@ -6,8 +6,8 @@
             "constant": "border_gray"
         },
         "top": {
-            "all": "multiply.compressed.all",
-            "base": "multiply.compressed.base",
+            "all": "multiply.basic.top.all",
+            "base": "multiply.basic.top.base",
             "constant": "border_dark"
         }
     },
@@ -18,8 +18,8 @@
             "constant": "border_dark"
         },
         "top": {
-            "all": "multiply.quad.all",
-            "base": "multiply.quad.base",
+            "all": "multiply.compressed.top.all",
+            "base": "multiply.compressed.top.base",
             "constant": "border_dark"
         }
     },
@@ -30,8 +30,8 @@
             "constant": "border_dark"
         },
         "top": {
-            "all": "multiply.improbable.all",
-            "base": "multiply.improbable.base",
+            "all": "multiply.quad.top.all",
+            "base": "multiply.quad.top.base",
             "constant": "border_dark"
         }
     },
@@ -42,8 +42,8 @@
             "constant": "border_dark"
         },
         "top": {
-            "all": "multiply.improbable.all",
-            "base": "multiply.improbable.base",
+            "all": "multiply.improbable.top.all",
+            "base": "multiply.improbable.top.base",
             "constant": "border_dark"
         }
     }

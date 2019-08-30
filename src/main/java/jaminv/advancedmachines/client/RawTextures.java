@@ -59,6 +59,7 @@ public class RawTextures {
 			for (String variant : variants) {
 				for (String file : files) {
 					map.put(StringHelper.buildString(base, variant, file), new Texture(register("blocks/machine/base/" + base + "/" + variant + "_" + file)));
+					map.put(StringHelper.buildString(base, variant, "top", file), new Texture(register("blocks/machine/base/" + base + "/" + variant + "_top_" + file)));
 				}
 			}
 		}
