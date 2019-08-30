@@ -81,6 +81,7 @@ public class BakedModelCache {
 	
 	@Nullable
 	public static List<BakedQuad> getBlockModel(IBlockState state) {
+		if (state == null) { return Collections.emptyList(); }
 		String key = buildCacheKey(state);
 		List<BakedQuad> quads = blockCache.get(key);
 		if (quads != null) { return quads; }
