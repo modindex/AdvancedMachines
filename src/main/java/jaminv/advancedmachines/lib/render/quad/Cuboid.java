@@ -16,12 +16,12 @@ public class Cuboid {
 	
 	public Cuboid offset(float xoff, float yoff, float zoff) {
 		return new Cuboid(xmin + xoff, ymin + yoff, zmin + zoff,
-				xmax - xoff, ymax - yoff, zmin - zoff);
+				xmax - xoff, ymax - yoff, zmax - zoff);
 	}
 	
 	public Cuboid offset(float xminOff, float yminOff, float zminOff, float xmaxOff, float ymaxOff, float zmaxOff) {
 		return new Cuboid(xmin + xminOff, ymin + yminOff, zmin + zminOff,
-				xmax + xmaxOff, ymax + ymaxOff, zmax + zmaxOff);
+				xmax - xmaxOff, ymax - ymaxOff, zmax - zmaxOff);
 	}
 
 	public float getXMin() { return xmin; }

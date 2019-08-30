@@ -3,48 +3,48 @@
         "side": {
             "all": "multiply.basic.all",
             "base": "multiply.basic.base",
-            "constant": "border_gray"
+            "constant": "border"
         },
         "top": {
             "all": "multiply.basic.top.all",
             "base": "multiply.basic.top.base",
-            "constant": "border_dark"
+            "constant": "border"
         }
     },
     "compressed": {
         "side": {
             "all": "multiply.compressed.all",
             "base": "multiply.compressed.base",
-            "constant": "border_dark"
+            "constant": "border"
         },
         "top": {
             "all": "multiply.compressed.top.all",
             "base": "multiply.compressed.top.base",
-            "constant": "border_dark"
+            "constant": "border"
         }
     },
     "quad": {
         "side": {
             "all": "multiply.quad.all",
             "base": "multiply.quad.base",
-            "constant": "border_dark"
+            "constant": "border"
         },
         "top": {
             "all": "multiply.quad.top.all",
             "base": "multiply.quad.top.base",
-            "constant": "border_dark"
+            "constant": "border"
         }
     },
     "improbable": {
         "side": {
             "all": "multiply.improbable.all",
             "base": "multiply.improbable.base",
-            "constant": "border_dark"
+            "constant": "border"
         },
         "top": {
             "all": "multiply.improbable.top.all",
             "base": "multiply.improbable.top.base",
-            "constant": "border_dark"
+            "constant": "border"
         }
     }
 }

@@ -49,10 +49,12 @@ public class ModelBakeryMachineTank extends ModelBakeryMachineExpansion {
 		LayeredTexture top = new LayeredTextureMultiblockTransparent(state, base).withSided(TextureSide.TOP);
 		
 		ret.addAll(new QuadBuilderLayeredBlock(side).withTopBottom(top).build());
-		ret.addAll(new QuadBuilderLayeredBlock(side).withTopBottom(top).withCuboid(Cuboid.UNIT.offset(xmin, xmax, ymin, ymax, zmin, zmax)).invert().build());
+		ret.addAll(new QuadBuilderLayeredBlock(side).withTopBottom(top).withCuboid(Cuboid.UNIT.offset(xmin, ymin, zmin, xmax , ymax, zmax)).invert().build());
 
 		if (fluid != null && capacity > 0) {
-			ret.addAll(new QuadBuilderFluid(fluid, fluid.amount / (float)capacity).withCuboid(Cuboid.UNIT.offset(0.02f,  0.02f, 0.02f)).build()); 
+			QuadBuilderFluid quad = new QuadBuilderFluid(fluid, fluid.amount / (float)capacity);
+			quad.withCuboid(quad.getCuboid().offset(0.02f, 0.02f, 0.02f));
+			ret.addAll(quad.build()); 
 		}		
 		return ret;
 	}

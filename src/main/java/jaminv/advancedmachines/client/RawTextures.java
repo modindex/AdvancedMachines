@@ -22,7 +22,7 @@ public class RawTextures {
 	public final static String[] machines = { "alloy", "furnace", "grinder", "purifier", "melter", "stabilizer", "injector" };
 	public final static String[] states = { "active", "inactive" };
 	
-	public final static String[] border_types = { "single", "solid_dark", "solid_gray" };
+	public final static String[] border_types = { "single", "solid" };
 	public final static String[] borders = { "top", "left", "right", "bottom" };
 
 	protected static ImmutableMap<String, Texture> textures;
@@ -66,7 +66,7 @@ public class RawTextures {
 		
 		for (String type : border_types) {
 			for (String dir : borders) {
-				map.put("border." + type + "." + dir, new Texture(register("blocks/machine/borders/" + type + "/" + dir)));
+				map.put("border." + type + "." + dir, new Texture(register("blocks/machine/borders/" + type + "_" + dir)));
 			}
 		}
 		

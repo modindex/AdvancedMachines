@@ -4,8 +4,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Map.Entry;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 
@@ -38,9 +38,10 @@ public class BakedModelCache {
 	
 	@Nullable
 	public static IBakedModel getItemModel(ItemStack stack) {
-		IBakedModel model = itemCache.get(buildCacheKey(stack));
+		String key = buildCacheKey(stack);
+		IBakedModel model = itemCache.get(key);
 		if (model != null) { return model; }
-		return generateItemModel(stack);
+		return itemCache.put(key, generateItemModel(stack));
 	}
 	
 	@Nullable
@@ -80,9 +81,10 @@ public class BakedModelCache {
 	
 	@Nullable
 	public static List<BakedQuad> getBlockModel(IBlockState state) {
-		List<BakedQuad> quads = blockCache.get(buildCacheKey(state));
+		String key = buildCacheKey(state);
+		List<BakedQuad> quads = blockCache.get(key);
 		if (quads != null) { return quads; }
-		return generateBlockModel(state);
+		return blockCache.put(key, generateBlockModel(state));
 	}
 	
 	@Nullable

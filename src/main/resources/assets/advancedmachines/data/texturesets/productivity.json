@@ -3,48 +3,48 @@
         "side": {
             "all": "productivity.basic.all",
             "base": "productivity.basic.base",
-            "constant": "border_gray"
+            "constant": "border"
         },
         "top": {
             "all": "productivity.basic.top.all",
             "base": "productivity.basic.top.base",
-            "constant": "border_dark"
+            "constant": "border"
         }
     },
     "compressed": {
         "side": {
             "all": "productivity.compressed.all",
             "base": "productivity.compressed.base",
-            "constant": "border_dark"
+            "constant": "border"
         },
         "top": {
             "all": "productivity.compressed.top.all",
             "base": "productivity.compressed.top.base",
-            "constant": "border_dark"
+            "constant": "border"
         }
     },
     "quad": {
         "side": {
             "all": "productivity.quad.all",
             "base": "productivity.quad.base",
-            "constant": "border_dark"
+            "constant": "border"
         },
         "top": {
             "all": "productivity.quad.top.all",
             "base": "productivity.quad.top.base",
-            "constant": "border_dark"
+            "constant": "border"
         }
     },
     "improbable": {
         "side": {
             "all": "productivity.improbable.all",
             "base": "productivity.improbable.base",
-            "constant": "border_dark"
+            "constant": "border"
         },
         "top": {
             "all": "productivity.improbable.top.all",
             "base": "productivity.improbable.top.base",
-            "constant": "border_dark"
+            "constant": "border"
         }
     }
 }

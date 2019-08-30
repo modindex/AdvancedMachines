@@ -3,48 +3,48 @@
        "side": {
            "all": "tank.basic.all",
            "base": "tank.basic.base",
-           "constant": "border_gray"
+           "constant": "border"
        },
        "top": {
            "all": "tank.basic.top.all",
            "base": "tank.basic.top.base",
-           "constant": "border_dark"
+           "constant": "border"
        }
     },
     "compressed": {
        "side": {
            "all": "tank.compressed.all",
            "base": "tank.compressed.base",
-           "constant": "border_dark"
+           "constant": "border"
        },
        "top": {
            "all": "tank.compressed.top.all",
            "base": "tank.compressed.top.base",
-           "constant": "border_dark"
+           "constant": "border"
        }
     },
     "quad": {
         "side": {
             "all": "tank.quad.all",
             "base": "tank.quad.base",
-            "constant": "border_dark"
+            "constant": "border"
         },
         "top": {
             "all": "tank.quad.top.all",
             "base": "tank.quad.top.base",
-            "constant": "border_dark"
+            "constant": "border"
         }
     },
     "improbable": {
         "side": { 
             "all": "tank.improbable.add",
             "base": "tank.improbable.base",
-            "constant": "border_dark"
+            "constant": "border"
         },
         "top": {
             "all": "tank.improbable.top.add",
             "base": "tank.improbable.top.base",
-            "constant": "border_dark"
+            "constant": "border"
         }
     }      
 }
