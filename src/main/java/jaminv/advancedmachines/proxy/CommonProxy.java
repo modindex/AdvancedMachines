@@ -2,11 +2,10 @@ package jaminv.advancedmachines.proxy;
 
 
 import jaminv.advancedmachines.Main;
-import jaminv.advancedmachines.init.RecipeInit;
-import jaminv.advancedmachines.proxy.handlers.OreDictionaryHandler;
+import jaminv.advancedmachines.lib.util.parser.DataParser;
+import jaminv.advancedmachines.lib.util.parser.FileHandlerOreDictionary;
 import jaminv.advancedmachines.proxy.handlers.RegistryHandler;
 import jaminv.advancedmachines.util.network.MessageRegistry;
-import jaminv.advancedmachines.util.parser.DataParser;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -35,9 +34,9 @@ public class CommonProxy {
 	}
 	
 	public void init(FMLInitializationEvent e) {
-		DataParser.parseConstants();
+		DataParser.parseConstants();	
+		DataParser.parseFolder("data/ore_dictionary", new FileHandlerOreDictionary());
 		
-		OreDictionaryHandler.registerOreDictionary();
 		RecipeInit.init();
 		
 		NetworkRegistry.INSTANCE.registerGuiHandler(Main.instance, new GuiProxy());

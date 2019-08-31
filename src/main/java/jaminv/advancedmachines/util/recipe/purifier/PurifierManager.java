@@ -4,8 +4,8 @@ import java.util.List;
 
 import jaminv.advancedmachines.lib.recipe.RecipeBase;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
+import jaminv.advancedmachines.lib.util.parser.DataParser;
 import jaminv.advancedmachines.util.ModConfig;
-import jaminv.advancedmachines.util.parser.DataParser;
 
 public class PurifierManager {
 	

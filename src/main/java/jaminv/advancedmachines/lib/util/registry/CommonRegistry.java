@@ -3,32 +3,44 @@ package jaminv.advancedmachines.lib.util.registry;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
-
-import jaminv.advancedmachines.init.BlockInit;
-import jaminv.advancedmachines.init.FluidInit;
-import jaminv.advancedmachines.init.ItemInit;
-import jaminv.advancedmachines.lib.render.ModelBakery;
 import jaminv.advancedmachines.lib.render.ModelBakeryProvider;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.DefaultStateMapper;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fluids.BlockFluidClassic;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 
 public class CommonRegistry {
 	
 	protected static List<Block> blockRegistry = new ArrayList<Block>();
 	protected static List<Item> itemRegistry = new ArrayList<Item>();
+	protected static List<FluidData> fluidRegistry = new ArrayList<>();
+	
+	protected static class FluidData {
+		Fluid fluid;
+		String registryName;
+		Material material;
+		
+		public FluidData(Fluid fluid, String registryName, Material material) {
+			this.fluid = fluid; this.registryName = registryName; this.material = material;
+		}
+	}
 	
 	public void registerBlocks(RegistryEvent.Register<Block> event) {
+		for (FluidData data : fluidRegistry) {
+			FluidRegistry.registerFluid(data.fluid);
+			FluidRegistry.addBucketForFluid(data.fluid);
+			
+			BlockFluidClassic blockFluid = new BlockFluidClassic(data.fluid, data.material);
+			blockFluid.setRegistryName(data.registryName);
+			blockFluid.setUnlocalizedName(data.registryName);
+			blockRegistry.add(blockFluid);
+			registerFluidModel(blockFluid);
+		}
+
 		event.getRegistry().registerAll(blockRegistry.toArray(new Block[0]));
 	}
 	
@@ -58,4 +70,10 @@ public class CommonRegistry {
 		item.setUnlocalizedName(registryName);
 		itemRegistry.add(item);
 	}
+	
+	public void addFluid(Fluid fluid, String registryName, Material material) {
+		fluidRegistry.add(new FluidData(fluid, registryName, material));
+	}
+	
+	protected void registerFluidModel(BlockFluidClassic blockFluid) {}
 }

@@ -6,12 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 import jaminv.advancedmachines.Main;
-import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.machine.expansion.MachineUpgradeTile;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
+import jaminv.advancedmachines.objects.blocks.Properties;
 import jaminv.advancedmachines.objects.variant.NeedsVariant;
 import jaminv.advancedmachines.objects.variant.Variant;
-import jaminv.advancedmachines.util.interfaces.IDirectional;
 import jaminv.advancedmachines.util.interfaces.IHasMetadata;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -113,8 +112,8 @@ public class BlockHelper {
 		}
 		
 		TileEntity te = worldIn.getTileEntity(pos);
-		if (te != null && te instanceof IDirectional) {
-			((IDirectional)te).setFacing(ret);
+		if (te != null && te instanceof Directional) {
+			((Directional)te).setFacing(ret);
 		}
 		
 		return ret;

@@ -1,11 +1,12 @@
 package jaminv.advancedmachines.lib.util.registry;
 
 import jaminv.advancedmachines.lib.LibReference;
-import jaminv.advancedmachines.lib.render.ModelBakery;
 import jaminv.advancedmachines.lib.render.ModelBakeryProvider;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.SidedProxy;
 
 public class RegistryHelper {
@@ -45,5 +46,9 @@ public class RegistryHelper {
 	
 	public static void addItem(Item item, String registryName) {
 		proxy.addItem(item, registryName);
-	}	
+	}
+	
+	public static void addFluid(Fluid fluid, String registryName, Material material) {
+		proxy.addFluid(fluid, registryName, material);
+	}
 }

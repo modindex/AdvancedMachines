@@ -40,12 +40,12 @@ item.circuit_advanced.name=Advanced Processing Circuit
 item.circuit_ender.name=Ender Processing Circuit
 item.circuit_improbable.name=Improbability Matrix
 
-item.ingredient_copper_wire.name=Copper Wire
-item.ingredient_silver_wire.name=Silver Wire
-item.ingredient_gold_wire.name=Gold-plated wire
-item.ingredient_plastic.name=Plastic
-item.ingredient_tar.name=Tar
-item.ingredient_rosin.name=Rosin
+item.copper_wire.name=Copper Wire
+item.silver_wire.name=Silver Wire
+item.gold_wire.name=Gold-plated wire
+item.plastic.name=Plastic
+item.tar.name=Tar
+item.rosin.name=Rosin
 
 item.axe_titanium.name=Titanium Axe
 item.hoe_titanium.name=Titanium Hoe

@@ -1,10 +1,5 @@
 package jaminv.advancedmachines.machine.multiblock.model;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import jaminv.advancedmachines.util.enums.EnumGui;
-
 public enum TextureSide {
 	SIDE(0, "side"),
 	TOP(1, "top");

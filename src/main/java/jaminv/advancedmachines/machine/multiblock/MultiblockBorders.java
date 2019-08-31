@@ -1,8 +1,8 @@
 package jaminv.advancedmachines.machine.multiblock;
 
-import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.machine.BlockMachineMultiblock;
 import jaminv.advancedmachines.machine.expansion.MachineUpgrade;
+import jaminv.advancedmachines.objects.blocks.Properties;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;

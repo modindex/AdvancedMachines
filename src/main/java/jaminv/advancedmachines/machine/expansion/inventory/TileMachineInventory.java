@@ -12,7 +12,7 @@ import jaminv.advancedmachines.lib.machine.IMachineController;
 import jaminv.advancedmachines.machine.dialog.DialogIOToggle;
 import jaminv.advancedmachines.machine.expansion.TileMachineExpansion;
 import jaminv.advancedmachines.proxy.HasGui;
-import jaminv.advancedmachines.util.interfaces.IDirectional;
+import jaminv.advancedmachines.util.helper.Directional;
 import jaminv.advancedmachines.util.network.IOStateMessage;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -21,7 +21,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 
-public class TileMachineInventory extends TileMachineExpansion implements HasGui, IMachineController.ISubController, IDirectional, DialogIOToggle.ISwitchableIO, IItemObservable.IObserver {
+public class TileMachineInventory extends TileMachineExpansion implements HasGui, IMachineController.ISubController, Directional, DialogIOToggle.ISwitchableIO, IItemObservable.IObserver {
 
 	public static final ILayoutManager layout = new LayoutManager()
 		.addLayout(new ItemLayoutGrid.InventoryLayout(8, 38))

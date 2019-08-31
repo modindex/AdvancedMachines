@@ -1,8 +1,8 @@
 package jaminv.advancedmachines.machine;
 
-import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.lib.util.blocks.BlockProperties;
 import jaminv.advancedmachines.objects.blocks.BlockPropertiesMod;
+import jaminv.advancedmachines.objects.blocks.Properties;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.helper.BlockHelper;
 import net.minecraft.block.Block;

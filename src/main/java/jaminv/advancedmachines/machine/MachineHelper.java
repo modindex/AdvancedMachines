@@ -1,11 +1,11 @@
 package jaminv.advancedmachines.machine;
 
-import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.lib.dialog.control.enums.IOState;
 import jaminv.advancedmachines.lib.render.quad.Texture;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
+import jaminv.advancedmachines.objects.blocks.Properties;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;

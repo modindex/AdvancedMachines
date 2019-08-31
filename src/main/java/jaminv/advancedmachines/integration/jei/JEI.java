@@ -1,6 +1,5 @@
 package jaminv.advancedmachines.integration.jei;
 
-import jaminv.advancedmachines.init.BlockInit;
 import jaminv.advancedmachines.lib.container.ContainerMachine;
 import jaminv.advancedmachines.lib.dialog.container.EmptyContainer;
 import jaminv.advancedmachines.lib.jei.IJeiDialog;
@@ -11,6 +10,7 @@ import jaminv.advancedmachines.machine.instance.injector.DialogMachineInjector;
 import jaminv.advancedmachines.machine.instance.melter.DialogMachineMelter;
 import jaminv.advancedmachines.machine.instance.purifier.DialogMachinePurifier;
 import jaminv.advancedmachines.machine.instance.stabilizer.DialogMachineStabilizer;
+import jaminv.advancedmachines.proxy.handlers.RegistryHandler;
 import jaminv.advancedmachines.util.Reference;
 import jaminv.advancedmachines.util.recipe.AlloyManager;
 import jaminv.advancedmachines.util.recipe.FurnaceManager;
@@ -68,12 +68,12 @@ public class JEI implements IModPlugin {
 
 	@Override
 	public void register(IModRegistry registry) {
-		RecipeCategory.initialize(registry, RecipeUids.FURNACE, FurnaceManager.getRecipeList(), dialogFurnace, DialogMachineFurnace.class, ContainerMachine.class, BlockInit.MACHINE_FURNACE);
-		RecipeCategory.initialize(registry, RecipeUids.PURIFIER, PurifierManager.getRecipeList(), dialogPurifier, DialogMachinePurifier.class, ContainerMachine.class, BlockInit.MACHINE_PURIFIER);
-		RecipeCategory.initialize(registry, RecipeUids.GRINDER, GrinderManager.getRecipeList(), dialogGrinder, DialogMachineGrinder.class, ContainerMachine.class, BlockInit.MACHINE_GRINDER);
-		RecipeCategory.initialize(registry, RecipeUids.ALLOY, AlloyManager.getRecipeList(), dialogAlloy, DialogMachineAlloy.class, ContainerMachine.class, BlockInit.MACHINE_ALLOY);
-		RecipeCategory.initialize(registry, RecipeUids.MELTER, MelterManager.getRecipeList(), dialogMelter, DialogMachineMelter.class, ContainerMachine.class, BlockInit.MACHINE_MELTER);
-		RecipeCategory.initialize(registry, RecipeUids.STABILIZER, StabilizerManager.getRecipeList(), dialogStabilizer, DialogMachineStabilizer.class, ContainerMachine.class, BlockInit.MACHINE_STABILIZER);
-		RecipeCategory.initialize(registry, RecipeUids.INJECTOR, InjectorManager.getRecipeList(), dialogInjector, DialogMachineInjector.class, ContainerMachine.class, BlockInit.MACHINE_INJECTOR);
+		RecipeCategory.initialize(registry, RecipeUids.FURNACE, FurnaceManager.getRecipeList(), dialogFurnace, DialogMachineFurnace.class, ContainerMachine.class, RegistryHandler.FURNACE.get("basic"));
+		RecipeCategory.initialize(registry, RecipeUids.PURIFIER, PurifierManager.getRecipeList(), dialogPurifier, DialogMachinePurifier.class, ContainerMachine.class, RegistryHandler.PURIFIER.get("basic"));
+		RecipeCategory.initialize(registry, RecipeUids.GRINDER, GrinderManager.getRecipeList(), dialogGrinder, DialogMachineGrinder.class, ContainerMachine.class, RegistryHandler.GRINDER.get("basic"));
+		RecipeCategory.initialize(registry, RecipeUids.ALLOY, AlloyManager.getRecipeList(), dialogAlloy, DialogMachineAlloy.class, ContainerMachine.class, RegistryHandler.ALLOY.get("basic"));
+		RecipeCategory.initialize(registry, RecipeUids.MELTER, MelterManager.getRecipeList(), dialogMelter, DialogMachineMelter.class, ContainerMachine.class, RegistryHandler.MELTER.get("basic"));
+		RecipeCategory.initialize(registry, RecipeUids.STABILIZER, StabilizerManager.getRecipeList(), dialogStabilizer, DialogMachineStabilizer.class, ContainerMachine.class, RegistryHandler.STABILIZER.get("basic"));
+		RecipeCategory.initialize(registry, RecipeUids.INJECTOR, InjectorManager.getRecipeList(), dialogInjector, DialogMachineInjector.class, ContainerMachine.class, RegistryHandler.INJECTOR.get("basic"));
 	}	
 }

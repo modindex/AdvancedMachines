@@ -4,13 +4,13 @@ import com.google.gson.JsonObject;
 
 import jaminv.advancedmachines.lib.recipe.RecipeInput;
 import jaminv.advancedmachines.lib.recipe.RecipeOutput;
+import jaminv.advancedmachines.lib.util.logger.Logger;
+import jaminv.advancedmachines.lib.util.parser.DataParserException;
+import jaminv.advancedmachines.lib.util.parser.FileHandlerRecipe;
 import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.Reference;
 import jaminv.advancedmachines.util.conditions.ConfigConditionFactory;
 import jaminv.advancedmachines.util.conditions.OreDictionaryConditionFactory;
-import jaminv.advancedmachines.util.logger.Logger;
-import jaminv.advancedmachines.util.parser.DataParserException;
-import jaminv.advancedmachines.util.parser.FileHandlerRecipe;
 import jaminv.advancedmachines.util.recipe.grinder.GrinderManager.GrinderRecipe;
 
 public class FileHandlerGrinderRecipe extends FileHandlerRecipe {

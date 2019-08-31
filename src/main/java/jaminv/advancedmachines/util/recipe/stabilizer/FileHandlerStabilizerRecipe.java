@@ -4,11 +4,11 @@ import com.google.gson.JsonObject;
 
 import jaminv.advancedmachines.lib.recipe.RecipeInput;
 import jaminv.advancedmachines.lib.recipe.RecipeOutput;
+import jaminv.advancedmachines.lib.util.logger.Logger;
+import jaminv.advancedmachines.lib.util.parser.DataParserException;
+import jaminv.advancedmachines.lib.util.parser.FileHandlerRecipe;
+import jaminv.advancedmachines.lib.util.parser.ParseUtils;
 import jaminv.advancedmachines.util.ModConfig;
-import jaminv.advancedmachines.util.logger.Logger;
-import jaminv.advancedmachines.util.parser.DataParserException;
-import jaminv.advancedmachines.util.parser.FileHandlerRecipe;
-import jaminv.advancedmachines.util.parser.ParseUtils;
 import jaminv.advancedmachines.util.recipe.stabilizer.StabilizerManager.StabilizerRecipe;
 
 public class FileHandlerStabilizerRecipe extends FileHandlerRecipe {

@@ -1,9 +1,9 @@
 package jaminv.advancedmachines.machine.expansion.tank;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import jaminv.advancedmachines.init.property.Properties;
 import jaminv.advancedmachines.lib.render.quad.Cuboid;
 import jaminv.advancedmachines.lib.render.quad.LayeredTexture;
 import jaminv.advancedmachines.lib.render.quad.QuadBuilderFluid;
@@ -15,6 +15,7 @@ import jaminv.advancedmachines.machine.multiblock.model.LayeredTextureMultiblock
 import jaminv.advancedmachines.machine.multiblock.model.MultiblockTextureBase;
 import jaminv.advancedmachines.machine.multiblock.model.QuadBuilderMultiblockItem;
 import jaminv.advancedmachines.machine.multiblock.model.TextureSide;
+import jaminv.advancedmachines.objects.blocks.Properties;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -61,6 +62,9 @@ public class ModelBakeryMachineTank extends ModelBakeryMachineExpansion {
 
 	@Override
 	public List<BakedQuad> bakeItemModel(ItemStack stack) {
-		return new QuadBuilderMultiblockItem(stack, base).build();
+		List<BakedQuad> quads = new ArrayList<>();
+		quads.addAll(new QuadBuilderMultiblockItem(stack, base).build());
+		quads.addAll(new QuadBuilderMultiblockItem(stack, base).invert().build());
+		return quads;
 	}
 }

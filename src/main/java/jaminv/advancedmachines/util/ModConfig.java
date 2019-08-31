@@ -1,8 +1,5 @@
 package jaminv.advancedmachines.util;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import jaminv.advancedmachines.lib.recipe.RecipeOutput;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.RangeInt;
@@ -58,62 +55,6 @@ public final class ModConfig {
 		@Config.Comment("Default energy cost for standard alloy furnace recipes")
 		@RangeInt(min = 0, max = 1000000)
 		public int defaultAlloyEnergyCost = 8000;
-	}
-	
-	@Config.Comment({ "Material Configuration", "",
-		"Disabling a material here will prevent creation of all blocks and items associated with the material.",
-		"This mod will attempt to use the ore dictionary for any recipes that include these materials;",
-		"If no equivilent material is found, the recipe will not be available.",
-		"This may make some items unavailable if a material is removed and these is no ore dictionary equivalent.",
-		"This is intended to be used primarily when another mod provides the same material and you don't want duplicates."		
-	})
-	@Config.RequiresMcRestart
-	public static Material material = new Material();
-	public static class Material {
-		@Config.Comment({
-			"Check for the existence of Thermal Foundation and remove all materials that coincide with it.", "NOT YET WORKING."
-		})
-		public boolean detectAndRemoveTF = true;
-		
-		@Config.Comment({
-			"Check for the existence of Applied Energestics 2 and remove all materials that coincide with it (basically just ender dust).", "NOT YET WORKING."
-		})
-		public boolean detectAndRemoveAE2 = true;
-
-		@Config.Comment({ "List of mod materials to exclude", "Valid options are 'titanium', 'copper', 'silver'", "This will also disable world generation for these ores." })
-		public String[] excludeMaterials = {};
-		
-		@Config.Comment({ "List of pure ingots and dusts to exclude.", "Valid options are 'gold', 'copper', 'silver', 'diamond', 'ender'." })
-		public String[] excludePure = {};
-		
-		@Config.Comment({ "List of dusts to exclude.", "Valid options are 'coal', 'iron', 'gold', 'copper', 'silver', 'diamond', 'ender'." })
-		public String[] excludeDust = {};
-		
-		@Config.Comment({ "List of alloys to exclude.", "Valid options are 'titanium_carbide', 'titanium_endite'." })
-		public String[] excludeAlloy = {};
-		
-		public static boolean doInclude(String material) {
-			return true;
-		}
-		
-/*		protected static Map<String, Boolean> exclude = new HashMap<String, Boolean>;
-		public static boolean doInclude(String material) {			
-			if (exclude.isEmpty()) {
-				for (String mat : excludeMaterials) {
-					doExclude.put("material_" + mat, true);
-				}
-				for (String pure : excludePure) {
-					doExclude.put("pure_" + pure, true);
-				}
-				for (String dust : excludeDust) {
-					doExclude.put("dust_" + dust, true);
-				}
-				for (String alloy : excludeAlloy) {
-					doExclude.put("alloy_" + alloy, true);
-				}				
-			} 
-		} */
-		
 	}
 	
 	@Config.Comment({ "Crafting Configuration", "Allows disabling of some common crafting recipes that may conflict with other mods." })

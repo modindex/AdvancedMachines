@@ -17,7 +17,7 @@ import jaminv.advancedmachines.machine.expansion.TileMachineExpansion;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.proxy.HasGui;
 import jaminv.advancedmachines.util.ModConfig;
-import jaminv.advancedmachines.util.interfaces.IDirectional;
+import jaminv.advancedmachines.util.helper.Directional;
 import jaminv.advancedmachines.util.network.IOStateMessage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -35,7 +35,7 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
-public class TileMachineTank extends TileMachineExpansion implements ITickable, HasGui, IDirectional, 
+public class TileMachineTank extends TileMachineExpansion implements ITickable, HasGui, Directional, 
 		IMachineController.ISubController, IItemObservable.IObserver, IFluidObservable.IObserver, DialogIOToggle.ISwitchableIO {
 	
 	public static final ILayoutManager layout = new LayoutManager()

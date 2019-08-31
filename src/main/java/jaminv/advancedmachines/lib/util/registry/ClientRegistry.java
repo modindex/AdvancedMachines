@@ -6,18 +6,19 @@ import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 
 import jaminv.advancedmachines.lib.render.BakedModelLoader;
-import jaminv.advancedmachines.lib.render.ModelBakery;
 import jaminv.advancedmachines.lib.render.ModelBakeryProvider;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.IStateMapper;
+import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fluids.BlockFluidClassic;
 
 public class ClientRegistry  extends CommonRegistry {
 
 	protected static List<Item> modelRegistry = new ArrayList<Item>();
 	protected static List<Pair<Block, ModelBakeryProvider>> bakedModelRegistry = new ArrayList<>();
+	protected static List<BlockFluidClassic> fluidModelRegistry = new ArrayList();
 	
 	@Override
 	public void registerModels() {
@@ -29,6 +30,10 @@ public class ClientRegistry  extends CommonRegistry {
 		
 		for (Pair<Block, ModelBakeryProvider> pair : bakedModelRegistry) {
 			BakedModelLoader.register(pair.getLeft().getRegistryName(), pair.getRight().getModelBakery());
+		}
+		
+		for (BlockFluidClassic fluid : fluidModelRegistry) {
+			ModelLoader.setCustomStateMapper(fluid, new StateMap.Builder().ignore(BlockFluidClassic.LEVEL).build());
 		}
 	}		
 	
@@ -43,6 +48,10 @@ public class ClientRegistry  extends CommonRegistry {
 		super.addBlockWithBakedModel(block, provider, registryName);
 		bakedModelRegistry.add(Pair.of(block, provider));
 	}
-	
 
+	@Override
+	protected void registerFluidModel(BlockFluidClassic blockFluid) {
+		super.registerFluidModel(blockFluid);
+		fluidModelRegistry.add(blockFluid);
+	}
 }

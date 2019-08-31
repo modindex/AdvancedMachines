@@ -6,8 +6,8 @@ import jaminv.advancedmachines.lib.recipe.RecipeBase;
 import jaminv.advancedmachines.lib.recipe.RecipeInput;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
 import jaminv.advancedmachines.lib.recipe.RecipeOutput;
+import jaminv.advancedmachines.lib.util.parser.DataParser;
 import jaminv.advancedmachines.util.ModConfig;
-import jaminv.advancedmachines.util.parser.DataParser;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class GrinderManager {

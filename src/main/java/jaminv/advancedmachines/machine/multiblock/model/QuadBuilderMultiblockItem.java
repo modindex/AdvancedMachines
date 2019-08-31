@@ -21,6 +21,7 @@ public class QuadBuilderMultiblockItem implements QuadBuilder {
 	ItemStack stack;
 	MultiblockTextureBase base; 
 	Texture face;
+	boolean inverted = false;
 	
 	public QuadBuilderMultiblockItem(ItemStack stack, MultiblockTextureBase base) {
 		this.stack = stack;
@@ -31,6 +32,9 @@ public class QuadBuilderMultiblockItem implements QuadBuilder {
 		this.face = face;
 		return this;
 	}
+	
+	public QuadBuilderMultiblockItem invert() { this.inverted = true; return this; }
+	public QuadBuilderMultiblockItem invert(boolean inverted) { this.inverted = inverted; return this; }
 	
 	@Override
 	public List<BakedQuad> build() {
@@ -49,7 +53,7 @@ public class QuadBuilderMultiblockItem implements QuadBuilder {
 		Texture side = base.getItemTexture(variant, TextureSide.SIDE);
 		Texture top = base.getItemTexture(variant, TextureSide.TOP);
 		
-		QuadBuilderLayeredBlock quad = new QuadBuilderLayeredBlock(new LayeredTextureList(side)).withTopBottom(new LayeredTextureList(top));
+		QuadBuilderLayeredBlock quad = new QuadBuilderLayeredBlock(new LayeredTextureList(side)).withTopBottom(new LayeredTextureList(top)).invert(inverted);
 		if (face != null) { quad.withFace(EnumFacing.NORTH, new LayeredTextureList(side, face)); }
 		return quad.build();
 	}

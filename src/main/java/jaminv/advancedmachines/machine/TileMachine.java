@@ -22,7 +22,7 @@ import jaminv.advancedmachines.lib.recipe.IRecipeManager;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.proxy.HasGui;
 import jaminv.advancedmachines.util.ModConfig;
-import jaminv.advancedmachines.util.interfaces.IDirectional;
+import jaminv.advancedmachines.util.helper.Directional;
 import jaminv.advancedmachines.util.network.ProcessingStateMessage;
 import jaminv.advancedmachines.util.network.RedstoneStateMessage;
 import net.minecraft.block.state.IBlockState;
@@ -40,7 +40,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.items.CapabilityItemHandler;
 
-public abstract class TileMachine extends TileEntity implements ITickable, HasGui, IMachineTE, VariantExpansion.Needs, IDirectional, ISyncSubject {
+public abstract class TileMachine extends TileEntity implements ITickable, HasGui, IMachineTE, VariantExpansion.Needs, Directional, ISyncSubject {
 
 	protected final MachineStorage storage;
 	protected final MachineController controller;
