@@ -1,6 +1,7 @@
 package jaminv.advancedmachines.machine.expansion.inventory;
 
 import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.init.HasGui;
 import jaminv.advancedmachines.lib.container.ContainerInventory;
 import jaminv.advancedmachines.lib.container.layout.ILayoutManager;
 import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid;
@@ -11,7 +12,6 @@ import jaminv.advancedmachines.lib.inventory.ItemStackHandlerObservable;
 import jaminv.advancedmachines.lib.machine.IMachineController;
 import jaminv.advancedmachines.machine.dialog.DialogIOToggle;
 import jaminv.advancedmachines.machine.expansion.TileMachineExpansion;
-import jaminv.advancedmachines.proxy.HasGui;
 import jaminv.advancedmachines.util.helper.Directional;
 import jaminv.advancedmachines.util.network.IOStateMessage;
 import net.minecraft.inventory.Container;

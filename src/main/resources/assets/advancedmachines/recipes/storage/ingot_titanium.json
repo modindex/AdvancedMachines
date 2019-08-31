@@ -1,4 +1,7 @@
 {
+    "conditions" : [
+        { "type": "advancedmachines:config", "value": "blockTitanium" }
+    ],
     "type": "forge:ore_shapeless",
     
     "ingredients":
@@ -10,8 +13,7 @@
     ],
     
     "result": { 
-        "item": "advancedmachines:ingot",
-        "data": 0,
+        "item": "advancedmachines:ingot_titanium",
         "count": 9
     }
 }

@@ -1,4 +1,4 @@
-package jaminv.advancedmachines.util;
+package jaminv.advancedmachines;
 
 import jaminv.advancedmachines.lib.recipe.RecipeOutput;
 import net.minecraftforge.common.config.Config;
@@ -66,6 +66,33 @@ public final class ModConfig {
 		
 		@Config.Comment("Include crafting recipe for 'Titanium Gear'.")
 		public boolean craftTitaniumGear = true;
+		
+		@Config.Comment("Include crafting recipes for titanium blocks.")
+		public boolean craftTitaniumBlock = true;
+		
+		@Config.Comment("Include crafting recipe for copper blocks.")
+		public boolean craftCopperBlock = true;
+		
+		@Config.Comment("Include crafting recipe for silver blocks.")
+		public boolean craftSilverBlock = true;
+		
+		@Config.Comment("Include crafting recipes for titanium tools.")
+		public boolean craftTitaniumTools = true;
+		
+		@Config.Comment("Include crafting recipes for titanium armor.")
+		public boolean craftTitaniumArmor = true;
+		
+		@Config.Comment("Include crafting recipes for copper tools.")
+		public boolean craftCopperTools = true;
+		
+		@Config.Comment("Include crafting recipes for copper armor.")
+		public boolean craftCopperArmor = true;
+		
+		@Config.Comment("Include crafting recipes for silver tools.")
+		public boolean craftSilverTools = true;
+		
+		@Config.Comment("Include crafting recipes for silver armor.")
+		public boolean craftSilverArmor = true;		
 	}
 	
 	@Config.Comment({ "Recipe Configuration" })
@@ -100,17 +127,7 @@ public final class ModConfig {
 	@Config.RequiresMcRestart
 	public static Tool tool = new Tool();
 	public static class Tool {
-		@Config.Comment("Set to false to disable Titanium tools")
-		public boolean doAddTitaniumTools = true;
-		
-		@Config.Comment("Set to false to disable Titanium armor")
-		public boolean doAddTitaniumArmor = true;
-		
-		@Config.Comment("Set to false to disable Copper tools")
-		public boolean doAddCopperTools = true;
-		
-		@Config.Comment("Set to false to disable Copper armor")
-		public boolean doAddCopperArmor = true;
+
 	}
 	
 	@Config.Comment({ "World Gen Configution", "",

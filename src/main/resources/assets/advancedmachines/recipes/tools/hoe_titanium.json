@@ -1,4 +1,7 @@
 {
+    "conditions" : [
+        { "type": "advancedmachines:config", "value": "toolTitanium" }
+    ],
     "type": "forge:ore_shaped",
     
     "pattern":

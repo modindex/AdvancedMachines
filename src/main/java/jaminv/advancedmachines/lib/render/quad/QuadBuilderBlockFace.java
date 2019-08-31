@@ -39,11 +39,6 @@ public class QuadBuilderBlockFace implements QuadBuilder {
 		float ymin = cuboid.getYMin(), ymax = cuboid.getYMax();
 		float zmin = cuboid.getZMin(), zmax = cuboid.getZMax();
 		
-		// FIXME: Debugging
-		if (texture.getUMin() == 0.0f && texture.getUMax() != 16f) {
-			int a = 0;
-		}
-		
 		/*
 		 * The UV coordinates may or may not be correct. They have worked so far for my very limited purposes (fluids & large textures),
 		 * but may need to be corrected for more general-purpose usage. (Top and Bottom UV coordinated may not work correctly).

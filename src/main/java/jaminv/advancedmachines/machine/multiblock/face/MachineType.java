@@ -3,7 +3,7 @@ package jaminv.advancedmachines.machine.multiblock.face;
 import java.util.HashMap;
 import java.util.Map;
 
-import jaminv.advancedmachines.proxy.GuiProxy;
+import jaminv.advancedmachines.init.GuiProxy;
 
 public enum MachineType {
 	

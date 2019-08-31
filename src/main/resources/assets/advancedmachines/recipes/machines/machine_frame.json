@@ -4,7 +4,7 @@
     "pattern":
     [
         "SSS",
-        "SIS",
+        "S S",
         "TTT"
     ],
     
@@ -13,15 +13,11 @@
             "type": "forge:ore_dict",
             "ore": "ingotSilver"
         },
-        "I": {
-            "type": "forge:ore_dict",
-            "ore": "gearIron"
-        },
         "T": {
             "type": "forge:ore_dict",
             "ore": "ingotTitanium"
         }
     },
     
-    "result": { "item": "advancedmachines:machine_frame", "data": 0 }
+    "result": { "item": "advancedmachines:machine_frame_basic" }
 }

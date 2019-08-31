@@ -1,4 +1,4 @@
-package jaminv.advancedmachines.proxy;
+package jaminv.advancedmachines.init;
 
 import jaminv.advancedmachines.machine.expansion.energy.DialogMachineEnergy;
 import jaminv.advancedmachines.machine.expansion.energy.TileMachineEnergy;

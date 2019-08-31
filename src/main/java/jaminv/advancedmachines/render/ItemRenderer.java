@@ -1,4 +1,4 @@
-package jaminv.advancedmachines.client;
+package jaminv.advancedmachines.render;
 
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;

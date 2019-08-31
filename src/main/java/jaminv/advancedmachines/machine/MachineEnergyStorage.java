@@ -1,8 +1,8 @@
 package jaminv.advancedmachines.machine;
 
+import jaminv.advancedmachines.ModConfig;
 import jaminv.advancedmachines.lib.energy.EnergyStorageAdvanced;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
-import jaminv.advancedmachines.util.ModConfig;
 
 public class MachineEnergyStorage extends EnergyStorageAdvanced {
 

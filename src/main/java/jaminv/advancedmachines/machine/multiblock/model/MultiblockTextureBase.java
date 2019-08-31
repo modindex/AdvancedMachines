@@ -1,9 +1,9 @@
 package jaminv.advancedmachines.machine.multiblock.model;
 
-import jaminv.advancedmachines.client.textureset.TextureSets;
 import jaminv.advancedmachines.lib.render.quad.Texture;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorderType;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
+import jaminv.advancedmachines.render.textureset.TextureSets;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 public enum MultiblockTextureBase {

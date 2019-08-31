@@ -14,14 +14,15 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
+import jaminv.advancedmachines.Reference;
 import jaminv.advancedmachines.lib.LibReference;
 import jaminv.advancedmachines.lib.util.logger.Logger;
-import jaminv.advancedmachines.util.Reference;
 import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.ModContainer;
 
+// TODO: Move log creation out of this file - have callers pass a log object.
 public class DataParser {
 	
     private static Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();	

@@ -3,9 +3,9 @@ package jaminv.advancedmachines.util.recipe;
 import java.util.List;
 import java.util.Map;
 
+import jaminv.advancedmachines.ModConfig;
 import jaminv.advancedmachines.lib.recipe.RecipeBase;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
-import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.helper.ItemHelper;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;

@@ -4,8 +4,8 @@ import java.util.function.BooleanSupplier;
 
 import com.google.gson.JsonObject;
 
-import jaminv.advancedmachines.util.ModConfig;
-import jaminv.advancedmachines.util.Reference;
+import jaminv.advancedmachines.ModConfig;
+import jaminv.advancedmachines.Reference;
 import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.crafting.IConditionFactory;
 import net.minecraftforge.common.crafting.JsonContext;

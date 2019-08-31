@@ -1,5 +1,7 @@
 package jaminv.advancedmachines.machine.expansion.energy;
 
+import jaminv.advancedmachines.ModConfig;
+import jaminv.advancedmachines.init.HasGui;
 import jaminv.advancedmachines.lib.dialog.container.EmptyContainer;
 import jaminv.advancedmachines.lib.dialog.container.IContainerUpdate;
 import jaminv.advancedmachines.lib.energy.EnergyStorageAdvanced;
@@ -8,8 +10,6 @@ import jaminv.advancedmachines.lib.energy.IEnergyStorageInternal;
 import jaminv.advancedmachines.lib.machine.IMachineController;
 import jaminv.advancedmachines.machine.expansion.TileMachineExpansion;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
-import jaminv.advancedmachines.proxy.HasGui;
-import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.helper.Directional;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;

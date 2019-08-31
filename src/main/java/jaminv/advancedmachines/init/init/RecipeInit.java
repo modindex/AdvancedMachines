@@ -1,4 +1,4 @@
-package jaminv.advancedmachines.proxy;
+package jaminv.advancedmachines.init.init;
 
 import jaminv.advancedmachines.util.recipe.AlloyManager;
 import jaminv.advancedmachines.util.recipe.FurnaceManager;

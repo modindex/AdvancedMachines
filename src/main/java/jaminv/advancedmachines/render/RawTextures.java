@@ -1,12 +1,12 @@
-package jaminv.advancedmachines.client;
+package jaminv.advancedmachines.render;
 
 import com.google.common.collect.ImmutableMap;
 
 import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.Reference;
 import jaminv.advancedmachines.lib.render.TextureHelper;
 import jaminv.advancedmachines.lib.render.quad.Texture;
 import jaminv.advancedmachines.lib.util.helper.StringHelper;
-import jaminv.advancedmachines.util.Reference;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;

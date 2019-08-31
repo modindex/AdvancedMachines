@@ -2,7 +2,7 @@ package jaminv.advancedmachines.lib.render;
 
 import java.util.HashMap;
 
-import jaminv.advancedmachines.util.Reference;
+import jaminv.advancedmachines.Reference;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ICustomModelLoader;

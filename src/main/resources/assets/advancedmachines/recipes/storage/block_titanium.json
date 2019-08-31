@@ -1,4 +1,7 @@
 {
+    "conditions" : [
+        { "type": "advancedmachines:config", "value": "blockTitanium" }
+    ],
     "type": "forge:ore_shaped",
     
     "pattern":
@@ -15,5 +18,5 @@
         }
     },
     
-    "result": { "item": "advancedmachines:storage", "data": 0 }
+    "result": { "item": "advancedmachines:storage_titanium" }
 }

@@ -1,4 +1,4 @@
-package jaminv.advancedmachines.proxy;
+package jaminv.advancedmachines.init;
 
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;

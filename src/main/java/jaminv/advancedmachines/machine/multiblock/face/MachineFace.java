@@ -5,8 +5,8 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import jaminv.advancedmachines.client.RawTextures;
 import jaminv.advancedmachines.lib.render.quad.Texture;
+import jaminv.advancedmachines.render.RawTextures;
 
 public enum MachineFace {
 	

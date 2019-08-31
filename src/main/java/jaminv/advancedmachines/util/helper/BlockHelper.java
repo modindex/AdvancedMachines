@@ -8,14 +8,11 @@ import java.util.Map;
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.machine.expansion.MachineUpgradeTile;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
-import jaminv.advancedmachines.objects.blocks.Properties;
 import jaminv.advancedmachines.objects.variant.NeedsVariant;
 import jaminv.advancedmachines.objects.variant.Variant;
-import jaminv.advancedmachines.util.interfaces.IHasMetadata;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -58,15 +55,6 @@ public class BlockHelper {
 	
 	public static boolean hasUnlistedProperty(IExtendedBlockState state, Object property) {
 		return state.getUnlistedProperties().containsKey(property);
-	}
-	
-	// FIXME: Remove
-	@Deprecated // Use setMaterial() instead
-	public static void setMeta(World worldIn, BlockPos pos, ItemStack stack) {
-		TileEntity te = worldIn.getTileEntity(pos);
-		if (te instanceof IHasMetadata) {
-			((IHasMetadata)te).setMeta(ItemHelper.getMeta(stack));
-		}
 	}
 	
 	/**

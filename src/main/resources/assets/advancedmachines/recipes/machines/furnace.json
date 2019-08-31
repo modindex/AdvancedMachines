@@ -9,12 +9,12 @@
     ],
     
     "key": {
-        "F": { "item": "advancedmachines:machine_frame", "data": 0 },
+        "F": { "item": "advancedmachines:machine_frame_basic" },
         "R": { "type": "forge:ore_dict", "ore": "dustRedstone" },
         "B": { "item": "minecraft:brick_block" },
         "G": { "type": "forge:ore_dict", "ore": "gearIron" },
-        "W": { "item": "advancedmachines:ingredient", "data": 0 }
+        "W": { "item": "advancedmachines:copper_wire" }
     },
     
-    "result": { "item": "advancedmachines:machine_furnace", "data": 0 }
+    "result": { "item": "advancedmachines:machine_furnace_basic" }
 }

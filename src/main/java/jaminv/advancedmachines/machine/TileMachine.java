@@ -3,6 +3,8 @@ package jaminv.advancedmachines.machine;
 import javax.annotation.Nullable;
 
 import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.ModConfig;
+import jaminv.advancedmachines.init.HasGui;
 import jaminv.advancedmachines.lib.container.ISyncManager;
 import jaminv.advancedmachines.lib.container.ISyncSubject;
 import jaminv.advancedmachines.lib.container.SyncManager;
@@ -20,8 +22,6 @@ import jaminv.advancedmachines.lib.machine.MachineStorage;
 import jaminv.advancedmachines.lib.machine.MachineStorageCapability;
 import jaminv.advancedmachines.lib.recipe.IRecipeManager;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
-import jaminv.advancedmachines.proxy.HasGui;
-import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.helper.Directional;
 import jaminv.advancedmachines.util.network.ProcessingStateMessage;
 import jaminv.advancedmachines.util.network.RedstoneStateMessage;

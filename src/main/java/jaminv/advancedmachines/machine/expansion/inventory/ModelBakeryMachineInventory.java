@@ -2,13 +2,13 @@ package jaminv.advancedmachines.machine.expansion.inventory;
 
 import java.util.List;
 
-import jaminv.advancedmachines.client.RawTextures;
 import jaminv.advancedmachines.machine.expansion.ModelBakeryMachineExpansion;
 import jaminv.advancedmachines.machine.multiblock.model.MultiblockTextureBase;
 import jaminv.advancedmachines.machine.multiblock.model.QuadBuilderMultiblock;
 import jaminv.advancedmachines.machine.multiblock.model.QuadBuilderMultiblockItem;
 import jaminv.advancedmachines.objects.blocks.Properties;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
+import jaminv.advancedmachines.render.RawTextures;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.item.ItemStack;

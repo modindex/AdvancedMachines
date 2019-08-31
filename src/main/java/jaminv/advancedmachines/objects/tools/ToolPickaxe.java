@@ -1,24 +1,13 @@
 package jaminv.advancedmachines.objects.tools;
 
-import jaminv.advancedmachines.Main;
-import jaminv.advancedmachines.init.ItemInit;
-import jaminv.advancedmachines.util.interfaces.IHasModel;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemPickaxe;
 
-public class ToolPickaxe extends ItemPickaxe implements IHasModel {
+/** For some reason, the constructors for ItemAxe and ItemPickaxe are protected. */
+public class ToolPickaxe extends ItemPickaxe {
 
-	public ToolPickaxe(String name, ToolMaterial material) {
+	public ToolPickaxe(ToolMaterial material) {
 		super(material);
-		setUnlocalizedName(name);
-		setRegistryName(name);
 		setCreativeTab(CreativeTabs.TOOLS);
-		
-		ItemInit.ITEMS.add(this);
-	}
-	
-	@Override
-	public void registerModels() {
-		Main.proxy.registerItemRenderer(this, 0, "inventory");
 	}
 }

@@ -1,12 +1,12 @@
-package jaminv.advancedmachines.client.textureset;
+package jaminv.advancedmachines.render.textureset;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import jaminv.advancedmachines.client.RawTextures;
 import jaminv.advancedmachines.lib.render.TextureHelper;
 import jaminv.advancedmachines.lib.render.quad.Texture;
 import jaminv.advancedmachines.lib.util.helper.StringHelper;
+import jaminv.advancedmachines.render.RawTextures;
 
 public class TextureSets {
 	private static Map<String, Texture> set = new HashMap<String, Texture>();

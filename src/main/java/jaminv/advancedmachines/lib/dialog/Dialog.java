@@ -4,13 +4,13 @@ import java.io.IOException;
 
 import org.lwjgl.opengl.GL11;
 
+import jaminv.advancedmachines.Reference;
 import jaminv.advancedmachines.lib.dialog.control.DialogText;
 import jaminv.advancedmachines.lib.dialog.control.IDialogControl;
 import jaminv.advancedmachines.lib.dialog.control.IDialogControlAdvanced;
 import jaminv.advancedmachines.lib.dialog.control.IDialogElement;
 import jaminv.advancedmachines.lib.dialog.struct.DialogTooltip;
 import jaminv.advancedmachines.lib.util.coord.CoordRect;
-import jaminv.advancedmachines.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;

@@ -1,4 +1,4 @@
-package jaminv.advancedmachines.client.textureset;
+package jaminv.advancedmachines.render.textureset;
 
 import java.util.Map;
 

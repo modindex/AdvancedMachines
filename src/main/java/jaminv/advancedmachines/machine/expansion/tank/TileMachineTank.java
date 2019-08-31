@@ -3,6 +3,8 @@ package jaminv.advancedmachines.machine.expansion.tank;
 import javax.annotation.Nullable;
 
 import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.ModConfig;
+import jaminv.advancedmachines.init.HasGui;
 import jaminv.advancedmachines.lib.container.ContainerInventory;
 import jaminv.advancedmachines.lib.container.layout.ILayoutManager;
 import jaminv.advancedmachines.lib.container.layout.LayoutManager;
@@ -15,8 +17,6 @@ import jaminv.advancedmachines.lib.machine.IMachineController;
 import jaminv.advancedmachines.machine.dialog.DialogIOToggle;
 import jaminv.advancedmachines.machine.expansion.TileMachineExpansion;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
-import jaminv.advancedmachines.proxy.HasGui;
-import jaminv.advancedmachines.util.ModConfig;
 import jaminv.advancedmachines.util.helper.Directional;
 import jaminv.advancedmachines.util.network.IOStateMessage;
 import net.minecraft.entity.player.EntityPlayer;

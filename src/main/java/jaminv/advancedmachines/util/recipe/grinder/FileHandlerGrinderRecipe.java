@@ -2,13 +2,13 @@ package jaminv.advancedmachines.util.recipe.grinder;
 
 import com.google.gson.JsonObject;
 
+import jaminv.advancedmachines.ModConfig;
+import jaminv.advancedmachines.Reference;
 import jaminv.advancedmachines.lib.recipe.RecipeInput;
 import jaminv.advancedmachines.lib.recipe.RecipeOutput;
 import jaminv.advancedmachines.lib.util.logger.Logger;
 import jaminv.advancedmachines.lib.util.parser.DataParserException;
 import jaminv.advancedmachines.lib.util.parser.FileHandlerRecipe;
-import jaminv.advancedmachines.util.ModConfig;
-import jaminv.advancedmachines.util.Reference;
 import jaminv.advancedmachines.util.conditions.ConfigConditionFactory;
 import jaminv.advancedmachines.util.conditions.OreDictionaryConditionFactory;
 import jaminv.advancedmachines.util.recipe.grinder.GrinderManager.GrinderRecipe;

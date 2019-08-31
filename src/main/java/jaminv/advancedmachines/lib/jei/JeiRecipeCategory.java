@@ -2,13 +2,13 @@ package jaminv.advancedmachines.lib.jei;
 
 import java.util.List;
 
+import jaminv.advancedmachines.ModConfig;
+import jaminv.advancedmachines.Reference;
 import jaminv.advancedmachines.lib.container.layout.IFluidLayout;
 import jaminv.advancedmachines.lib.container.layout.IItemLayout;
 import jaminv.advancedmachines.lib.util.coord.CoordOffset;
 import jaminv.advancedmachines.lib.util.coord.Offset;
 import jaminv.advancedmachines.lib.util.coord.Pos;
-import jaminv.advancedmachines.util.ModConfig;
-import jaminv.advancedmachines.util.Reference;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableStatic;
 import mezz.jei.api.gui.IGuiFluidStackGroup;

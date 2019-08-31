@@ -1,8 +1,8 @@
 {
     "type": "forge:ore_shapeless",
     "ingredients": [
-        { "item": "advancedmachines:ingredient", "data": 1 },
+        { "item": "advancedmachines:silver_wire" },
         { "type": "forge:ore_dict", "ore": "ingotGoldPure" }
     ],    
-    "result": { "item": "advancedmachines:ingredient", "data": 2 }
+    "result": { "item": "advancedmachines:gold_wire" }
 }

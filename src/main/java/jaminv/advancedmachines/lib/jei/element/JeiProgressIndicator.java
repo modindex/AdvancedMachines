@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.lib.jei.element;
 
-import jaminv.advancedmachines.util.ModConfig;
+import jaminv.advancedmachines.ModConfig;
 import mezz.jei.api.gui.IDrawableAnimated;
 
 public class JeiProgressIndicator extends JeiElementAnimated {

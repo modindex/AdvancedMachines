@@ -2,9 +2,9 @@ package jaminv.advancedmachines.world.gen;
 
 import java.util.Random;
 
-import jaminv.advancedmachines.init.BlockInit;
-import jaminv.advancedmachines.objects.variant.MaterialMod;
-import jaminv.advancedmachines.util.ModConfig;
+import jaminv.advancedmachines.ModConfig;
+import jaminv.advancedmachines.init.init.BlockInit;
+import jaminv.advancedmachines.objects.variant.VariantResource;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -20,7 +20,8 @@ public class WorldGenCustomOres implements IWorldGenerator {
 	private WorldGenerator ore_titanium;
 
 	public WorldGenCustomOres() {
-		ore_titanium = new WorldGenMinable(BlockInit.ORE.getDefaultState().withProperty(BlockInit.ORE.VARIANT, MaterialMod.TITANIUM), ModConfig.worldgen.titaniumVeinSize, BlockMatcher.forBlock(Blocks.STONE));	
+		// %1.13% I imagine this is different?
+		ore_titanium = new WorldGenMinable(BlockInit.ORE.get(VariantResource.TITANIUM).getDefaultState(), ModConfig.worldgen.titaniumVeinSize, BlockMatcher.forBlock(Blocks.STONE));	
 	}
 	
 	@Override

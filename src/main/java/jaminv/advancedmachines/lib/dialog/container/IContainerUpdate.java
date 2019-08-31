@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.lib.dialog.container;
 
-import jaminv.advancedmachines.proxy.HasGui;
+import jaminv.advancedmachines.init.HasGui;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;

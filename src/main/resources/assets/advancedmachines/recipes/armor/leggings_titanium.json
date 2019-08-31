@@ -1,4 +1,7 @@
 {
+    "conditions" : [
+        { "type": "advancedmachines:config", "value": "armorTitanium" }
+    ],
     "type": "forge:ore_shaped",
     
     "pattern":

@@ -1,7 +1,32 @@
 {
     "ore_dictionary": [
-        { "item": { "item": "advancedmachines:ingredient", "data": 3 }, "ore": "itemPlastic" },
-        { "item": { "item": "advancedmachines:ingredient", "data": 4 }, "ore": "ballTar" },
-        { "item": { "item": "advancedmachines:ingredient", "data": 5 }, "ore": "ballRosin" }
+        { "item": "advancedmachines:ore_titanium", "ore": "oreTitanium" },
+        { "item": "advancedmachines:ore_copper", "ore": "oreCopper" },
+        { "item": "advancedmachines:ore_silver", "ore": "oreSilver" },
+        { "item": "advancedmachines:storage_titanium", "ore": "blockTitanium" },
+        { "item": "advancedmachines:storage_copper", "ore": "blockCopper" },
+        { "item": "advancedmachines:storage_silver", "ore": "blockSilver" },
+        { "item": "advancedmachines:ingot_titanium", "ore": "ingotTitanium" },
+        { "item": "advancedmachines:ingot_copper", "ore": "ingotCopper" },
+        { "item": "advancedmachines:ingot_silver", "ore": "ingotSilver" },
+        { "item": "advancedmachines:ingot_pure_gold", "ore": "ingotGoldPure" },
+        { "item": "advancedmachines:ingot_pure_silver", "ore": "ingotSilverPure" },
+        { "item": "advancedmachines:ingot_pure_copper", "ore": "ingotCopperPure" },
+        { "item": "advancedmachines:dust_coal", "ore": "dustCoal" },
+        { "item": "advancedmachines:dust_iron", "ore": "dustIron" },
+        { "item": "advancedmachines:dust_gold", "ore": "dustGold" },
+        { "item": "advancedmachines:dust_titanium", "ore": "dustTitanium" },
+        { "item": "advancedmachines:dust_copper", "ore": "dustCopper" },
+        { "item": "advancedmachines:dust_silver", "ore": "dustSilver" },
+        { "item": "advancedmachines:dust_diamond", "ore": "dustDiamond" },
+        { "item": "advancedmachines:dust_ender", "ore": "dustEnder" },
+        { "item": "advancedmachines:dust_glass", "ore": "dustGlass" },
+        { "item": "advancedmachines:dust_pure_gold", "ore": "dustGoldPure" },
+        { "item": "advancedmachines:dust_pure_silver", "ore": "dustSilverPure" },
+        { "item": "advancedmachines:dust_pure_copper", "ore": "dustCopperPure" },
+        { "item": "advancedmachines:dust_pure_diamond", "ore": "dustDiamondPure" },
+        { "item": "advancedmachines:plastic", "ore": "itemPlastic" },
+        { "item": "advancedmachines:tar", "ore": "ballTar" },
+        { "item": "advancedmachines:rosin", "ore": "ballRosin" }
     ]
 }

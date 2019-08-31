@@ -1,4 +1,7 @@
 {
+    "conditions" : [
+        { "type": "advancedmachines:config", "value": "gearTitanium" }
+    ],
     "type": "forge:ore_shaped",
     
     "pattern":
@@ -19,5 +22,5 @@
         }
     },
     
-    "result": { "item": "advancedmachines:gear", "data": 1 }
+    "result": { "item": "advancedmachines:gear_titanium" }
 }
