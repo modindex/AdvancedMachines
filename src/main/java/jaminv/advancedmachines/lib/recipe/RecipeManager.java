@@ -24,7 +24,7 @@ import net.minecraftforge.fluids.FluidStack;
  * @author Jamin VanderBerg
  * @param <T> Recipe type
  */
-public abstract class RecipeManager<T extends RecipeBase> implements IRecipeManager<T> {  
+public class RecipeManager<T extends RecipeBase> implements IRecipeManager<T> {  
 	
 	private Map<ItemComparableList, T> lookup = new HashMap<ItemComparableList, T>();
 	private Map<ItemComparable, ArrayList<T>> validInput = new HashMap<ItemComparable, ArrayList<T>>();
@@ -40,7 +40,7 @@ public abstract class RecipeManager<T extends RecipeBase> implements IRecipeMana
 	
 	public T getRecipe(ItemStack[] input, FluidStack[] fluids) { return getRecipe(new ItemComparableList(input, fluids)); }
 	
-	protected void addRecipe(T recipe) {
+	public void addRecipe(T recipe) {
 		// Check to make sure the recipe has at least 1 ingredient and that no ingredients have error states.
 		if (recipe.getInputCount() < 1) { return; }
 		boolean valid = false;

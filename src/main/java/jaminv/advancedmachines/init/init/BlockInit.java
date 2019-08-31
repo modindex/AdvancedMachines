@@ -28,6 +28,8 @@ import jaminv.advancedmachines.machine.instance.injector.BlockMachineInjector;
 import jaminv.advancedmachines.machine.instance.injector.TileMachineInjector;
 import jaminv.advancedmachines.machine.instance.melter.BlockMachineMelter;
 import jaminv.advancedmachines.machine.instance.melter.TileMachineMelter;
+import jaminv.advancedmachines.machine.instance.press.BlockMachinePress;
+import jaminv.advancedmachines.machine.instance.press.TileMachinePress;
 import jaminv.advancedmachines.machine.instance.purifier.BlockMachinePurifier;
 import jaminv.advancedmachines.machine.instance.purifier.TileMachinePurifier;
 import jaminv.advancedmachines.machine.instance.stabilizer.BlockMachineStabilizer;
@@ -50,6 +52,7 @@ public class BlockInit {
 	public static Map<VariantExpansion, BlockMachineGrinder> GRINDER = new HashMap<>();
 	public static Map<VariantExpansion, BlockMachineAlloy> ALLOY = new HashMap<>();
 	public static Map<VariantExpansion, BlockMachinePurifier> PURIFIER = new HashMap<>();
+	public static Map<VariantExpansion, BlockMachinePress> PRESS = new HashMap<>();
 	public static Map<VariantExpansion, BlockMachineMelter> MELTER = new HashMap<>();
 	public static Map<VariantExpansion, BlockMachineStabilizer> STABILIZER = new HashMap<>();
 	public static Map<VariantExpansion, BlockMachineInjector> INJECTOR = new HashMap<>();
@@ -91,6 +94,7 @@ public class BlockInit {
 				BlockMachineGrinder grinder = new BlockMachineGrinder(var); GRINDER.put(var, grinder);
 				BlockMachineAlloy alloy = new BlockMachineAlloy(var); ALLOY.put(var, alloy);
 				BlockMachinePurifier purifier = new BlockMachinePurifier(var); PURIFIER.put(var, purifier);
+				BlockMachinePress press = new BlockMachinePress(var); PRESS.put(var, press);
 				BlockMachineMelter melter = new BlockMachineMelter(var); MELTER.put(var, melter);
 				BlockMachineStabilizer stabilizer = new BlockMachineStabilizer(var); STABILIZER.put(var, stabilizer);
 				BlockMachineInjector injector = new BlockMachineInjector(var); INJECTOR.put(var, injector);
@@ -99,6 +103,7 @@ public class BlockInit {
 				RegistryHelper.addBlockWithBakedModel(grinder, "machine_grinder_" + name);
 				RegistryHelper.addBlockWithBakedModel(alloy, "machine_alloy_" + name);
 				RegistryHelper.addBlockWithBakedModel(purifier, "machine_purifier_" + name);
+				RegistryHelper.addBlockWithBakedModel(press, getVariantName("machine_press", var));
 				RegistryHelper.addBlockWithBakedModel(melter, "machine_melter_" + name);
 				RegistryHelper.addBlockWithBakedModel(stabilizer, "machine_stabilizer_" + name);
 				RegistryHelper.addBlockWithBakedModel(injector, "machine_injector_" + name);
@@ -115,6 +120,7 @@ public class BlockInit {
 		GameRegistry.registerTileEntity(TileMachineGrinder.class, new ResourceLocation("tile_machine_grinder"));
 		GameRegistry.registerTileEntity(TileMachineAlloy.class, new ResourceLocation("tile_machine_alloy"));
 		GameRegistry.registerTileEntity(TileMachinePurifier.class, new ResourceLocation("tile_machine_purifier"));
+		GameRegistry.registerTileEntity(TileMachinePress.class, new ResourceLocation("tile_machine_press"));
 		GameRegistry.registerTileEntity(TileMachineMelter.class, new ResourceLocation("tile_machine_melter"));
 		GameRegistry.registerTileEntity(TileMachineStabilizer.class, new ResourceLocation("tile_machine_stabilizer"));
 		GameRegistry.registerTileEntity(TileMachineInjector.class, new ResourceLocation("tile_machine_injector"));		

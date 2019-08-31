@@ -28,7 +28,7 @@ public class FileHandlerMelterRecipe extends FileHandlerRecipe {
 		MelterRecipe rec = new MelterRecipe(filename + "." + path, energy);
 		rec.setInput(input).setOutput(output);
 
-		MelterManager.getRecipeManager().addRecipe(rec);		
+		MelterManager.manager.addRecipe(rec);		
 		
 		return true; 
 	}

@@ -3,6 +3,7 @@ package jaminv.advancedmachines.util.recipe.purifier;
 import java.util.List;
 
 import jaminv.advancedmachines.ModConfig;
+import jaminv.advancedmachines.lib.recipe.IRecipeManager;
 import jaminv.advancedmachines.lib.recipe.RecipeBase;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
 import jaminv.advancedmachines.lib.util.parser.DataParser;
@@ -21,15 +22,9 @@ public class PurifierManager {
 		}
 	}
 	
-	public static class PurifierRecipeManager extends RecipeManager<PurifierRecipe> {
-		@Override
-		protected void addRecipe(PurifierRecipe recipe) {
-			super.addRecipe(recipe);
-		}
-	}
-	private static PurifierRecipeManager manager = new PurifierRecipeManager();
+	protected static RecipeManager<PurifierRecipe> manager = new RecipeManager<>();
 	
-	public static PurifierRecipeManager getRecipeManager() { return manager; }
+	public static IRecipeManager getRecipeManager() { return manager; }
 	public static List<PurifierRecipe> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {

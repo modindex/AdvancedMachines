@@ -2,7 +2,7 @@ package jaminv.advancedmachines.util.recipe.injector;
 
 import java.util.List;
 
-import jaminv.advancedmachines.ModConfig;
+import jaminv.advancedmachines.lib.recipe.IRecipeManager;
 import jaminv.advancedmachines.lib.recipe.RecipeBase;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
 import jaminv.advancedmachines.lib.util.parser.DataParser;
@@ -21,15 +21,9 @@ public class InjectorManager {
 		}
 	}
 	
-	public static class InjectorRecipeManager extends RecipeManager<InjectorRecipe> {
-		@Override
-		protected void addRecipe(InjectorRecipe recipe) {
-			super.addRecipe(recipe);
-		}
-	}
-	private static InjectorRecipeManager manager = new InjectorRecipeManager();
+	protected static RecipeManager<InjectorRecipe> manager = new RecipeManager<>();
 	
-	public static InjectorRecipeManager getRecipeManager() { return manager; }
+	public static IRecipeManager getRecipeManager() { return manager; }
 	public static List<InjectorRecipe> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {

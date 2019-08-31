@@ -3,6 +3,7 @@ package jaminv.advancedmachines.util.recipe.stabilizer;
 import java.util.List;
 
 import jaminv.advancedmachines.ModConfig;
+import jaminv.advancedmachines.lib.recipe.IRecipeManager;
 import jaminv.advancedmachines.lib.recipe.RecipeBase;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
 import jaminv.advancedmachines.lib.util.parser.DataParser;
@@ -20,16 +21,10 @@ public class StabilizerManager {
 			super(id, energy, ModConfig.general.processTimeBasic);
 		}
 	}
+
+	protected static RecipeManager<StabilizerRecipe> manager = new RecipeManager<>();
 	
-	public static class StabilizerRecipeManager extends RecipeManager<StabilizerRecipe> {
-		@Override
-		protected void addRecipe(StabilizerRecipe recipe) {
-			super.addRecipe(recipe);
-		}
-	}
-	private static StabilizerRecipeManager manager = new StabilizerRecipeManager();
-	
-	public static StabilizerRecipeManager getRecipeManager() { return manager; }
+	public static IRecipeManager getRecipeManager() { return manager; }
 	public static List<StabilizerRecipe> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {

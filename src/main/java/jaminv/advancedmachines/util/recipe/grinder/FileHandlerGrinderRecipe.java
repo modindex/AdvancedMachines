@@ -39,7 +39,7 @@ public class FileHandlerGrinderRecipe extends FileHandlerRecipe {
 		rec.setOutput(output);
 		if (secondary != null && !secondary.isEmpty()) { rec.addSecondary(secondary); }
 
-		GrinderManager.getRecipeManager().addRecipe(rec);		
+		GrinderManager.manager.addRecipe(rec);		
 		
 		return true; 
 	}

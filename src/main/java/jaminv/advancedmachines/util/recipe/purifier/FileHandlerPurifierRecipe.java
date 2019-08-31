@@ -41,7 +41,7 @@ public class FileHandlerPurifierRecipe extends FileHandlerRecipe {
 			}
 		}
 		
-		PurifierManager.getRecipeManager().addRecipe(recipe);
+		PurifierManager.manager.addRecipe(recipe);
 		
 		return true; 
 	}

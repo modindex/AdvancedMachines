@@ -3,6 +3,7 @@ package jaminv.advancedmachines.util.recipe.melter;
 import java.util.List;
 
 import jaminv.advancedmachines.ModConfig;
+import jaminv.advancedmachines.lib.recipe.IRecipeManager;
 import jaminv.advancedmachines.lib.recipe.RecipeBase;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
 import jaminv.advancedmachines.lib.util.parser.DataParser;
@@ -21,15 +22,9 @@ public class MelterManager {
 		}
 	}
 	
-	public static class MelterRecipeManager extends RecipeManager<MelterRecipe> {
-		@Override
-		protected void addRecipe(MelterRecipe recipe) {
-			super.addRecipe(recipe);
-		}
-	}
-	private static MelterRecipeManager manager = new MelterRecipeManager();
+	protected static RecipeManager<MelterRecipe> manager = new RecipeManager<>();
 	
-	public static MelterRecipeManager getRecipeManager() { return manager; }
+	public static IRecipeManager getRecipeManager() { return manager; }
 	public static List<MelterRecipe> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {

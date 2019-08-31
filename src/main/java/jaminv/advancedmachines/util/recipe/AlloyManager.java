@@ -3,6 +3,7 @@ package jaminv.advancedmachines.util.recipe;
 import java.util.List;
 
 import jaminv.advancedmachines.ModConfig;
+import jaminv.advancedmachines.lib.recipe.IRecipeManager;
 import jaminv.advancedmachines.lib.recipe.RecipeBase;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
 
@@ -20,15 +21,9 @@ public class AlloyManager {
 		}
 	}
 	
-	public static class AlloyRecipeManager extends RecipeManager<AlloyRecipe> {
-		@Override
-		protected void addRecipe(AlloyRecipe recipe) {
-			super.addRecipe(recipe);
-		}
-	}
-	private static AlloyRecipeManager manager = new AlloyRecipeManager();
+	protected static RecipeManager<AlloyRecipe> manager = new RecipeManager<>();
 	
-	public static AlloyRecipeManager getRecipeManager() { return manager; }
+	public static IRecipeManager getRecipeManager() { return manager; }
 	public static List<AlloyRecipe> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {

@@ -16,6 +16,8 @@ import jaminv.advancedmachines.machine.instance.injector.DialogMachineInjector;
 import jaminv.advancedmachines.machine.instance.injector.TileMachineInjector;
 import jaminv.advancedmachines.machine.instance.melter.DialogMachineMelter;
 import jaminv.advancedmachines.machine.instance.melter.TileMachineMelter;
+import jaminv.advancedmachines.machine.instance.press.DialogMachinePress;
+import jaminv.advancedmachines.machine.instance.press.TileMachinePress;
 import jaminv.advancedmachines.machine.instance.purifier.DialogMachinePurifier;
 import jaminv.advancedmachines.machine.instance.purifier.TileMachinePurifier;
 import jaminv.advancedmachines.machine.instance.stabilizer.DialogMachineStabilizer;
@@ -70,6 +72,9 @@ public class GuiProxy implements IGuiHandler {
         case PURIFIER:
         	if (!(te instanceof TileMachinePurifier)) { return null; }
         	return new DialogMachinePurifier(((TileMachinePurifier)te).createContainer(player.inventory), (TileMachinePurifier)te);
+        case PRESS:
+        	if (!(te instanceof TileMachinePress)) { return null; }
+        	return new DialogMachinePress(((TileMachinePress)te).createContainer(player.inventory), (TileMachinePress)te);
         case MELTER:
         	if (!(te instanceof TileMachineMelter)) { return null; }
         	return new DialogMachineMelter(((TileMachineMelter)te).createContainer(player.inventory), (TileMachineMelter)te);

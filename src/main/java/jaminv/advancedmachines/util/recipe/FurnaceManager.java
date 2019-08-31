@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import jaminv.advancedmachines.ModConfig;
+import jaminv.advancedmachines.lib.recipe.IRecipeManager;
 import jaminv.advancedmachines.lib.recipe.RecipeBase;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
 import jaminv.advancedmachines.util.helper.ItemHelper;
@@ -24,16 +25,10 @@ public class FurnaceManager {
 			super(id, energy, ModConfig.general.processTimeBasic);
 		}
 	}
+
+	private static RecipeManager<FurnaceRecipe> manager = new RecipeManager<>();
 	
-	public static class FurnaceRecipeManager extends RecipeManager<FurnaceRecipe> {
-		@Override
-		protected void addRecipe(FurnaceRecipe recipe) {
-			super.addRecipe(recipe);
-		}
-	}
-	private static FurnaceRecipeManager manager = new FurnaceRecipeManager();
-	
-	public static FurnaceRecipeManager getRecipeManager() { return manager; }
+	public static IRecipeManager getRecipeManager() { return manager; }
 	public static List<FurnaceRecipe> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {
