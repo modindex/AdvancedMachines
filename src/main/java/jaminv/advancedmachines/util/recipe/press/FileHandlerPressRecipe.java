@@ -40,13 +40,13 @@ public class FileHandlerPressRecipe extends FileHandlerRecipe {
 			
 			RecipeInput recipeInput = parseInput(element, name);
 			if (recipeInput == null || recipeInput.hasError()) { return false; }
-			recipe.addInput(i, recipeInput);
+			recipe.addInput(recipeInput);
 			i++;
 		}		
 		
 		RecipeOutput output = parseOutput(json.get("output"), "output");
 		if (output == null || output.isEmpty()) { return false; }
-		recipe.setOutput(output);
+		recipe.addOutput(output);
 
 		if (!checkConditions(json, "conditions", logger)) { return false; }
 		

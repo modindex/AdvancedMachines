@@ -26,7 +26,7 @@ public class FileHandlerStabilizerRecipe extends FileHandlerRecipe {
 		if (!checkConditions(recipe, "conditions", logger)) { return false; }
 		
 		StabilizerRecipe rec = new StabilizerRecipe(filename + "." + path, energy);
-		rec.setInput(input).setOutput(output);
+		rec.addInput(input).addOutput(output);
 
 		StabilizerManager.manager.addRecipe(rec);		
 		

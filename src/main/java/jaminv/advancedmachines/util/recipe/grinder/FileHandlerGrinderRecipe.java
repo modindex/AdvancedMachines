@@ -35,8 +35,8 @@ public class FileHandlerGrinderRecipe extends FileHandlerRecipe {
 		if (!checkConditions(recipe, "conditions", logger)) { return false; }
 		
 		GrinderRecipe rec = new GrinderRecipe(filename + "." + path, energy);
-		rec.setInput(input);
-		rec.setOutput(output);
+		rec.addInput(input);
+		rec.addOutput(output);
 		if (secondary != null && !secondary.isEmpty()) { rec.addSecondary(secondary); }
 
 		GrinderManager.manager.addRecipe(rec);		

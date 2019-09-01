@@ -26,8 +26,8 @@ public class FileHandlerPurifierRecipe extends FileHandlerRecipe {
 		if (!checkConditions(json, "conditions", logger)) { return false; }
 		
 		PurifierRecipe recipe = new PurifierRecipe(filename + "." + path, energy);
-		recipe.setInput(input);
-		recipe.setOutput(output);
+		recipe.addInput(input);
+		recipe.addOutput(output);
 		
 		JsonArray secondary = JsonUtils.getJsonArray(json, "secondary", null);
 		if (secondary != null) {

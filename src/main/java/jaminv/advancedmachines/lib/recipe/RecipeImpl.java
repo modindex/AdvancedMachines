@@ -12,9 +12,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 
 import jaminv.advancedmachines.lib.fluid.IFluidTankInternal;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 
 public abstract class RecipeImpl implements RecipeJei {
@@ -42,36 +40,27 @@ public abstract class RecipeImpl implements RecipeJei {
 	
 	private String recipeid;
 	
-	private RecipeInput[] input;
-	private RecipeOutput[] output;
-	private NonNullList<RecipeOutput> secondary;
+	private List<RecipeInput> input = new ArrayList<>();
+	private List<RecipeOutput> output = new ArrayList<>();
+	private List<RecipeInput> catalyst = new ArrayList<>();
+	private List<RecipeOutput> secondary = new ArrayList<>();
 	private int energy;
 	
 	private int processTime;
 	
 	public RecipeImpl(String id, int energy, int processTime) {
 		this.recipeid = id;
-		this.input = new RecipeInput[getInputCount()];
-		this.output = new RecipeOutput[getOutputCount()];
-		this.secondary = NonNullList.<RecipeOutput>create();
-		
-		for (int i = 0; i < getInputCount(); i++) {
-			this.input[i] = RecipeInput.EMPTY;
-		}
-		for (int i = 0; i < getOutputCount(); i++) {
-			this.output[i] = RecipeOutput.EMPTY;
-		}
-		
 		this.energy = energy;
 		this.processTime = processTime;
 	}
 	
-	public abstract int getInputCount();
-	public abstract int getOutputCount();
-	public int getCatalystCount() { return 0; }
+	public int getInputCount() { return input.size(); }
+	public int getOutputCount() { return output.size(); }
+	public int getCatalystCount() { return catalyst.size(); }
+	public int getSecondaryCount() { return secondary.size(); }
 	
-	protected RecipeInput getInput(int index) { return input[index]; }
-	protected RecipeOutput getOutput(int index) { return output[index]; }
+	protected RecipeInput getInput(int index) { return input.get(index); }
+	protected RecipeOutput getOutput(int index) { return output.get(index); }
 	
 	protected Map<Boolean, InputImpl> inputcache = new HashMap<>();
 	protected OutputImpl outputcache;
@@ -102,9 +91,9 @@ public abstract class RecipeImpl implements RecipeJei {
 	}
 	
 	@Override
-	public OutputImpl getSecondary() { return getOutput(this.secondary.toArray(new RecipeOutput[secondary.size()]), true); }
+	public OutputImpl getSecondary() { return getOutput(this.secondary, true); }
 	
-	protected OutputImpl getOutput(RecipeOutput[] outputs, boolean doRandom) {
+	protected OutputImpl getOutput(List<RecipeOutput> outputs, boolean doRandom) {
 		OutputImpl ret = new OutputImpl();
 		Random rand = new Random();
 		
@@ -136,22 +125,14 @@ public abstract class RecipeImpl implements RecipeJei {
 
 	public String getRecipeId() { return recipeid; }
 	
-	public RecipeImpl addInput(int index, RecipeInput input) {
-		this.input[index] = input;
+	public RecipeImpl addInput(RecipeInput input) {
+		this.input.add(input);
 		return this;
 	}
 	
-	public RecipeImpl setInput(RecipeInput input) {
-		return this.addInput(0, input);
-	}
-	
-	public RecipeImpl addOutput(int index, RecipeOutput output) {
-		this.output[index] = output;
+	public RecipeImpl addOutput(RecipeOutput output) {
+		this.output.add(output);
 		return this;
-	}
-	
-	public RecipeImpl setOutput(RecipeOutput output) {
-		return this.addOutput(0, output);
 	}
 	
 	public RecipeImpl addSecondary(RecipeOutput output) {
@@ -159,7 +140,11 @@ public abstract class RecipeImpl implements RecipeJei {
 		this.secondary.add(output);
 		return this;
 	}
-
+	
+	public RecipeImpl addCatalyst(RecipeInput input) {
+		this.catalyst.add(input);
+		return this;
+	}
 	
 	@Override
 	public int getEnergy() {
@@ -176,29 +161,28 @@ public abstract class RecipeImpl implements RecipeJei {
 	
 	public int getInputQty(@Nullable ItemStack[] items, @Nullable FluidStack[] fluids) {
 		int min = -1;
-		for (int i = 0; i < this.getInputCount(); i++) {
-			RecipeInput input = this.input[i];
-			if (input.isEmpty()) { continue; }
+		for (RecipeInput in : this.input) {
+			if (in.isEmpty()) { continue; }
 			
 			boolean found = false;
 			
-			if (input.isFluid()) {
+			if (in.isFluid()) {
 				if (fluids == null) { return 0; }
 				for (FluidStack fluid : fluids) {
-					if (input.isValid(fluid)) {
+					if (in.isValid(fluid)) {
 						found = true;
-						if (!input.getExtract()) { continue; }
-						int qty = input.getQty(fluid);
+						if (!in.getExtract()) { continue; }
+						int qty = in.getQty(fluid);
 						if (min == -1 || qty < min) { min = qty; }
 					}
 				}
 			} else {
 				if (items == null) { return 0; }
 				for (ItemStack item : items) {
-					if (input.isValid(item)) {
+					if (in.isValid(item)) {
 						found = true;
-						if (!input.getExtract()) { continue; }
-						int qty = input.getQty(item);
+						if (!in.getExtract()) { continue; }
+						int qty = in.getQty(item);
 						if (min == -1 || qty < min) { min = qty; }
 					}
 				}
@@ -211,13 +195,12 @@ public abstract class RecipeImpl implements RecipeJei {
 	public int getOutputQty(ItemStack[] inventory, @Nullable IFluidTankInternal[] tanks) {
 		int slot = 0, tank = 0;
 		int min = -1;
-		for (int i = 0; i < this.getOutputCount(); i++) {
-			RecipeOutput output = this.output[i];
+		for (RecipeOutput out : this.output) {
 			int count = 0;
 			
-			if (output.isFluid()) {
+			if (out.isFluid()) {
 				if (tanks == null) { return 0; }
-				FluidStack stack = output.toFluidStack();
+				FluidStack stack = out.toFluidStack();
 				do {
 					if (tanks[tank].fillInternal(stack, false) == stack.amount) {
 						count = tanks[tank].getCapacity() / stack.amount;
@@ -226,7 +209,7 @@ public abstract class RecipeImpl implements RecipeJei {
 				} while (count == 0 && tank < tanks.length);
 			} else {
 				if (inventory == null) { return 0; }
-				ItemStack stack = output.toItemStack();
+				ItemStack stack = out.toItemStack();
 				do {
 					if (inventory[slot] == null || inventory[slot].isEmpty()) {
 						count = stack.getMaxStackSize() / stack.getCount(); 
@@ -246,36 +229,6 @@ public abstract class RecipeImpl implements RecipeJei {
 	
 	public int getRecipeQty(ItemStack[] items, FluidStack[] fluids, ItemStack[] inventory, IFluidTankInternal[] tanks) {
 		return Math.min(getInputQty(items, fluids), getOutputQty(inventory, tanks));
-	}
-	
-	/* Helpful utility methods */
-	public RecipeImpl addInput(int index, String oredictName, int count) { return this.addInput(index, new RecipeInput(oredictName, count)); }
-	public RecipeImpl addInput(int index, String oredictName) { return this.addInput(index, new RecipeInput(oredictName)); }
-	public RecipeImpl addInput(int index, ItemStack stack) { return this.addInput(index, new RecipeInput(stack)); }
-	public RecipeImpl addInput(int index, Item item, int count, int meta) { return this.addInput(index, new RecipeInput(item, count, meta)); }
-	public RecipeImpl addInput(int index, Item item) { return this.addInput(index, new RecipeInput(item)); }
-	public RecipeImpl addBlankInput(int index) { return this.addInput(index, new RecipeInput()); }
-	
-	public RecipeImpl setInput(String oredictName, int count) { return this.setInput(new RecipeInput(oredictName, count)); }
-	public RecipeImpl setInput(String oredictName) { return this.setInput(new RecipeInput(oredictName)); }
-	public RecipeImpl setInput(ItemStack stack) { return this.setInput(new RecipeInput(stack)); }
-	public RecipeImpl setInput(Item item, int count, int meta) { return this.setInput(new RecipeInput(item, count, meta)); }
-	public RecipeImpl setInput(Item item) { return this.setInput(new RecipeInput(item)); }
-
-	public RecipeImpl addOutput(int index, String oredictName, int count) { return this.addOutput(index, new RecipeOutput(oredictName, count)); }
-	public RecipeImpl addOutput(int index, String oredictName) { return this.addOutput(index, new RecipeOutput(oredictName)); }
-	public RecipeImpl addOutput(int index, ItemStack stack) { return this.addOutput(index, new RecipeOutput(stack)); }
-	public RecipeImpl addOutput(int index, Item item, int count, int meta) { return this.addOutput(index, new RecipeOutput(item, count, meta)); }
-	public RecipeImpl addOutput(int index, Item item) { return this.addOutput(index, new RecipeOutput(item)); }
-	
-	public RecipeImpl setOutput(String oredictName, int count) { return this.setOutput(new RecipeOutput(oredictName, count)); }
-	public RecipeImpl setOutput(String oredictName) { return this.setOutput(new RecipeOutput(oredictName)); }
-	public RecipeImpl setOutput(ItemStack stack) { return this.setOutput(new RecipeOutput(stack)); }
-	public RecipeImpl setOutput(Item item, int count, int meta) { return this.setOutput(new RecipeOutput(item, count, meta)); }
-	public RecipeImpl setOutput(Item item) { return this.setOutput(new RecipeOutput(item)); }
-	
-	public int getSecondaryCount() {
-		return secondary.size();
 	}
 	
 	@Override

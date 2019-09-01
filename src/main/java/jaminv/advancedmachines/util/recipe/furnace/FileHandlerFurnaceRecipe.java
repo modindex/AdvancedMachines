@@ -28,8 +28,8 @@ public class FileHandlerFurnaceRecipe extends FileHandlerRecipe {
 		if (!checkConditions(json, "conditions", logger)) { return false; }
 		
 		FurnaceRecipe recipe = new FurnaceRecipe(filename + "." + path, energy, time);
-		recipe.setInput(input);
-		recipe.setOutput(output);
+		recipe.addInput(input);
+		recipe.addOutput(output);
 				
 		FurnaceManager.manager.addRecipe(recipe);
 		
