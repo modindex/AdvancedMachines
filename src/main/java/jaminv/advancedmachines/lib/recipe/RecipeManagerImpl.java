@@ -24,7 +24,7 @@ import net.minecraftforge.fluids.FluidStack;
  * @author Jamin VanderBerg
  * @param <T> Recipe type
  */
-public class RecipeManagerImpl<T extends RecipeImpl> implements RecipeManager<T> {  
+public class RecipeManagerImpl<T extends RecipeInternal> implements RecipeManager<T> {  
 	
 	private Map<ItemComparableList, T> lookup = new HashMap<ItemComparableList, T>();
 	private Map<ItemComparable, ArrayList<T>> validInput = new HashMap<ItemComparable, ArrayList<T>>();

@@ -8,12 +8,12 @@ import jaminv.advancedmachines.ModConfig;
 import jaminv.advancedmachines.Reference;
 import jaminv.advancedmachines.lib.parser.DataParserException;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe;
+import jaminv.advancedmachines.lib.recipe.RecipeImpl;
 import jaminv.advancedmachines.lib.recipe.RecipeInput;
 import jaminv.advancedmachines.lib.recipe.RecipeOutput;
 import jaminv.advancedmachines.lib.util.logger.Logger;
 import jaminv.advancedmachines.util.conditions.ConfigConditionFactory;
 import jaminv.advancedmachines.util.conditions.OreDictionaryConditionFactory;
-import jaminv.advancedmachines.util.recipe.press.PressManager.PressRecipe;
 import net.minecraft.util.JsonUtils;
 
 public class FileHandlerPressRecipe extends FileHandlerRecipe {
@@ -31,7 +31,7 @@ public class FileHandlerPressRecipe extends FileHandlerRecipe {
 		
 		int energy = getEnergy(json, ModConfig.general.defaultGrinderEnergyCost);
 		int time = getTime(json, ModConfig.general.processTimeBasic);
-		PressRecipe recipe = new PressRecipe(filename + "." + path, energy, time);
+		RecipeImpl recipe = new RecipeImpl(filename + "." + path, energy, time);
 		
 		JsonArray input = JsonUtils.getJsonArray(json, "input");
 		int i = 0;

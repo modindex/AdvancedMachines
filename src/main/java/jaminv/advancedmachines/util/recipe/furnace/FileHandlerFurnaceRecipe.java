@@ -5,10 +5,10 @@ import com.google.gson.JsonObject;
 import jaminv.advancedmachines.ModConfig;
 import jaminv.advancedmachines.lib.parser.DataParserException;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe;
+import jaminv.advancedmachines.lib.recipe.RecipeImpl;
 import jaminv.advancedmachines.lib.recipe.RecipeInput;
 import jaminv.advancedmachines.lib.recipe.RecipeOutput;
 import jaminv.advancedmachines.lib.util.logger.Logger;
-import jaminv.advancedmachines.util.recipe.furnace.FurnaceManager.FurnaceRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JsonUtils;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -27,7 +27,7 @@ public class FileHandlerFurnaceRecipe extends FileHandlerRecipe {
 		if (input == null || input.isEmpty() || output == null || output.isEmpty()) { return false; }
 		if (!checkConditions(json, "conditions", logger)) { return false; }
 		
-		FurnaceRecipe recipe = new FurnaceRecipe(filename + "." + path, energy, time);
+		RecipeImpl recipe = new RecipeImpl(filename + "." + path, energy, time);
 		recipe.addInput(input);
 		recipe.addOutput(output);
 				

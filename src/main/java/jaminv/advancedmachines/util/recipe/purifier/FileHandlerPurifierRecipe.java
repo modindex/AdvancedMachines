@@ -7,10 +7,10 @@ import com.google.gson.JsonObject;
 import jaminv.advancedmachines.ModConfig;
 import jaminv.advancedmachines.lib.parser.DataParserException;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe;
+import jaminv.advancedmachines.lib.recipe.RecipeImpl;
 import jaminv.advancedmachines.lib.recipe.RecipeInput;
 import jaminv.advancedmachines.lib.recipe.RecipeOutput;
 import jaminv.advancedmachines.lib.util.logger.Logger;
-import jaminv.advancedmachines.util.recipe.purifier.PurifierManager.PurifierRecipe;
 import net.minecraft.util.JsonUtils;
 
 public class FileHandlerPurifierRecipe extends FileHandlerRecipe {
@@ -21,11 +21,12 @@ public class FileHandlerPurifierRecipe extends FileHandlerRecipe {
 		RecipeInput input = parseInput(json.get("input"), "input");
 		RecipeOutput output = parseOutput(json.get("output"), "output");
 		int energy = getEnergy(json, ModConfig.general.defaultGrinderEnergyCost);
+		int time = getTime(json, ModConfig.general.processTimeBasic);
 		
 		if (input == null || input.isEmpty() || output == null || output.isEmpty()) { return false; }
 		if (!checkConditions(json, "conditions", logger)) { return false; }
 		
-		PurifierRecipe recipe = new PurifierRecipe(filename + "." + path, energy);
+		RecipeImpl recipe = new RecipeImpl(filename + "." + path, energy, time);
 		recipe.addInput(input);
 		recipe.addOutput(output);
 		

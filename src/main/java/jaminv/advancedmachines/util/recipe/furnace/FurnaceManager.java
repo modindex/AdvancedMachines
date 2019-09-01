@@ -5,32 +5,21 @@ import java.util.Map;
 
 import jaminv.advancedmachines.ModConfig;
 import jaminv.advancedmachines.lib.parser.DataParser;
-import jaminv.advancedmachines.lib.recipe.RecipeManager;
 import jaminv.advancedmachines.lib.recipe.RecipeImpl;
+import jaminv.advancedmachines.lib.recipe.RecipeInput;
+import jaminv.advancedmachines.lib.recipe.RecipeManager;
 import jaminv.advancedmachines.lib.recipe.RecipeManagerImpl;
+import jaminv.advancedmachines.lib.recipe.RecipeOutput;
 import jaminv.advancedmachines.util.helper.ItemHelper;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 
 public class FurnaceManager {
-	
-	public static class FurnaceRecipe extends RecipeImpl {
-		@Override
-		public int getInputCount() { return 1; }
-
-		@Override
-		public int getOutputCount() { return 1; }
-		
-		public FurnaceRecipe(String id, int energy, int time) {
-			super(id, energy, time);
-		}
-	}
-
-	protected static RecipeManagerImpl<FurnaceRecipe> manager = new RecipeManagerImpl<>();
+	protected static RecipeManagerImpl<RecipeImpl> manager = new RecipeManagerImpl<>();
 	
 	public static RecipeManager getRecipeManager() { return manager; }
-	public static List<FurnaceRecipe> getRecipeList() { return manager.getRecipeList(); }
+	public static List<RecipeImpl> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {
 		Map<ItemStack, ItemStack> smeltingList = FurnaceRecipes.instance().getSmeltingList();
@@ -51,10 +40,10 @@ public class FurnaceManager {
 				energy *= 14/20.0f;
 			}
 			
-			manager.addRecipe((FurnaceRecipe)new FurnaceRecipe("smelting_list." + key.getItem().getUnlocalizedName(), energy, ModConfig.general.processTimeBasic)
-				.setInput(key).setOutput(output));
+			manager.addRecipe(new RecipeImpl("smelting_list." + key.getItem().getUnlocalizedName(), energy, ModConfig.general.processTimeBasic)
+				.addInput(new RecipeInput(key)).addOutput(new RecipeOutput(output)));
 		}
 
-		DataParser.parseFolder("data/recipes/furnace", new FileHandlerFurnaceRecipe());		
+		DataParser.parseFolder("data/recipes/furnace", new FileHandlerFurnaceRecipe());	
 	}
 }

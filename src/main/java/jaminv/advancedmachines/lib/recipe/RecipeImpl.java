@@ -15,7 +15,7 @@ import jaminv.advancedmachines.lib.fluid.IFluidTankInternal;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-public abstract class RecipeImpl implements RecipeJei {
+public class RecipeImpl implements RecipeJei, RecipeInternal {
 	
 	protected static class InputImpl implements Input {
 		protected List<Ingredient> items = new ArrayList<Ingredient>();
@@ -54,13 +54,17 @@ public abstract class RecipeImpl implements RecipeJei {
 		this.processTime = processTime;
 	}
 	
+	@Override
 	public int getInputCount() { return input.size(); }
+	@Override
 	public int getOutputCount() { return output.size(); }
+	@Override
 	public int getCatalystCount() { return catalyst.size(); }
+	@Override
 	public int getSecondaryCount() { return secondary.size(); }
 	
-	protected RecipeInput getInput(int index) { return input.get(index); }
-	protected RecipeOutput getOutput(int index) { return output.get(index); }
+	public RecipeInput getInput(int index) { return input.get(index); }
+	public RecipeOutput getOutput(int index) { return output.get(index); }
 	
 	protected Map<Boolean, InputImpl> inputcache = new HashMap<>();
 	protected OutputImpl outputcache;
@@ -135,13 +139,13 @@ public abstract class RecipeImpl implements RecipeJei {
 		return this;
 	}
 	
-	public RecipeImpl addSecondary(RecipeOutput output) {
+	public RecipeInternal addSecondary(RecipeOutput output) {
 		if (output == null) { return this; }
 		this.secondary.add(output);
 		return this;
 	}
 	
-	public RecipeImpl addCatalyst(RecipeInput input) {
+	public RecipeInternal addCatalyst(RecipeInput input) {
 		this.catalyst.add(input);
 		return this;
 	}
@@ -151,7 +155,7 @@ public abstract class RecipeImpl implements RecipeJei {
 		return energy;
 	}
 	
-	public RecipeImpl setProcessTime(int ticks) {
+	public RecipeInternal setProcessTime(int ticks) {
 		processTime = ticks;
 		return this;
 	}

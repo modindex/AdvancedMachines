@@ -6,12 +6,12 @@ import jaminv.advancedmachines.ModConfig;
 import jaminv.advancedmachines.Reference;
 import jaminv.advancedmachines.lib.parser.DataParserException;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe;
+import jaminv.advancedmachines.lib.recipe.RecipeImpl;
 import jaminv.advancedmachines.lib.recipe.RecipeInput;
 import jaminv.advancedmachines.lib.recipe.RecipeOutput;
 import jaminv.advancedmachines.lib.util.logger.Logger;
 import jaminv.advancedmachines.util.conditions.ConfigConditionFactory;
 import jaminv.advancedmachines.util.conditions.OreDictionaryConditionFactory;
-import jaminv.advancedmachines.util.recipe.grinder.GrinderManager.GrinderRecipe;
 
 public class FileHandlerGrinderRecipe extends FileHandlerRecipe {
 
@@ -22,24 +22,25 @@ public class FileHandlerGrinderRecipe extends FileHandlerRecipe {
 	}
 
 	@Override
-	protected boolean parseRecipe(Logger logger, String filename, String path, JsonObject recipe) throws DataParserException {
+	protected boolean parseRecipe(Logger logger, String filename, String path, JsonObject json) throws DataParserException {
 		logger = logger.getLogger("grinder");		
 		logger.info("Parsing recipe '" + path + "'.");
 		
-		RecipeInput input = parseInput(recipe.get("input"), "input");
-		RecipeOutput output = parseOutput(recipe.get("output"), "output");
-		RecipeOutput secondary = parseOutputWithChance(recipe.get("secondary"), "secondary");
-		int energy = getEnergy(recipe, ModConfig.general.defaultGrinderEnergyCost);
+		RecipeInput input = parseInput(json.get("input"), "input");
+		RecipeOutput output = parseOutput(json.get("output"), "output");
+		RecipeOutput secondary = parseOutputWithChance(json.get("secondary"), "secondary");
+		int energy = getEnergy(json, ModConfig.general.defaultGrinderEnergyCost);
+		int time = getTime(json, ModConfig.general.processTimeBasic);
 		
 		if (input == null || input.isEmpty() || output == null || output.isEmpty()) { return false; }
-		if (!checkConditions(recipe, "conditions", logger)) { return false; }
+		if (!checkConditions(json, "conditions", logger)) { return false; }
 		
-		GrinderRecipe rec = new GrinderRecipe(filename + "." + path, energy);
-		rec.addInput(input);
-		rec.addOutput(output);
-		if (secondary != null && !secondary.isEmpty()) { rec.addSecondary(secondary); }
+		RecipeImpl recipe = new RecipeImpl(filename + "." + path, energy, time);
+		recipe.addInput(input);
+		recipe.addOutput(output);
+		if (secondary != null && !secondary.isEmpty()) { recipe.addSecondary(secondary); }
 
-		GrinderManager.manager.addRecipe(rec);		
+		GrinderManager.manager.addRecipe(recipe);		
 		
 		return true; 
 	}

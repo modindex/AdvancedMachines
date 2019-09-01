@@ -8,10 +8,10 @@ import jaminv.advancedmachines.ModConfig;
 import jaminv.advancedmachines.lib.parser.DataParserException;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe;
 import jaminv.advancedmachines.lib.parser.ParseUtils;
+import jaminv.advancedmachines.lib.recipe.RecipeImpl;
 import jaminv.advancedmachines.lib.recipe.RecipeInput;
 import jaminv.advancedmachines.lib.recipe.RecipeOutput;
 import jaminv.advancedmachines.lib.util.logger.Logger;
-import jaminv.advancedmachines.util.recipe.injector.InjectorManager.InjectorRecipe;
 import net.minecraft.util.JsonUtils;
 
 public class FileHandlerInjectorRecipe extends FileHandlerRecipe {
@@ -23,7 +23,7 @@ public class FileHandlerInjectorRecipe extends FileHandlerRecipe {
 
 		int energy = getEnergy(json, ModConfig.general.defaultGrinderEnergyCost);
 		int time = getTime(json, ModConfig.general.processTimeBasic);
-		InjectorRecipe recipe = new InjectorRecipe(filename + "." + path, energy, time);
+		RecipeImpl recipe = new RecipeImpl(filename + "." + path, energy, time);
 		
 		// Input Loop
 		JsonArray input = JsonUtils.getJsonArray(json, "input");

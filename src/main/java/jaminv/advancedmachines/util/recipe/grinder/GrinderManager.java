@@ -4,30 +4,19 @@ import java.util.List;
 
 import jaminv.advancedmachines.ModConfig;
 import jaminv.advancedmachines.lib.parser.DataParser;
-import jaminv.advancedmachines.lib.recipe.RecipeManager;
 import jaminv.advancedmachines.lib.recipe.RecipeImpl;
 import jaminv.advancedmachines.lib.recipe.RecipeInput;
+import jaminv.advancedmachines.lib.recipe.RecipeManager;
 import jaminv.advancedmachines.lib.recipe.RecipeManagerImpl;
 import jaminv.advancedmachines.lib.recipe.RecipeOutput;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class GrinderManager {
-	
-	public static class GrinderRecipe extends RecipeImpl {
-		@Override
-		public int getInputCount() { return 1; }
 
-		@Override
-		public int getOutputCount() { return 1; }
-		
-		public GrinderRecipe(String id, int energy) {
-			super(id, energy, ModConfig.general.processTimeBasic);
-		}
-	}
-	protected static RecipeManagerImpl<GrinderRecipe> manager = new RecipeManagerImpl<>();
+	protected static RecipeManagerImpl<RecipeImpl> manager = new RecipeManagerImpl<>();
 	
 	public static RecipeManager getRecipeManager() { return manager; }
-	public static List<GrinderRecipe> getRecipeList() { return manager.getRecipeList(); }
+	public static List<RecipeImpl> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {
 		DataParser.parseFolder("data/recipes/grinder", new FileHandlerGrinderRecipe());
@@ -56,24 +45,25 @@ public class GrinderManager {
 		String oreNether = "oreNether" + oreType;
 		String oreEnd = "oreEnd" + oreType;
 		int energy = ModConfig.general.defaultGrinderEnergyCost;
+		int time = ModConfig.general.processTimeBasic;
 		
 		if (OreDictionary.doesOreNameExist(gem)) {
-			addRecipe(energy, ore, gem, 2);
-			addRecipe(energy, oreNether, gem, 4);
-			addRecipe(energy, oreEnd, gem, 4);
-			addRecipe(energy / 2, gem, dust, 1);
+			addRecipe(energy, ore, gem, 2, time);
+			addRecipe(energy, oreNether, gem, 4, time);
+			addRecipe(energy, oreEnd, gem, 4, time);
+			addRecipe(energy / 2, gem, dust, 1, time);
 		} else {
-			addRecipe(energy, ore, dust, 2);
-			addRecipe(energy, oreNether, dust, 4);
-			addRecipe(energy, oreEnd, ingot, 4);
-			addRecipe(energy / 2, ingot, dust, 1);
+			addRecipe(energy, ore, dust, 2, time);
+			addRecipe(energy, oreNether, dust, 4, time);
+			addRecipe(energy, oreEnd, ingot, 4, time);
+			addRecipe(energy / 2, ingot, dust, 1, time);
 		}
 	}
 	
-	protected static void addRecipe(int energy, String oreInput, String oreOutput, int count) {
-		GrinderRecipe recipe = new GrinderRecipe("auto." + oreInput, energy);
-		recipe.setInput(new RecipeInput(oreInput));
-		recipe.setOutput(new RecipeOutput(oreOutput, count));
+	protected static void addRecipe(int energy, String oreInput, String oreOutput, int count, int time) {
+		RecipeImpl recipe = new RecipeImpl("auto." + oreInput, energy, time);
+		recipe.addInput(new RecipeInput(oreInput));
+		recipe.addOutput(new RecipeOutput(oreOutput, count));
 		manager.addRecipe(recipe);
 	}
 }
