@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 import jaminv.advancedmachines.lib.energy.IEnergyStorageInternal;
 import jaminv.advancedmachines.lib.fluid.IFluidHandlerInternal;
 import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
-import jaminv.advancedmachines.lib.recipe.IRecipeManager;
+import jaminv.advancedmachines.lib.recipe.RecipeManager;
 
 /**
  * This interface is largely to prevent objects from being tightly coupled to the machine controller.
@@ -35,5 +35,5 @@ public interface IMachineController extends IMachineProcess {
 	public IItemHandlerMachine getInventory();
 	public IFluidHandlerInternal getFluidTank();
 	public IEnergyStorageInternal getEnergy();
-	public IRecipeManager getRecipeManager();
+	public RecipeManager getRecipeManager();
 }

@@ -1,0 +1,17 @@
+{
+    "titanium_ore": {
+        "input": { "item": "advancedmachines:ore_titanium" },
+        "output": { "ore": "ingotTitanium" },
+        "xp": 0.7
+    },
+    "copper_ore": {
+        "input": { "item": "advancedmachines:ore_copper" },
+        "output": { "ore": "ingotCopper" },
+        "xp": 0.5
+    },
+    "silver_ore": {
+        "input": { "item": "advancedmachines:ore_silver" },
+        "output": { "ore": "ingotSilver" },
+        "xp": 0.5
+    }
+}

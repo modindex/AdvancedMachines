@@ -12,27 +12,27 @@ import net.minecraftforge.fluids.FluidStack;
  * This interface also abstract the various internal-use objects, like RecipeInput, RecipeOutput
  * and ItemComparable.
  */
-public interface IRecipe {
-	public interface IInput {
-		public List<IItemGeneric> getItems();
+public interface Recipe {
+	public interface Input {
+		public List<Ingredient> getItems();
 		public List<FluidStack> getFluids();
 	}
 	
-	public interface IOutput {
+	public interface Output {
 		public List<ItemStack> getItems();
 		public List<FluidStack> getFluids();
 	}
 	
 	public String getRecipeId();
 	
-	public IInput getInput();	
-	public IOutput getOutput();
+	public Input getInput(boolean extractOnly);	
+	public Output getOutput();
 	
 	/**
 	 * This method is not deterministic (there is a random component applied).
 	 * If you need multiple secondary outputs, you should call this method multiple times.
 	 */
-	public IOutput getSecondary();
+	public Output getSecondary();
 	
 	public int getEnergy();
 	public int getProcessTime();

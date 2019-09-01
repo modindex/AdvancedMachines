@@ -2,7 +2,7 @@ package jaminv.advancedmachines.machine;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.lib.machine.IMachineController.ISubController;
-import jaminv.advancedmachines.lib.recipe.IRecipeManager;
+import jaminv.advancedmachines.lib.recipe.RecipeManager;
 import jaminv.advancedmachines.machine.expansion.MachineUpgrade;
 import jaminv.advancedmachines.machine.expansion.MachineUpgrade.UpgradeType;
 import jaminv.advancedmachines.machine.expansion.MachineUpgradeTile;
@@ -34,7 +34,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public abstract class TileMachineMultiblock extends TileMachine implements MachineUpgradeTile, IMachineFaceTE {
 
-	public TileMachineMultiblock(IRecipeManager recipeManager) {
+	public TileMachineMultiblock(RecipeManager recipeManager) {
 		super(recipeManager);
 	}
 	

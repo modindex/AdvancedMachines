@@ -40,7 +40,9 @@ public class ConfigConditionFactory implements IConditionFactory {
 			case "toolSilver":
 				return () -> ModConfig.crafting.craftSilverTools;
 			case "armorSilver":
-				return () -> ModConfig.crafting.craftSilverArmor;					
+				return () -> ModConfig.crafting.craftSilverArmor;
+			case "ae2Press":
+				return () -> ModConfig.recipe.allowPressAE2;
 			default:
 				break;
 			}

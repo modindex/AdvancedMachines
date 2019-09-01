@@ -21,7 +21,7 @@ import jaminv.advancedmachines.machine.instance.purifier.TileMachinePurifier.Con
 import jaminv.advancedmachines.machine.instance.stabilizer.DialogMachineStabilizer;
 import jaminv.advancedmachines.machine.instance.stabilizer.TileMachineStabilizer.ContainerStabilizer;
 import jaminv.advancedmachines.util.recipe.AlloyManager;
-import jaminv.advancedmachines.util.recipe.FurnaceManager;
+import jaminv.advancedmachines.util.recipe.furnace.FurnaceManager;
 import jaminv.advancedmachines.util.recipe.grinder.GrinderManager;
 import jaminv.advancedmachines.util.recipe.injector.InjectorManager;
 import jaminv.advancedmachines.util.recipe.melter.MelterManager;

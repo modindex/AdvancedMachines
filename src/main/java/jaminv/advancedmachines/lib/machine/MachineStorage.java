@@ -10,7 +10,7 @@ import jaminv.advancedmachines.lib.fluid.IFluidTankInternal;
 import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
 import jaminv.advancedmachines.lib.inventory.IItemObservable;
 import jaminv.advancedmachines.lib.inventory.IItemObservable.IObserver;
-import jaminv.advancedmachines.lib.recipe.IRecipeManager;
+import jaminv.advancedmachines.lib.recipe.RecipeManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -33,10 +33,10 @@ public class MachineStorage implements IMachineStorage, INBTSerializable<NBTTagC
 	protected final IFluidHandlerAdvanced inputTanks;
 	protected final IFluidHandlerAdvanced outputTanks;
 	protected final IEnergyStorageAdvanced energy;
-	protected final IRecipeManager recipeManager;
+	protected final RecipeManager recipeManager;
 	
 	public MachineStorage(IItemHandlerMachine inventory, IFluidHandlerAdvanced inputTanks, IFluidHandlerAdvanced outputTanks, 
-			IEnergyStorageAdvanced energy, IRecipeManager recipeManager) {
+			IEnergyStorageAdvanced energy, RecipeManager recipeManager) {
 		
 		this.inventory = inventory;
 		this.inputTanks = inputTanks;
@@ -49,7 +49,7 @@ public class MachineStorage implements IMachineStorage, INBTSerializable<NBTTagC
 	public IFluidHandlerAdvanced getInputTanks() { return inputTanks; }
 	public IFluidHandlerAdvanced getOutputTanks() { return outputTanks; }
 	public IEnergyStorageAdvanced getEnergy() { return energy; }
-	public IRecipeManager getRecipeManager() { return recipeManager; }
+	public RecipeManager getRecipeManager() { return recipeManager; }
 	
 	/* IItemHandler */
 	

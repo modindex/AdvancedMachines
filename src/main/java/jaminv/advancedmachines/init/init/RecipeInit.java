@@ -1,7 +1,7 @@
 package jaminv.advancedmachines.init.init;
 
 import jaminv.advancedmachines.util.recipe.AlloyManager;
-import jaminv.advancedmachines.util.recipe.FurnaceManager;
+import jaminv.advancedmachines.util.recipe.furnace.FurnaceManager;
 import jaminv.advancedmachines.util.recipe.grinder.GrinderManager;
 import jaminv.advancedmachines.util.recipe.injector.InjectorManager;
 import jaminv.advancedmachines.util.recipe.melter.MelterManager;

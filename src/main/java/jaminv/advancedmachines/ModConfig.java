@@ -117,6 +117,9 @@ public final class ModConfig {
 		})
 		public String[] oreDictionaryPreference = { "minecraft", "thermalfoundation", "appliedenergistics2", "advancedmachines" };
 		
+		@Config.Comment("Enable Applied Energistics 2 recipes for the Circuit Press")
+		public boolean allowPressAE2 = true; 
+		
 		/*
 		for (String item : excludeGrinderRecipes) {
 			doExcludeGrinder.put(item, true);

@@ -4,16 +4,16 @@ import java.util.List;
 
 import jaminv.advancedmachines.ModConfig;
 import jaminv.advancedmachines.lib.parser.DataParser;
-import jaminv.advancedmachines.lib.recipe.IRecipeManager;
-import jaminv.advancedmachines.lib.recipe.RecipeBase;
-import jaminv.advancedmachines.lib.recipe.RecipeInput;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
+import jaminv.advancedmachines.lib.recipe.RecipeImpl;
+import jaminv.advancedmachines.lib.recipe.RecipeInput;
+import jaminv.advancedmachines.lib.recipe.RecipeManagerImpl;
 import jaminv.advancedmachines.lib.recipe.RecipeOutput;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class GrinderManager {
 	
-	public static class GrinderRecipe extends RecipeBase {
+	public static class GrinderRecipe extends RecipeImpl {
 		@Override
 		public int getInputCount() { return 1; }
 
@@ -24,9 +24,9 @@ public class GrinderManager {
 			super(id, energy, ModConfig.general.processTimeBasic);
 		}
 	}
-	protected static RecipeManager<GrinderRecipe> manager = new RecipeManager<>();
+	protected static RecipeManagerImpl<GrinderRecipe> manager = new RecipeManagerImpl<>();
 	
-	public static IRecipeManager getRecipeManager() { return manager; }
+	public static RecipeManager getRecipeManager() { return manager; }
 	public static List<GrinderRecipe> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {
@@ -66,7 +66,7 @@ public class GrinderManager {
 			addRecipe(energy, ore, dust, 2);
 			addRecipe(energy, oreNether, dust, 4);
 			addRecipe(energy, oreEnd, ingot, 4);
-			addRecipe(energy / 2, gem, ingot, 1);
+			addRecipe(energy / 2, ingot, dust, 1);
 		}
 	}
 	

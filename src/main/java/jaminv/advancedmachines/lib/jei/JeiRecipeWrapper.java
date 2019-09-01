@@ -5,10 +5,10 @@ import java.util.Collections;
 import java.util.List;
 
 import jaminv.advancedmachines.lib.jei.element.IJeiElement;
-import jaminv.advancedmachines.lib.recipe.IItemGeneric;
-import jaminv.advancedmachines.lib.recipe.IJeiRecipe;
-import jaminv.advancedmachines.lib.recipe.IRecipe.IInput;
-import jaminv.advancedmachines.lib.recipe.IRecipe.IOutput;
+import jaminv.advancedmachines.lib.recipe.Ingredient;
+import jaminv.advancedmachines.lib.recipe.Recipe.Input;
+import jaminv.advancedmachines.lib.recipe.Recipe.Output;
+import jaminv.advancedmachines.lib.recipe.RecipeJei;
 import jaminv.advancedmachines.lib.util.coord.Offset;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
@@ -20,18 +20,18 @@ import scala.actors.threadpool.Arrays;
 
 public class JeiRecipeWrapper implements IRecipeWrapper {
 
-	protected final IJeiRecipe recipe;
+	protected final RecipeJei recipe;
 	protected final IJeiDialog dialog;
 	
 	protected List<List<ItemStack>> inputItems;
 	protected List<FluidStack> inputFluids;
 	protected List<ItemStack> outputItems;
 	protected List<FluidStack> outputFluids;
-	protected IJeiRecipe.ISecondaryOutput secondary;
+	protected RecipeJei.SecondaryOutput secondary;
 	
 	public String getRecipeId() { return recipe.getRecipeId(); }
 	
-	public JeiRecipeWrapper(IGuiHelper guiHelper, IJeiRecipe recipe, IJeiDialog dialog) {
+	public JeiRecipeWrapper(IGuiHelper guiHelper, RecipeJei recipe, IJeiDialog dialog) {
 		this.recipe = recipe;
 		this.dialog = dialog;
 		
@@ -40,21 +40,21 @@ public class JeiRecipeWrapper implements IRecipeWrapper {
 		this.outputItems = new ArrayList<ItemStack>();
 		this.outputFluids = new ArrayList<FluidStack>();
 		
-		IInput input = recipe.getInput();
-		for (IItemGeneric item : input.getItems()) {
+		Input input = recipe.getInput(false);
+		for (Ingredient item : input.getItems()) {
 			this.inputItems.add(item.getItems());
 		}
 		inputFluids = input.getFluids();
 		
-		IOutput output = recipe.getOutput();
+		Output output = recipe.getOutput();
 		outputItems.addAll(output.getItems());
 		outputFluids.addAll(output.getFluids());
 		
 		secondary = recipe.getJeiSecondary();
-		for (IJeiRecipe.ISecondary sec : secondary.getItems()) {
+		for (RecipeJei.Secondary sec : secondary.getItems()) {
 			this.outputItems.add(sec.toItemStack());
 		}
-		for (IJeiRecipe.ISecondary fluid : secondary.getFluids()) {
+		for (RecipeJei.Secondary fluid : secondary.getFluids()) {
 			this.outputFluids.add(fluid.toFluidStack());
 		}
 		

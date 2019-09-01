@@ -4,8 +4,8 @@ import java.util.List;
 
 import jaminv.advancedmachines.lib.container.layout.IItemLayout;
 import jaminv.advancedmachines.lib.container.layout.IJeiLayoutManager;
-import jaminv.advancedmachines.lib.recipe.IJeiRecipe;
-import jaminv.advancedmachines.lib.recipe.IRecipe;
+import jaminv.advancedmachines.lib.recipe.RecipeJei;
+import jaminv.advancedmachines.lib.recipe.Recipe;
 import jaminv.advancedmachines.lib.util.coord.CoordOffset;
 import jaminv.advancedmachines.lib.util.coord.Offset;
 import jaminv.advancedmachines.lib.util.coord.Pos;
@@ -53,10 +53,10 @@ public abstract class JeiSecondaryChance implements IJeiElement {
 	public void init(IGuiHelper guiHelper, ResourceLocation resource) {}
 	
 	@Override	
-	public void draw(Minecraft minecraft, IJeiRecipe recipe, Offset baseOffset) {
+	public void draw(Minecraft minecraft, RecipeJei recipe, Offset baseOffset) {
 		
 		int i = 0;
-		for (IJeiRecipe.ISecondary sec : recipe.getJeiSecondary().getItems()) {
+		for (RecipeJei.Secondary sec : recipe.getJeiSecondary().getItems()) {
 			String percent = I18n.format("dialog.common.percent", sec.getChance());
 			int width = minecraft.fontRenderer.getStringWidth(percent);
 		
@@ -68,5 +68,5 @@ public abstract class JeiSecondaryChance implements IJeiElement {
 	
 	public abstract Offset getChanceOffset(int width);
 	
-	@Override public String getTooltip(IRecipe recipe) { return null; }
+	@Override public String getTooltip(Recipe recipe) { return null; }
 }

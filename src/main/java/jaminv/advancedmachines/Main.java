@@ -67,9 +67,6 @@ public class Main {
 		logger.info("Ore Dictionary Registry");
 		DataParser.parseFolder("data/ore_dictionary", new FileHandlerOreDictionary());
 		
-		logger.info("Recipe Initialization");
-		RecipeInit.init();
-		
 		NetworkRegistry.INSTANCE.registerGuiHandler(Main.instance, new GuiProxy());
 
 		proxy.init(e);
@@ -77,6 +74,9 @@ public class Main {
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent e) {
+		logger.info("Recipe Initialization");
+		RecipeInit.init();    	
+    	
         proxy.postInit(e);
     }
 }

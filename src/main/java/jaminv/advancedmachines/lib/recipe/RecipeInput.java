@@ -15,7 +15,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class RecipeInput implements Cloneable, IItemGeneric {
+public class RecipeInput implements Cloneable, Ingredient {
 	
 	private int oreId = -1;
 	private Item item = Items.AIR;

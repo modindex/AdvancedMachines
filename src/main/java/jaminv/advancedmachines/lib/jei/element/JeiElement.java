@@ -1,7 +1,7 @@
 package jaminv.advancedmachines.lib.jei.element;
 
-import jaminv.advancedmachines.lib.recipe.IJeiRecipe;
-import jaminv.advancedmachines.lib.recipe.IRecipe;
+import jaminv.advancedmachines.lib.recipe.RecipeJei;
+import jaminv.advancedmachines.lib.recipe.Recipe;
 import jaminv.advancedmachines.lib.util.coord.Offset;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
@@ -32,12 +32,12 @@ public class JeiElement implements IJeiElement {
 	}
 	
 	@Override
-	public void draw(Minecraft minecraft, IJeiRecipe recipe, Offset offset) {
+	public void draw(Minecraft minecraft, RecipeJei recipe, Offset offset) {
 		drawable.draw(minecraft, x + offset.getX(), y + offset.getY());
 	}
 	
 	@Override
-	public String getTooltip(IRecipe recipe) {
+	public String getTooltip(Recipe recipe) {
 		return null;
 	}
 }

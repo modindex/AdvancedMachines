@@ -15,7 +15,7 @@ import net.minecraftforge.fluids.FluidStack;
  * 
  * @author Jamin VanderBerg
  */
-public interface IItemGeneric {
+public interface Ingredient {
 	public boolean isValid(ItemStack stack);
 	public boolean isValid(FluidStack stack);
 	public int getCount();

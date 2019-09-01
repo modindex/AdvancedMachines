@@ -3,12 +3,15 @@ package jaminv.advancedmachines.machine.instance.press;
 import jaminv.advancedmachines.lib.container.ContainerMachine;
 import jaminv.advancedmachines.lib.container.ISyncManager;
 import jaminv.advancedmachines.lib.container.layout.ILayoutManager;
+import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid;
 import jaminv.advancedmachines.lib.container.layout.JeiLayoutManager;
 import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
+import jaminv.advancedmachines.lib.inventory.slot.ISlotHandler;
 import jaminv.advancedmachines.machine.TileMachineMultiblock;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.util.recipe.press.PressManager;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 
 public class TileMachinePress extends TileMachineMultiblock {
 	
@@ -20,9 +23,30 @@ public class TileMachinePress extends TileMachineMultiblock {
 		}
 	}
 	
+	public class SlotHandlerPress implements ISlotHandler {
+
+		@Override public boolean canInsert(int slot, ItemStack stack) { 
+			if (!stack.getItem().getRegistryName().toString().equals("appliedenergistics2:material")) {
+				return false;
+			}
+			if (stack.getMetadata() != 13 && stack.getMetadata() != 14 && stack.getMetadata() != 15 && stack.getMetadata() != 19) {
+				return false;
+			}
+			return true;
+		}
+
+		@Override public boolean canExtract(int slot, int amount, ItemStack contents) { return true; }
+
+		@Override
+		public int getStackLimit(int slot, int defaultLimit) {
+			return 1;
+		}
+	}
+	
 	public static final JeiLayoutManager layout	= new JeiLayoutManager()
-		.setItemInputLayout(PressManager.getRecipeManager(), 44, 19, 3, 1) 
-		.setItemOutputLayout(98, 23)		
+		.setItemInputLayout(PressManager.getRecipeManager(), 53, 19, 3, 1) 
+		.setItemOutputLayout(116, 37)
+		.setItemAdditionalLayout(new ItemLayoutGrid(6-24, 6, 4, 1))
 		.setInventoryLayout(8, 84)
 		.setHotbarLayout(8, 142);
 	
@@ -30,6 +54,7 @@ public class TileMachinePress extends TileMachineMultiblock {
 		super(PressManager.getRecipeManager());
 		inventory.addInputSlots(3);
 		inventory.addOutputSlots(1);
+		inventory.addAdditionalSlots(4, new SlotHandlerPress());
 	}
 
 	@Override

@@ -1,10 +1,75 @@
 {
-    "pcb": {
+    "silicon": {
         "input": [
-            { "ore": "dustGlass" },
-            { "ore": "ingotCopper", "extract": false },
-            { "ore": "itemPlastic" }
+            { "item": "appliedenergistics2:material", "data": 19, "extract": false },
+            { "ore": "itemSilicon" }
         ],
-        "output": { "item": "advancedmachines:circuit_pcb" }
+        "output": { "item": "appliedenergistics2:material", "data": 20 },
+        "conditions": [
+            { "type": "advancedmachines:config", "value": "ae2Press" }
+        ]          
+    },
+    "logic_circuit": {
+        "input": [
+            { "item": "appliedenergistics2:material", "data": 15, "extract": false },
+            { "ore": "ingotGold" }
+        ],
+        "output": { "item": "appliedenergistics2:material", "data": 18 },
+        "conditions": [
+            { "type": "advancedmachines:config", "value": "ae2Press" }
+        ]          
+    },
+    "calc_circuit": {
+        "input": [
+            { "item": "appliedenergistics2:material", "data": 13, "extract": false },
+            { "item": "appliedenergistics2:material", "data": 10 }
+        ],
+        "output": { "item": "appliedenergistics2:material", "data": 16 },
+        "conditions": [
+            { "type": "advancedmachines:config", "value": "ae2Press" }
+        ]          
+    },
+    "eng_circuit": {
+        "input": [
+            { "item": "appliedenergistics2:material", "data": 14, "extract": false },
+            { "ore": "gemDiamond" }
+        ],
+        "output": { "item": "appliedenergistics2:material", "data": 17 },
+        "conditions": [
+            { "type": "advancedmachines:config", "value": "ae2Press" }
+        ]          
+    },
+    "logic_proc": {
+        "input": [
+            { "item": "appliedenergistics2:material", "data": 18 },
+            { "ore": "dustRedstone" },
+            { "item": "appliedenergistics2:material", "data": 20 }
+        ],
+        "output": { "item": "appliedenergistics2:material", "data": 22 },
+        "conditions": [
+            { "type": "advancedmachines:config", "value": "ae2Press" }
+        ]
+    },      
+    "calc_proc": {
+        "input": [
+            { "item": "appliedenergistics2:material", "data": 16 },
+            { "ore": "dustRedstone" },
+            { "item": "appliedenergistics2:material", "data": 20 }
+        ],
+        "output": { "item": "appliedenergistics2:material", "data": 23 },
+        "conditions": [
+            { "type": "advancedmachines:config", "value": "ae2Press" }
+        ]
+    },
+    "eng_proc": {
+        "input": [
+            { "item": "appliedenergistics2:material", "data": 17 },
+            { "ore": "dustRedstone" },
+            { "item": "appliedenergistics2:material", "data": 20 }
+        ],
+        "output": { "item": "appliedenergistics2:material", "data": 24 },
+        "conditions": [
+            { "type": "advancedmachines:config", "value": "ae2Press" }
+        ]          
     }
 }

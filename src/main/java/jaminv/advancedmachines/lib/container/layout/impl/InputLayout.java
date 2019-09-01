@@ -2,17 +2,17 @@ package jaminv.advancedmachines.lib.container.layout.impl;
 
 import jaminv.advancedmachines.lib.container.ContainerMachine;
 import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid;
-import jaminv.advancedmachines.lib.recipe.IRecipeManager;
+import jaminv.advancedmachines.lib.recipe.RecipeManager;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class InputLayout extends ItemLayoutGrid {
-	IRecipeManager recipe;
+	RecipeManager recipe;
 	
 	public static class SlotInput extends SlotItemHandler {
-		IRecipeManager recipe;
-		public SlotInput(IRecipeManager recipe, IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+		RecipeManager recipe;
+		public SlotInput(RecipeManager recipe, IItemHandler itemHandler, int index, int xPosition, int yPosition) {
 			super(itemHandler, index, xPosition, yPosition);
 			this.recipe = recipe;
 		}
@@ -23,15 +23,15 @@ public class InputLayout extends ItemLayoutGrid {
 		}
 	}	
 	
-	public InputLayout(IRecipeManager recipe, int xpos, int ypos, int xspacing, int yspacing, int rows, int cols) {
+	public InputLayout(RecipeManager recipe, int xpos, int ypos, int xspacing, int yspacing, int rows, int cols) {
 		super(xpos, ypos, xspacing, yspacing, rows, cols);
 		this.recipe = recipe;
 	}
-	public InputLayout(IRecipeManager recipe, int xpos, int ypos, int rows, int cols) {
+	public InputLayout(RecipeManager recipe, int xpos, int ypos, int rows, int cols) {
 		super(xpos, ypos, rows, cols);
 		this.recipe = recipe;
 	}
-	public InputLayout(IRecipeManager recipe, int xpos, int ypos) {
+	public InputLayout(RecipeManager recipe, int xpos, int ypos) {
 		super(xpos, ypos);
 		this.recipe = recipe;
 	}

@@ -10,7 +10,7 @@ import jaminv.advancedmachines.lib.container.layout.IJeiLayoutManager;
 import jaminv.advancedmachines.lib.jei.IJeiDialog;
 import jaminv.advancedmachines.lib.jei.JeiRecipeCategory;
 import jaminv.advancedmachines.lib.jei.JeiRecipeWrapper;
-import jaminv.advancedmachines.lib.recipe.IJeiRecipe;
+import jaminv.advancedmachines.lib.recipe.RecipeJei;
 import jaminv.advancedmachines.lib.util.coord.Rect;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import mezz.jei.api.IGuiHelper;
@@ -41,7 +41,7 @@ public class RecipeCategory extends JeiRecipeCategory {
 		return recipeUid;
 	}
 	
-	public static void initialize(IModRegistry registry, String recipeUid, List<? extends IJeiRecipe> recipeList, IJeiDialog dialog, Class<? extends GuiContainer> dialogClass, Class containerClass, Map<VariantExpansion,? extends Block> blocks) {
+	public static void initialize(IModRegistry registry, String recipeUid, List<? extends RecipeJei> recipeList, IJeiDialog dialog, Class<? extends GuiContainer> dialogClass, Class containerClass, Map<VariantExpansion,? extends Block> blocks) {
 		RecipeCategory.addRecipes(registry, recipeUid, dialog, recipeList);
 		RecipeCategory.createRecipeCatalyst(registry, recipeUid, blocks);
 		RecipeCategory.createRecipeClickArea(registry, recipeUid, dialog, dialogClass);
@@ -63,16 +63,16 @@ public class RecipeCategory extends JeiRecipeCategory {
 		);		
 	}
 	
-	public static void addRecipes(IModRegistry registry, String recipeUid, IJeiDialog dialog, List<? extends IJeiRecipe> recipeList) {
+	public static void addRecipes(IModRegistry registry, String recipeUid, IJeiDialog dialog, List<? extends RecipeJei> recipeList) {
 		IJeiHelpers jeiHelpers = registry.getJeiHelpers();
 		IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
 		registry.addRecipes(getRecipes(guiHelper, recipeList, dialog), recipeUid);
 	}
 	
-	public static List<JeiRecipeWrapper> getRecipes(IGuiHelper guiHelper, List<? extends IJeiRecipe> recipeList, IJeiDialog dialog) {
+	public static List<JeiRecipeWrapper> getRecipes(IGuiHelper guiHelper, List<? extends RecipeJei> recipeList, IJeiDialog dialog) {
 		List<JeiRecipeWrapper> recipes = new ArrayList<>();
 		
-		for (IJeiRecipe recipe : recipeList) {
+		for (RecipeJei recipe : recipeList) {
 			recipes.add(new JeiRecipeWrapper(guiHelper, recipe, dialog));
 		}
 		

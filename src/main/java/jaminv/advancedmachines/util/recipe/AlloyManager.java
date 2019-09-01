@@ -3,13 +3,13 @@ package jaminv.advancedmachines.util.recipe;
 import java.util.List;
 
 import jaminv.advancedmachines.ModConfig;
-import jaminv.advancedmachines.lib.recipe.IRecipeManager;
-import jaminv.advancedmachines.lib.recipe.RecipeBase;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
+import jaminv.advancedmachines.lib.recipe.RecipeImpl;
+import jaminv.advancedmachines.lib.recipe.RecipeManagerImpl;
 
 public class AlloyManager {
 	
-	public static class AlloyRecipe extends RecipeBase {
+	public static class AlloyRecipe extends RecipeImpl {
 		@Override
 		public int getInputCount() { return 3; }
 
@@ -21,9 +21,9 @@ public class AlloyManager {
 		}
 	}
 	
-	protected static RecipeManager<AlloyRecipe> manager = new RecipeManager<>();
+	protected static RecipeManagerImpl<AlloyRecipe> manager = new RecipeManagerImpl<>();
 	
-	public static IRecipeManager getRecipeManager() { return manager; }
+	public static RecipeManager getRecipeManager() { return manager; }
 	public static List<AlloyRecipe> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {

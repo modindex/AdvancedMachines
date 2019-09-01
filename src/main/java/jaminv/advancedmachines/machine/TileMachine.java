@@ -20,7 +20,7 @@ import jaminv.advancedmachines.lib.machine.IRedstoneControlled;
 import jaminv.advancedmachines.lib.machine.MachineController;
 import jaminv.advancedmachines.lib.machine.MachineStorage;
 import jaminv.advancedmachines.lib.machine.MachineStorageCapability;
-import jaminv.advancedmachines.lib.recipe.IRecipeManager;
+import jaminv.advancedmachines.lib.recipe.RecipeManager;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.helper.Directional;
 import jaminv.advancedmachines.util.network.ProcessingStateMessage;
@@ -53,7 +53,7 @@ public abstract class TileMachine extends TileEntity implements ITickable, HasGu
 			ModConfig.general.defaultMachineFluidTransfer * VariantExpansion.maxMultiplier);
 	protected final EnergyStorageAdvanced energy = new EnergyStorageAdvanced(ModConfig.general.defaultMachineEnergyCapacity * VariantExpansion.maxMultiplier);
 	
-	public TileMachine(IRecipeManager recipeManager) {
+	public TileMachine(RecipeManager recipeManager) {
 		super();
 		
 		storage = new MachineStorage(inventory, inputTanks, outputTanks, energy, recipeManager);
@@ -68,7 +68,7 @@ public abstract class TileMachine extends TileEntity implements ITickable, HasGu
 	public IFluidHandlerAdvanced getInputTanks() { return inputTanks; }
 	public IFluidHandlerAdvanced getOutputTanks() { return outputTanks; }
 	public IEnergyStorageInternal getEnergy() { return energy; }
-	public IRecipeManager getRecipeManager() { return storage.getRecipeManager(); }
+	public RecipeManager getRecipeManager() { return storage.getRecipeManager(); }
 	
 	public ISyncManager getSyncManager() {
 		return new SyncManager().addSubject(this).addSubject(controller);

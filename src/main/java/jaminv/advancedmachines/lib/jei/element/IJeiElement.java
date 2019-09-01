@@ -1,7 +1,7 @@
 package jaminv.advancedmachines.lib.jei.element;
 
-import jaminv.advancedmachines.lib.recipe.IJeiRecipe;
-import jaminv.advancedmachines.lib.recipe.IRecipe;
+import jaminv.advancedmachines.lib.recipe.RecipeJei;
+import jaminv.advancedmachines.lib.recipe.Recipe;
 import jaminv.advancedmachines.lib.util.coord.Offset;
 import mezz.jei.api.IGuiHelper;
 import net.minecraft.client.Minecraft;
@@ -14,7 +14,7 @@ public interface IJeiElement {
 	public int getH();
 	
 	void init(IGuiHelper guiHelper, ResourceLocation resource);
-	void draw(Minecraft minecraft, IJeiRecipe recipe, Offset baseOffset);
+	void draw(Minecraft minecraft, RecipeJei recipe, Offset baseOffset);
 
-	String getTooltip(IRecipe recipe);
+	String getTooltip(Recipe recipe);
 }

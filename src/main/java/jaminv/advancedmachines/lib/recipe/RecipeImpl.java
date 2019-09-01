@@ -1,7 +1,9 @@
 package jaminv.advancedmachines.lib.recipe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -15,27 +17,27 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 
-public abstract class RecipeBase implements IJeiRecipe {
+public abstract class RecipeImpl implements RecipeJei {
 	
-	protected static class Input implements IInput {
-		protected List<IItemGeneric> items = new ArrayList<IItemGeneric>();
+	protected static class InputImpl implements Input {
+		protected List<Ingredient> items = new ArrayList<Ingredient>();
 		protected List<FluidStack> fluids = new ArrayList<FluidStack>();
-		@Override public List<IItemGeneric> getItems() { return items; }
+		@Override public List<Ingredient> getItems() { return items; }
 		@Override public List<FluidStack> getFluids() { return fluids; }
 	}	
 	
-	protected static class Output implements IOutput {
+	protected static class OutputImpl implements Output {
 		protected List<ItemStack> items = new ArrayList<ItemStack>();
 		protected List<FluidStack> fluids = new ArrayList<FluidStack>();
 		@Override public List<ItemStack> getItems() { return items; }
 		@Override public List<FluidStack> getFluids() { return fluids; }
 	}
 	
-	protected static class SecondaryOutput implements ISecondaryOutput {
-		protected List<ISecondary> items = new ArrayList<ISecondary>();
-		protected List<ISecondary> fluids = new ArrayList<ISecondary>();
-		@Override public List<ISecondary> getItems() { return items; }
-		@Override public List<ISecondary> getFluids() { return fluids; }
+	protected static class SecondaryOutputImpl implements SecondaryOutput {
+		protected List<Secondary> items = new ArrayList<Secondary>();
+		protected List<Secondary> fluids = new ArrayList<Secondary>();
+		@Override public List<Secondary> getItems() { return items; }
+		@Override public List<Secondary> getFluids() { return fluids; }
 	}
 	
 	private String recipeid;
@@ -47,7 +49,7 @@ public abstract class RecipeBase implements IJeiRecipe {
 	
 	private int processTime;
 	
-	public RecipeBase(String id, int energy, int processTime) {
+	public RecipeImpl(String id, int energy, int processTime) {
 		this.recipeid = id;
 		this.input = new RecipeInput[getInputCount()];
 		this.output = new RecipeOutput[getOutputCount()];
@@ -71,24 +73,26 @@ public abstract class RecipeBase implements IJeiRecipe {
 	protected RecipeInput getInput(int index) { return input[index]; }
 	protected RecipeOutput getOutput(int index) { return output[index]; }
 	
-	protected Input inputcache;
-	protected Output outputcache;
-	protected SecondaryOutput secondarycache;
+	protected Map<Boolean, InputImpl> inputcache = new HashMap<>();
+	protected OutputImpl outputcache;
+	protected SecondaryOutputImpl secondarycache;
 	
 	@Override
-	public Input getInput() {
-		if (inputcache != null) { return inputcache; }
-		inputcache = new Input();
+	public Input getInput(boolean extractOnly) {
+		InputImpl input;
+		if ((input = inputcache.get(extractOnly)) != null) { return input; }
+		input = new InputImpl();
 		
 		for (RecipeInput in : this.input) {
-			if (!in.getExtract()) { continue; }
+			if (!in.getExtract() && extractOnly) { continue; }
 			if (in.isFluid()) {
-				inputcache.fluids.add(in.toFluidStack());
+				input.fluids.add(in.toFluidStack());
 			} else {
-				inputcache.items.add(in);
+				input.items.add(in);
 			}
 		}
-		return inputcache;
+		inputcache.put(extractOnly, input);
+		return input;
 	}
 	
 	@Override
@@ -98,10 +102,10 @@ public abstract class RecipeBase implements IJeiRecipe {
 	}
 	
 	@Override
-	public Output getSecondary() { return getOutput(this.secondary.toArray(new RecipeOutput[secondary.size()]), true); }
+	public OutputImpl getSecondary() { return getOutput(this.secondary.toArray(new RecipeOutput[secondary.size()]), true); }
 	
-	protected Output getOutput(RecipeOutput[] outputs, boolean doRandom) {
-		Output ret = new Output();
+	protected OutputImpl getOutput(RecipeOutput[] outputs, boolean doRandom) {
+		OutputImpl ret = new OutputImpl();
 		Random rand = new Random();
 		
 		for (RecipeOutput out : outputs) {
@@ -116,9 +120,9 @@ public abstract class RecipeBase implements IJeiRecipe {
 	}
 	
 	@Override
-	public ISecondaryOutput getJeiSecondary() {
+	public SecondaryOutput getJeiSecondary() {
 		if (secondarycache != null) { return secondarycache; }
-		secondarycache = new SecondaryOutput();
+		secondarycache = new SecondaryOutputImpl();
 		
 		for (RecipeOutput sec : this.secondary) {
 			if (sec.isFluid()) {
@@ -132,25 +136,25 @@ public abstract class RecipeBase implements IJeiRecipe {
 
 	public String getRecipeId() { return recipeid; }
 	
-	public RecipeBase addInput(int index, RecipeInput input) {
+	public RecipeImpl addInput(int index, RecipeInput input) {
 		this.input[index] = input;
 		return this;
 	}
 	
-	public RecipeBase setInput(RecipeInput input) {
+	public RecipeImpl setInput(RecipeInput input) {
 		return this.addInput(0, input);
 	}
 	
-	public RecipeBase addOutput(int index, RecipeOutput output) {
+	public RecipeImpl addOutput(int index, RecipeOutput output) {
 		this.output[index] = output;
 		return this;
 	}
 	
-	public RecipeBase setOutput(RecipeOutput output) {
+	public RecipeImpl setOutput(RecipeOutput output) {
 		return this.addOutput(0, output);
 	}
 	
-	public RecipeBase addSecondary(RecipeOutput output) {
+	public RecipeImpl addSecondary(RecipeOutput output) {
 		if (output == null) { return this; }
 		this.secondary.add(output);
 		return this;
@@ -162,7 +166,7 @@ public abstract class RecipeBase implements IJeiRecipe {
 		return energy;
 	}
 	
-	public RecipeBase setProcessTime(int ticks) {
+	public RecipeImpl setProcessTime(int ticks) {
 		processTime = ticks;
 		return this;
 	}
@@ -245,30 +249,30 @@ public abstract class RecipeBase implements IJeiRecipe {
 	}
 	
 	/* Helpful utility methods */
-	public RecipeBase addInput(int index, String oredictName, int count) { return this.addInput(index, new RecipeInput(oredictName, count)); }
-	public RecipeBase addInput(int index, String oredictName) { return this.addInput(index, new RecipeInput(oredictName)); }
-	public RecipeBase addInput(int index, ItemStack stack) { return this.addInput(index, new RecipeInput(stack)); }
-	public RecipeBase addInput(int index, Item item, int count, int meta) { return this.addInput(index, new RecipeInput(item, count, meta)); }
-	public RecipeBase addInput(int index, Item item) { return this.addInput(index, new RecipeInput(item)); }
-	public RecipeBase addBlankInput(int index) { return this.addInput(index, new RecipeInput()); }
+	public RecipeImpl addInput(int index, String oredictName, int count) { return this.addInput(index, new RecipeInput(oredictName, count)); }
+	public RecipeImpl addInput(int index, String oredictName) { return this.addInput(index, new RecipeInput(oredictName)); }
+	public RecipeImpl addInput(int index, ItemStack stack) { return this.addInput(index, new RecipeInput(stack)); }
+	public RecipeImpl addInput(int index, Item item, int count, int meta) { return this.addInput(index, new RecipeInput(item, count, meta)); }
+	public RecipeImpl addInput(int index, Item item) { return this.addInput(index, new RecipeInput(item)); }
+	public RecipeImpl addBlankInput(int index) { return this.addInput(index, new RecipeInput()); }
 	
-	public RecipeBase setInput(String oredictName, int count) { return this.setInput(new RecipeInput(oredictName, count)); }
-	public RecipeBase setInput(String oredictName) { return this.setInput(new RecipeInput(oredictName)); }
-	public RecipeBase setInput(ItemStack stack) { return this.setInput(new RecipeInput(stack)); }
-	public RecipeBase setInput(Item item, int count, int meta) { return this.setInput(new RecipeInput(item, count, meta)); }
-	public RecipeBase setInput(Item item) { return this.setInput(new RecipeInput(item)); }
+	public RecipeImpl setInput(String oredictName, int count) { return this.setInput(new RecipeInput(oredictName, count)); }
+	public RecipeImpl setInput(String oredictName) { return this.setInput(new RecipeInput(oredictName)); }
+	public RecipeImpl setInput(ItemStack stack) { return this.setInput(new RecipeInput(stack)); }
+	public RecipeImpl setInput(Item item, int count, int meta) { return this.setInput(new RecipeInput(item, count, meta)); }
+	public RecipeImpl setInput(Item item) { return this.setInput(new RecipeInput(item)); }
 
-	public RecipeBase addOutput(int index, String oredictName, int count) { return this.addOutput(index, new RecipeOutput(oredictName, count)); }
-	public RecipeBase addOutput(int index, String oredictName) { return this.addOutput(index, new RecipeOutput(oredictName)); }
-	public RecipeBase addOutput(int index, ItemStack stack) { return this.addOutput(index, new RecipeOutput(stack)); }
-	public RecipeBase addOutput(int index, Item item, int count, int meta) { return this.addOutput(index, new RecipeOutput(item, count, meta)); }
-	public RecipeBase addOutput(int index, Item item) { return this.addOutput(index, new RecipeOutput(item)); }
+	public RecipeImpl addOutput(int index, String oredictName, int count) { return this.addOutput(index, new RecipeOutput(oredictName, count)); }
+	public RecipeImpl addOutput(int index, String oredictName) { return this.addOutput(index, new RecipeOutput(oredictName)); }
+	public RecipeImpl addOutput(int index, ItemStack stack) { return this.addOutput(index, new RecipeOutput(stack)); }
+	public RecipeImpl addOutput(int index, Item item, int count, int meta) { return this.addOutput(index, new RecipeOutput(item, count, meta)); }
+	public RecipeImpl addOutput(int index, Item item) { return this.addOutput(index, new RecipeOutput(item)); }
 	
-	public RecipeBase setOutput(String oredictName, int count) { return this.setOutput(new RecipeOutput(oredictName, count)); }
-	public RecipeBase setOutput(String oredictName) { return this.setOutput(new RecipeOutput(oredictName)); }
-	public RecipeBase setOutput(ItemStack stack) { return this.setOutput(new RecipeOutput(stack)); }
-	public RecipeBase setOutput(Item item, int count, int meta) { return this.setOutput(new RecipeOutput(item, count, meta)); }
-	public RecipeBase setOutput(Item item) { return this.setOutput(new RecipeOutput(item)); }
+	public RecipeImpl setOutput(String oredictName, int count) { return this.setOutput(new RecipeOutput(oredictName, count)); }
+	public RecipeImpl setOutput(String oredictName) { return this.setOutput(new RecipeOutput(oredictName)); }
+	public RecipeImpl setOutput(ItemStack stack) { return this.setOutput(new RecipeOutput(stack)); }
+	public RecipeImpl setOutput(Item item, int count, int meta) { return this.setOutput(new RecipeOutput(item, count, meta)); }
+	public RecipeImpl setOutput(Item item) { return this.setOutput(new RecipeOutput(item)); }
 	
 	public int getSecondaryCount() {
 		return secondary.size();

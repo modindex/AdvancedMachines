@@ -7,7 +7,7 @@ import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.HotbarLayout;
 import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.InventoryLayout;
 import jaminv.advancedmachines.lib.container.layout.impl.InputLayout;
 import jaminv.advancedmachines.lib.container.layout.impl.OutputLayout;
-import jaminv.advancedmachines.lib.recipe.IRecipeManager;
+import jaminv.advancedmachines.lib.recipe.RecipeManager;
 import net.minecraft.inventory.IInventory;
 import net.minecraftforge.items.IItemHandler;
 
@@ -31,10 +31,10 @@ public class JeiLayoutManager implements IJeiLayoutManager {
 	public JeiLayoutManager setItemInputLayout(IItemLayout layout) {
 		itemInput = layout; return this;
 	}
-	public JeiLayoutManager setItemInputLayout(IRecipeManager recipe, int x, int y) {
+	public JeiLayoutManager setItemInputLayout(RecipeManager recipe, int x, int y) {
 		return this.setItemInputLayout(new InputLayout(recipe, x, y));		
 	}
-	public JeiLayoutManager setItemInputLayout(IRecipeManager recipe, int x, int y, int rows, int cols) {
+	public JeiLayoutManager setItemInputLayout(RecipeManager recipe, int x, int y, int rows, int cols) {
 		return this.setItemInputLayout(new InputLayout(recipe, x, y, rows, cols));
 	}
 	

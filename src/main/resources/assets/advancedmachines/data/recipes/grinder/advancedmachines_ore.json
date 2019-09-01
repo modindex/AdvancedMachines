@@ -6,7 +6,7 @@
     },
     "oreSilver_tf": {
         "input": { "ore": "oreSilver" },
-        "output": { "ore": "dustSilver" },
+        "output": { "ore": "dustSilver", "count": 2 },
         "secondary": { "ore": "dustLead", "chance": 10 },
         "conditions": [
             { "type": "advancedmachines:oredictionary", "property": "exists", "key": "dustLead" }
@@ -14,7 +14,7 @@
     },
     "oreSilver": {
         "input": { "ore": "oreSilver" },
-        "output": { "ore": "dustSilver" },
+        "output": { "ore": "dustSilver", "count": 2 },
         "secondary": { "ore": "dustGold", "chance": 10 },
         "conditions": [
             { "type": "advancedmachines:oredictionary", "property": "notexists", "key": "dustLead" }
@@ -22,7 +22,7 @@
     },
     "oreTitanium": {
         "input": { "ore": "oreTitanium" },
-        "output": { "ore": "dustTitanium"  },
+        "output": { "ore": "dustTitanium", "count": 2 },
         "secondary": { "ore": "dustIron", "chance": 10 }
     }
 }

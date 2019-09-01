@@ -50,7 +50,7 @@ public class ContainerMachine extends Container implements ILayoutUser {
 			}
 		} else {
 			result = InventoryHelper.pushStackToInput(stack, inventory, false);
-			result = InventoryHelper.pushStackToAdditional(stack, inventory, false);
+			result = InventoryHelper.pushStackToAdditional(result, inventory, false);
 			slot.putStack(result);
 			slot.onSlotChanged();
 		}

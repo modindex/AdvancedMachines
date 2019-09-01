@@ -4,13 +4,13 @@ import java.util.List;
 
 import jaminv.advancedmachines.ModConfig;
 import jaminv.advancedmachines.lib.parser.DataParser;
-import jaminv.advancedmachines.lib.recipe.IRecipeManager;
-import jaminv.advancedmachines.lib.recipe.RecipeBase;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
+import jaminv.advancedmachines.lib.recipe.RecipeImpl;
+import jaminv.advancedmachines.lib.recipe.RecipeManagerImpl;
 
 public class MelterManager {
 	
-	public static class MelterRecipe extends RecipeBase {
+	public static class MelterRecipe extends RecipeImpl {
 		@Override
 		public int getInputCount() { return 1; }
 
@@ -22,9 +22,9 @@ public class MelterManager {
 		}
 	}
 	
-	protected static RecipeManager<MelterRecipe> manager = new RecipeManager<>();
+	protected static RecipeManagerImpl<MelterRecipe> manager = new RecipeManagerImpl<>();
 	
-	public static IRecipeManager getRecipeManager() { return manager; }
+	public static RecipeManager getRecipeManager() { return manager; }
 	public static List<MelterRecipe> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {

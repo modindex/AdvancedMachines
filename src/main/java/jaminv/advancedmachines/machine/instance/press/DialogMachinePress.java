@@ -28,13 +28,13 @@ public class DialogMachinePress extends JeiDialog {
 		this.addText(8, 73, "dialog.common.inventory", 0x404040);
 		
 		addJeiElement(new JeiEnergyBar(9, 20, 14, 50, 200, 0));
-		addJeiElement(new JeiProgressIndicator(65, 24, 24, 17, 200, 50));		
+		addJeiElement(new JeiProgressIndicator(79, 38, 24, 17, 200, 50));		
 	}
 	
 	public DialogMachinePress(ContainerMachine container, TileMachinePress te) {
 		this(container);
 
-		this.addElement(new DialogProcessBar(te.getController(), 65, 24, 24, 17, 200, 50));
+		this.addElement(new DialogProcessBar(te.getController(), 79, 38, 24, 17, 200, 50));
 		this.addElement(new DialogEnergyBar(te.getEnergy(), 9, 20, 14, 50, 200, 0));
 		this.addElement(new RedstoneToggleButton((IRedstoneControlled)te));
 		

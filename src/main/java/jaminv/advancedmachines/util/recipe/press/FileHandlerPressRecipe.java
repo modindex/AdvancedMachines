@@ -5,16 +5,25 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import jaminv.advancedmachines.ModConfig;
+import jaminv.advancedmachines.Reference;
 import jaminv.advancedmachines.lib.parser.DataParserException;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe;
 import jaminv.advancedmachines.lib.recipe.RecipeInput;
 import jaminv.advancedmachines.lib.recipe.RecipeOutput;
 import jaminv.advancedmachines.lib.util.logger.Logger;
+import jaminv.advancedmachines.util.conditions.ConfigConditionFactory;
+import jaminv.advancedmachines.util.conditions.OreDictionaryConditionFactory;
 import jaminv.advancedmachines.util.recipe.press.PressManager.PressRecipe;
 import net.minecraft.util.JsonUtils;
 
 public class FileHandlerPressRecipe extends FileHandlerRecipe {
 
+	public FileHandlerPressRecipe() {
+		super();
+		addConditionFactory(Reference.MODID + ":config", new ConfigConditionFactory());
+		addConditionFactory(Reference.MODID + ":oredictionary", new OreDictionaryConditionFactory());
+	}	
+	
 	@Override
 	protected boolean parseRecipe(Logger logger, String filename, String path, JsonObject json) throws DataParserException {
 		logger = logger.getLogger("press");		

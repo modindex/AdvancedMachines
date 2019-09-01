@@ -13,9 +13,9 @@ import jaminv.advancedmachines.lib.fluid.IFluidObservable;
 import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
 import jaminv.advancedmachines.lib.inventory.IItemObservable;
 import jaminv.advancedmachines.lib.inventory.InventoryHelper;
-import jaminv.advancedmachines.lib.recipe.IItemGeneric;
-import jaminv.advancedmachines.lib.recipe.IRecipe;
-import jaminv.advancedmachines.lib.recipe.IRecipeManager;
+import jaminv.advancedmachines.lib.recipe.Ingredient;
+import jaminv.advancedmachines.lib.recipe.Recipe;
+import jaminv.advancedmachines.lib.recipe.RecipeManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -27,10 +27,10 @@ public class MachineController implements IMachineController, IItemObservable.IO
 	protected final IItemHandlerMachine inventory;
 	protected final IFluidHandlerInternal fluidtank;
 	protected final IEnergyStorageAdvanced energy;
-	protected final IRecipeManager recipemanager;
+	protected final RecipeManager recipemanager;
 	protected final IMachineTE te;
 	
-	public MachineController(IItemHandlerMachine inventory, IFluidHandlerInternal fluidtank, IEnergyStorageAdvanced energy, IRecipeManager recipemanager, IMachineTE te) {
+	public MachineController(IItemHandlerMachine inventory, IFluidHandlerInternal fluidtank, IEnergyStorageAdvanced energy, RecipeManager recipemanager, IMachineTE te) {
 		this.inventory = inventory;
 		this.fluidtank = fluidtank;
 		this.energy = energy;
@@ -38,7 +38,7 @@ public class MachineController implements IMachineController, IItemObservable.IO
 		this.te = te;
 	}
 	
-	public MachineController(IMachineStorage storage, IRecipeManager recipemanager, IMachineTE te) {
+	public MachineController(IMachineStorage storage, RecipeManager recipemanager, IMachineTE te) {
 		inventory = storage;
 		fluidtank = storage;
 		energy = storage;
@@ -54,7 +54,7 @@ public class MachineController implements IMachineController, IItemObservable.IO
 	public IItemHandlerMachine getInventory() { return inventory; }
 	public IFluidHandlerInternal getFluidTank() { return fluidtank; }
 	public IEnergyStorageInternal getEnergy() { return energy; }
-	public IRecipeManager getRecipeManager() { return recipemanager; }	
+	public RecipeManager getRecipeManager() { return recipemanager; }	
 	
 	private List<ISubController> subcontrollers = new ArrayList<ISubController>();
 	public void addSubController(ISubController sub) { 
@@ -83,7 +83,7 @@ public class MachineController implements IMachineController, IItemObservable.IO
 	/** Call to restart tick updates when a tile entity's state changes. */
 	public void wake() { sleep = false; }
 	
-	private IRecipe lastRecipe;	
+	private Recipe lastRecipe;	
 	private int qtyProcessing = 0;
 	private int processTimeRemaining = -1;
 	private int totalProcessTime = 0;
@@ -139,7 +139,7 @@ public class MachineController implements IMachineController, IItemObservable.IO
 		if (!te.isRedstoneActive()) { return; }
 		
 		if (!isProcessing()) {
-			IRecipe recipe = recipemanager.getRecipe(inventory.getItemInput(), fluidtank.getStacks());
+			Recipe recipe = recipemanager.getRecipe(inventory.getItemInput(), fluidtank.getStacks());
 			if (recipe == null || !beginProcess(recipe)) { return; }
 			processTimeRemaining = totalProcessTime = recipe.getProcessTime();
 			lastRecipe = recipe;
@@ -163,17 +163,17 @@ public class MachineController implements IMachineController, IItemObservable.IO
 		return;
 	}
 	
-	protected boolean beginProcess(IRecipe recipe) {
+	protected boolean beginProcess(Recipe recipe) {
 		qtyProcessing = Math.min(getRecipeQty(recipe), te.getProcessingMultiplier());
 		return qtyProcessing > 0;
 	}
 	
-	protected int getRecipeQty(IRecipe recipe) {
+	protected int getRecipeQty(Recipe recipe) {
 		return recipe.getRecipeQty(inventory.getItemInput(), fluidtank.getStacks(),
 			inventory.getOutput(), fluidtank.getTanks());
 	}	
 	
-	protected boolean extractEnergy(IRecipe lastRecipe, int ticks) {
+	protected boolean extractEnergy(Recipe lastRecipe, int ticks) {
 		int amount = (lastRecipe.getEnergy() / totalProcessTime) * ticks;
 		
 		int extract = energy.extractEnergyInternal(amount, true);
@@ -184,20 +184,20 @@ public class MachineController implements IMachineController, IItemObservable.IO
 	}
 	
 	
-	protected void endProcess(IRecipe recipe) {
-		IRecipe.IInput input = recipe.getInput();
-		for (IItemGeneric item : input.getItems()) { extractItem(item); }
+	protected void endProcess(Recipe recipe) {
+		Recipe.Input input = recipe.getInput(true);
+		for (Ingredient item : input.getItems()) { extractItem(item); }
 		for (FluidStack fluid : input.getFluids()) { extractFluid(fluid); }
 
 		// Output
-		IRecipe.IOutput output = recipe.getOutput();
+		Recipe.Output output = recipe.getOutput();
 		for (ItemStack item : output.getItems()) { outputItem(item, 
 			inventory.getFirstOutputSlot(), inventory.getLastOutputSlot()); }
 		for (FluidStack fluid : output.getFluids()) { outputFluid(fluid); }
 		
 		// Secondary
 		for (int i = 0; i < qtyProcessing; i++) {
-			IRecipe.IOutput secondary = recipe.getSecondary();
+			Recipe.Output secondary = recipe.getSecondary();
 			for (ItemStack item : secondary.getItems()) { outputItem(item, 
 				inventory.getFirstSecondarySlot(), inventory.getLastSecondarySlot()); }
 			for (FluidStack fluid : secondary.getFluids()) { outputFluid(fluid); }
@@ -206,7 +206,7 @@ public class MachineController implements IMachineController, IItemObservable.IO
 		qtyProcessing = 0;
 	}
 	
-	protected void extractItem(IItemGeneric item) {
+	protected void extractItem(Ingredient item) {
 		int qty = item.getCount() * qtyProcessing;
 		int count = 0;
 		

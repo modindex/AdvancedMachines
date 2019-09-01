@@ -3,13 +3,13 @@ package jaminv.advancedmachines.util.recipe.press;
 import java.util.List;
 
 import jaminv.advancedmachines.lib.parser.DataParser;
-import jaminv.advancedmachines.lib.recipe.IRecipeManager;
-import jaminv.advancedmachines.lib.recipe.RecipeBase;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
+import jaminv.advancedmachines.lib.recipe.RecipeImpl;
+import jaminv.advancedmachines.lib.recipe.RecipeManagerImpl;
 
 public class PressManager {
 	
-	public static class PressRecipe extends RecipeBase {
+	public static class PressRecipe extends RecipeImpl {
 		@Override
 		public int getInputCount() { return 3; }
 
@@ -21,9 +21,9 @@ public class PressManager {
 		}
 	}
 	
-	protected static RecipeManager<PressRecipe> manager = new RecipeManager<>();
+	protected static RecipeManagerImpl<PressRecipe> manager = new RecipeManagerImpl<>();
 	
-	public static IRecipeManager getRecipeManager() { return manager; }
+	public static RecipeManager getRecipeManager() { return manager; }
 	public static List<PressRecipe> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {
