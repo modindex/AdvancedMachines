@@ -23,6 +23,7 @@ public class RecipeInput implements Cloneable, IItemGeneric {
 	private int count = -1;
 	private NBTTagCompound nbt = null;
 	private Fluid fluid = null;
+	private boolean extract = true;
 	
 	private boolean invalid = false;
 		
@@ -95,6 +96,9 @@ public class RecipeInput implements Cloneable, IItemGeneric {
 		this(stack.getFluid(), stack.amount, stack.tag);
 		lookup.add(new ItemComparable(stack));
 	}
+	
+	public RecipeInput setExtract(boolean extract) { this.extract = extract; return this; }
+	public boolean getExtract() { return extract; } 
 	
 	List<ItemStack> itemlist = new ArrayList<ItemStack>();
 	HashSet<ItemComparable> lookup = new HashSet<ItemComparable>();

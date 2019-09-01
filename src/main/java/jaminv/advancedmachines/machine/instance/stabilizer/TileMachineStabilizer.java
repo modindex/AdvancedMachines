@@ -1,16 +1,26 @@
 package jaminv.advancedmachines.machine.instance.stabilizer;
 
 import jaminv.advancedmachines.lib.container.ContainerMachine;
+import jaminv.advancedmachines.lib.container.ISyncManager;
+import jaminv.advancedmachines.lib.container.layout.ILayoutManager;
 import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.HotbarLayout;
 import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.InventoryLayout;
 import jaminv.advancedmachines.lib.container.layout.JeiLayoutManager;
 import jaminv.advancedmachines.lib.container.layout.impl.BucketLayout;
+import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
 import jaminv.advancedmachines.machine.TileMachineMultiblock;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.util.recipe.stabilizer.StabilizerManager;
 import net.minecraft.inventory.IInventory;
 
 public class TileMachineStabilizer extends TileMachineMultiblock {
+	
+	public static class ContainerStabilizer extends ContainerMachine {
+		public ContainerStabilizer(ILayoutManager layout, IItemHandlerMachine inventory, IInventory playerInventory,
+				ISyncManager sync) {
+			super(layout, inventory, playerInventory, sync);
+		}
+	}
 	
 	public static final JeiLayoutManager layout = new JeiLayoutManager()
 		.addFluidInputLayout(53, 21, 16, 48)
@@ -33,7 +43,7 @@ public class TileMachineStabilizer extends TileMachineMultiblock {
 
 	@Override
 	public ContainerMachine createContainer(IInventory playerInventory) {
-		return new ContainerMachine(layout, storage, playerInventory, this.getSyncManager());
+		return new ContainerStabilizer(layout, storage, playerInventory, this.getSyncManager());
 	}
 	
 	/*

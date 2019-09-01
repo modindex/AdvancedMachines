@@ -1,4 +1,4 @@
-package jaminv.advancedmachines.lib.util.parser;
+package jaminv.advancedmachines.lib.parser;
 
 public class DataParserException extends Exception {
 

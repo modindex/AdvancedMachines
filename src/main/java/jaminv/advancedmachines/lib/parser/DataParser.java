@@ -1,4 +1,4 @@
-package jaminv.advancedmachines.lib.util.parser;
+package jaminv.advancedmachines.lib.parser;
 
 import java.io.BufferedReader;
 import java.io.IOException;

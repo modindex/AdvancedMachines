@@ -1,13 +1,24 @@
 package jaminv.advancedmachines.machine.instance.alloy;
 
 import jaminv.advancedmachines.lib.container.ContainerMachine;
+import jaminv.advancedmachines.lib.container.ISyncManager;
+import jaminv.advancedmachines.lib.container.layout.ILayoutManager;
 import jaminv.advancedmachines.lib.container.layout.JeiLayoutManager;
+import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
 import jaminv.advancedmachines.machine.TileMachineMultiblock;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.util.recipe.AlloyManager;
 import net.minecraft.inventory.IInventory;
 
 public class TileMachineAlloy extends TileMachineMultiblock {
+	
+	/* Discrete Container class required for JEI */
+	public static class ContainerAlloy extends ContainerMachine {
+		public ContainerAlloy(ILayoutManager layout, IItemHandlerMachine inventory, IInventory playerInventory,
+				ISyncManager sync) {
+			super(layout, inventory, playerInventory, sync);
+		}
+	}
 	
 	public static final JeiLayoutManager layout = new JeiLayoutManager()
 			.setItemInputLayout(AlloyManager.getRecipeManager(), 35, 37, 1, 3) 
@@ -28,6 +39,6 @@ public class TileMachineAlloy extends TileMachineMultiblock {
 
 	@Override
 	public ContainerMachine createContainer(IInventory playerInventory) {
-		return new ContainerMachine(layout, storage, playerInventory, this.getSyncManager());
+		return new ContainerAlloy(layout, storage, playerInventory, this.getSyncManager());
 	}
 }

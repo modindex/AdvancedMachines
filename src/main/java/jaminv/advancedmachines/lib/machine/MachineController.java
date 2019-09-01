@@ -105,7 +105,7 @@ public class MachineController implements IMachineController, IItemObservable.IO
 	public void tick(int ticks) {
 		if (te.isClient() || sleep) { return; }
 
-		boolean sleep = true;
+		sleep = true;
 
 		boolean oldProcess = this.isProcessing();
 		

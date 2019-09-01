@@ -3,12 +3,12 @@ package jaminv.advancedmachines.util.recipe.grinder;
 import java.util.List;
 
 import jaminv.advancedmachines.ModConfig;
+import jaminv.advancedmachines.lib.parser.DataParser;
 import jaminv.advancedmachines.lib.recipe.IRecipeManager;
 import jaminv.advancedmachines.lib.recipe.RecipeBase;
 import jaminv.advancedmachines.lib.recipe.RecipeInput;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
 import jaminv.advancedmachines.lib.recipe.RecipeOutput;
-import jaminv.advancedmachines.lib.util.parser.DataParser;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class GrinderManager {

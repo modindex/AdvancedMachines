@@ -3,10 +3,10 @@ package jaminv.advancedmachines.util.recipe.stabilizer;
 import java.util.List;
 
 import jaminv.advancedmachines.ModConfig;
+import jaminv.advancedmachines.lib.parser.DataParser;
 import jaminv.advancedmachines.lib.recipe.IRecipeManager;
 import jaminv.advancedmachines.lib.recipe.RecipeBase;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
-import jaminv.advancedmachines.lib.util.parser.DataParser;
 
 public class StabilizerManager {
 	

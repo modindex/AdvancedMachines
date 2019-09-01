@@ -2,12 +2,15 @@ package jaminv.advancedmachines.machine.instance.injector;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.lib.container.ContainerMachine;
+import jaminv.advancedmachines.lib.container.ISyncManager;
+import jaminv.advancedmachines.lib.container.layout.ILayoutManager;
 import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.HotbarLayout;
 import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.InventoryLayout;
 import jaminv.advancedmachines.lib.container.layout.JeiLayoutManager;
 import jaminv.advancedmachines.lib.container.layout.impl.BucketLayout;
 import jaminv.advancedmachines.lib.container.layout.impl.OutputLayout;
 import jaminv.advancedmachines.lib.dialog.control.enums.IOState;
+import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
 import jaminv.advancedmachines.lib.inventory.slot.SlotHandlerFluid;
 import jaminv.advancedmachines.machine.MachineHelper;
 import jaminv.advancedmachines.machine.TileMachineMultiblock;
@@ -18,6 +21,13 @@ import jaminv.advancedmachines.util.recipe.injector.InjectorManager;
 import net.minecraft.inventory.IInventory;
 
 public class TileMachineInjector extends TileMachineMultiblock implements IBucketToggle {
+	
+	public static class ContainerInjector extends ContainerMachine {
+		public ContainerInjector(ILayoutManager layout, IItemHandlerMachine inventory, IInventory playerInventory,
+				ISyncManager sync) {
+			super(layout, inventory, playerInventory, sync);
+		}
+	}
 
 	public static final JeiLayoutManager layout = new JeiLayoutManager()
 		.setItemInputLayout(InjectorManager.getRecipeManager(), 107, 21)
@@ -42,7 +52,7 @@ public class TileMachineInjector extends TileMachineMultiblock implements IBucke
 
 	@Override
 	public ContainerMachine createContainer(IInventory playerInventory) {
-		return new ContainerMachine(layout, storage, playerInventory, this.getSyncManager());
+		return new ContainerInjector(layout, storage, playerInventory, this.getSyncManager());
 	}
 	
 	// IBucketToggle

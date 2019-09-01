@@ -6,10 +6,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
+import jaminv.advancedmachines.lib.parser.DataParserException;
+import jaminv.advancedmachines.lib.parser.FileHandler;
+import jaminv.advancedmachines.lib.parser.ParseUtils;
 import jaminv.advancedmachines.lib.util.logger.Logger;
-import jaminv.advancedmachines.lib.util.parser.DataParserException;
-import jaminv.advancedmachines.lib.util.parser.FileHandler;
-import jaminv.advancedmachines.lib.util.parser.ParseUtils;
 import net.minecraft.util.JsonUtils;
 
 public class FileHandlerTextureSet implements FileHandler {

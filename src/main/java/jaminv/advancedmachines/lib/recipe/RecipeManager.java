@@ -38,7 +38,9 @@ public class RecipeManager<T extends RecipeBase> implements IRecipeManager<T> {
 		return lookup.get(input.sort());		
 	}
 	
-	public T getRecipe(ItemStack[] input, FluidStack[] fluids) { return getRecipe(new ItemComparableList(input, fluids)); }
+	public T getRecipe(ItemStack[] input, FluidStack[] fluids) { 
+		return getRecipe(new ItemComparableList(input, fluids));
+	}
 	
 	public void addRecipe(T recipe) {
 		// Check to make sure the recipe has at least 1 ingredient and that no ingredients have error states.

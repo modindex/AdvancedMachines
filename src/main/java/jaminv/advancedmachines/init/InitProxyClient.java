@@ -2,8 +2,8 @@ package jaminv.advancedmachines.init;
 
 import jaminv.advancedmachines.Main;
 import jaminv.advancedmachines.init.handlers.EventHandlerClient;
+import jaminv.advancedmachines.lib.parser.DataParser;
 import jaminv.advancedmachines.lib.render.BakedModelLoader;
-import jaminv.advancedmachines.lib.util.parser.DataParser;
 import jaminv.advancedmachines.render.textureset.FileHandlerTextureSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;

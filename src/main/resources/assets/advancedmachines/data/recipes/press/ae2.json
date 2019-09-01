@@ -1,0 +1,10 @@
+{
+    "pcb": {
+        "input": [
+            { "ore": "dustGlass" },
+            { "ore": "ingotCopper", "extract": false },
+            { "ore": "itemPlastic" }
+        ],
+        "output": { "item": "advancedmachines:circuit_pcb" }
+    }
+}

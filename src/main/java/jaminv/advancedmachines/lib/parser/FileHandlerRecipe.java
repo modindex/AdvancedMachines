@@ -1,4 +1,4 @@
-package jaminv.advancedmachines.lib.util.parser;
+package jaminv.advancedmachines.lib.parser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,24 +7,15 @@ import java.util.function.BooleanSupplier;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
 
 import jaminv.advancedmachines.Reference;
 import jaminv.advancedmachines.lib.recipe.RecipeInput;
 import jaminv.advancedmachines.lib.recipe.RecipeOutput;
 import jaminv.advancedmachines.lib.util.logger.Logger;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.nbt.NBTException;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.JsonUtils;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.IConditionFactory;
 import net.minecraftforge.common.crafting.JsonContext;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public abstract class FileHandlerRecipe implements FileHandler {
 	
@@ -65,17 +56,22 @@ public abstract class FileHandlerRecipe implements FileHandler {
 	protected RecipeInput parseInput(JsonElement input, String memberName) throws DataParserException {
 		if (input == null) { throw new DataParserException("Missing recipe element: '" + memberName + "'"); }
 		
+		RecipeInput ret;
 		if (input.isJsonPrimitive()) {
 			return new RecipeInput(ParseUtils.parseItemStack(input, memberName));
 		}
+		
 		JsonObject inputob = ParseUtils.getJsonObject(input, memberName);
 		if (!inputob.has("ore")) {
-			return new RecipeInput(ParseUtils.parseItemStack(input, memberName));
+			ret = new RecipeInput(ParseUtils.parseItemStack(input, memberName));
+		} else {
+			int count = JsonUtils.getInt(inputob, "count", 1);
+			String ore = JsonUtils.getString(inputob, "ore");
+			ret = new RecipeInput(ore, count);
 		}
 		
-		int count = JsonUtils.getInt(inputob, "count", 1);
-		String ore = JsonUtils.getString(inputob, "ore");
-		return new RecipeInput(ore, count);
+		ret.setExtract(JsonUtils.getBoolean(inputob, "extract", true));
+		return ret;
 	}
 	
 	/**

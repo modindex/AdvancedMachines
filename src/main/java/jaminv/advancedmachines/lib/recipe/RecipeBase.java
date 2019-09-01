@@ -4,20 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 
 import jaminv.advancedmachines.lib.fluid.IFluidTankInternal;
-import jaminv.advancedmachines.lib.recipe.IJeiRecipe.ISecondaryOutput;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.FluidStack;
 
 public abstract class RecipeBase implements IJeiRecipe {
+	
 	protected static class Input implements IInput {
 		protected List<IItemGeneric> items = new ArrayList<IItemGeneric>();
 		protected List<FluidStack> fluids = new ArrayList<FluidStack>();
@@ -67,6 +66,7 @@ public abstract class RecipeBase implements IJeiRecipe {
 	
 	public abstract int getInputCount();
 	public abstract int getOutputCount();
+	public int getCatalystCount() { return 0; }
 	
 	protected RecipeInput getInput(int index) { return input[index]; }
 	protected RecipeOutput getOutput(int index) { return output[index]; }
@@ -81,6 +81,7 @@ public abstract class RecipeBase implements IJeiRecipe {
 		inputcache = new Input();
 		
 		for (RecipeInput in : this.input) {
+			if (!in.getExtract()) { continue; }
 			if (in.isFluid()) {
 				inputcache.fluids.add(in.toFluidStack());
 			} else {
@@ -182,6 +183,7 @@ public abstract class RecipeBase implements IJeiRecipe {
 				for (FluidStack fluid : fluids) {
 					if (input.isValid(fluid)) {
 						found = true;
+						if (!input.getExtract()) { continue; }
 						int qty = input.getQty(fluid);
 						if (min == -1 || qty < min) { min = qty; }
 					}
@@ -191,6 +193,7 @@ public abstract class RecipeBase implements IJeiRecipe {
 				for (ItemStack item : items) {
 					if (input.isValid(item)) {
 						found = true;
+						if (!input.getExtract()) { continue; }
 						int qty = input.getQty(item);
 						if (min == -1 || qty < min) { min = qty; }
 					}

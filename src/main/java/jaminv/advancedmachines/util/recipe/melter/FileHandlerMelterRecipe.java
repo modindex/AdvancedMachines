@@ -3,12 +3,12 @@ package jaminv.advancedmachines.util.recipe.melter;
 import com.google.gson.JsonObject;
 
 import jaminv.advancedmachines.ModConfig;
+import jaminv.advancedmachines.lib.parser.DataParserException;
+import jaminv.advancedmachines.lib.parser.FileHandlerRecipe;
+import jaminv.advancedmachines.lib.parser.ParseUtils;
 import jaminv.advancedmachines.lib.recipe.RecipeInput;
 import jaminv.advancedmachines.lib.recipe.RecipeOutput;
 import jaminv.advancedmachines.lib.util.logger.Logger;
-import jaminv.advancedmachines.lib.util.parser.DataParserException;
-import jaminv.advancedmachines.lib.util.parser.FileHandlerRecipe;
-import jaminv.advancedmachines.lib.util.parser.ParseUtils;
 import jaminv.advancedmachines.util.recipe.melter.MelterManager.MelterRecipe;
 
 public class FileHandlerMelterRecipe extends FileHandlerRecipe {

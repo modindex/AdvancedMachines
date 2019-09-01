@@ -23,7 +23,7 @@ public class DialogMachinePress extends JeiDialog {
 	public DialogMachinePress(Container container) {
 		super(container, "textures/gui/press.png", 24, 0, 176, 166);
 		
-		this.addText(8, 8, 160, "dialog.alloy.title", 0x404040);
+		this.addText(8, 8, 160, "dialog.press.title", 0x404040);
 		this.addText(8, 73, "dialog.common.inventory", 0x404040);
 		
 		addJeiElement(new JeiEnergyBar(9, 20, 14, 50, 200, 0));
