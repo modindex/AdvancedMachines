@@ -9,13 +9,11 @@ import jaminv.advancedmachines.lib.fluid.IFluidObservable;
 import jaminv.advancedmachines.lib.fluid.IFluidTankInternal;
 import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
 import jaminv.advancedmachines.lib.inventory.IItemObservable;
-import jaminv.advancedmachines.lib.inventory.IItemObservable.IObserver;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -97,6 +95,7 @@ public class MachineStorage implements IMachineStorage, INBTSerializable<NBTTagC
 
 	@Override public ItemStack[] getItemInput() { return inventory.getItemInput(); }
 	@Override public ItemStack[] getOutput() { return inventory.getOutput(); }
+	@Override public ItemStack[] getItemAdditional() { return inventory.getItemAdditional(); }
 	
 	/* IFluidHandler */
 

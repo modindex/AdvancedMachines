@@ -206,4 +206,16 @@ public class RecipeInput implements Cloneable, Ingredient {
 	public int getQty(FluidStack stack) {
 		return stack.amount / count;
 	}
+	
+	public List<ItemComparable> toItemComparable() {
+		List<ItemComparable> ret = new ArrayList<>();
+		if (isFluid()) {
+			ret.add(new ItemComparable(toFluidStack()));			
+		} else {
+			for (ItemStack stack : getItems()) {
+				ret.add(new ItemComparable(stack));
+			}
+		}
+		return ret;
+	}
 }

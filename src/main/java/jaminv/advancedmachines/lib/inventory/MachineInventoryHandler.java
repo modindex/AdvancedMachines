@@ -127,6 +127,7 @@ public class MachineInventoryHandler extends ItemStackHandlerObservable implemen
 	
 	public ItemStack[] getItemInput() { return getStacks(getFirstInputSlot(), getLastInputSlot()); }
 	public ItemStack[] getOutput() { return getStacks(getFirstOutputSlot(), getLastOutputSlot()); }
+	public ItemStack[] getItemAdditional() { return getStacks(getFirstAdditionalSlot(), getLastAdditionalSlot()); }
 	
 	/* NBT */
 

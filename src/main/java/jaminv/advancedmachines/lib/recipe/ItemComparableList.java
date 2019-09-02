@@ -1,8 +1,6 @@
 package jaminv.advancedmachines.lib.recipe;
 
-import java.awt.List;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 
 import javax.annotation.Nullable;
@@ -69,6 +67,10 @@ public class ItemComparableList  {
 		if (list.size() > 0) { sorted = false; }
 		list.add(item);
 		return this;
+	}
+	
+	public ItemComparable remove(int index) {
+		return list.remove(index);
 	}
 	
 	public ItemComparableList sort() {

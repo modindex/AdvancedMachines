@@ -65,6 +65,7 @@ public class RecipeImpl implements RecipeJei, RecipeInternal {
 	
 	public RecipeInput getInput(int index) { return input.get(index); }
 	public RecipeOutput getOutput(int index) { return output.get(index); }
+	public RecipeInput getCatalyst(int index) { return catalyst.get(index); }
 	
 	protected Map<Boolean, InputImpl> inputcache = new HashMap<>();
 	protected OutputImpl outputcache;
@@ -82,6 +83,15 @@ public class RecipeImpl implements RecipeJei, RecipeInternal {
 				input.fluids.add(in.toFluidStack());
 			} else {
 				input.items.add(in);
+			}
+		}
+		if (!extractOnly) {
+			for (RecipeInput cat : this.catalyst) {
+				if (cat.isFluid()) {
+					input.fluids.add(cat.toFluidStack());
+				} else {
+					input.items.add(cat);
+				}
 			}
 		}
 		inputcache.put(extractOnly, input);

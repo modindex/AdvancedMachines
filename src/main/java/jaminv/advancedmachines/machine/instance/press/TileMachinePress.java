@@ -55,6 +55,7 @@ public class TileMachinePress extends TileMachineMultiblock {
 		inventory.addInputSlots(3);
 		inventory.addOutputSlots(1);
 		inventory.addAdditionalSlots(4, new SlotHandlerPress());
+		controller.includeAdditional(true);
 	}
 
 	@Override

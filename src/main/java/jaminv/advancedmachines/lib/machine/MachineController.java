@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import jaminv.advancedmachines.lib.container.ISyncSubject;
 import jaminv.advancedmachines.lib.energy.IEnergyObservable;
 import jaminv.advancedmachines.lib.energy.IEnergyStorageAdvanced;
@@ -29,6 +31,7 @@ public class MachineController implements IMachineController, IItemObservable.IO
 	protected final IEnergyStorageAdvanced energy;
 	protected final RecipeManager recipemanager;
 	protected final IMachineTE te;
+	protected boolean includeAdditional = false;
 	
 	public MachineController(IItemHandlerMachine inventory, IFluidHandlerInternal fluidtank, IEnergyStorageAdvanced energy, RecipeManager recipemanager, IMachineTE te) {
 		this.inventory = inventory;
@@ -75,7 +78,13 @@ public class MachineController implements IMachineController, IItemObservable.IO
 	@Override
 	public void sortSubControllers() {
 		subcontrollers.sort(new SubControllerCompare());
-	}	
+	}
+	
+	/** Include additional inventory as though it were input inventory.
+	 * Used for catalyst items. */
+	public void includeAdditional(boolean include) {
+		this.includeAdditional = include;
+	}
 	
 	/* Base Processing Data */
 
@@ -132,21 +141,26 @@ public class MachineController implements IMachineController, IItemObservable.IO
 		for (ISubController obvserver : subcontrollers) {
 			if (obvserver.postProcess((IMachineController)this)) { wake(); }
 		}
-	}	
+	}
+	
+	protected ItemStack[] getItemInput() {
+		if (!includeAdditional) { return inventory.getItemInput(); }
+		return ArrayUtils.addAll(inventory.getItemInput(), inventory.getItemAdditional());
+	}
 	
 	/** @return true if any operation was performed, false otherwise. */	
 	protected final void process(int ticks) {
 		if (!te.isRedstoneActive()) { return; }
 		
 		if (!isProcessing()) {
-			Recipe recipe = recipemanager.getRecipe(inventory.getItemInput(), fluidtank.getStacks());
+			Recipe recipe = recipemanager.getRecipe(getItemInput(), fluidtank.getStacks());
 			if (recipe == null || !beginProcess(recipe)) { return; }
 			processTimeRemaining = totalProcessTime = recipe.getProcessTime();
 			lastRecipe = recipe;
 			wake(); return;
 		} else if (lastRecipe == null) {
 			// TE was just loaded from NBT
-			lastRecipe = recipemanager.getRecipe(inventory.getItemInput(), fluidtank.getStacks());
+			lastRecipe = recipemanager.getRecipe(getItemInput(), fluidtank.getStacks());
 			if (lastRecipe == null) { haltProcess(); return; }
 		}
 

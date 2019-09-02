@@ -26,4 +26,6 @@ public interface IItemHandlerMachine extends IItemHandler, IItemHandlerModifiabl
 	public ItemStack[] getItemInput();
 	/** Return copies of the stacks in output slots */
 	public ItemStack[] getOutput();
+	/** Return copies of the stacks in additional slots */
+	public ItemStack[] getItemAdditional();
 }

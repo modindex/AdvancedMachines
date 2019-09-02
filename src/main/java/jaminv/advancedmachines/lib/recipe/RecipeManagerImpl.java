@@ -3,8 +3,10 @@ package jaminv.advancedmachines.lib.recipe;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -28,14 +30,32 @@ public class RecipeManagerImpl<T extends RecipeInternal> implements RecipeManage
 	
 	private Map<ItemComparableList, T> lookup = new HashMap<ItemComparableList, T>();
 	private Map<ItemComparable, ArrayList<T>> validInput = new HashMap<ItemComparable, ArrayList<T>>();
-	private ArrayList<T> list = new ArrayList<T>();
+	private List<T> list = new ArrayList<T>();
+	private Set<ItemComparable> catalyst = new HashSet<>();
 	
 	/**
 	 * Returns NULL if no recipe available
 	 * @return T Recipe if found, NULL otherwise.
 	 */
 	public T getRecipe(ItemComparableList input) {
-		return lookup.get(input.sort());		
+		ItemComparableList copy = input.copy();
+		int c = input.size();
+		for (int i = 0; i < c; i++) {
+			if (catalyst.contains(input.get(i))) {
+				input.remove(i); i--; c--;
+			}
+		}
+		T ret = lookup.get(input.sort());
+		if (ret == null) { return null; }
+		
+		outerloop:
+		for (int i = 0; i < ret.getCatalystCount(); i++) {
+			for (int j = 0; j < copy.size(); j++) {
+				if (ret.getCatalyst(i).isValid(copy.get(j))) { continue outerloop; }
+			}
+			return null;
+		}
+		return ret;
 	}
 	
 	public T getRecipe(ItemStack[] input, FluidStack[] fluids) { 
@@ -61,15 +81,17 @@ public class RecipeManagerImpl<T extends RecipeInternal> implements RecipeManage
 		if (!addLookup(recipe)) { return; /* Don't add the recipe if it already exists */ }
 		
 		for (int i = 0; i < recipe.getInputCount(); i++) {
-			RecipeInput item = recipe.getInput(i);
-			if (item.isEmpty()) { continue; }
-			
-			if (item.isFluid()) {
-				addValidInput(new ItemComparable(item.toFluidStack()), recipe);			
-			} else {
-				for (ItemStack stack : item.getItems()) {
-					addValidInput(new ItemComparable(stack), recipe);
-				}
+			RecipeInput input = recipe.getInput(i);
+			for (ItemComparable item : input.toItemComparable()) {
+				addValidInput(item, recipe);
+			}
+		}
+		
+		for (int i = 0; i < recipe.getCatalystCount(); i++) {
+			RecipeInput input = recipe.getCatalyst(i);
+			for (ItemComparable item : input.toItemComparable()) {
+				catalyst.add(item);
+				addValidInput(item, recipe);
 			}
 		}
 		
@@ -116,14 +138,10 @@ public class RecipeManagerImpl<T extends RecipeInternal> implements RecipeManage
 		
 		List<ItemComparable> items = new ArrayList<ItemComparable>();
 		RecipeInput input = recipe.getInput(index);
-		if (input.isFluid()) {
-			items.add(new ItemComparable(input.toFluidStack()));
-		} else {
-			for (ItemStack stack : input.getItems()) {
-				items.add(new ItemComparable(stack));
-			}
+		for (ItemComparable item : input.toItemComparable()) {
+			items.add(item);
 		}
-
+		
 		List<ItemComparableList> ret = new ArrayList<ItemComparableList>();
 		for (ItemComparable item : items) {
 			if (other == null || other.isEmpty()) {
@@ -212,7 +230,6 @@ public class RecipeManagerImpl<T extends RecipeInternal> implements RecipeManage
 				
 				for (int k = 0; k < iclist.size(); k++) {
 					if (iclist.get(k).isEmpty()) { ingredient[k] = true; continue; }
-					
 					if (input.isValid(iclist.get(k))) { ingredient[k] = true; found = true; break; }
 				}
 				

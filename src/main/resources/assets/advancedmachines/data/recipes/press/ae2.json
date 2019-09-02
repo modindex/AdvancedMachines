@@ -1,8 +1,10 @@
 {
     "silicon": {
         "input": [
-            { "item": "appliedenergistics2:material", "data": 19, "extract": false },
             { "ore": "itemSilicon" }
+        ],
+        "catalyst": [
+            { "item": "appliedenergistics2:material", "data": 19, "extract": false }
         ],
         "output": { "item": "appliedenergistics2:material", "data": 20 },
         "conditions": [

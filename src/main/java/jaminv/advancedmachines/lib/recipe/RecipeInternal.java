@@ -8,4 +8,5 @@ public interface RecipeInternal extends Recipe {
 
 	RecipeInput getInput(int index);
 	RecipeOutput getOutput(int index);
+	RecipeInput getCatalyst(int index);
 }

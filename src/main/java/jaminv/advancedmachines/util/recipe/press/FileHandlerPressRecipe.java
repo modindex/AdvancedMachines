@@ -42,7 +42,20 @@ public class FileHandlerPressRecipe extends FileHandlerRecipe {
 			if (recipeInput == null || recipeInput.hasError()) { return false; }
 			recipe.addInput(recipeInput);
 			i++;
-		}		
+		}
+		
+		JsonArray catalyst = JsonUtils.getJsonArray(json, "catalyst", null);
+		if (catalyst != null) {
+			i = 0;
+			for (JsonElement element : catalyst) {
+				String name = "catalyst[" + i + "]";
+				
+				RecipeInput recipeCatalyst = parseInput(element, name);
+				if (recipeCatalyst == null || recipeCatalyst.hasError()) { return false; }
+				recipe.addCatalyst(recipeCatalyst);
+				i++;
+			}
+		}
 		
 		RecipeOutput output = parseOutput(json.get("output"), "output");
 		if (output == null || output.isEmpty()) { return false; }
