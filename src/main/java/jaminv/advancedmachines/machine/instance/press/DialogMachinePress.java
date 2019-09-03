@@ -2,6 +2,7 @@ package jaminv.advancedmachines.machine.instance.press;
 
 import jaminv.advancedmachines.lib.container.ContainerMachine;
 import jaminv.advancedmachines.lib.container.layout.IJeiLayoutManager;
+import jaminv.advancedmachines.lib.dialog.Color;
 import jaminv.advancedmachines.lib.dialog.control.DialogTextureElement;
 import jaminv.advancedmachines.lib.jei.JeiDialog;
 import jaminv.advancedmachines.lib.jei.element.JeiEnergyBar;
@@ -13,7 +14,7 @@ import jaminv.advancedmachines.machine.dialog.DialogMultiblockQuantity;
 import jaminv.advancedmachines.machine.dialog.DialogProcessBar;
 import jaminv.advancedmachines.machine.dialog.DialogTooltipMultiblock;
 import jaminv.advancedmachines.machine.dialog.RedstoneToggleButton;
-import jaminv.advancedmachines.util.Color;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.Container;
 
 public class DialogMachinePress extends JeiDialog {
@@ -40,7 +41,12 @@ public class DialogMachinePress extends JeiDialog {
 		
 		this.addTooltip(new DialogTooltipMultiblock(158, 7, 11, 11, te));
 		
-		this.addElement(new DialogTextureElement(-12, 0, 25, 82, 200, 81));
+		this.addElement(new DialogTextureElement(-24, 0, 25, 82, 200, 81));
+		this.addElement(new DialogTextureElement(-16, 86, 11, 11, 242, 67) {
+			@Override public String getTooltip(int mouseX, int mouseY) {
+				return I18n.format("dialog.press.ae2");
+			}			
+		});
 		
 		this.addText(new DialogMultiblockQuantity(te.getController(), 92, 33, 26, 26, Color.DIALOG_TEXT));
 		this.addText(new DialogMultiblockQuantity(te.getController(), 91, 32, 26, 26, Color.WHITE));

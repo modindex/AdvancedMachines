@@ -1,9 +1,12 @@
-package jaminv.advancedmachines.util.recipe.grinder;
+package jaminv.advancedmachines.machine.instance.grinder;
 
 import java.util.List;
 
 import jaminv.advancedmachines.ModConfig;
 import jaminv.advancedmachines.lib.parser.DataParser;
+import jaminv.advancedmachines.lib.parser.FileHandlerRecipe;
+import jaminv.advancedmachines.lib.parser.FileHandlerRecipe.IngredientType;
+import jaminv.advancedmachines.lib.parser.FileHandlerRecipe.RecipeSection;
 import jaminv.advancedmachines.lib.recipe.RecipeImpl;
 import jaminv.advancedmachines.lib.recipe.RecipeInput;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
@@ -19,8 +22,12 @@ public class GrinderManager {
 	public static List<RecipeImpl> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {
-		DataParser.parseFolder("data/recipes/grinder", new FileHandlerGrinderRecipe());
-
+		DataParser.parseFolder("data/recipes/grinder", new FileHandlerRecipe("grinder", (recipe) -> {
+			manager.addRecipe(recipe);
+		}).setLimit(RecipeSection.INPUT, IngredientType.ITEM, 1).setLimit(RecipeSection.OUTPUT, IngredientType.ITEM, 1)
+			.setLimit(RecipeSection.SECONDARY, IngredientType.ITEM, 1)
+		);
+				
 		if (ModConfig.recipe.scanGrinderOre) {
 			for (String oreName : OreDictionary.getOreNames()) {
 				String oreType;

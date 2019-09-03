@@ -1,0 +1,34 @@
+{
+    "dust_dust": {
+        "input": [
+            { "ore": "dustCopper", "count": 3 },
+            { "ore": "dustTin" }
+        ],
+        "output": { "ore": "ingotBronze", "count": 4 },
+        "energy_percent": 80
+    },
+    "dust_ingot": {
+        "input": [
+            { "ore": "dustCopper", "count": 3 },
+            { "ore": "ingotTin" }
+        ],
+        "output": { "ore": "ingotBronze", "count": 4 },
+        "energy_percent": 90
+    },
+    "ingot_dust": {
+        "input": [
+            { "ore": "ingotCopper", "count": 3 },
+            { "ore": "dustTin" }
+        ],
+        "output": { "ore": "ingotBronze", "count": 4 },
+        "energy_percent": 110
+    },
+    "ingot_ingot": {
+        "input": [
+            { "ore": "ingotCopper", "count": 3 },
+            { "ore": "ingotTin" }
+        ],
+        "output": { "ore": "ingotBronze", "count": 4 },
+        "energy_percent": 120
+    }
+}

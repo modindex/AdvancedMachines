@@ -1,13 +1,14 @@
 package jaminv.advancedmachines.machine.expansion.energy;
 
+import jaminv.advancedmachines.AdvancedMachines;
 import jaminv.advancedmachines.init.GuiProxy;
 import jaminv.advancedmachines.lib.render.ModelBakery;
+import jaminv.advancedmachines.lib.util.helper.BlockHelper;
 import jaminv.advancedmachines.machine.MachineHelper;
 import jaminv.advancedmachines.machine.expansion.BlockMachineExpansion;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.objects.blocks.Properties;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
-import jaminv.advancedmachines.util.helper.BlockHelper;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -45,7 +46,7 @@ public class BlockMachineEnergy extends BlockMachineExpansion {
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
 			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		
-		return BlockHelper.openGui(worldIn, pos, playerIn, getGuiId());
+		return BlockHelper.openGui(AdvancedMachines.instance, worldIn, pos, playerIn, getGuiId());
 	}
 	
 	@Override
@@ -74,15 +75,6 @@ public class BlockMachineEnergy extends BlockMachineExpansion {
         
         return (IExtendedBlockState) MachineHelper.withCommonProperties((IExtendedBlockState)state, variant, borders)
         	.withProperty(Properties.FACING, facing);
-	}
-	
-	@Override
-	public void setMultiblock(World world, BlockPos pos, BlockPos parent, MultiblockBorders borders) {
-		TileEntity tileentity = world.getTileEntity(pos);
-		if (tileentity instanceof TileMachineEnergy) {
-			TileMachineEnergy te = (TileMachineEnergy)tileentity;
-			te.setBorders(world, borders);
-		}
 	}
 
 	@Override @SideOnly(Side.CLIENT) public ModelBakery getModelBakery() { return new ModelBakeryMachineEnergy(variant); }

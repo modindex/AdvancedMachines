@@ -3,8 +3,6 @@ package jaminv.advancedmachines.machine.expansion;
 import java.util.HashMap;
 import java.util.Map;
 
-import jaminv.advancedmachines.machine.TileMachineMultiblock;
-import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -38,7 +36,4 @@ public interface MachineUpgrade {
 	
 	public UpgradeType getUpgradeType();
 	public int getUpgradeQty(World world, BlockPos pos);	
-	
-	// TODO: Is it really necessary to setMultiblock() on the block, since it always just passes it to the TE?
-	public void setMultiblock(World world, BlockPos pos, BlockPos parent, MultiblockBorders borders);
 }

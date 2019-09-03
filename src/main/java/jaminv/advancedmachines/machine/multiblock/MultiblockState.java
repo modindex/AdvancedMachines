@@ -1,11 +1,8 @@
 package jaminv.advancedmachines.machine.multiblock;
 
 import jaminv.advancedmachines.machine.expansion.MachineUpgrade;
-import jaminv.advancedmachines.util.helper.BlockHelper.BlockChecker;
-import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public abstract class MultiblockState {
 	public abstract String toString();

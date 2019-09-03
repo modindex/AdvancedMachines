@@ -1,0 +1,34 @@
+{
+    "dust_dust": {
+        "input": [
+            { "ore": "dustArdite", "count": 2 },
+            { "ore": "dustCobalt" }
+        ],
+        "output": { "ore": "ingotManyullyn", "count": 2 },
+        "energy_percent": 160
+    },
+    "dust_ingot": {
+        "input": [
+            { "ore": "dustArdite", "count": 2 },
+            { "ore": "ingotCobalt" }
+        ],
+        "output": { "ore": "ingotManyullyn", "count": 2 },
+        "energy_percent": 200
+    },
+    "ingot_dust": {
+        "input": [
+            { "ore": "ingotArdite", "count": 2 },
+            { "ore": "dustCobalt" }
+        ],
+        "output": { "ore": "ingotManyullyn", "count": 2 },
+        "energy_percent": 200
+    },
+    "ingot_ingot": {
+        "input": [
+            { "ore": "ingotArdite", "count": 2 },
+            { "ore": "ingotCobalt" }
+        ],
+        "output": { "ore": "ingotManyullyn", "count": 2 },
+        "energy_percent": 240
+    }
+}

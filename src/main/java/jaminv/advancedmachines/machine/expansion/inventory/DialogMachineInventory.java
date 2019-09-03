@@ -1,11 +1,11 @@
 package jaminv.advancedmachines.machine.expansion.inventory;
 
+import jaminv.advancedmachines.lib.dialog.Color;
 import jaminv.advancedmachines.lib.dialog.Dialog;
 import jaminv.advancedmachines.lib.dialog.control.DialogTextBox;
 import jaminv.advancedmachines.lib.dialog.control.IDialogElement;
 import jaminv.advancedmachines.lib.dialog.control.IElementStateObserver;
 import jaminv.advancedmachines.machine.dialog.DialogIOToggle;
-import jaminv.advancedmachines.util.Color;
 import jaminv.advancedmachines.util.enums.EnumComponent;
 import net.minecraft.inventory.Container;
 

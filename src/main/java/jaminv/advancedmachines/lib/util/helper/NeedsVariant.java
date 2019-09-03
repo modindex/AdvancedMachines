@@ -1,4 +1,4 @@
-package jaminv.advancedmachines.objects.variant;
+package jaminv.advancedmachines.lib.util.helper;
 
 /**
  * Has Mutable Variant

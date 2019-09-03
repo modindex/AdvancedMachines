@@ -1,11 +1,10 @@
 package jaminv.advancedmachines.util.network;
 
 import io.netty.buffer.ByteBuf;
-import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.AdvancedMachines;
 import jaminv.advancedmachines.lib.machine.ICanProcess;
-import jaminv.advancedmachines.machine.multiblock.face.IMachineFaceTE;
-import jaminv.advancedmachines.util.helper.BlockHelper;
-import jaminv.advancedmachines.util.helper.BlockHelper.BlockCallback;
+import jaminv.advancedmachines.lib.util.helper.BlockIterator;
+import jaminv.advancedmachines.machine.multiblock.face.MachineFaceTile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -44,29 +43,24 @@ public class ProcessingStateMessage implements IMessage {
 	
 		@Override
 		public IMessage onMessage(ProcessingStateMessage message, MessageContext ctx) {
-			World world = Main.proxy.getMessageWorld(ctx);
+			World world = AdvancedMachines.proxy.getMessageWorld(ctx);
 			  
 			BlockPos min = message.min;
 			BlockPos max = message.max;
 			boolean state = message.state;
-			  
-			BlockCallback callback = new BlockCallback() {
-				@Override
-				public void callback(World world, BlockPos pos) {
-					TileEntity te = world.getTileEntity(pos);
-					if (te instanceof ICanProcess) {
-						((ICanProcess)te).setProcessingState(state);
-					}
-					if (te instanceof IMachineFaceTE) {
-						((IMachineFaceTE)te).setActive(state);
-					}
-				}
-			};			  
 				  
 			if (!world.isBlockLoaded(min) && !world.isBlockLoaded(max)) { return null; }
 				  
 			Minecraft.getMinecraft().addScheduledTask(() -> {
-				BlockHelper.iterateBlocks(world, min, max, callback);
+				BlockIterator.iterateBlocks(world, min, max, (worldIn, pos) -> {
+					TileEntity te = worldIn.getTileEntity(pos);
+					if (te instanceof ICanProcess) {
+						((ICanProcess)te).setProcessingState(state);
+					}
+					if (te instanceof MachineFaceTile) {
+						((MachineFaceTile)te).setActive(state);
+					}					
+				});
 				world.markBlockRangeForRenderUpdate(min, max);
 			});
 			return null;

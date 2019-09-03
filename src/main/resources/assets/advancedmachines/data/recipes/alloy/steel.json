@@ -1,0 +1,50 @@
+{
+    "steel_coal": {
+        "input": [
+            { "ore": "dustIron" },
+            { "ore": "dustCoal", "count": 4 }
+        ],
+        "output": { "ore": "ingotSteel" },
+        "energy_percent": 100
+    },
+    "steel_coal_ingot": {
+        "input": [
+            { "ore": "ingotIron" },
+            { "ore": "dustCoal", "count": 4 }
+        ],
+        "output": { "ore": "ingotSteel" },
+        "energy_percent": 110
+    },
+    "steel_charcoal": {
+        "input": [
+            { "ore": "dustIron" },
+            { "ore": "dustCharcoal" }
+        ],
+        "output": { "ore": "ingotSteel" },
+        "energy_percent": 100
+    },
+    "steel_charcoal_ingot": {
+        "input": [
+            { "ore": "ingotIron" },
+            { "ore": "dustCharcoal" }
+        ],
+        "output": { "ore": "ingotSteel" },
+        "energy_percent": 110
+    },
+    "steel_coke": {
+        "input": [
+            { "ore": "dustIron" },
+            { "ore": "fuelCoke" }
+        ],
+        "output": { "ore": "ingotSteel" },
+        "energy_percent": 50
+    },
+    "steel_coke_ingot": {
+        "input": [
+            { "ore": "ingotIron" },
+            { "ore": "fuelCoke" }
+        ],
+        "output": { "ore": "ingotSteel" },
+        "energy_percent": 60
+    }
+}

@@ -1,0 +1,138 @@
+{
+    "glass": {
+        "input": [
+            { "ore": "dustLead" },
+            { "ore": "dustObsidian", "count": 4 }
+        ],
+        "output": { "item": "thermalfoundation:glass", "data": 3, "count": 2 },
+        "energy_percent": 200
+    },
+    "copper": {
+        "input": [
+            { "ore": "dustCopper" },
+            { "ore": "blockGlassHardened", "count": 2 }
+        ],
+        "output": { "item": "thermalfoundation:glass", "data": 0, "count": 2 },
+        "energy_percent": 150
+    },
+    "tin": {
+        "input": [
+            { "ore": "dustTin" },
+            { "ore": "blockGlassHardened", "count": 2 }
+        ],
+        "output": { "item": "thermalfoundation:glass", "data": 1, "count": 2 },
+        "energy_percent": 150
+    },
+    "silver": {
+        "input": [
+            { "ore": "dustSilver" },
+            { "ore": "blockGlassHardened", "count": 2 }
+        ],
+        "output": { "item": "thermalfoundation:glass", "data": 2, "count": 2 },
+        "energy_percent": 150
+    },
+    "lead": {
+        "input": [
+            { "ore": "dustLead" },
+            { "ore": "blockGlassHardened", "count": 2 }
+        ],
+        "output": { "item": "thermalfoundation:glass", "data": 3, "count": 2 },
+        "energy_percent": 150
+    },    
+    "aluminum": {
+        "input": [
+            { "ore": "dustAluminum" },
+            { "ore": "blockGlassHardened", "count": 2 }
+        ],
+        "output": { "item": "thermalfoundation:glass", "data": 4, "count": 2 },
+        "energy_percent": 150
+    },
+    "nickel": {
+        "input": [
+            { "ore": "dustNickel" },
+            { "ore": "blockGlassHardened", "count": 2 }
+        ],
+        "output": { "item": "thermalfoundation:glass", "data": 5, "count": 2 },
+        "energy_percent": 150
+    },
+    "platinum": {
+        "input": [
+            { "ore": "dustPlatinum" },
+            { "ore": "blockGlassHardened", "count": 2 }
+        ],
+        "output": { "item": "thermalfoundation:glass", "data": 6, "count": 2 },
+        "energy_percent": 150
+    },
+    "iridium": {
+        "input": [
+            { "ore": "dustIridium" },
+            { "ore": "blockGlassHardened", "count": 2 }
+        ],
+        "output": { "item": "thermalfoundation:glass", "data": 7, "count": 2 },
+        "energy_percent": 150
+    },
+    "steel": {
+        "input": [
+            { "ore": "dustSteel" },
+            { "ore": "blockGlassHardened", "count": 2 }
+        ],
+        "output": { "item": "thermalfoundation:glass_alloy", "data": 0, "count": 2 },
+        "energy_percent": 150
+    },
+    "electrum": {
+        "input": [
+            { "ore": "dustElectrum" },
+            { "ore": "blockGlassHardened", "count": 2 }
+        ],
+        "output": { "item": "thermalfoundation:glass_alloy", "data": 1, "count": 2 },
+        "energy_percent": 150
+    },
+    "invar": {
+        "input": [
+            { "ore": "dustInvar" },
+            { "ore": "blockGlassHardened", "count": 2 }
+        ],
+        "output": { "item": "thermalfoundation:glass_alloy", "data": 2, "count": 2 },
+        "energy_percent": 150
+    },
+    "bronze": {
+        "input": [
+            { "ore": "dustBronze" },
+            { "ore": "blockGlassHardened", "count": 2 }
+        ],
+        "output": { "item": "thermalfoundation:glass_alloy", "data": 3, "count": 2 },
+        "energy_percent": 150
+    },
+    "constantan": {
+        "input": [
+            { "ore": "dustConstantan" },
+            { "ore": "blockGlassHardened", "count": 2 }
+        ],
+        "output": { "item": "thermalfoundation:glass_alloy", "data": 4, "count": 2 },
+        "energy_percent": 150
+    },
+    "singalum": {
+        "input": [
+            { "ore": "dustSingalum" },
+            { "ore": "blockGlassHardened", "count": 2 }
+        ],
+        "output": { "item": "thermalfoundation:glass_alloy", "data": 5, "count": 2 },
+        "energy_percent": 150
+    },
+    "lumium": {
+        "input": [
+            { "ore": "dustLumium" },
+            { "ore": "blockGlassHardened", "count": 2 }
+        ],
+        "output": { "item": "thermalfoundation:glass_alloy", "data": 6, "count": 2 },
+        "energy_percent": 150
+    },
+    "enderium": {
+        "input": [
+            { "ore": "dustEnderium" },
+            { "ore": "blockGlassHardened", "count": 2 }
+        ],
+        "output": { "item": "thermalfoundation:glass_alloy", "data": 7, "count": 2 },
+        "energy_percent": 150
+    }  
+}

@@ -1,5 +1,7 @@
 package jaminv.advancedmachines.objects.variant;
 
+import jaminv.advancedmachines.lib.util.helper.Variant;
+
 public enum VariantCircuit implements Variant {
 	PCB("pcb"),
 	BASIC("basic"),

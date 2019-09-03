@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.init;
 
-import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.AdvancedMachines;
 import jaminv.advancedmachines.init.handlers.EventHandlerClient;
 import jaminv.advancedmachines.lib.parser.DataParser;
 import jaminv.advancedmachines.lib.render.BakedModelLoader;
@@ -19,7 +19,7 @@ public class InitProxyClient implements InitProxy {
 	public void preInit(FMLPreInitializationEvent e) {
 		MinecraftForge.EVENT_BUS.register(EventHandlerClient.class);
 		
-		Main.logger.info("Loading Baked Models");
+		AdvancedMachines.logger.info("Loading Baked Models");
 		ModelLoaderRegistry.registerLoader(new BakedModelLoader());
 	}
 	
@@ -28,7 +28,7 @@ public class InitProxyClient implements InitProxy {
 
 	@Override
 	public void postInit(FMLPostInitializationEvent e) {
-		Main.logger.info("Loading Texture Sets");
+		AdvancedMachines.logger.info("Loading Texture Sets");
 		DataParser.parseFolder("data/texturesets", new FileHandlerTextureSet());		
 	}
 

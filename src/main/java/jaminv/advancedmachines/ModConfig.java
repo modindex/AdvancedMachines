@@ -54,7 +54,7 @@ public final class ModConfig {
 		
 		@Config.Comment("Default energy cost for standard alloy furnace recipes")
 		@RangeInt(min = 0, max = 1000000)
-		public int defaultAlloyEnergyCost = 8000;
+		public int defaultAlloyEnergyCost = 4000;
 	}
 	
 	@Config.Comment({ "Crafting Configuration", "Allows disabling of some common crafting recipes that may conflict with other mods." })

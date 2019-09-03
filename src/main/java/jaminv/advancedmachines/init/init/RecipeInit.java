@@ -1,13 +1,13 @@
 package jaminv.advancedmachines.init.init;
 
-import jaminv.advancedmachines.util.recipe.AlloyManager;
-import jaminv.advancedmachines.util.recipe.furnace.FurnaceManager;
-import jaminv.advancedmachines.util.recipe.grinder.GrinderManager;
-import jaminv.advancedmachines.util.recipe.injector.InjectorManager;
-import jaminv.advancedmachines.util.recipe.melter.MelterManager;
-import jaminv.advancedmachines.util.recipe.press.PressManager;
-import jaminv.advancedmachines.util.recipe.purifier.PurifierManager;
-import jaminv.advancedmachines.util.recipe.stabilizer.StabilizerManager;
+import jaminv.advancedmachines.machine.instance.alloy.AlloyManager;
+import jaminv.advancedmachines.machine.instance.furnace.FurnaceManager;
+import jaminv.advancedmachines.machine.instance.grinder.GrinderManager;
+import jaminv.advancedmachines.machine.instance.injector.InjectorManager;
+import jaminv.advancedmachines.machine.instance.melter.MelterManager;
+import jaminv.advancedmachines.machine.instance.press.PressManager;
+import jaminv.advancedmachines.machine.instance.purifier.PurifierManager;
+import jaminv.advancedmachines.machine.instance.stabilizer.StabilizerManager;
 
 public class RecipeInit {
 

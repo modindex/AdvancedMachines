@@ -1,10 +1,10 @@
 package jaminv.advancedmachines.init.init;
 
 import jaminv.advancedmachines.Reference;
+import jaminv.advancedmachines.lib.util.helper.Variant;
 import jaminv.advancedmachines.lib.util.registry.RegistryHelper;
 import jaminv.advancedmachines.objects.tools.ToolAxe;
 import jaminv.advancedmachines.objects.tools.ToolPickaxe;
-import jaminv.advancedmachines.objects.variant.Variant;
 import jaminv.advancedmachines.objects.variant.VariantAlloy;
 import jaminv.advancedmachines.objects.variant.VariantCircuit;
 import jaminv.advancedmachines.objects.variant.VariantDust;

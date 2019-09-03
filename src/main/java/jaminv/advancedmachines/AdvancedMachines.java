@@ -24,10 +24,10 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION, dependencies = "required-after:forge@[14.23.2.2638,)", useMetadata = true)
-public class Main {
+public class AdvancedMachines {
 	
 	@Instance
-	public static Main instance;
+	public static AdvancedMachines instance;
 	
 	public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MODID);
 	
@@ -59,7 +59,7 @@ public class Main {
     public void init(FMLInitializationEvent e) {
     	logger.info("Init");
 
-		Main.logger.info("WorldGen Registry");
+		AdvancedMachines.logger.info("WorldGen Registry");
 		GameRegistry.registerWorldGenerator(new WorldGenCustomOres(), 0);	
     	
     	logger.info("Parse Constants");
@@ -67,7 +67,7 @@ public class Main {
 		logger.info("Ore Dictionary Registry");
 		DataParser.parseFolder("data/ore_dictionary", new FileHandlerOreDictionary());
 		
-		NetworkRegistry.INSTANCE.registerGuiHandler(Main.instance, new GuiProxy());
+		NetworkRegistry.INSTANCE.registerGuiHandler(AdvancedMachines.instance, new GuiProxy());
 
 		proxy.init(e);
     }

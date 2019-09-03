@@ -9,7 +9,6 @@ import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.machine.multiblock.model.ModelBakeryMultiblockMachine;
 import jaminv.advancedmachines.objects.blocks.Properties;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
-import jaminv.advancedmachines.util.helper.BlockHelper;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -114,11 +113,6 @@ public abstract class BlockMachineMultiblock extends BlockMachine implements Mac
 	@Override
 	public int getUpgradeQty(World world, BlockPos pos) {
 		return getVariant().getMultiplier();
-	}
-	
-	@Override
-	public void setMultiblock(World world, BlockPos pos, BlockPos parent, MultiblockBorders borders) {
-		BlockHelper.setBorders(world, pos, borders);
 	}
 
 	@Override @SideOnly(Side.CLIENT) public ModelBakery getModelBakery() { return new ModelBakeryMultiblockMachine(variant); }

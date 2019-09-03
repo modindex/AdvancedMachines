@@ -3,7 +3,7 @@ package jaminv.advancedmachines.machine.expansion.multiply;
 import javax.annotation.Nullable;
 
 import jaminv.advancedmachines.machine.expansion.TileMachineExpansion;
-import jaminv.advancedmachines.machine.multiblock.face.IMachineFaceTE;
+import jaminv.advancedmachines.machine.multiblock.face.MachineFaceTile;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,7 +12,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
-public class TileMachineMultiply extends TileMachineExpansion implements IMachineFaceTE {
+public class TileMachineMultiply extends TileMachineExpansion implements MachineFaceTile {
 
 	protected MachineFace face = MachineFace.NONE;
 	protected MachineType parent = MachineType.NONE;

@@ -1,0 +1,34 @@
+{
+    "dust_dust": {
+        "input": [
+            { "ore": "dustGold", "count": 1 },
+            { "ore": "dustSilver" }
+        ],
+        "output": { "ore": "ingotElectrum", "count": 2 },
+        "energy_percent": 40
+    },
+    "dust_ingot": {
+        "input": [
+            { "ore": "dustGold", "count": 1 },
+            { "ore": "ingotSilver" }
+        ],
+        "output": { "ore": "ingotElectrum", "count": 2 },
+        "energy_percent": 50
+    },
+    "ingot_dust": {
+        "input": [
+            { "ore": "ingotGold", "count": 1 },
+            { "ore": "dustSilver" }
+        ],
+        "output": { "ore": "ingotElectrum", "count": 2 },
+        "energy_percent": 50
+    },
+    "ingot_ingot": {
+        "input": [
+            { "ore": "ingotGold", "count": 1 },
+            { "ore": "ingotSilver" }
+        ],
+        "output": { "ore": "ingotElectrum", "count": 2 },
+        "energy_percent": 60
+    }
+}

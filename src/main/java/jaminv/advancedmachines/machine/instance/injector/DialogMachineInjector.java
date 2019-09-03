@@ -2,6 +2,7 @@ package jaminv.advancedmachines.machine.instance.injector;
 
 import jaminv.advancedmachines.lib.container.ContainerMachine;
 import jaminv.advancedmachines.lib.container.layout.IJeiLayoutManager;
+import jaminv.advancedmachines.lib.dialog.Color;
 import jaminv.advancedmachines.lib.dialog.control.enums.IOState;
 import jaminv.advancedmachines.lib.jei.JeiDialog;
 import jaminv.advancedmachines.lib.jei.element.JeiEnergyBar;
@@ -15,7 +16,6 @@ import jaminv.advancedmachines.machine.dialog.DialogMultiblockQuantity;
 import jaminv.advancedmachines.machine.dialog.DialogProcessBar;
 import jaminv.advancedmachines.machine.dialog.DialogTooltipMultiblock;
 import jaminv.advancedmachines.machine.dialog.RedstoneToggleButton;
-import jaminv.advancedmachines.util.Color;
 import net.minecraft.inventory.Container;
 
 public class DialogMachineInjector extends JeiDialog {

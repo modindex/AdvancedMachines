@@ -1,8 +1,13 @@
 package jaminv.advancedmachines.machine;
 
-import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.AdvancedMachines;
 import jaminv.advancedmachines.lib.machine.IMachineController.ISubController;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
+import jaminv.advancedmachines.lib.util.helper.BlockHelper;
+import jaminv.advancedmachines.lib.util.helper.BlockIterator;
+import jaminv.advancedmachines.lib.util.helper.Variant;
+import jaminv.advancedmachines.lib.util.helper.BlockIterator.BlockChecker;
+import jaminv.advancedmachines.lib.util.helper.BlockIterator.ScanResult;
 import jaminv.advancedmachines.machine.expansion.MachineUpgrade;
 import jaminv.advancedmachines.machine.expansion.MachineUpgrade.UpgradeType;
 import jaminv.advancedmachines.machine.expansion.MachineUpgradeTile;
@@ -11,15 +16,10 @@ import jaminv.advancedmachines.machine.multiblock.MultiblockState;
 import jaminv.advancedmachines.machine.multiblock.MultiblockState.MultiblockNull;
 import jaminv.advancedmachines.machine.multiblock.MultiblockUpdateMessage;
 import jaminv.advancedmachines.machine.multiblock.UpgradeManager;
-import jaminv.advancedmachines.machine.multiblock.face.IMachineFaceTE;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
+import jaminv.advancedmachines.machine.multiblock.face.MachineFaceTile;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
-import jaminv.advancedmachines.objects.variant.HasVariant;
-import jaminv.advancedmachines.objects.variant.Variant;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
-import jaminv.advancedmachines.util.helper.BlockHelper;
-import jaminv.advancedmachines.util.helper.BlockHelper.BlockChecker;
-import jaminv.advancedmachines.util.helper.BlockHelper.ScanResult;
 import jaminv.advancedmachines.util.network.ProcessingStateMessage;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
@@ -32,14 +32,14 @@ import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
-public abstract class TileMachineMultiblock extends TileMachine implements MachineUpgradeTile, IMachineFaceTE {
+public abstract class TileMachineMultiblock extends TileMachine implements MachineUpgradeTile, MachineFaceTile {
 
 	public TileMachineMultiblock(RecipeManager recipeManager) {
 		super(recipeManager);
 	}
 	
 	protected MultiblockBorders borders = new MultiblockBorders();
-	public void setBorders(World world, MultiblockBorders borders) { this.borders = borders; }
+	public void setBorders(MultiblockBorders borders) { this.borders = borders; }
 	public MultiblockBorders getBorders() {	return borders;	}
 	
 	@Override
@@ -88,7 +88,7 @@ public abstract class TileMachineMultiblock extends TileMachine implements Machi
 	protected UpgradeManager upgrades = new UpgradeManager();
 	protected BlockPos multiblockMin = null, multiblockMax = null;
 
-	public static class MultiblockChecker extends BlockChecker {
+	public static class MultiblockChecker implements BlockChecker {
 		@Override
 		public Action checkBlock(World world, BlockPos pos) {
 			Block block = world.getBlockState(pos).getBlock();
@@ -115,7 +115,7 @@ public abstract class TileMachineMultiblock extends TileMachine implements Machi
 	
 	public void scanMultiblock(boolean destroy) {
 		if (destroy && multiblockMin != null && multiblockMax != null) {
-			Main.NETWORK.sendToAll(new MultiblockUpdateMessage(this.getPos(), multiblockMin, multiblockMax));
+			AdvancedMachines.NETWORK.sendToAll(new MultiblockUpdateMessage(this.getPos(), multiblockMin, multiblockMax));
 		}
 		
 		this.controller.wake();
@@ -126,7 +126,7 @@ public abstract class TileMachineMultiblock extends TileMachine implements Machi
 		
 		BlockPos pos = this.getPos();
 		
-		ScanResult result = BlockHelper.scanBlocks(world, pos, new MultiblockChecker());
+		ScanResult result = BlockIterator.scanBlocks(world, pos, new MultiblockChecker());
 		
 		BlockPos end = result.getEnd();
 		if (end != null) {
@@ -191,18 +191,21 @@ public abstract class TileMachineMultiblock extends TileMachine implements Machi
 					upgrade.setPos(x, y, z);
 					//if (pos.equals(upgrade)) { continue; }
 					Block block = world.getBlockState(upgrade).getBlock();
-					if (block instanceof MachineUpgrade) { 
-						TileEntity te = world.getTileEntity(upgrade);
+					TileEntity te = world.getTileEntity(upgrade);
+					
+					if (te instanceof MachineUpgradeTile) { 
+						MachineUpgradeTile tile = (MachineUpgradeTile)te;
 						MultiblockBorders bord;
+						
 						if (!isMultiblock) { 
 							bord = MultiblockBorders.DEFAULT;
 							
-							if (te instanceof IMachineFaceTE) {
-								((IMachineFaceTE)te).setMachineFace(MachineFace.NONE, MachineType.NONE, EnumFacing.UP, null);
+							if (te instanceof MachineFaceTile) {
+								((MachineFaceTile)te).setMachineFace(MachineFace.NONE, MachineType.NONE, EnumFacing.UP, null);
 							}
 						} else { bord = new MultiblockBorders(world, upgrade, min, max); }
 						
-						((MachineUpgrade) block).setMultiblock(world, upgrade, pos, bord);
+						tile.setBorders(bord);
 					}
 				}
 			}
@@ -240,7 +243,7 @@ public abstract class TileMachineMultiblock extends TileMachine implements Machi
 				TileEntity te = world.getTileEntity(check);
 				
 				if (te != null) {
-					eval = (te instanceof IMachineFaceTE);
+					eval = (te instanceof MachineFaceTile);
 					Block checkBlock = world.getBlockState(check).getBlock();
 					if (eval) { eval = (checkBlock instanceof VariantExpansion.Has) && ((VariantExpansion.Has)checkBlock).getVariant() == variant; }
 				} else { eval = false; }
@@ -261,8 +264,8 @@ public abstract class TileMachineMultiblock extends TileMachine implements Machi
 			for (int y = -count+1; y < 1; y++) {
 				TileEntity te = world.getTileEntity(pos.offset(dir, x).offset(EnumFacing.UP, y));
 				
-				if (te instanceof IMachineFaceTE) {
-					((IMachineFaceTE)te).setMachineFace(MachineFace.build(count, -x, -y), this.getMachineType(), facing, this.getPos());
+				if (te instanceof MachineFaceTile) {
+					((MachineFaceTile)te).setMachineFace(MachineFace.build(count, -x, -y), this.getMachineType(), facing, this.getPos());
 				}
 			}
 		}

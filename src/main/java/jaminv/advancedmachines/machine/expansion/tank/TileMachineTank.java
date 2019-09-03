@@ -2,7 +2,7 @@ package jaminv.advancedmachines.machine.expansion.tank;
 
 import javax.annotation.Nullable;
 
-import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.AdvancedMachines;
 import jaminv.advancedmachines.ModConfig;
 import jaminv.advancedmachines.init.HasGui;
 import jaminv.advancedmachines.lib.container.ContainerInventory;
@@ -14,10 +14,10 @@ import jaminv.advancedmachines.lib.fluid.IFluidObservable;
 import jaminv.advancedmachines.lib.inventory.IItemObservable;
 import jaminv.advancedmachines.lib.inventory.ItemStackHandlerObservable;
 import jaminv.advancedmachines.lib.machine.IMachineController;
+import jaminv.advancedmachines.lib.util.helper.Directional;
 import jaminv.advancedmachines.machine.dialog.DialogIOToggle;
 import jaminv.advancedmachines.machine.expansion.TileMachineExpansion;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
-import jaminv.advancedmachines.util.helper.Directional;
 import jaminv.advancedmachines.util.network.IOStateMessage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -113,7 +113,7 @@ public class TileMachineTank extends TileMachineExpansion implements ITickable, 
 		if (controller != null) { controller.wake(); }
 		
 		if (world.isRemote) {
-			Main.NETWORK.sendToServer(new IOStateMessage(this.getPos(), state, priority));
+			AdvancedMachines.NETWORK.sendToServer(new IOStateMessage(this.getPos(), state, priority));
 		}
 	}
 	
@@ -121,7 +121,7 @@ public class TileMachineTank extends TileMachineExpansion implements ITickable, 
 		this.priority = priority;
 				
 		if (world.isRemote) {
-			Main.NETWORK.sendToServer(new IOStateMessage(this.getPos(), inputState, priority));
+			AdvancedMachines.NETWORK.sendToServer(new IOStateMessage(this.getPos(), inputState, priority));
 		}
 		
 		if (controller != null) { controller.sortSubControllers(); }

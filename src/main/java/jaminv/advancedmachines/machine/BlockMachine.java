@@ -1,10 +1,11 @@
 package jaminv.advancedmachines.machine;
 
+import jaminv.advancedmachines.AdvancedMachines;
 import jaminv.advancedmachines.lib.util.blocks.BlockProperties;
+import jaminv.advancedmachines.lib.util.helper.BlockHelper;
 import jaminv.advancedmachines.objects.blocks.BlockPropertiesMod;
 import jaminv.advancedmachines.objects.blocks.Properties;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
-import jaminv.advancedmachines.util.helper.BlockHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -47,7 +48,7 @@ public abstract class BlockMachine extends Block implements VariantExpansion.Has
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
 			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		
-		return BlockHelper.openGui(worldIn, pos, playerIn, getGuiId());
+		return BlockHelper.openGui(AdvancedMachines.instance, worldIn, pos, playerIn, getGuiId());
 	}
 	
 	@Override

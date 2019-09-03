@@ -36,6 +36,7 @@ public interface Recipe {
 	
 	public int getEnergy();
 	public int getProcessTime();
+	public float getXp();
 	
 	public int getRecipeQty(ItemStack[] items, FluidStack[] fluids, ItemStack[] inventory, IFluidTankInternal[] tanks);
 }

@@ -14,7 +14,7 @@ public class DialogTextureElement extends DialogTextureMapDefault implements IDi
 	@Override
 	public void draw(Dialog gui, FontRenderer font, int drawX, int drawY) {
 		DialogTexture texture = this.getTexture(TextureDefault.DEFAULT);		
-		gui.drawTexturedModalRect(drawX + this.getX(), drawY + this.getY(),
+		gui.drawTexturedModalRect(drawX, drawY,
 			texture.getU(), texture.getV(),
 			this.getW(), this.getH());
 	}

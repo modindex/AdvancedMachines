@@ -2,13 +2,14 @@ package jaminv.advancedmachines.machine.expansion;
 
 import jaminv.advancedmachines.lib.render.ModelBakeryProvider;
 import jaminv.advancedmachines.lib.util.blocks.BlockProperties;
+import jaminv.advancedmachines.lib.util.helper.BlockHelper;
+import jaminv.advancedmachines.lib.util.helper.BlockIterator;
+import jaminv.advancedmachines.lib.util.helper.BlockIterator.ScanResult;
 import jaminv.advancedmachines.machine.MachineHelper;
 import jaminv.advancedmachines.machine.TileMachineMultiblock;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.objects.blocks.BlockPropertiesMod;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
-import jaminv.advancedmachines.util.helper.BlockHelper;
-import jaminv.advancedmachines.util.helper.BlockHelper.ScanResult;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -86,7 +87,7 @@ public abstract class BlockMachineExpansion extends Block implements VariantExpa
 	}	
 	
 	public static void scanMultiblock(World world, BlockPos pos) {
-		ScanResult result = BlockHelper.scanBlocks(world, pos, new TileMachineMultiblock.MultiblockChecker());
+		ScanResult result = BlockIterator.scanBlocks(world, pos, new TileMachineMultiblock.MultiblockChecker());
 		BlockPos end = result.getEnd();
 		if (end == null) { return; }
 		
@@ -104,14 +105,6 @@ public abstract class BlockMachineExpansion extends Block implements VariantExpa
 	@Override
 	public int getUpgradeQty(World world, BlockPos pos) {
 		return variant.getMultiplier();
-	}
-	
-	@Override
-	public void setMultiblock(World world, BlockPos pos, BlockPos parent, MultiblockBorders borders) {
-		TileEntity tileentity = world.getTileEntity(pos);
-		if (tileentity instanceof MachineUpgradeTile) {
-			((MachineUpgradeTile)tileentity).setBorders(world, borders); 
-		}
 	}
 	
 	@Override

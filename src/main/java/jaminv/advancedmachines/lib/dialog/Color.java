@@ -1,4 +1,4 @@
-package jaminv.advancedmachines.util;
+package jaminv.advancedmachines.lib.dialog;
 
 public class Color {
 	public static final int WHITE = 0xFFFFFF;

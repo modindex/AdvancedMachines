@@ -1,4 +1,4 @@
-package jaminv.advancedmachines.util.helper;
+package jaminv.advancedmachines.lib.util.helper;
 
 import net.minecraft.util.EnumFacing;
 

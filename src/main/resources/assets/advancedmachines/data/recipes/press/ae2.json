@@ -13,8 +13,10 @@
     },
     "logic_circuit": {
         "input": [
-            { "item": "appliedenergistics2:material", "data": 15, "extract": false },
             { "ore": "ingotGold" }
+        ],
+        "catalyst": [
+            { "item": "appliedenergistics2:material", "data": 15, "extract": false }
         ],
         "output": { "item": "appliedenergistics2:material", "data": 18 },
         "conditions": [
@@ -23,8 +25,10 @@
     },
     "calc_circuit": {
         "input": [
-            { "item": "appliedenergistics2:material", "data": 13, "extract": false },
             { "item": "appliedenergistics2:material", "data": 10 }
+        ],
+        "catalyst": [
+            { "item": "appliedenergistics2:material", "data": 13, "extract": false }
         ],
         "output": { "item": "appliedenergistics2:material", "data": 16 },
         "conditions": [
@@ -33,8 +37,10 @@
     },
     "eng_circuit": {
         "input": [
-            { "item": "appliedenergistics2:material", "data": 14, "extract": false },
             { "ore": "gemDiamond" }
+        ],
+        "catalyst": [
+            { "item": "appliedenergistics2:material", "data": 14, "extract": false }
         ],
         "output": { "item": "appliedenergistics2:material", "data": 17 },
         "conditions": [

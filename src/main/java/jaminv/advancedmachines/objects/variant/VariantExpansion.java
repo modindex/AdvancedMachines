@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import jaminv.advancedmachines.lib.util.helper.HasVariant;
+import jaminv.advancedmachines.lib.util.helper.NeedsVariant;
+import jaminv.advancedmachines.lib.util.helper.Variant;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
 
 public enum VariantExpansion implements Variant {

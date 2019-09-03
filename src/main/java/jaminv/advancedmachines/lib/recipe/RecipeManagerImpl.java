@@ -222,8 +222,11 @@ public class RecipeManagerImpl<T extends RecipeInternal> implements RecipeManage
 			boolean[] ingredient = new boolean[iclist.size()];
 			Arrays.fill(ingredient, false);
 			
-			for (int j = 0; j < recipe.getInputCount(); j++) {
-				RecipeInput input = recipe.getInput(j);
+			for (int j = 0; j < recipe.getInputCount() + recipe.getCatalystCount(); j++) {
+				RecipeInput input;
+				if (j >= recipe.getInputCount()) { input = recipe.getCatalyst(j - recipe.getInputCount()); }
+				else { input = recipe.getInput(j); }
+				
 				if (input.isEmpty()) { continue; }
 				
 				boolean found = false;

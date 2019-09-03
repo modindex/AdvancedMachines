@@ -45,8 +45,8 @@ public class RecipeImpl implements RecipeJei, RecipeInternal {
 	private List<RecipeInput> catalyst = new ArrayList<>();
 	private List<RecipeOutput> secondary = new ArrayList<>();
 	private int energy;
-	
 	private int processTime;
+	private float xp = 0.0f;
 	
 	public RecipeImpl(String id, int energy, int processTime) {
 		this.recipeid = id;
@@ -172,6 +172,10 @@ public class RecipeImpl implements RecipeJei, RecipeInternal {
 	
 	@Override
 	public int getProcessTime() { return processTime; }
+	
+	@Override
+	public float getXp() { return xp; }
+	public void setXp(float xp) { this.xp = xp; }
 	
 	public int getInputQty(@Nullable ItemStack[] items, @Nullable FluidStack[] fluids) {
 		int min = -1;

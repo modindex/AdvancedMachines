@@ -9,7 +9,6 @@ import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
 import jaminv.advancedmachines.lib.inventory.slot.ISlotHandler;
 import jaminv.advancedmachines.machine.TileMachineMultiblock;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
-import jaminv.advancedmachines.util.recipe.press.PressManager;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 

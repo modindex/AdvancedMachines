@@ -10,7 +10,6 @@ import jaminv.advancedmachines.lib.container.layout.impl.BucketLayout;
 import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
 import jaminv.advancedmachines.machine.TileMachineMultiblock;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
-import jaminv.advancedmachines.util.recipe.stabilizer.StabilizerManager;
 import net.minecraft.inventory.IInventory;
 
 public class TileMachineStabilizer extends TileMachineMultiblock {

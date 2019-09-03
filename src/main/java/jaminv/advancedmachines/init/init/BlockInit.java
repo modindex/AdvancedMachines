@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import jaminv.advancedmachines.lib.util.blocks.BlockProperties;
+import jaminv.advancedmachines.lib.util.helper.Variant;
 import jaminv.advancedmachines.lib.util.registry.RegistryHelper;
 import jaminv.advancedmachines.machine.expansion.BlockMachineProductivity;
 import jaminv.advancedmachines.machine.expansion.BlockMachineSpeed;
@@ -37,7 +38,6 @@ import jaminv.advancedmachines.machine.instance.stabilizer.TileMachineStabilizer
 import jaminv.advancedmachines.objects.blocks.BlockPropertiesMod;
 import jaminv.advancedmachines.objects.blocks.render.BlockLayeredBaked;
 import jaminv.advancedmachines.objects.blocks.render.ModelBakeryProviderMachineFrame;
-import jaminv.advancedmachines.objects.variant.Variant;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.objects.variant.VariantResource;
 import net.minecraft.block.Block;

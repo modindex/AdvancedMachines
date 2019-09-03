@@ -1,10 +1,10 @@
 package jaminv.advancedmachines.machine.expansion.tank;
 
+import jaminv.advancedmachines.lib.dialog.Color;
 import jaminv.advancedmachines.lib.dialog.Dialog;
 import jaminv.advancedmachines.lib.dialog.control.DialogTextBox;
 import jaminv.advancedmachines.machine.dialog.DialogFluid;
 import jaminv.advancedmachines.machine.dialog.DialogIOToggle;
-import jaminv.advancedmachines.util.Color;
 import net.minecraft.inventory.Container;
 
 public class DialogMachineTank extends Dialog {

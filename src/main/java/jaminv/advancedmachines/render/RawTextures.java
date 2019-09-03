@@ -2,7 +2,7 @@ package jaminv.advancedmachines.render;
 
 import com.google.common.collect.ImmutableMap;
 
-import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.AdvancedMachines;
 import jaminv.advancedmachines.Reference;
 import jaminv.advancedmachines.lib.render.TextureHelper;
 import jaminv.advancedmachines.lib.render.quad.Texture;
@@ -31,7 +31,7 @@ public class RawTextures {
 		Texture ret = textures.get(reference);
 		if (ret == null) { 
 			ret = new Texture(TextureHelper.getMissingTexture());
-			Main.logger.error("Error loading sprite: '" + reference + "'.");
+			AdvancedMachines.logger.error("Error loading sprite: '" + reference + "'.");
 		}
 		return ret;
 	}
@@ -49,7 +49,7 @@ public class RawTextures {
 	public static void registerTextures(TextureMap textureMap, String path) {
 		RawTextures.textureMap = textureMap;
 		
-		Main.logger.info("Loading raw textures");
+		AdvancedMachines.logger.info("Loading raw textures");
 		
 		ImmutableMap.Builder<String, Texture> map = ImmutableMap.<String, Texture>builder();
 		
@@ -104,6 +104,6 @@ public class RawTextures {
 
 		textures = map.build();
 
-		Main.logger.info("Completed - Loading raw textures");
+		AdvancedMachines.logger.info("Completed - Loading raw textures");
 	}
 }

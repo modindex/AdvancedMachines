@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.machine.expansion.inventory;
 
-import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.AdvancedMachines;
 import jaminv.advancedmachines.init.HasGui;
 import jaminv.advancedmachines.lib.container.ContainerInventory;
 import jaminv.advancedmachines.lib.container.layout.ILayoutManager;
@@ -10,9 +10,9 @@ import jaminv.advancedmachines.lib.inventory.IItemObservable;
 import jaminv.advancedmachines.lib.inventory.InventoryHelper;
 import jaminv.advancedmachines.lib.inventory.ItemStackHandlerObservable;
 import jaminv.advancedmachines.lib.machine.IMachineController;
+import jaminv.advancedmachines.lib.util.helper.Directional;
 import jaminv.advancedmachines.machine.dialog.DialogIOToggle;
 import jaminv.advancedmachines.machine.expansion.TileMachineExpansion;
-import jaminv.advancedmachines.util.helper.Directional;
 import jaminv.advancedmachines.util.network.IOStateMessage;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -60,7 +60,7 @@ public class TileMachineInventory extends TileMachineExpansion implements HasGui
 		world.markBlockRangeForRenderUpdate(this.pos, this.pos);
 		
 		if (world.isRemote) {
-			Main.NETWORK.sendToServer(new IOStateMessage(this.getPos(), state, priority));
+			AdvancedMachines.NETWORK.sendToServer(new IOStateMessage(this.getPos(), state, priority));
 		}
 		
 		if (controller != null) { controller.wake(); }
@@ -70,7 +70,7 @@ public class TileMachineInventory extends TileMachineExpansion implements HasGui
 		this.priority = priority;
 				
 		if (world.isRemote) {
-			Main.NETWORK.sendToServer(new IOStateMessage(this.getPos(), inputState, priority));
+			AdvancedMachines.NETWORK.sendToServer(new IOStateMessage(this.getPos(), inputState, priority));
 		}
 		
 		if (controller != null) { controller.sortSubControllers(); }

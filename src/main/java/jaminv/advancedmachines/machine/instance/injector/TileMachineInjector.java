@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.machine.instance.injector;
 
-import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.AdvancedMachines;
 import jaminv.advancedmachines.lib.container.ContainerMachine;
 import jaminv.advancedmachines.lib.container.ISyncManager;
 import jaminv.advancedmachines.lib.container.layout.ILayoutManager;
@@ -17,7 +17,6 @@ import jaminv.advancedmachines.machine.TileMachineMultiblock;
 import jaminv.advancedmachines.machine.dialog.DialogBucketToggle.IBucketToggle;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.util.network.BucketStateMessage;
-import jaminv.advancedmachines.util.recipe.injector.InjectorManager;
 import net.minecraft.inventory.IInventory;
 
 public class TileMachineInjector extends TileMachineMultiblock implements IBucketToggle {
@@ -66,7 +65,7 @@ public class TileMachineInjector extends TileMachineMultiblock implements IBucke
 		controller.wake();
 		
 		if (world.isRemote) {
-			Main.NETWORK.sendToServer(new BucketStateMessage(this.getPos(), state));
+			AdvancedMachines.NETWORK.sendToServer(new BucketStateMessage(this.getPos(), state));
 		}
 	}
 

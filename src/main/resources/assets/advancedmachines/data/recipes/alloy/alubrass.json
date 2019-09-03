@@ -1,0 +1,34 @@
+{
+    "dust_dust": {
+        "input": [
+            { "ore": "dustAluminum", "count": 3 },
+            { "ore": "dustCopper" }
+        ],
+        "output": { "ore": "ingotAlubrass", "count": 4 },
+        "energy_percent": 80
+    },
+    "dust_ingot": {
+        "input": [
+            { "ore": "dustAluminum", "count": 3 },
+            { "ore": "ingotCopper" }
+        ],
+        "output": { "ore": "ingotAlubrass", "count": 4 },
+        "energy_percent": 90
+    },
+    "ingot_dust": {
+        "input": [
+            { "ore": "ingotAluminum", "count": 3 },
+            { "ore": "dustCopper" }
+        ],
+        "output": { "ore": "ingotAlubrass", "count": 4 },
+        "energy_percent": 110
+    },
+    "ingot_ingot": {
+        "input": [
+            { "ore": "ingotAluminum", "count": 3 },
+            { "ore": "ingotCopper" }
+        ],
+        "output": { "ore": "ingotAlubrass", "count": 4 },
+        "energy_percent": 120
+    }
+}

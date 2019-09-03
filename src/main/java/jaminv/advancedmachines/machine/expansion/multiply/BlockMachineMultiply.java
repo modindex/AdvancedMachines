@@ -1,7 +1,8 @@
 package jaminv.advancedmachines.machine.expansion.multiply;
 
-import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.AdvancedMachines;
 import jaminv.advancedmachines.lib.render.ModelBakery;
+import jaminv.advancedmachines.lib.util.helper.BlockHelper;
 import jaminv.advancedmachines.machine.MachineHelper;
 import jaminv.advancedmachines.machine.expansion.BlockMachineExpansion;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
@@ -9,7 +10,6 @@ import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.objects.blocks.Properties;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
-import jaminv.advancedmachines.util.helper.BlockHelper;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -79,7 +79,7 @@ public class BlockMachineMultiply extends BlockMachineExpansion {
 
 			BlockPos machine = exp.getParentPos();
 			if (worldIn.isRemote) { return true; }
-			playerIn.openGui(Main.instance, exp.getMachineParent().getGuiId(), worldIn, machine.getX(), machine.getY(), machine.getZ());
+			playerIn.openGui(AdvancedMachines.instance, exp.getMachineParent().getGuiId(), worldIn, machine.getX(), machine.getY(), machine.getZ());
 			return true;
 		}
 		

@@ -2,7 +2,7 @@ package jaminv.advancedmachines.machine;
 
 import javax.annotation.Nullable;
 
-import jaminv.advancedmachines.Main;
+import jaminv.advancedmachines.AdvancedMachines;
 import jaminv.advancedmachines.ModConfig;
 import jaminv.advancedmachines.init.HasGui;
 import jaminv.advancedmachines.lib.container.ISyncManager;
@@ -21,8 +21,8 @@ import jaminv.advancedmachines.lib.machine.MachineController;
 import jaminv.advancedmachines.lib.machine.MachineStorage;
 import jaminv.advancedmachines.lib.machine.MachineStorageCapability;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
+import jaminv.advancedmachines.lib.util.helper.Directional;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
-import jaminv.advancedmachines.util.helper.Directional;
 import jaminv.advancedmachines.util.network.ProcessingStateMessage;
 import jaminv.advancedmachines.util.network.RedstoneStateMessage;
 import net.minecraft.block.state.IBlockState;
@@ -101,7 +101,7 @@ public abstract class TileMachine extends TileEntity implements ITickable, HasGu
 		this.processingState = state;
 		
 		if (world != null && !world.isRemote) {
-			Main.NETWORK.sendToAll(getProcessingStateMessage(state));
+			AdvancedMachines.NETWORK.sendToAll(getProcessingStateMessage(state));
 		}
 	}
 
@@ -118,7 +118,7 @@ public abstract class TileMachine extends TileEntity implements ITickable, HasGu
 		this.redstoneState = state;
 		
 		if (world.isRemote) {
-			Main.NETWORK.sendToServer(new RedstoneStateMessage(this.getPos(), state));
+			AdvancedMachines.NETWORK.sendToServer(new RedstoneStateMessage(this.getPos(), state));
 		}
 	}
 	

@@ -7,7 +7,6 @@ import jaminv.advancedmachines.lib.container.layout.JeiLayoutManager;
 import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
 import jaminv.advancedmachines.machine.TileMachineMultiblock;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
-import jaminv.advancedmachines.util.recipe.AlloyManager;
 import net.minecraft.inventory.IInventory;
 
 public class TileMachineAlloy extends TileMachineMultiblock {

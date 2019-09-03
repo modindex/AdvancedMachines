@@ -8,7 +8,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 
 public class TileMachineExpansion extends TileEntity implements MachineUpgradeTile, VariantExpansion.Needs {
 
@@ -18,18 +17,17 @@ public class TileMachineExpansion extends TileEntity implements MachineUpgradeTi
 	
 	@Override
 	public void setVariant(VariantExpansion variant) {
-		if (variant == null) { return; } // FIXME: Backwards Compatibility
 		this.variant = variant;
 	}
 	
 	protected MultiblockBorders borders = new MultiblockBorders();
 	
-	public void setBorders(World world, MultiblockBorders borders) {
+	public void setBorders(MultiblockBorders borders) {
 		this.borders = borders;
 	}
 	
 	public MultiblockBorders getBorders() {
-		return borders; 
+		return borders;
 	}
 	
 	@Override

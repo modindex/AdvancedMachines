@@ -1,0 +1,34 @@
+{
+    "dust_dust": {
+        "input": [
+            { "ore": "dustIron", "count": 2 },
+            { "ore": "dustNickel" }
+        ],
+        "output": { "ore": "ingotInvar", "count": 3 },
+        "energy_percent": 60
+    },
+    "dust_ingot": {
+        "input": [
+            { "ore": "dustIron", "count": 2 },
+            { "ore": "ingotNickel" }
+        ],
+        "output": { "ore": "ingotInvar", "count": 3 },
+        "energy_percent": 70
+    },
+    "ingot_dust": {
+        "input": [
+            { "ore": "ingotIron", "count": 2 },
+            { "ore": "dustNickel" }
+        ],
+        "output": { "ore": "ingotInvar", "count": 3 },
+        "energy_percent": 80
+    },
+    "ingot_ingot": {
+        "input": [
+            { "ore": "ingotIron", "count": 2 },
+            { "ore": "ingotNickel" }
+        ],
+        "output": { "ore": "ingotInvar", "count": 3 },
+        "energy_percent": 90
+    }
+}
