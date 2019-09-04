@@ -111,6 +111,7 @@ public class BlockMachineTank extends BlockMachineExpansion {
 			ItemStack stack) {
 		super.harvestBlock(worldIn, player, pos, state, te, stack);
         worldIn.setBlockToAir(pos);
+        scanMultiblock(worldIn, pos);
 	}
         
 	@Override

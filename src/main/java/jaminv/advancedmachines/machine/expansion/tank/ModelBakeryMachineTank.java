@@ -73,9 +73,9 @@ public class ModelBakeryMachineTank extends ModelBakeryMachineExpansion {
 					ModConfig.general.defaultMachineFluidCapacity * variant.getMultiplier(),
 					ModConfig.general.defaultMachineFluidTransfer * variant.getMultiplier());
 			tank.deserializeNBT(stack.getTagCompound().getCompoundTag("tank"));
-			if (tank.getFluid() != null) {
+			if (tank.getFluid() != null && tank.getFluidAmount() > 0) {
 				QuadBuilderFluid quad = new QuadBuilderFluid(tank.getFluid(),
-						tank.getFluidAmount() / tank.getCapacity());
+						tank.getFluidAmount() / (float)tank.getCapacity());
 				quad.withCuboid(quad.getCuboid().offset(0.02f, 0.02f, 0.02f));
 				quads.addAll(quad.build()); 
 			}

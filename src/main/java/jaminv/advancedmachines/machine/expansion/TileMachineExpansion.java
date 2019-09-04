@@ -24,6 +24,7 @@ public class TileMachineExpansion extends TileEntity implements MachineUpgradeTi
 	
 	public void setBorders(MultiblockBorders borders) {
 		this.borders = borders;
+		this.markDirty();
 	}
 	
 	public MultiblockBorders getBorders() {

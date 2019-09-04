@@ -5,9 +5,9 @@ import jaminv.advancedmachines.lib.machine.IMachineController.ISubController;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
 import jaminv.advancedmachines.lib.util.helper.BlockHelper;
 import jaminv.advancedmachines.lib.util.helper.BlockIterator;
-import jaminv.advancedmachines.lib.util.helper.Variant;
 import jaminv.advancedmachines.lib.util.helper.BlockIterator.BlockChecker;
 import jaminv.advancedmachines.lib.util.helper.BlockIterator.ScanResult;
+import jaminv.advancedmachines.lib.util.helper.Variant;
 import jaminv.advancedmachines.machine.expansion.MachineUpgrade;
 import jaminv.advancedmachines.machine.expansion.MachineUpgrade.UpgradeType;
 import jaminv.advancedmachines.machine.expansion.MachineUpgradeTile;
@@ -100,6 +100,7 @@ public abstract class TileMachineMultiblock extends TileMachine implements Machi
 	
 	public void scanMultiblock() {
 		scanMultiblock(false);
+		markDirty();
 	}
 	
 	protected void reset() {
