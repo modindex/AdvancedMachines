@@ -175,6 +175,8 @@ dialog.machine_tank.title=Fluid Tank
 
 dialog.press.ae2=You may put AE2 Inscriber Press items in the above slots.
 
+tooltip.inventory.more=and %d more...
+
 message.no_controller=No Machine Controller Found
 message.controller_found=Machine Controller (%s) found at (%d, %d, %d)
 message.multiblock.null=Multiblock invalid. You should never see this message.

@@ -5,10 +5,13 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class FluidTankAdvanced implements IFluidTankAdvanced {
 	
@@ -162,6 +165,13 @@ public class FluidTankAdvanced implements IFluidTankAdvanced {
 		ret.canFill = canFill; ret.canDrain = canDrain;
 		return ret;
 	}
+	
+	@SideOnly (Side.CLIENT)
+	public void addInformation(List<String> tooltip, ITooltipFlag advanced) {
+		if (fluid != null) {
+			tooltip.add(String.format("%dmB %s", fluid.amount, fluid.getLocalizedName()));
+		}
+	}	
 
 	@Override
 	public NBTTagCompound serializeNBT() {

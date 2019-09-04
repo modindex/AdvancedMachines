@@ -10,7 +10,8 @@ import jaminv.advancedmachines.lib.inventory.IItemObservable;
 import jaminv.advancedmachines.lib.inventory.InventoryHelper;
 import jaminv.advancedmachines.lib.inventory.ItemStackHandlerObservable;
 import jaminv.advancedmachines.lib.machine.IMachineController;
-import jaminv.advancedmachines.lib.util.helper.Directional;
+import jaminv.advancedmachines.lib.util.helper.HasFacing;
+import jaminv.advancedmachines.lib.util.helper.HasItemNBT;
 import jaminv.advancedmachines.machine.dialog.DialogIOToggle;
 import jaminv.advancedmachines.machine.expansion.TileMachineExpansion;
 import jaminv.advancedmachines.util.network.IOStateMessage;
@@ -21,7 +22,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 
-public class TileMachineInventory extends TileMachineExpansion implements HasGui, IMachineController.ISubController, Directional, DialogIOToggle.ISwitchableIO, IItemObservable.IObserver {
+public class TileMachineInventory extends TileMachineExpansion implements HasGui, IMachineController.ISubController, HasFacing, HasItemNBT, DialogIOToggle.ISwitchableIO, IItemObservable.IObserver {
 
 	public static final ILayoutManager layout = new LayoutManager()
 		.addLayout(new ItemLayoutGrid.InventoryLayout(8, 38))
@@ -161,6 +162,17 @@ public class TileMachineInventory extends TileMachineExpansion implements HasGui
 		compound.setInteger("priority", priority);
 		compound.setBoolean("allowInput", allowInput);
 		compound.setBoolean("allowOutput", allowOutput);
+		compound.setTag("inventory", inventory.serializeNBT());
+		return compound;
+	}
+	
+	@Override
+	public void readItemNBT(NBTTagCompound compound) {
+		inventory.deserializeNBT(compound.getCompoundTag("inventory"));
+	}
+	
+	@Override
+	public NBTTagCompound writeItemNBT(NBTTagCompound compound) {
 		compound.setTag("inventory", inventory.serializeNBT());
 		return compound;
 	}

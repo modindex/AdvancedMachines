@@ -42,7 +42,7 @@ public class DialogMachinePress extends JeiDialog {
 		this.addTooltip(new DialogTooltipMultiblock(158, 7, 11, 11, te));
 		
 		this.addElement(new DialogTextureElement(-24, 0, 25, 82, 200, 81));
-		this.addElement(new DialogTextureElement(-16, 86, 11, 11, 242, 67) {
+		this.addElement(new DialogTextureElement(-13, 83, 11, 11, 242, 67) {
 			@Override public String getTooltip(int mouseX, int mouseY) {
 				return I18n.format("dialog.press.ae2");
 			}			

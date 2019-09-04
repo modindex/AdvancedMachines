@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import jaminv.advancedmachines.ModConfig;
+import jaminv.advancedmachines.lib.fluid.FluidTankAdvanced;
 import jaminv.advancedmachines.lib.render.quad.Cuboid;
 import jaminv.advancedmachines.lib.render.quad.LayeredTexture;
 import jaminv.advancedmachines.lib.render.quad.QuadBuilderFluid;
@@ -65,6 +67,19 @@ public class ModelBakeryMachineTank extends ModelBakeryMachineExpansion {
 		List<BakedQuad> quads = new ArrayList<>();
 		quads.addAll(new QuadBuilderMultiblockItem(stack, base).build());
 		quads.addAll(new QuadBuilderMultiblockItem(stack, base).invert().build());
+		
+		if (stack.hasTagCompound()) {
+			FluidTankAdvanced tank = new FluidTankAdvanced(
+					ModConfig.general.defaultMachineFluidCapacity * variant.getMultiplier(),
+					ModConfig.general.defaultMachineFluidTransfer * variant.getMultiplier());
+			tank.deserializeNBT(stack.getTagCompound().getCompoundTag("tank"));
+			if (tank.getFluid() != null) {
+				QuadBuilderFluid quad = new QuadBuilderFluid(tank.getFluid(),
+						tank.getFluidAmount() / tank.getCapacity());
+				quad.withCuboid(quad.getCuboid().offset(0.02f, 0.02f, 0.02f));
+				quads.addAll(quad.build()); 
+			}
+		}
 		return quads;
 	}
 }

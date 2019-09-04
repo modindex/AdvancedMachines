@@ -14,7 +14,8 @@ import jaminv.advancedmachines.lib.fluid.IFluidObservable;
 import jaminv.advancedmachines.lib.inventory.IItemObservable;
 import jaminv.advancedmachines.lib.inventory.ItemStackHandlerObservable;
 import jaminv.advancedmachines.lib.machine.IMachineController;
-import jaminv.advancedmachines.lib.util.helper.Directional;
+import jaminv.advancedmachines.lib.util.helper.HasFacing;
+import jaminv.advancedmachines.lib.util.helper.HasItemNBT;
 import jaminv.advancedmachines.machine.dialog.DialogIOToggle;
 import jaminv.advancedmachines.machine.expansion.TileMachineExpansion;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
@@ -35,7 +36,7 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
-public class TileMachineTank extends TileMachineExpansion implements ITickable, HasGui, Directional, 
+public class TileMachineTank extends TileMachineExpansion implements ITickable, HasGui, HasFacing, HasItemNBT,
 		IMachineController.ISubController, IItemObservable.IObserver, IFluidObservable.IObserver, DialogIOToggle.ISwitchableIO {
 	
 	public static final ILayoutManager layout = new LayoutManager()
@@ -284,6 +285,19 @@ public class TileMachineTank extends TileMachineExpansion implements ITickable, 
 		compound.setInteger("priority", priority);
 		compound.setBoolean("allowInput", allowInput);
 		compound.setBoolean("allowOutput", allowOutput);		
+		return compound;
+	}
+
+	@Override
+	public void readItemNBT(NBTTagCompound compound) {
+		if (compound.hasKey("tank")) {
+			tank.deserializeNBT(compound.getCompoundTag("tank"));
+		}	
+	}
+
+	@Override
+	public NBTTagCompound writeItemNBT(NBTTagCompound compound) {
+		compound.setTag("tank", tank.serializeNBT());
 		return compound;
 	}
 }

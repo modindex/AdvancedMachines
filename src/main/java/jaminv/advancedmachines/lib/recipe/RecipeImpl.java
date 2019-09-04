@@ -12,6 +12,8 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 
 import jaminv.advancedmachines.lib.fluid.IFluidTankInternal;
+import net.minecraft.block.BlockShulkerBox;
+import net.minecraft.item.ItemShulkerBox;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -95,6 +97,9 @@ public class RecipeImpl implements RecipeJei, RecipeInternal {
 			}
 		}
 		inputcache.put(extractOnly, input);
+		ItemShulkerBox item;
+		BlockShulkerBox block;
+
 		return input;
 	}
 	

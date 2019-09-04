@@ -1,7 +1,10 @@
 package jaminv.advancedmachines.machine.expansion.inventory;
 
+import java.util.List;
+
 import jaminv.advancedmachines.AdvancedMachines;
 import jaminv.advancedmachines.init.GuiProxy;
+import jaminv.advancedmachines.lib.inventory.ItemStackHandlerObservable;
 import jaminv.advancedmachines.lib.render.ModelBakery;
 import jaminv.advancedmachines.lib.util.helper.BlockHelper;
 import jaminv.advancedmachines.machine.MachineHelper;
@@ -11,11 +14,10 @@ import jaminv.advancedmachines.objects.blocks.Properties;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -39,13 +41,7 @@ public class BlockMachineInventory extends BlockMachineExpansion {
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 		
-		if (stack.hasTagCompound()) {
-			TileEntity te = worldIn.getTileEntity(pos);
-			if (te instanceof TileMachineInventory) {
-				te.deserializeNBT(stack.getTagCompound());
-			}
-		}
-		
+		BlockHelper.placeItemWithNBT(worldIn, pos, stack);		
 		BlockHelper.setDirectional(worldIn, pos, placer);
 		BlockHelper.setVariant(worldIn, pos, variant);
 	}		 
@@ -80,17 +76,7 @@ public class BlockMachineInventory extends BlockMachineExpansion {
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
 			int fortune) {
 		super.getDrops(drops, world, pos, state, fortune);
-
-		TileEntity te = world.getTileEntity(pos);
-		if (!(te instanceof TileMachineInventory)) { return; }
-		
-		TileMachineInventory tile = (TileMachineInventory)te;
-		NBTTagCompound nbt = te.serializeNBT();
-		for (ItemStack drop : drops) {
-			if ((drop.getItem() instanceof ItemBlock) && ((ItemBlock)drop.getItem()).getBlock() instanceof BlockMachineInventory) {
-				drop.setTagCompound(nbt);
-			}
-		}
+		BlockHelper.getItemNBTDrops(drops, world, pos, BlockMachineInventory.class);
 	}
 	
 	@Override
@@ -100,6 +86,16 @@ public class BlockMachineInventory extends BlockMachineExpansion {
         worldIn.setBlockToAir(pos);
 	}
         
+	@Override
+	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		super.addInformation(stack, player, tooltip, advanced);
+		if (stack.hasTagCompound()) {
+			ItemStackHandlerObservable inventory = new ItemStackHandlerObservable();
+			inventory.deserializeNBT(stack.getTagCompound().getCompoundTag("inventory"));
+			inventory.addInformation(tooltip, advanced);
+		}
+	}
+
 	@Override
 	public IExtendedBlockState getExtendedState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
 		TileEntity tileentity = BlockHelper.getTileEntity(worldIn, pos);
