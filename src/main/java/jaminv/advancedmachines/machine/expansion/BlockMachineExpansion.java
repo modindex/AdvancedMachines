@@ -8,6 +8,7 @@ import jaminv.advancedmachines.lib.util.helper.BlockIterator.ScanResult;
 import jaminv.advancedmachines.machine.MachineHelper;
 import jaminv.advancedmachines.machine.TileMachineMultiblock;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
+import jaminv.advancedmachines.machine.multiblock.MultiblockBuilder;
 import jaminv.advancedmachines.objects.blocks.BlockPropertiesMod;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import net.minecraft.block.Block;
@@ -18,7 +19,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.IExtendedBlockState;
@@ -54,18 +54,13 @@ public abstract class BlockMachineExpansion extends Block implements VariantExpa
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
 			ItemStack stack) {
-		scanMultiblock(worldIn, pos);
+		scanMultiblock(worldIn, pos, false);
 		BlockHelper.setVariant(worldIn, pos, variant);
 	}	
 	
 	@Override
-	public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state) {
-		scanMultiblock(worldIn, pos);
-	}
-	
-	@Override
-	public void onBlockDestroyedByExplosion(World worldIn, BlockPos pos, Explosion explosionIn) {
-		scanMultiblock(worldIn, pos);
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+		scanMultiblock(worldIn, pos, true);
 	}
 
 	@Override
@@ -86,14 +81,14 @@ public abstract class BlockMachineExpansion extends Block implements VariantExpa
         return MachineHelper.withCommonProperties((IExtendedBlockState)state, variant, borders);
 	}	
 	
-	public static void scanMultiblock(World world, BlockPos pos) {
-		ScanResult result = BlockIterator.scanBlocks(world, pos, new TileMachineMultiblock.MultiblockChecker());
+	public static void scanMultiblock(World world, BlockPos pos, boolean destroy) {
+		ScanResult result = BlockIterator.scanBlocks(world, pos, new MultiblockBuilder.MultiblockChecker());
 		BlockPos end = result.getEnd();
 		if (end == null) { return; }
 		
 		TileEntity te = world.getTileEntity(end);
 		if (te instanceof TileMachineMultiblock) {
-			((TileMachineMultiblock)te).scanMultiblock();
+			((TileMachineMultiblock)te).scanMultiblock(destroy ? pos : null);
 		}
 	}
 

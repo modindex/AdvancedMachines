@@ -60,7 +60,7 @@ public abstract class BlockMachineMultiblock extends BlockMachine implements Mac
 		TileEntity te = worldIn.getTileEntity(pos);
 		if (!(te instanceof TileMachineMultiblock)) { return; }
 		
-		((TileMachineMultiblock)te).scanMultiblock(destroy);		
+		((TileMachineMultiblock)te).scanMultiblock(destroy ? pos : null);		
 	}
 	
 	@Override
