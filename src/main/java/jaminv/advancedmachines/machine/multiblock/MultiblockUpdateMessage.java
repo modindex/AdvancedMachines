@@ -4,36 +4,40 @@ import io.netty.buffer.ByteBuf;
 import jaminv.advancedmachines.AdvancedMachines;
 import jaminv.advancedmachines.machine.TileMachineMultiblock;
 import net.minecraft.client.Minecraft;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
+/**
+ * Called by TileMachineMultiblock whenever a block is destroyed.
+ * Block.breakBlock() isn't called on the client, so this message is used to tell
+ * the client machine to update the multiblock state.
+ * @author Jamin VanderBerg
+ */
 public class MultiblockUpdateMessage implements IMessage {
 	
 	  public MultiblockUpdateMessage() {}
 
-	  private BlockPos pos, min, max;
+	  private BlockPos machine, blockDestroyed;
 	  
-	  public MultiblockUpdateMessage(BlockPos pos, BlockPos min, BlockPos max) {
-		  this.pos = pos;
-		  this.min = min;
-		  this.max = max;
+	  public MultiblockUpdateMessage(BlockPos machine, BlockPos blockDestroyed) {
+		  this.machine = machine;
+		  this.blockDestroyed = blockDestroyed;
 	  }
 
 	  @Override 
 	  public void toBytes(ByteBuf buf) {
-		  buf.writeLong(pos.toLong());
-		  buf.writeLong(min.toLong());
-		  buf.writeLong(max.toLong());
+		  buf.writeLong(machine.toLong());
+		  buf.writeLong(blockDestroyed.toLong());
 	  }
 
 	  @Override
 	  public void fromBytes(ByteBuf buf) {
-		  pos = BlockPos.fromLong(buf.readLong());
-		  min = BlockPos.fromLong(buf.readLong());
-		  max = BlockPos.fromLong(buf.readLong());
+		  machine = BlockPos.fromLong(buf.readLong());
+		  blockDestroyed = BlockPos.fromLong(buf.readLong());
 	  }
 	  
 	  public static class MultiblockUpdateMessageHandler implements IMessageHandler<MultiblockUpdateMessage, IMessage> {
@@ -42,15 +46,15 @@ public class MultiblockUpdateMessage implements IMessage {
 		  public IMessage onMessage(MultiblockUpdateMessage message, MessageContext ctx) {
 			  World world = AdvancedMachines.proxy.getMessageWorld(ctx);
 			  
-			  BlockPos pos = message.pos;
-			  BlockPos min = message.min;
-			  BlockPos max = message.max;
+			  BlockPos machine = message.machine;
+			  BlockPos blockDestroyed = message.blockDestroyed;
 			  
-			  if (!world.isBlockLoaded(pos)) { return null; }
+			  if (!world.isBlockLoaded(machine)) { return null; }
+			  TileEntity te = world.getTileEntity(machine);
+			  if (!(te instanceof TileMachineMultiblock)) { return null; }			  
 			  
 			  Minecraft.getMinecraft().addScheduledTask(() -> {
-				  TileMachineMultiblock.setMultiblock(min, max, false, world, pos);
-				  world.markBlockRangeForRenderUpdate(min, max);
+				  ((TileMachineMultiblock)te).scanMultiblock(blockDestroyed);
 			  });
 			  return null;
 		  }

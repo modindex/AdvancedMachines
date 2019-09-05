@@ -10,6 +10,9 @@ import jaminv.advancedmachines.lib.util.helper.BlockIterator.ScanResult;
 import jaminv.advancedmachines.machine.BlockMachineMultiblock;
 import jaminv.advancedmachines.machine.expansion.MachineUpgrade;
 import jaminv.advancedmachines.machine.expansion.MachineUpgradeTile;
+import jaminv.advancedmachines.machine.multiblock.MultiblockMessage.MultiblockMessageComplete;
+import jaminv.advancedmachines.machine.multiblock.MultiblockMessage.MultiblockMessageIllegal;
+import jaminv.advancedmachines.machine.multiblock.MultiblockMessage.MultiblockMessageSimple;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFaceTile;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
@@ -36,16 +39,16 @@ public class MultiblockBuilder {
 		
 		BlockPos end = result.getEnd();
 		if (end != null) {
-			return new MultiblockState.MultiblockIllegal("message.multiblock.connected_machine", BlockHelper.getBlockName(world, end), end);
+			return new MultiblockState(new MultiblockMessageIllegal("message.multiblock.connected_machine", BlockHelper.getBlockName(world, end), end));
 		}
 		
 		BlockPos min = result.getMin(), max = result.getMax();
 		
 		if (parent.equals(min) && parent.equals(max)) {
-			return new MultiblockState.MultiblockSimple("message.multiblock.absent");
+			return new MultiblockState(new MultiblockMessageSimple("message.multiblock.absent"));
 		}
 		
-		MultiblockUpgrades.Builder upgrades = new MultiblockUpgrades.Builder();
+		MultiblockUpgrades.Writable upgrades = new MultiblockUpgrades.Writable();
 		
 		MutableBlockPos check = new MutableBlockPos();
 		for (int x = min.getX(); x <= max.getX(); x++) {
@@ -62,19 +65,19 @@ public class MultiblockBuilder {
 							upgrades.addTool(new BlockPos(check));
 						}
 					} else {
-						return new MultiblockState.MultiblockIllegal("message.multiblock.illegal", block.getLocalizedName(), check.toImmutable());
+						return new MultiblockState(new MultiblockMessageIllegal("message.multiblock.illegal", block.getLocalizedName(), check.toImmutable()));
 					} 
 				}
 			}
 		}
 		
 		// Tell all the upgrades that they are now part of a multiblock
-		setMultiblock(min, max, true, world, parent);
+		setMultiblock(min, max, true, world);
 		
-		return new MultiblockState.MultiblockComplete(upgrades, min, max);
+		return new MultiblockState(new MultiblockMessageComplete(upgrades), upgrades, min, max);
 	}
 	
-	public static void setMultiblock(BlockPos min, BlockPos max, boolean isMultiblock, World world, BlockPos pos) {
+	public static void setMultiblock(BlockPos min, BlockPos max, boolean isMultiblock, World world) {
 		MutableBlockPos upgrade = new MutableBlockPos();
 		for (int x = min.getX(); x <= max.getX(); x++) {
 			for (int y = min.getY(); y <= max.getY(); y++) {

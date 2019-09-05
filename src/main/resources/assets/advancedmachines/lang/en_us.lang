@@ -179,7 +179,6 @@ tooltip.inventory.more=and %d more...
 
 message.no_controller=No Machine Controller Found
 message.controller_found=Machine Controller (%s) found at (%d, %d, %d)
-message.multiblock.null=Multiblock invalid. You should never see this message.
 message.multiblock.absent=You may create a multiblock using this block and several Machine Expansions in cuboid shape up to 3x3x4.
 message.multiblock.connected_machine=Only one machine may be connected to a multiblock. A second machine, "%s" is connected at (%d, %d, %d).
 message.multiblock.illegal=Block "%s" at (%d, %d, %d) is not a legal for multiblock structure.

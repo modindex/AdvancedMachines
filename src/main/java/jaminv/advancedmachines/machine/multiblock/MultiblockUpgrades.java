@@ -15,7 +15,7 @@ import net.minecraftforge.common.util.INBTSerializable;
 
 public interface MultiblockUpgrades extends INBTSerializable<NBTTagCompound> {
 	
-	public static MultiblockUpgrades EMPTY = new Builder();
+	public static final MultiblockUpgrades EMPTY = new Writable();
 	
 	public boolean isValid();
 
@@ -24,11 +24,11 @@ public interface MultiblockUpgrades extends INBTSerializable<NBTTagCompound> {
 	public int getToolCount();
 	public BlockPos getTool(int index);
 	
-	public static class Builder implements MultiblockUpgrades {
+	public static class Writable implements MultiblockUpgrades {
 		protected Map<MachineUpgrade.UpgradeType, Integer> upgrades;
 		protected List<BlockPos> tools = new ArrayList<BlockPos>();
 		
-		public Builder() {
+		public Writable() {
 			this.reset();
 		}
 	

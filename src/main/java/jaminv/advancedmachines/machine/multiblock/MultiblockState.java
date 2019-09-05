@@ -2,86 +2,75 @@ package jaminv.advancedmachines.machine.multiblock;
 
 import javax.annotation.Nullable;
 
-import jaminv.advancedmachines.machine.expansion.MachineUpgrade;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public interface MultiblockState {
+public class MultiblockState implements INBTSerializable<NBTTagCompound> {
+	
+	public static final MultiblockState EMPTY = new MultiblockState();
+	
+	protected MultiblockMessage message = null;
+	protected BlockPos multiblockMin = null, multiblockMax = null;
+	protected MultiblockUpgrades upgrades = MultiblockUpgrades.EMPTY;
+	protected boolean valid = false;	
+	
+	public boolean isValid() { return valid; }
+	
+	private MultiblockState()  {}
+	
+	public MultiblockState(MultiblockMessage message) {
+		this.message = message;
+	}
+	
+	public MultiblockState(MultiblockMessage message, MultiblockUpgrades upgrades,
+			BlockPos multiblockMin, BlockPos multiblockMax) {
+		
+		this.message = message;
+		this.upgrades = upgrades;
+		this.multiblockMin = multiblockMin;
+		this.multiblockMax = multiblockMax;
+		this.valid = true;
+	}
+	
+	/**
+	 * Human-Readable Multi-block State Message
+	 * 
+	 * This is only available on the client. It will fail if called from the server.
+	 * Further, it is not saved to NBT. If this method returns NULL, the MultiblockState should be re-built. 
+	 * @return String - Human-readable multi-block state message, or NULL if this object needs to be refreshed.
+	 */	
 	@SideOnly (Side.CLIENT)
-	public abstract String getMultiblockString();
+	public @Nullable MultiblockMessage getMessage() { return message; }
 	
-	public default @Nullable BlockPos getMultiblockMin() { return null; }
-	public default @Nullable BlockPos getMultiblockMax() { return null; }
-	public default MultiblockUpgrades getUpgrades() { return MultiblockUpgrades.EMPTY; }
-	
-	public default boolean isValid() { return false; }
-	
-	public static class MultiblockNull implements MultiblockState {
-		@Override
-		public String getMultiblockString() {
-			return I18n.format("message.multiblock.null");
-		}
+	public @Nullable BlockPos getMultiblockMin() { return multiblockMin; }
+	public @Nullable BlockPos getMultiblockMax() { return multiblockMax; }
+	public MultiblockUpgrades getUpgrades() { return upgrades; }
+
+
+	@Override
+	public NBTTagCompound serializeNBT() {
+		NBTTagCompound compound = new NBTTagCompound();
+		compound.setTag("upgrades",  upgrades.serializeNBT());
+        if (multiblockMin != null) { compound.setTag("multiblockMin", NBTUtil.createPosTag(multiblockMin)); }
+        if (multiblockMax != null) { compound.setTag("multiblockMax", NBTUtil.createPosTag(multiblockMax)); }
+		return compound;
 	}
 
-	public static class MultiblockSimple implements MultiblockState {
-		protected final String message;
-		public MultiblockSimple(String message) {
-			this.message = message;
-		}
-		
-		@Override
-		public String getMultiblockString() {
-			return I18n.format(message);
-		}
-	}
-	
-	public static class MultiblockIllegal implements MultiblockState {
-		protected final String message;
-		protected final String name;
-		protected final BlockPos pos;
-		public MultiblockIllegal(String message, String name, BlockPos pos) {
-			this.message = message;
-			this.name = name;
-			this.pos = pos;
-		}
-		
-		@Override
-		public String getMultiblockString() {
-			return I18n.format(message, name, pos.getX(), pos.getY(), pos.getZ());
-		}
-	}
-	
-	public static class MultiblockComplete implements MultiblockState {
-		protected MultiblockUpgrades upgrades;
-		protected BlockPos multiblockMin = null, multiblockMax = null;
-		
-		public MultiblockComplete(MultiblockUpgrades upgrades, BlockPos multiblockMin, BlockPos multiblockMax) {
-			this.upgrades = upgrades;
-			this.multiblockMin = multiblockMin;
-			this.multiblockMax = multiblockMax;
-		}
-		
-		@Override
-		public String getMultiblockString() {
-			String ret = I18n.format("message.multiblock.complete", 
-				upgrades.get(MachineUpgrade.UpgradeType.MULTIPLY),
-				upgrades.get(MachineUpgrade.UpgradeType.SPEED),
-				upgrades.get(MachineUpgrade.UpgradeType.PRODUCTIVITY)
-			);
-			
-			return ret;
-		}
-		
-		public boolean isValid() { return true; }
 
-		@Override public BlockPos getMultiblockMin() { return multiblockMin; }
-		@Override public BlockPos getMultiblockMax() { return multiblockMax; }
-
-		@Override
-		public MultiblockUpgrades getUpgrades() {
-			return upgrades;
+	@Override
+	public void deserializeNBT(NBTTagCompound compound) {
+		if (compound.hasKey("upgrades")) {
+			upgrades.deserializeNBT(compound.getCompoundTag("upgrades"));
 		}
-	}
+    	if (compound.hasKey("multiblockMin")) {
+    		multiblockMin = NBTUtil.getPosFromTag(compound.getCompoundTag("multiblockMin"));
+    	}
+    	if (compound.hasKey("multiblockMax")) {
+    		multiblockMax = NBTUtil.getPosFromTag(compound.getCompoundTag("multiblockMax"));
+    	}		
+	}	
 }

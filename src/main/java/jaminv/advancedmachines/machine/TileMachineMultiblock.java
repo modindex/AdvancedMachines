@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import jaminv.advancedmachines.AdvancedMachines;
 import jaminv.advancedmachines.lib.machine.IMachineController.ISubController;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
 import jaminv.advancedmachines.machine.expansion.MachineUpgrade.UpgradeType;
@@ -11,8 +12,7 @@ import jaminv.advancedmachines.machine.expansion.MachineUpgradeTile;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBuilder;
 import jaminv.advancedmachines.machine.multiblock.MultiblockState;
-import jaminv.advancedmachines.machine.multiblock.MultiblockState.MultiblockNull;
-import jaminv.advancedmachines.machine.multiblock.MultiblockUpgrades;
+import jaminv.advancedmachines.machine.multiblock.MultiblockUpdateMessage;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFaceBuilder;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFaceTile;
@@ -37,8 +37,8 @@ public abstract class TileMachineMultiblock extends TileMachine implements Machi
 	
 	protected void addSubcontrollers() {
 		this.controller.clearSubContollers();
-		for (int i = 0; i < upgrades.getToolCount(); i++) {
-			BlockPos tool = upgrades.getTool(i);
+		for (int i = 0; i < multiblockState.getUpgrades().getToolCount(); i++) {
+			BlockPos tool = multiblockState.getUpgrades().getTool(i);
 			TileEntity te = world.getTileEntity(tool);
 			if (te instanceof ISubController) {
 				controller.addSubController((ISubController)te);
@@ -48,7 +48,7 @@ public abstract class TileMachineMultiblock extends TileMachine implements Machi
 	
 	@Override
 	protected boolean preProcess() {
-		if (controller.getSubControllerCount() == 0 && upgrades.getToolCount() > 0) {
+		if (controller.getSubControllerCount() == 0 && multiblockState.getUpgrades().getToolCount() > 0) {
 			this.addSubcontrollers();
 			return true;
 		}
@@ -75,16 +75,13 @@ public abstract class TileMachineMultiblock extends TileMachine implements Machi
 
 	public MachineFace getMachineFace() { return face; }
 
-	protected MultiblockState multiblockState = new MultiblockNull();
+	protected MultiblockState multiblockState = MultiblockState.EMPTY;
 	public String getMultiblockString() { 
-		if (multiblockState instanceof MultiblockNull) {
+		if (multiblockState.getMessage() == null) {
 			scanMultiblock(null);
 		}
-		return multiblockState.getMultiblockString(); 
+		return multiblockState.getMessage().toString(); 
 	}
-	
-	protected MultiblockUpgrades upgrades = MultiblockUpgrades.EMPTY;
-	protected BlockPos multiblockMin = null, multiblockMax = null;
 	
 	protected void redrawMultiblock() {
 		if (multiblockState.getMultiblockMin() == null ||
@@ -96,6 +93,16 @@ public abstract class TileMachineMultiblock extends TileMachine implements Machi
 	public void scanMultiblock(@Nullable BlockPos blockDestroyed) {
 		this.controller.wake();
 		markDirty();
+		
+		// breakBlock() doesn't get called on the client
+		if (blockDestroyed != null) {
+			AdvancedMachines.NETWORK.sendToAll(new MultiblockUpdateMessage(pos, blockDestroyed));
+		}
+		
+		if (multiblockState.getMultiblockMin() != null && multiblockState.getMultiblockMax() != null) {
+			MultiblockBuilder.setMultiblock(multiblockState.getMultiblockMin(), multiblockState.getMultiblockMax(), false, world);
+		}
+		
 		facemin = null; facemax = null;
 		this.redrawMultiblock();
 		
@@ -121,7 +128,7 @@ public abstract class TileMachineMultiblock extends TileMachine implements Machi
 
 	@Override
 	public int getProcessingMultiplier() {
-		return Math.max(upgrades.get(UpgradeType.MULTIPLY), getMultiplier());
+		return Math.max(multiblockState.getUpgrades().get(UpgradeType.MULTIPLY), getMultiplier());
 	}	
 	
 	/* ================= *
@@ -131,18 +138,9 @@ public abstract class TileMachineMultiblock extends TileMachine implements Machi
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		if (compound.hasKey("borders")) {
-			borders.deserializeNBT(compound.getCompoundTag("borders"));
-		}		
-		if (compound.hasKey("upgrades")) {
-			upgrades.deserializeNBT(compound.getCompoundTag("upgrades"));
-		}
-    	if (compound.hasKey("multiblockMin")) {
-    		multiblockMin = NBTUtil.getPosFromTag(compound.getCompoundTag("multiblockMin"));
-    	}
-    	if (compound.hasKey("multiblockMax")) {
-    		multiblockMax = NBTUtil.getPosFromTag(compound.getCompoundTag("multiblockMax"));
-    	}		
+		borders.deserializeNBT(compound.getCompoundTag("borders"));
+		multiblockState.deserializeNBT(compound.getCompoundTag("multiblock"));
+	
     	if (compound.hasKey("face")) {
     		face = MachineFace.lookup(compound.getString("face"));
     	}
@@ -157,10 +155,9 @@ public abstract class TileMachineMultiblock extends TileMachine implements Machi
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
-		compound.setTag("borders",  borders.serializeNBT());		
-		compound.setTag("upgrades",  upgrades.serializeNBT());
-        if (multiblockMin != null) { compound.setTag("multiblockMin", NBTUtil.createPosTag(multiblockMin)); }
-        if (multiblockMax != null) { compound.setTag("multiblockMax", NBTUtil.createPosTag(multiblockMax)); }
+		compound.setTag("borders",  borders.serializeNBT());
+		compound.setTag("multiblock", multiblockState.serializeNBT());
+
         compound.setString("face", face.getName());
         if (facemin != null) { compound.setTag("facemin", NBTUtil.createPosTag(facemin)); }
         if (facemax != null) { compound.setTag("facemax", NBTUtil.createPosTag(facemax)); }
