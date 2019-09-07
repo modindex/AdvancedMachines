@@ -2,6 +2,7 @@ package jaminv.advancedmachines.machine;
 
 import jaminv.advancedmachines.lib.render.ModelBakery;
 import jaminv.advancedmachines.lib.render.ModelBakeryProvider;
+import jaminv.advancedmachines.lib.util.helper.BlockHelper;
 import jaminv.advancedmachines.machine.expansion.MachineUpgrade;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
@@ -47,8 +48,15 @@ public abstract class BlockMachineMultiblock extends BlockMachine implements Mac
 		scanMultiblock(worldIn, pos, false);
 	}
 
+	// FIXME: Breaking machine doesn't update multiblock
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+		TileEntity te = worldIn.getTileEntity(pos);
+		
+		if (te instanceof TileMachineMultiblock) {
+			BlockHelper.dropInventoryItems(worldIn, pos, ((TileMachineMultiblock)te).getInventory());
+		}
+		
 		scanMultiblock(worldIn, pos, true);
 		super.breakBlock(worldIn, pos, state);
 	}
@@ -60,7 +68,7 @@ public abstract class BlockMachineMultiblock extends BlockMachine implements Mac
 		TileEntity te = worldIn.getTileEntity(pos);
 		if (!(te instanceof TileMachineMultiblock)) { return; }
 		
-		((TileMachineMultiblock)te).scanMultiblock(destroy ? pos : null);		
+		((TileMachineMultiblock)te).scanMultiblock(destroy ? pos : null);
 	}
 	
 	@Override

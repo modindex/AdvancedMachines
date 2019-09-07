@@ -3,6 +3,7 @@ package jaminv.advancedmachines.lib.util.helper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,6 +17,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.items.IItemHandler;
 
 public class BlockHelper {
 	
@@ -127,4 +129,13 @@ public class BlockHelper {
 		return true;		
 	}	
 
+    public static void dropInventoryItems(World worldIn, BlockPos pos, IItemHandler inventory) {
+        for (int i = 0; i < inventory.getSlots(); ++i) {
+            ItemStack itemstack = inventory.getStackInSlot(i);
+
+            if (!itemstack.isEmpty()) {
+                InventoryHelper.spawnItemStack(worldIn, (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), itemstack);
+            }
+        }
+    }
 }

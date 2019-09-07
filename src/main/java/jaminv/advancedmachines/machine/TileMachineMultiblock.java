@@ -95,7 +95,7 @@ public abstract class TileMachineMultiblock extends TileMachine implements Machi
 		markDirty();
 		
 		// breakBlock() doesn't get called on the client
-		if (blockDestroyed != null) {
+		if (blockDestroyed != null && !world.isRemote) {
 			AdvancedMachines.NETWORK.sendToAll(new MultiblockUpdateMessage(pos, blockDestroyed));
 		}
 		
