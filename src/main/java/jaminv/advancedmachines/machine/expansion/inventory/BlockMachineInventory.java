@@ -6,6 +6,7 @@ import jaminv.advancedmachines.AdvancedMachines;
 import jaminv.advancedmachines.init.GuiProxy;
 import jaminv.advancedmachines.lib.inventory.ItemStackHandlerObservable;
 import jaminv.advancedmachines.lib.render.ModelBakery;
+import jaminv.advancedmachines.lib.util.blocks.HasItemNBT;
 import jaminv.advancedmachines.lib.util.helper.BlockHelper;
 import jaminv.advancedmachines.machine.MachineHelper;
 import jaminv.advancedmachines.machine.expansion.BlockMachineExpansion;
@@ -41,7 +42,7 @@ public class BlockMachineInventory extends BlockMachineExpansion {
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 		
-		BlockHelper.placeItemWithNBT(worldIn, pos, stack);		
+		HasItemNBT.placeItem(worldIn, pos, stack);		
 		BlockHelper.setDirectional(worldIn, pos, placer);
 	}		 
 	
@@ -75,7 +76,7 @@ public class BlockMachineInventory extends BlockMachineExpansion {
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
 			int fortune) {
 		super.getDrops(drops, world, pos, state, fortune);
-		BlockHelper.getItemNBTDrops(drops, world, pos, BlockMachineInventory.class);
+		HasItemNBT.getDrops(drops, world, pos, BlockMachineInventory.class);
 	}
 	
 	@Override

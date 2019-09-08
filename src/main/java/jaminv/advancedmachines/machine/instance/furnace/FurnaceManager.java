@@ -13,17 +13,25 @@ import jaminv.advancedmachines.lib.recipe.RecipeInput;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
 import jaminv.advancedmachines.lib.recipe.RecipeManagerImpl;
 import jaminv.advancedmachines.lib.recipe.RecipeOutput;
-import jaminv.advancedmachines.lib.util.helper.ItemHelper;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class FurnaceManager {
 	protected static RecipeManagerImpl<RecipeImpl> manager = new RecipeManagerImpl<>();
 	
 	public static RecipeManager getRecipeManager() { return manager; }
 	public static List<RecipeImpl> getRecipeList() { return manager.getRecipeList(); }
+	
+	protected static String getOreName(ItemStack stack) {
+		int[] ids = OreDictionary.getOreIDs(stack);
+		if (ids != null && ids.length >= 1) {
+			return OreDictionary.getOreName(ids[0]);
+		}
+		return "";
+	}	
 
 	public static void init() {
 		Map<ItemStack, ItemStack> smeltingList = FurnaceRecipes.instance().getSmeltingList();
@@ -40,7 +48,7 @@ public class FurnaceManager {
 			if (output.getItem() instanceof ItemFood) {
 				energy /= 2;
 			}
-			if (ItemHelper.isDust(key) && ItemHelper.isIngot(output)) {
+			if (getOreName(key).startsWith("dust") && getOreName(output).startsWith("ingot")) {
 				energy *= 14/20.0f;
 			}
 			

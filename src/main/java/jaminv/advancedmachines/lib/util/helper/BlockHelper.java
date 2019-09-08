@@ -2,12 +2,8 @@ package jaminv.advancedmachines.lib.util.helper;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.ChunkCache;
@@ -16,29 +12,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
 public class BlockHelper {
-	
-	public static void placeItemWithNBT(World worldIn, BlockPos pos, ItemStack stack) {
-		if (stack.hasTagCompound()) {
-			TileEntity te = worldIn.getTileEntity(pos);
-			if (te instanceof HasItemNBT) {
-				((HasItemNBT)te).readItemNBT(stack.getTagCompound());
-			}
-		}
-	}
-	
-	public static void getItemNBTDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, Class blockClass) {
-		TileEntity te = world.getTileEntity(pos);
-		if (!(te instanceof HasItemNBT)) { return; }
-		
-		HasItemNBT tile = (HasItemNBT)te;
-		NBTTagCompound nbt = new NBTTagCompound();
-		nbt = tile.writeItemNBT(nbt);
-		for (ItemStack drop : drops) {
-			if ((drop.getItem() instanceof ItemBlock) && blockClass.isInstance(((ItemBlock)drop.getItem()).getBlock())) {
-				drop.setTagCompound(nbt);
-			}
-		}
-	}
 	
 	public static EnumFacing getXZFacing(EntityLivingBase living) {
 
