@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.objects.variant;
 
-import jaminv.advancedmachines.lib.util.helper.Variant;
+import jaminv.advancedmachines.lib.util.Variant;
 
 public enum VariantIngredient implements Variant {
 	COPPER_WIRE("copper_wire"),

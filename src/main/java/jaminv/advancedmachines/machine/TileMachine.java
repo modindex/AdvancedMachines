@@ -40,7 +40,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.items.CapabilityItemHandler;
 
-public abstract class TileMachine extends TileEntity implements ITickable, HasGui, IMachineTE, VariantExpansion.Needs, HasFacing, ISyncSubject {
+public abstract class TileMachine extends TileEntity implements ITickable, HasGui, IMachineTE, HasFacing, ISyncSubject {
 
 	protected final MachineStorage storage;
 	protected final MachineController controller;

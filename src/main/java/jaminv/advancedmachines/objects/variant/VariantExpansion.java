@@ -1,23 +1,19 @@
 package jaminv.advancedmachines.objects.variant;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import jaminv.advancedmachines.lib.util.helper.HasVariant;
-import jaminv.advancedmachines.lib.util.helper.NeedsVariant;
-import jaminv.advancedmachines.lib.util.helper.Variant;
-import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
+import jaminv.advancedmachines.lib.util.Variant;
 
 public enum VariantExpansion implements Variant {
 	BASIC("basic", 1),
 	COMPRESSED("compressed", 2),
 	QUAD("quad", 4),
 	IMPROBABLE("improbable", 8);
-
-	public static interface Has extends HasVariant<VariantExpansion> { };
-	public static interface Needs extends NeedsVariant<VariantExpansion> { };		
+	
+	public static interface HasVariant {
+		public VariantExpansion getVariant();
+	}
 	
 	protected static Map<String, VariantExpansion> nameLookup = new HashMap<>();	
 	

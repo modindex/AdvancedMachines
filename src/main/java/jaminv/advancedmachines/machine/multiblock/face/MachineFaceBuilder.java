@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import jaminv.advancedmachines.lib.util.helper.Variant;
+import jaminv.advancedmachines.lib.util.Variant;
 import jaminv.advancedmachines.machine.BlockMachineMultiblock;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import net.minecraft.block.Block;
@@ -30,8 +30,8 @@ public class MachineFaceBuilder {
 	protected static boolean scanFaceAt(World world, BlockPos parent, BlockPos pos, int count, EnumFacing dir) {
 		Block block = world.getBlockState(parent).getBlock();		
 		Variant variant = null;
-		if (block instanceof VariantExpansion.Has) {
-			variant = ((VariantExpansion.Has)block).getVariant();
+		if (block instanceof VariantExpansion.HasVariant) {
+			variant = ((VariantExpansion.HasVariant)block).getVariant();
 		}
 		
 		for (int x = -count; x < 2; x++) {
@@ -44,7 +44,8 @@ public class MachineFaceBuilder {
 				if (te != null) {
 					eval = (te instanceof MachineFaceTile);
 					Block checkBlock = world.getBlockState(check).getBlock();
-					if (eval) { eval = (checkBlock instanceof VariantExpansion.Has) && ((VariantExpansion.Has)checkBlock).getVariant() == variant; }
+					if (eval) { eval = (checkBlock instanceof VariantExpansion.HasVariant) 
+							&& ((VariantExpansion.HasVariant)checkBlock).getVariant() == variant; }
 				} else { eval = false; }
 				
 				if (x == -count || y == -count || x == 1 || y == 1) {

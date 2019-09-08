@@ -27,7 +27,7 @@ import net.minecraftforge.common.property.IExtendedBlockState;
  * Potential TODO: Push this class into BlockMachineMultiblock
  */
 
-public abstract class BlockMachine extends Block implements VariantExpansion.Has {
+public abstract class BlockMachine extends Block implements VariantExpansion.HasVariant {
 	
     protected VariantExpansion variant;
     
@@ -56,7 +56,10 @@ public abstract class BlockMachine extends Block implements VariantExpansion.Has
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 		
 		BlockHelper.setDirectional(worldIn, pos, placer, false);
-		BlockHelper.setVariant(worldIn, pos, variant);
+		TileEntity te = worldIn.getTileEntity(pos);
+		if (te instanceof TileMachine) {
+			((TileMachine)te).setVariant(variant);
+		}
 	}
 	
 	@Override

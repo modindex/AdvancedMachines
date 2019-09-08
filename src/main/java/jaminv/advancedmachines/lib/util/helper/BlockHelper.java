@@ -1,6 +1,5 @@
 package jaminv.advancedmachines.lib.util.helper;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -15,38 +14,8 @@ import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.property.IExtendedBlockState;
 
 public class BlockHelper {
-	
-	public static String getBlockName(World world, BlockPos pos) {
-		return world.getBlockState(pos).getBlock().getLocalizedName();
-	}
-	
-	public static boolean hasProperty(IBlockState state, Object property) {
-		return state.getProperties().containsKey(property);
-	}
-	
-	public static boolean hasUnlistedProperty(IExtendedBlockState state, Object property) {
-		return state.getUnlistedProperties().containsKey(property);
-	}
-	
-	/**
-	 * Find the TileEntity at a position and set the variant
-	 * 
-	 * Note: This isn't strongly typed. It doesn't (can't) check the type T at runtime,
-	 * and will fail if T doesn't match the expected type. This shouldn't come up much, though.
-	 * Just make sure that you're calling this from the block that coincides with the tile entity.
-	 * @param worldIn
-	 * @param pos
-	 * @param variant
-	 */
-	public static <T extends Variant> void setVariant(World worldIn, BlockPos pos, T variant) {
-		TileEntity te = worldIn.getTileEntity(pos);
-		if (te instanceof NeedsVariant) {
-			((NeedsVariant)te).setVariant(variant);
-		}
-	}
 	
 	public static void placeItemWithNBT(World worldIn, BlockPos pos, ItemStack stack) {
 		if (stack.hasTagCompound()) {

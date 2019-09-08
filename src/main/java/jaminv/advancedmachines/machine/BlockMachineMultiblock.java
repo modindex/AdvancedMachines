@@ -33,7 +33,7 @@ public abstract class BlockMachineMultiblock extends BlockMachine implements Mac
 	public static final PropertyBool BORDER_NORTH = PropertyBool.create("border_north");
 	public static final PropertyBool BORDER_SOUTH = PropertyBool.create("border_south");
 	public static final PropertyBool BORDER_EAST = PropertyBool.create("border_east");
-	public static final PropertyBool BORDER_WEST = PropertyBool.create("border_west");	
+	public static final PropertyBool BORDER_WEST = PropertyBool.create("border_west");
 
 	public BlockMachineMultiblock(VariantExpansion variant) {
 		super(variant);

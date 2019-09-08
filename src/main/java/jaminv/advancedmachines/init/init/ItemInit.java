@@ -1,7 +1,7 @@
 package jaminv.advancedmachines.init.init;
 
 import jaminv.advancedmachines.Reference;
-import jaminv.advancedmachines.lib.util.helper.Variant;
+import jaminv.advancedmachines.lib.util.Variant;
 import jaminv.advancedmachines.lib.util.registry.RegistryHelper;
 import jaminv.advancedmachines.objects.tools.ToolAxe;
 import jaminv.advancedmachines.objects.tools.ToolPickaxe;

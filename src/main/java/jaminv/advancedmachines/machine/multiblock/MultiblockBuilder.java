@@ -3,7 +3,6 @@ package jaminv.advancedmachines.machine.multiblock;
 import javax.annotation.Nullable;
 
 import jaminv.advancedmachines.lib.machine.IMachineController.ISubController;
-import jaminv.advancedmachines.lib.util.helper.BlockHelper;
 import jaminv.advancedmachines.lib.util.helper.BlockIterator;
 import jaminv.advancedmachines.lib.util.helper.BlockIterator.BlockChecker;
 import jaminv.advancedmachines.lib.util.helper.BlockIterator.ScanResult;
@@ -39,7 +38,8 @@ public class MultiblockBuilder {
 		
 		BlockPos end = result.getEnd();
 		if (end != null) {
-			return new MultiblockState(new MultiblockMessageIllegal("message.multiblock.connected_machine", BlockHelper.getBlockName(world, end), end));
+			return new MultiblockState(new MultiblockMessageIllegal("message.multiblock.connected_machine", 
+					world.getBlockState(end).getBlock().getLocalizedName(), end));
 		}
 		
 		BlockPos min = result.getMin(), max = result.getMax();

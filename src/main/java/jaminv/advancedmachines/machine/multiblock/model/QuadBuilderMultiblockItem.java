@@ -42,8 +42,8 @@ public class QuadBuilderMultiblockItem implements QuadBuilder {
 		Item item = stack.getItem();
 		if (item instanceof ItemBlock) {
 			Block block = Block.getBlockFromItem(item);
-			if (block instanceof VariantExpansion.Has) {
-				variant = ((VariantExpansion.Has)block).getVariant();
+			if (block instanceof VariantExpansion.HasVariant) {
+				variant = ((VariantExpansion.HasVariant)block).getVariant();
 			}
 			if (block instanceof BlockMachineMultiblock) {
 				BlockMachineMultiblock machine = ((BlockMachineMultiblock)block);

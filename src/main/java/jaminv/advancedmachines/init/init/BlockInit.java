@@ -3,8 +3,8 @@ package jaminv.advancedmachines.init.init;
 import java.util.HashMap;
 import java.util.Map;
 
+import jaminv.advancedmachines.lib.util.Variant;
 import jaminv.advancedmachines.lib.util.blocks.BlockProperties;
-import jaminv.advancedmachines.lib.util.helper.Variant;
 import jaminv.advancedmachines.lib.util.registry.RegistryHelper;
 import jaminv.advancedmachines.machine.expansion.BlockMachineProductivity;
 import jaminv.advancedmachines.machine.expansion.BlockMachineSpeed;

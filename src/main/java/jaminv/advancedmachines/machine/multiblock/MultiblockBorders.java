@@ -42,8 +42,8 @@ public class MultiblockBorders implements INBTSerializable<NBTTagCompound> {
 		if (min.getX() == pos.getX()) { west = MultiblockBorderType.SOLID; } else { west = MultiblockBorderType.NONE; }
 		
 		Block current = world.getBlockState(pos).getBlock();
-		if (current instanceof VariantExpansion.Has) {
-			VariantExpansion variant = ((VariantExpansion.Has)current).getVariant();
+		if (current instanceof VariantExpansion.HasVariant) {
+			VariantExpansion variant = ((VariantExpansion.HasVariant)current).getVariant();
 			
 			// Check for single borders
 			
@@ -53,12 +53,12 @@ public class MultiblockBorders implements INBTSerializable<NBTTagCompound> {
 				// If block isn't a machine or upgrade, there's no chance of a single border.
 				if (!(check instanceof MachineUpgrade) && !(check instanceof BlockMachineMultiblock)) { continue; }
 				// They all should be MaterialType.EXPANSION, but better to make sure.
-				if (!(check instanceof VariantExpansion.Has)) { continue; }
+				if (!(check instanceof VariantExpansion.HasVariant)) { continue; }
 				
 				MultiblockBorderType border = MultiblockBorderType.NONE;
 
 				// Variant types don't match 
-				if (((VariantExpansion.Has)check).getVariant() != variant) {
+				if (((VariantExpansion.HasVariant)check).getVariant() != variant) {
 					border = MultiblockBorderType.SINGLE;
 				}
 

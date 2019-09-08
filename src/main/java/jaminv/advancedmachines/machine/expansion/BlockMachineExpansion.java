@@ -25,7 +25,7 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class BlockMachineExpansion extends Block implements VariantExpansion.Has, MachineUpgrade, ModelBakeryProvider {
+public abstract class BlockMachineExpansion extends Block implements VariantExpansion.HasVariant, MachineUpgrade, ModelBakeryProvider {
 	
 	protected final VariantExpansion variant;
 	
@@ -55,7 +55,10 @@ public abstract class BlockMachineExpansion extends Block implements VariantExpa
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer,
 			ItemStack stack) {
 		scanMultiblock(worldIn, pos, false);
-		BlockHelper.setVariant(worldIn, pos, variant);
+		TileEntity te = worldIn.getTileEntity(pos);
+		if (te instanceof TileMachineExpansion) {
+			((TileMachineExpansion)te).setVariant(variant);
+		}
 	}	
 	
 	@Override

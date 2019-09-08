@@ -9,13 +9,12 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileMachineExpansion extends TileEntity implements MachineUpgradeTile, VariantExpansion.Needs {
+public class TileMachineExpansion extends TileEntity implements MachineUpgradeTile {
 
 	private VariantExpansion variant = VariantExpansion.BASIC;
 	public VariantExpansion getVariant() { return variant; }
 	public int getMultiplier() { return variant.getMultiplier(); }
 	
-	@Override
 	public void setVariant(VariantExpansion variant) {
 		this.variant = variant;
 	}

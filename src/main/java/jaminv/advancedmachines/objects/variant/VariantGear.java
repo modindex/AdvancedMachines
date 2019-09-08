@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.objects.variant;
 
-import jaminv.advancedmachines.lib.util.helper.Variant;
+import jaminv.advancedmachines.lib.util.Variant;
 
 public enum VariantGear implements Variant {
 	IRON("iron"),

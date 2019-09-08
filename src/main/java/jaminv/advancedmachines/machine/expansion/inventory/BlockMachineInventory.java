@@ -43,7 +43,6 @@ public class BlockMachineInventory extends BlockMachineExpansion {
 		
 		BlockHelper.placeItemWithNBT(worldIn, pos, stack);		
 		BlockHelper.setDirectional(worldIn, pos, placer);
-		BlockHelper.setVariant(worldIn, pos, variant);
 	}		 
 	
 	@Override
