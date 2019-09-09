@@ -19,7 +19,7 @@ public class RawTextures {
 	public final static String[] variants = { "basic", "compressed", "quad", "improbable" };
 	public final static String[] files = { "base", "all" };
 
-	public final static String[] machines = { "alloy", "furnace", "grinder", "purifier", "melter", "stabilizer", "injector" };
+	public final static String[] machines = { "alloy", "furnace", "grinder", "purifier", "melter", "stabilizer", "injector", "press" };
 	public final static String[] states = { "active", "inactive" };
 	
 	public final static String[] border_types = { "single", "solid" };
