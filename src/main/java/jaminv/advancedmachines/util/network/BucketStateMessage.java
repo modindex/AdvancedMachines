@@ -2,7 +2,7 @@ package jaminv.advancedmachines.util.network;
 
 import io.netty.buffer.ByteBuf;
 import jaminv.advancedmachines.lib.dialog.control.enums.IOState;
-import jaminv.advancedmachines.machine.dialog.DialogBucketToggle.IBucketToggle;
+import jaminv.advancedmachines.lib.dialog.fluid.DialogBucketToggle;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -49,8 +49,8 @@ public class BucketStateMessage implements IMessage {
 			  
 			  world.addScheduledTask(() -> {
 				  TileEntity te = world.getTileEntity(pos);
-				  if (te instanceof IBucketToggle) {
-					  ((IBucketToggle)te).setBucketState(state);
+				  if (te instanceof DialogBucketToggle.Provider) {
+					  ((DialogBucketToggle.Provider)te).getBucketToggle().setBucketState(state);
 				  }
 			  });
 			  return null;

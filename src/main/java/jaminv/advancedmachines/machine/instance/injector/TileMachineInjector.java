@@ -9,24 +9,32 @@ import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.InventoryLayo
 import jaminv.advancedmachines.lib.container.layout.JeiLayoutManager;
 import jaminv.advancedmachines.lib.container.layout.impl.BucketLayout;
 import jaminv.advancedmachines.lib.container.layout.impl.OutputLayout;
-import jaminv.advancedmachines.lib.dialog.control.enums.IOState;
+import jaminv.advancedmachines.lib.dialog.fluid.DialogBucketToggle;
+import jaminv.advancedmachines.lib.fluid.BucketHandler;
 import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
 import jaminv.advancedmachines.lib.inventory.slot.SlotHandlerFluid;
-import jaminv.advancedmachines.machine.MachineHelper;
 import jaminv.advancedmachines.machine.TileMachineMultiblock;
-import jaminv.advancedmachines.machine.dialog.DialogBucketToggle.IBucketToggle;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.util.network.BucketStateMessage;
 import net.minecraft.inventory.IInventory;
 
-public class TileMachineInjector extends TileMachineMultiblock implements IBucketToggle {
-	
+public class TileMachineInjector extends TileMachineMultiblock implements DialogBucketToggle.Provider {
+
 	public static class ContainerInjector extends ContainerMachine {
 		public ContainerInjector(ILayoutManager layout, IItemHandlerMachine inventory, IInventory playerInventory,
 				ISyncManager sync) {
 			super(layout, inventory, playerInventory, sync);
 		}
 	}
+	
+	protected BucketHandler bucketHandler = new BucketHandler().setCallback(state -> {
+		controller.wake();		
+		if (world.isRemote) {
+			AdvancedMachines.NETWORK.sendToServer(new BucketStateMessage(this.getPos(), state));
+		}
+	});
+	
+	public BucketHandler getBucketToggle() { return bucketHandler; }
 
 	public static final JeiLayoutManager layout = new JeiLayoutManager()
 		.setItemInputLayout(InjectorManager.getRecipeManager(), 107, 21)
@@ -53,25 +61,10 @@ public class TileMachineInjector extends TileMachineMultiblock implements IBucke
 	public ContainerMachine createContainer(IInventory playerInventory) {
 		return new ContainerInjector(layout, storage, playerInventory, this.getSyncManager());
 	}
-	
-	// IBucketToggle
-	
-	protected IOState bucketState = IOState.INPUT;
-	@Override public IOState getBucketState() { return bucketState; }
-
-	@Override
-	public void setBucketState(IOState state) {
-		bucketState = state;
-		controller.wake();
-		
-		if (world.isRemote) {
-			AdvancedMachines.NETWORK.sendToServer(new BucketStateMessage(this.getPos(), state));
-		}
-	}
 
 	@Override
 	protected boolean preProcess() {
 		return super.preProcess() || 
-			MachineHelper.handleBucket(inventory, inventory.getFirstAdditionalSlot(), inputTanks, bucketState);
+			bucketHandler.handleBucket(inventory, inventory.getFirstAdditionalSlot(), inputTanks);
 	}
 }

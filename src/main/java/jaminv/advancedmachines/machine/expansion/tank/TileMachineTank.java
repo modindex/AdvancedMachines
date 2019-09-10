@@ -9,6 +9,8 @@ import jaminv.advancedmachines.lib.container.ContainerInventory;
 import jaminv.advancedmachines.lib.container.layout.ILayoutManager;
 import jaminv.advancedmachines.lib.container.layout.LayoutManager;
 import jaminv.advancedmachines.lib.container.layout.impl.BucketLayout;
+import jaminv.advancedmachines.lib.dialog.fluid.DialogBucketToggle;
+import jaminv.advancedmachines.lib.fluid.BucketHandler;
 import jaminv.advancedmachines.lib.fluid.FluidTankAdvanced;
 import jaminv.advancedmachines.lib.fluid.IFluidObservable;
 import jaminv.advancedmachines.lib.inventory.IItemObservable;
@@ -19,6 +21,7 @@ import jaminv.advancedmachines.lib.util.helper.HasFacing;
 import jaminv.advancedmachines.machine.dialog.DialogIOToggle;
 import jaminv.advancedmachines.machine.expansion.TileMachineExpansion;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
+import jaminv.advancedmachines.util.network.BucketStateMessage;
 import jaminv.advancedmachines.util.network.IOStateMessage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -30,18 +33,17 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 public class TileMachineTank extends TileMachineExpansion implements ITickable, HasGui, HasFacing, HasItemNBT,
-		IMachineController.ISubController, IItemObservable.IObserver, IFluidObservable.IObserver, DialogIOToggle.ISwitchableIO {
+		IMachineController.ISubController, IItemObservable.IObserver, IFluidObservable.IObserver, DialogIOToggle.ISwitchableIO,
+		DialogBucketToggle.Provider {
 	
 	public static final ILayoutManager layout = new LayoutManager()
-		.addLayout(new BucketLayout(44, 37))
-		.addLayout(new BucketLayout(116, 37))
+		.addLayout(new BucketLayout(152, 59))
 		.setInventoryLayout(8, 84)
 		.setHotbarLayout(8, 142);	
 	
@@ -49,8 +51,16 @@ public class TileMachineTank extends TileMachineExpansion implements ITickable, 
 	protected boolean inputState = true;
 	protected int priority = 0;
 	protected IMachineController controller;
+	protected BucketHandler bucketHandler = new BucketHandler().setCallback(state -> {
+		if (controller != null) { controller.wake(); }		
+		if (world.isRemote) {
+			AdvancedMachines.NETWORK.sendToServer(new BucketStateMessage(this.getPos(), state));
+		}
+	});
 	
-	protected ItemStackHandlerObservable inventory = new ItemStackHandlerObservable(2) {
+	public BucketHandler getBucketToggle() { return bucketHandler; }
+	
+	protected ItemStackHandlerObservable inventory = new ItemStackHandlerObservable(1) {
 		@Override protected int getStackLimit(int slot, ItemStack stack) {
 			if (FluidUtil.getFluidHandler(stack) != null) {	return 1; }
 			return super.getStackLimit(slot, stack);
@@ -168,37 +178,17 @@ public class TileMachineTank extends TileMachineExpansion implements ITickable, 
 		if (tick < ModConfig.general.tickUpdate) { return; }
 		tick = 0;
 		
-		boolean didSomething = false;
-		
-		for (int i = 0; i < inventory.getSlots(); i++) {
-			ItemStack stack = inventory.getStackInSlot(i);
-			if (stack == null) { continue; }
-
-			FluidActionResult result = null;
-			if (i == 0) { 
-				result = FluidUtil.tryEmptyContainer(stack, tank, 1000, null, true);
-			} else if (i == 1) {
-				result = FluidUtil.tryFillContainer(stack, tank, 1000, null, true);
-			}
-			
-			if (result != null && result.success) {
-				inventory.extractItem(i, stack.getCount(), false);
-				inventory.insertItem(i, result.getResult(), false);
-				didSomething = true;
-			}
-		}
-		
-		if (!didSomething) { sleep = true; }
+		if (!bucketHandler.handleBucket(inventory, 0, tank)) { sleep = false; }
 	}
 	
 	@Override
 	public boolean preProcess(IMachineController controller) {
-		boolean didSomething = false;
+		boolean didSomething = bucketHandler.handleBucket(inventory, 0, tank);
 		
 		if (inputState) {
-			return moveInput(controller) > 0;
+			return moveInput(controller) > 0 || didSomething;
 		} else {
-			return moveOutput(controller) > 0;
+			return moveOutput(controller) > 0 || didSomething;
 		}
 	}
 	
@@ -229,7 +219,7 @@ public class TileMachineTank extends TileMachineExpansion implements ITickable, 
 	@Override
 	public void onInventoryContentsChanged(int slot) {
 		sleep = false;
-		if (controller != null) { controller.wake(); }	}
+	}
 	
 	@Override
 	public void onTankContentsChanged() {

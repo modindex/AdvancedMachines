@@ -1,4 +1,4 @@
-package jaminv.advancedmachines.machine.dialog;
+package jaminv.advancedmachines.lib.dialog.fluid;
 
 import jaminv.advancedmachines.lib.dialog.Dialog;
 import jaminv.advancedmachines.lib.dialog.control.DialogToggleButton;
@@ -10,13 +10,17 @@ import net.minecraft.client.resources.I18n;
 
 public class DialogBucketToggle extends DialogToggleButton<IOState> {
 	
-	public static interface IBucketToggle {
+	public static interface Toggle {
 		public void setBucketState(IOState state);
 		public IOState getBucketState();
-	}	
+	}
 	
-	protected final IBucketToggle te;
-	public DialogBucketToggle(int x, int y, int w, int h, IBucketToggle te) {
+	public static interface Provider {
+		public Toggle getBucketToggle();
+	}
+	
+	protected final Toggle te;
+	public DialogBucketToggle(int x, int y, int w, int h, Toggle te) {
 		super(x, y, w, h, IOState.INPUT);
 		this.te = te;
 	}

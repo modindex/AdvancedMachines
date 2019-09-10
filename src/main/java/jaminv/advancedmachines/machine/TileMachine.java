@@ -100,7 +100,7 @@ public abstract class TileMachine extends TileEntity implements ITickable, HasGu
 	public boolean isProcessing() { return processingState; }	
 	public void setProcessingState(boolean state) {	
 		this.processingState = state;
-		world.checkLightFor(EnumSkyBlock.BLOCK, pos);
+		if (world != null) { world.checkLightFor(EnumSkyBlock.BLOCK, pos); }
 		
 		if (world != null && !world.isRemote) {
 			AdvancedMachines.NETWORK.sendToAll(getProcessingStateMessage(state));
