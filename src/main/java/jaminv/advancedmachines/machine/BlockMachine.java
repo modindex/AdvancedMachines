@@ -89,6 +89,15 @@ public abstract class BlockMachine extends Block implements VariantExpansion.Has
 	}
 
 	@Override
+	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
+		TileEntity te = BlockHelper.getTileEntity(world, pos);
+		if (te instanceof TileMachine) {
+			return ((TileMachine)te).isProcessing() ? 15 : 0;
+		}
+		return 0;
+	}
+
+	@Override
 	public boolean hasTileEntity(IBlockState state) {
 		return true;
 	}

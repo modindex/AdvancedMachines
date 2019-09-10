@@ -33,6 +33,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -99,6 +100,7 @@ public abstract class TileMachine extends TileEntity implements ITickable, HasGu
 	public boolean isProcessing() { return processingState; }	
 	public void setProcessingState(boolean state) {	
 		this.processingState = state;
+		world.checkLightFor(EnumSkyBlock.BLOCK, pos);
 		
 		if (world != null && !world.isRemote) {
 			AdvancedMachines.NETWORK.sendToAll(getProcessingStateMessage(state));

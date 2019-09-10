@@ -153,11 +153,8 @@ public class MachineController implements IMachineController, IItemObservable.IO
 		if (!te.isRedstoneActive()) { return; }
 		
 		if (!isProcessing()) {
-			Recipe recipe = recipemanager.getRecipe(getItemInput(), fluidtank.getStacks());
-			if (recipe == null || !beginProcess(recipe)) { return; }
-			processTimeRemaining = totalProcessTime = recipe.getProcessTime();
-			lastRecipe = recipe;
-			wake(); return;
+			beginProcess();
+			return;
 		} else if (lastRecipe == null) {
 			// TE was just loaded from NBT
 			lastRecipe = recipemanager.getRecipe(getItemInput(), fluidtank.getStacks());
@@ -168,18 +165,24 @@ public class MachineController implements IMachineController, IItemObservable.IO
 		processTimeRemaining -= ticks;
 		
 		if (processTimeRemaining <= 0) {
-			endProcess(lastRecipe);
-			
-			processTimeRemaining = 0;
-		}
-		
+			endProcess(lastRecipe);			
+			beginProcess();
+			return;
+		}		
 		wake();
 		return;
 	}
 	
-	protected boolean beginProcess(Recipe recipe) {
+	protected void beginProcess() {
+		Recipe recipe = recipemanager.getRecipe(getItemInput(), fluidtank.getStacks());
+		if (recipe == null) { return; }
+		
 		qtyProcessing = Math.min(getRecipeQty(recipe), te.getProcessingMultiplier());
-		return qtyProcessing > 0;
+		if (qtyProcessing <= 0) { return; }
+		
+		processTimeRemaining = totalProcessTime = recipe.getProcessTime();
+		lastRecipe = recipe;
+		wake();
 	}
 	
 	protected int getRecipeQty(Recipe recipe) {
