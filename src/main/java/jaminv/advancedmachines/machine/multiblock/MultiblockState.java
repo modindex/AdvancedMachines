@@ -11,8 +11,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class MultiblockState implements INBTSerializable<NBTTagCompound> {
 	
-	public static final MultiblockState EMPTY = new MultiblockState();
-	
 	protected MultiblockMessage message = null;
 	protected BlockPos multiblockMin = null, multiblockMax = null;
 	protected MultiblockUpgrades upgrades = MultiblockUpgrades.EMPTY;
@@ -20,7 +18,7 @@ public class MultiblockState implements INBTSerializable<NBTTagCompound> {
 	
 	public boolean isValid() { return valid; }
 	
-	private MultiblockState()  {}
+	public MultiblockState()  {}
 	
 	public MultiblockState(MultiblockMessage message) {
 		this.message = message;

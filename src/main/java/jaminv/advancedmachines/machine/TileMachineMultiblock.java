@@ -75,7 +75,7 @@ public abstract class TileMachineMultiblock extends TileMachine implements Machi
 
 	public MachineFace getMachineFace() { return face; }
 
-	protected MultiblockState multiblockState = MultiblockState.EMPTY;
+	protected MultiblockState multiblockState = new MultiblockState();
 	public String getMultiblockString() { 
 		if (multiblockState.getMessage() == null) {
 			scanMultiblock(null);
