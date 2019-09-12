@@ -19,6 +19,7 @@ import jaminv.advancedmachines.lib.LibReference;
 import jaminv.advancedmachines.lib.util.logger.Logger;
 import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.crafting.IConditionFactory;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.ModContainer;
 
@@ -29,28 +30,31 @@ public class DataParser {
  	
 	public static final String LOG_PATH = "logs/" + LibReference.FILENAME + ".parser.log";
 	private static Map<String, JsonObject> constants = null;
-	private static Map<String, JsonObject> functions = null;
-	private static Map<String, Map<String, Class>> factories = null;
+	private static Map<String, IConditionFactory> conditions = null;
 	
 	public static JsonObject getConstant(String key) {
 		if (constants == null) { return null; }
 		return constants.get(key);
 	}
 	
-	public static JsonObject getFunction(String key) {
-		if (functions == null) { return null; }
-		return functions.get(key);
+	public static IConditionFactory getCondition(String key) {
+		if (conditions == null) { return null; }
+		return conditions.get(key);
 	}
 	
 	public static void parseConstants() {
 		constants = new HashMap<String, JsonObject>();
-		factories = new HashMap<String, Map<String, Class>>();
+		conditions = new HashMap<String, IConditionFactory>();
 		
 		(new Logger(LOG_PATH, "parser", false)).close();
 		
 		FileHandlerJsonMap chandler = new FileHandlerJsonMap("constants");
 		parseFolder("data", chandler, "_constants.json");
 		constants = chandler.getMap();
+		
+		FileHandlerFactories fhandler = new FileHandlerFactories();
+		parseFolder("data", fhandler, "_factories.json");
+		conditions = fhandler.getConditions();
 	}
 	
 	public static void parseFolder(String path, FileHandler handler) {

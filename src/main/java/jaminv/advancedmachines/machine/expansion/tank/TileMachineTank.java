@@ -31,6 +31,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
@@ -75,7 +76,10 @@ public class TileMachineTank extends TileMachineExpansion implements ITickable, 
 		tank.addObserver(this);
 		inventory.addObserver(this);
 	}
-
+	
+	public boolean onBlockActivated(EntityPlayer player, EnumHand hand) {
+		return bucketHandler.onBlockActivate(player, hand, tank);
+	}
 	
     @Nullable
     public SPacketUpdateTileEntity getUpdatePacket()

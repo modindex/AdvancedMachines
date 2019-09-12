@@ -4,7 +4,9 @@ import java.util.function.Consumer;
 
 import jaminv.advancedmachines.lib.dialog.control.enums.IOState;
 import jaminv.advancedmachines.lib.dialog.fluid.DialogBucketToggle;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -46,4 +48,9 @@ public class BucketHandler implements DialogBucketToggle.Toggle {
 		}
 		return false;
 	}	
+	
+	public boolean onBlockActivate(EntityPlayer player, EnumHand hand, IFluidHandler handler) {
+		if (FluidUtil.getFluidHandler(player.getHeldItem(hand)) == null) { return false; }
+		return FluidUtil.interactWithFluidHandler(player, hand, handler);
+	}
 }

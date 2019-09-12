@@ -1,7 +1,6 @@
 package jaminv.advancedmachines.lib.parser;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BooleanSupplier;
@@ -17,8 +16,6 @@ import jaminv.advancedmachines.lib.recipe.RecipeImpl;
 import jaminv.advancedmachines.lib.recipe.RecipeInput;
 import jaminv.advancedmachines.lib.recipe.RecipeOutput;
 import jaminv.advancedmachines.lib.util.logger.Logger;
-import jaminv.advancedmachines.util.conditions.ConfigConditionFactory;
-import jaminv.advancedmachines.util.conditions.OreDictionaryConditionFactory;
 import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.crafting.IConditionFactory;
 import net.minecraftforge.common.crafting.JsonContext;
@@ -57,17 +54,14 @@ public class FileHandlerRecipe implements FileHandler {
 		public void addRecipe(RecipeImpl recipe);
 	}
 	
-	protected HashMap<String, IConditionFactory>condition_factories = new HashMap<String, IConditionFactory>();
-	protected void addConditionFactory(String name, IConditionFactory factory) { condition_factories.put(name, factory); }
-	
 	protected final String logname;
 	protected int limit[][] = new int[RecipeSection.values().length][IngredientType.values().length];
 	protected RecipeHandler handler;
 	protected int count[][] = new int[RecipeSection.values().length][IngredientType.values().length];
 	
 	public FileHandlerRecipe(String logname, RecipeHandler handler) {
-		addConditionFactory(Reference.MODID + ":config", new ConfigConditionFactory());
-		addConditionFactory(Reference.MODID + ":oredictionary", new OreDictionaryConditionFactory());
+		//addConditionFactory(Reference.MODID + ":config", new ConfigConditionFactory());
+		//addConditionFactory(Reference.MODID + ":oredictionary", new OreDictionaryConditionFactory());
 		
 		this.logname = logname;
 		this.handler = handler;
@@ -291,8 +285,7 @@ public class FileHandlerRecipe implements FileHandler {
 			JsonObject ob = ParseUtils.getJsonObject(condition, key + "[" + i + "]");
 			String value = JsonUtils.getString(ob, "type");
 			
-			// TODO: Add Factories
-			IConditionFactory factory = condition_factories.get(value);
+			IConditionFactory factory = DataParser.getCondition(value);
 			if (factory == null) {
 				throw new DataParserException("Condition '" + value + "' not found.");
 			}

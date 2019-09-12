@@ -3,50 +3,48 @@ package jaminv.advancedmachines.lib.parser;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import jaminv.advancedmachines.lib.util.logger.Logger;
+import net.minecraft.util.JsonUtils;
+import net.minecraftforge.common.crafting.IConditionFactory;
 
 public class FileHandlerFactories implements FileHandler {
+	
+	protected Map<String, IConditionFactory> conditions = new HashMap<>();
+	public Map<String, IConditionFactory> getConditions() { return ImmutableMap.copyOf(conditions); }
 	
 	@Override
 	public boolean parseData(Logger logger, String filename, JsonObject json) throws DataParserException {
 		logger = logger.getLogger("factories");
 		
 		int i = 0, c = 0;
-		for (Map.Entry<String,JsonElement> entry : json.entrySet()) {
-			String name = entry.getKey();
-			try {
-				if (loadFactories(logger, entry.getKey(), entry.getValue())) { c++; }
-			} catch(DataParserException e) {
-				logger.error(e.getMessage());
+		if (json.has("conditions")) {
+			for (Map.Entry<String, JsonElement> entry : JsonUtils.getJsonObject(json, "conditions").entrySet()) {
+				c++;
+				try {
+					String clsName = JsonUtils.getString(entry.getValue(), "conditions[" + entry.getValue() + "]");
+					conditions.put(entry.getKey(), loadFactory(entry.getKey(), clsName, IConditionFactory.class));
+					i++;
+				} catch(DataParserException e) {
+					logger.error(e.getMessage());
+				}
 			}
-			i++;
 		}
 		
-		ParseUtils.logComplete(logger, c, i, "info.parser.constant.complete", "info.parser.constant.incomplete");
+		ParseUtils.logComplete(logger, c, i, "%d added successfully.", "%d not added.");
 		return true;
 	}
 	
-	protected boolean loadFactories(Logger logger, String type, JsonElement element) throws DataParserException {
-/*		JsonObject obj = assertObject(type, element);
-
-		Map<String, Map<String, Class>> factories = getFactories();
-		Map<String, Class> map = new HashMap<String, Class>();
-		
-		for (Map.Entry<String,JsonElement> entry : obj.entrySet()) {
-			try {
-				String className = assertString(type + "." + entry.getKey(), entry.getValue());
-				Class factory = Class.forName(className);
-				
-				map.put(entry.getKey(), factory);
-			} catch(DataParserException | ClassNotFoundException e) {
-				logger.error(e.getMessage());
-			}
-		}
-		
-		factories.put(type, map); */
-		return true;
+	protected <T> T loadFactory(String key, String className, Class<? extends T> factoryClass) throws DataParserException {
+	    try{
+	        return factoryClass.cast(Class.forName(className, true, ClassLoader.getSystemClassLoader()).newInstance());
+	    } catch(InstantiationException
+	          | IllegalAccessException
+	          | ClassNotFoundException e) {
+	        throw new DataParserException("Class at " + key + " instantiation error: " + e.toString());
+	    }
 	}
 }

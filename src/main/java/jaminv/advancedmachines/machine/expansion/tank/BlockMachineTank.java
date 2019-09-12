@@ -45,6 +45,13 @@ public class BlockMachineTank extends BlockMachineExpansion {
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
 			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		
+		TileEntity te = worldIn.getTileEntity(pos);
+		if (te instanceof TileMachineTank) {
+			if (((TileMachineTank)te).onBlockActivated(playerIn, hand)) {
+				return true;
+			}
+		}
+		
 		return BlockHelper.openGui(AdvancedMachines.instance, worldIn, pos, playerIn, getGuiId());
 	}
 	
