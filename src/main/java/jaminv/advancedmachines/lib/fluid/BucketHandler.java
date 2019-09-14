@@ -51,6 +51,7 @@ public class BucketHandler implements DialogBucketToggle.Toggle {
 	
 	public boolean onBlockActivate(EntityPlayer player, EnumHand hand, IFluidHandler handler) {
 		if (FluidUtil.getFluidHandler(player.getHeldItem(hand)) == null) { return false; }
-		return FluidUtil.interactWithFluidHandler(player, hand, handler);
+		FluidUtil.interactWithFluidHandler(player, hand, handler);
+		return true;
 	}
 }

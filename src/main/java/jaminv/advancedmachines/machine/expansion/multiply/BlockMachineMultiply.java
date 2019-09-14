@@ -69,7 +69,7 @@ public class BlockMachineMultiply extends BlockMachineExpansion {
 	}
 	
 	// FIXME: Activating multiply expansion with face doesn't work
-	// FIXME: (probably related) Machine face doesn't enter active state
+	// FIXME: (Probably related) Face state not saving/loading 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
 			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {

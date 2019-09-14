@@ -73,7 +73,11 @@ public class MachineFaceBuilder {
 				}
 			}
 		}
-		
-		return Pair.of(pos.offset(dir, -count+1).offset(EnumFacing.UP, -count+1), pos);
+		BlockPos other = pos.offset(dir, -count+1).offset(EnumFacing.UP, -count+1);
+		int minX = Math.min(other.getX(), pos.getX()), maxX = Math.max(other.getX(), pos.getX());
+		int minY = Math.min(other.getY(), pos.getY()), maxY = Math.max(other.getY(), pos.getY());
+		int minZ = Math.min(other.getZ(), pos.getZ()), maxZ = Math.max(other.getZ(), pos.getZ());
+				
+		return Pair.of(new BlockPos(minX, minY, minZ), new BlockPos(maxX, maxY, maxZ));
 	}
 }
