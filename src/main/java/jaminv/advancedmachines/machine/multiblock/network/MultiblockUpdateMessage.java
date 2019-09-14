@@ -1,4 +1,4 @@
-package jaminv.advancedmachines.machine.multiblock;
+package jaminv.advancedmachines.machine.multiblock.network;
 
 import io.netty.buffer.ByteBuf;
 import jaminv.advancedmachines.AdvancedMachines;
@@ -44,7 +44,7 @@ public class MultiblockUpdateMessage implements IMessage {
 
 		  @Override
 		  public IMessage onMessage(MultiblockUpdateMessage message, MessageContext ctx) {
-			  World world = AdvancedMachines.proxy.getMessageWorld(ctx);
+          			  World world = AdvancedMachines.proxy.getMessageWorld(ctx);
 			  
 			  BlockPos machine = message.machine;
 			  BlockPos blockDestroyed = message.blockDestroyed;

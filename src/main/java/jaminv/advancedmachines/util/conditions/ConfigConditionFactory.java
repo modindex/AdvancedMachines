@@ -5,7 +5,7 @@ import java.util.function.BooleanSupplier;
 import com.google.gson.JsonObject;
 
 import jaminv.advancedmachines.ModConfig;
-import jaminv.advancedmachines.Reference;
+import jaminv.advancedmachines.ModReference;
 import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.crafting.IConditionFactory;
 import net.minecraftforge.common.crafting.JsonContext;
@@ -16,7 +16,7 @@ public class ConfigConditionFactory implements IConditionFactory {
 	public BooleanSupplier parse(JsonContext context, JsonObject json) {
 		String type = JsonUtils.getString(json, "type");
 		
-		if (type.equals(Reference.MODID + ":config")) {
+		if (type.equals(ModReference.MODID + ":config")) {
 			String value = JsonUtils.getString(json, "value");
 			switch (value) {
 			case "gearIron":

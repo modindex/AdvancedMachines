@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import jaminv.advancedmachines.ModConfig;
+import jaminv.advancedmachines.ModReference;
 import jaminv.advancedmachines.lib.parser.DataParser;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe.IngredientType;
@@ -56,7 +57,7 @@ public class FurnaceManager {
 				.addInput(new RecipeInput(key)).addOutput(new RecipeOutput(output)));
 		}
 
-		DataParser.parseFolder("data/recipes/furnace", new FileHandlerRecipe("furnace", recipe -> {
+		DataParser.parseFolder(ModReference.MODID, "data/recipes/furnace", new FileHandlerRecipe("furnace", recipe -> {
 			FurnaceManager.manager.addRecipe(recipe);
 			
 			for (ItemStack stack : recipe.getInput(0).getItems()) {

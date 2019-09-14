@@ -14,8 +14,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
-import jaminv.advancedmachines.Reference;
-import jaminv.advancedmachines.lib.LibReference;
 import jaminv.advancedmachines.lib.util.logger.Logger;
 import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -23,12 +21,11 @@ import net.minecraftforge.common.crafting.IConditionFactory;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.ModContainer;
 
-// TODO: Move log creation out of this file - have callers pass a log object.
 public class DataParser {
 	
     private static Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();	
  	
-	public static final String LOG_PATH = "logs/" + LibReference.FILENAME + ".parser.log";
+	public static String getLogPath(String modId) { return "logs/" + modId + ".parser.log"; }
 	private static Map<String, JsonObject> constants = null;
 	private static Map<String, IConditionFactory> conditions = null;
 	
@@ -42,29 +39,29 @@ public class DataParser {
 		return conditions.get(key);
 	}
 	
-	public static void parseConstants() {
+	public static void parseConstants(String modId, String path) {
 		constants = new HashMap<String, JsonObject>();
 		conditions = new HashMap<String, IConditionFactory>();
 		
-		(new Logger(LOG_PATH, "parser", false)).close();
+		(new Logger(getLogPath(modId), "parser", false)).close();
 		
 		FileHandlerJsonMap chandler = new FileHandlerJsonMap("constants");
-		parseFolder("data", chandler, "_constants.json");
+		parseFolder(modId, path, chandler, "_constants.json");
 		constants = chandler.getMap();
 		
-		FileHandlerFactories fhandler = new FileHandlerFactories();
-		parseFolder("data", fhandler, "_factories.json");
+		FileHandlerFactories fhandler = new FileHandlerFactories(modId);
+		parseFolder(modId, path, fhandler, "_factories.json");
 		conditions = fhandler.getConditions();
 	}
 	
-	public static void parseFolder(String path, FileHandler handler) {
-		parseFolder(path, handler, null);
+	public static void parseFolder(String modId, String path, FileHandler handler) {
+		parseFolder(modId, path, handler, null);
 	}
 	
-	public static void parseFolder(String path, FileHandler handler, String findFilename) {
-		ModContainer mod = FMLCommonHandler.instance().findContainerFor(Reference.MODID);
+	public static void parseFolder(String modId, String path, FileHandler handler, String findFilename) {
+		ModContainer mod = FMLCommonHandler.instance().findContainerFor(modId);
 
-		Logger logger = new Logger(LOG_PATH, "parser");
+		Logger logger = new Logger(getLogPath(modId), "parser");
 		
 		CraftingHelper.findFiles(mod, "assets/" + mod.getModId() + "/" + path, null, (root, file) -> {
 			String filename = file.getFileName().toString();

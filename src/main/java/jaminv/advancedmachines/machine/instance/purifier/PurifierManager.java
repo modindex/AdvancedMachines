@@ -2,6 +2,7 @@ package jaminv.advancedmachines.machine.instance.purifier;
 
 import java.util.List;
 
+import jaminv.advancedmachines.ModReference;
 import jaminv.advancedmachines.lib.parser.DataParser;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe.IngredientType;
@@ -17,7 +18,7 @@ public class PurifierManager {
 	public static List<RecipeImpl> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {
-		DataParser.parseFolder("data/recipes/purifier", new FileHandlerRecipe("purifier", (recipe) -> {
+		DataParser.parseFolder(ModReference.MODID, "data/recipes/purifier", new FileHandlerRecipe("purifier", (recipe) -> {
 			manager.addRecipe(recipe);
 		}).setLimit(RecipeSection.INPUT, IngredientType.ITEM, 1).setLimit(RecipeSection.OUTPUT, IngredientType.ITEM, 1)
 			.setLimit(RecipeSection.SECONDARY, IngredientType.ITEM, 6)

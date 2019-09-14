@@ -2,6 +2,7 @@ package jaminv.advancedmachines.machine.instance.melter;
 
 import java.util.List;
 
+import jaminv.advancedmachines.ModReference;
 import jaminv.advancedmachines.lib.parser.DataParser;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe.IngredientType;
@@ -18,7 +19,7 @@ public class MelterManager {
 	public static List<RecipeImpl> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {
-		DataParser.parseFolder("data/recipes/melter", new FileHandlerRecipe("melter", (recipe) -> {
+		DataParser.parseFolder(ModReference.MODID, "data/recipes/melter", new FileHandlerRecipe("melter", (recipe) -> {
 			manager.addRecipe(recipe);
 		}).setLimit(RecipeSection.INPUT, IngredientType.ITEM, 1).setLimit(RecipeSection.OUTPUT, IngredientType.FLUID, 1));
 	}

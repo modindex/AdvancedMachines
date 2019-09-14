@@ -1,8 +1,10 @@
 package jaminv.advancedmachines.util.network;
 
 import jaminv.advancedmachines.AdvancedMachines;
-import jaminv.advancedmachines.machine.multiblock.MultiblockUpdateMessage;
-import jaminv.advancedmachines.machine.multiblock.MultiblockUpdateMessage.MultiblockUpdateMessageHandler;
+import jaminv.advancedmachines.machine.multiblock.network.MultiblockDestroyMessage;
+import jaminv.advancedmachines.machine.multiblock.network.MultiblockDestroyMessage.MultiblockDestroyMessageHandler;
+import jaminv.advancedmachines.machine.multiblock.network.MultiblockUpdateMessage;
+import jaminv.advancedmachines.machine.multiblock.network.MultiblockUpdateMessage.MultiblockUpdateMessageHandler;
 import jaminv.advancedmachines.util.network.BucketStateMessage.BucketStateMessageHandler;
 import jaminv.advancedmachines.util.network.IOStateMessage.IOMessageHandler;
 import jaminv.advancedmachines.util.network.ProcessingStateMessage.ProcessingStateMessageHandler;
@@ -17,6 +19,7 @@ public class MessageRegistry {
 		AdvancedMachines.NETWORK.registerMessage(RedstoneStateMessageHandler.class, RedstoneStateMessage.class, discriminator++, Side.SERVER);
 		AdvancedMachines.NETWORK.registerMessage(BucketStateMessageHandler.class, BucketStateMessage.class, discriminator++, Side.SERVER);
 		AdvancedMachines.NETWORK.registerMessage(MultiblockUpdateMessageHandler.class, MultiblockUpdateMessage.class, discriminator++, Side.CLIENT);
+		AdvancedMachines.NETWORK.registerMessage(MultiblockDestroyMessageHandler.class, MultiblockDestroyMessage.class, discriminator++, Side.CLIENT);
 		AdvancedMachines.NETWORK.registerMessage(ProcessingStateMessageHandler.class, ProcessingStateMessage.class, discriminator++, Side.CLIENT);
 	}
 }

@@ -26,15 +26,15 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 // TODO: Buckets on machines
 // TODO: Regular tank
 
-@Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION, dependencies = "required-after:forge@[14.23.2.2638,)", useMetadata = true)
+@Mod(modid = ModReference.MODID, name = ModReference.NAME, version = ModReference.VERSION, dependencies = "required-after:forge@[14.23.2.2638,)", useMetadata = true)
 public class AdvancedMachines {
 	
 	@Instance
 	public static AdvancedMachines instance;
 	
-	public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MODID);
+	public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(ModReference.MODID);
 	
-	@SidedProxy(clientSide = Reference.CLIENT, serverSide = Reference.SERVER)
+	@SidedProxy(clientSide = ModReference.CLIENT, serverSide = ModReference.SERVER)
 	public static InitProxy proxy;
 	// %1.13%:
 	//public static InitProxy proxy = DistExecutor.runForDist(() -> InitProxyClient::new, () -> InitProxyServer::new);
@@ -66,9 +66,9 @@ public class AdvancedMachines {
 		GameRegistry.registerWorldGenerator(new WorldGenCustomOres(), 0);	
     	
     	logger.info("Parse Constants");
-		DataParser.parseConstants();
+		DataParser.parseConstants(ModReference.MODID, "data");
 		logger.info("Ore Dictionary Registry");
-		DataParser.parseFolder("data/ore_dictionary", new FileHandlerOreDictionary());
+		DataParser.parseFolder(ModReference.MODID, "data/ore_dictionary", new FileHandlerOreDictionary());
 		
 		NetworkRegistry.INSTANCE.registerGuiHandler(AdvancedMachines.instance, new GuiProxy());
 

@@ -36,6 +36,9 @@ public class MultiblockBuilder {
 	public static MultiblockState scanMultiblock(World world, BlockPos parent, @Nullable BlockPos blockDestroyed) {
 		ScanResult result = BlockIterator.scanBlocks(world, parent, new MultiblockChecker());
 		
+		// If the machine block was the one that was destroyed, there's no reason to scan, and there's no reason to return a valid MultiblockState
+		if (parent.equals(blockDestroyed)) { return new MultiblockState(); }
+		
 		BlockPos end = result.getEnd();
 		if (end != null) {
 			return new MultiblockState(new MultiblockMessageIllegal("message.multiblock.connected_machine", 
@@ -104,5 +107,6 @@ public class MultiblockBuilder {
 				}
 			}
 		}
+		world.markBlockRangeForRenderUpdate(min, max);
 	}
 }

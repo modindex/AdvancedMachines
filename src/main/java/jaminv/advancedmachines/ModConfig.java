@@ -8,7 +8,7 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-@Config(modid = Reference.MODID, name = "advancedmachines/advancedmachines")
+@Config(modid = ModReference.MODID, name = "advancedmachines/advancedmachines")
 @Config.LangKey("advmach.config.title")
 public final class ModConfig {
 	
@@ -157,13 +157,13 @@ public final class ModConfig {
 		public int titaniumChance = 2; 
 	}
 	
-	@Mod.EventBusSubscriber(modid = Reference.MODID)
+	@Mod.EventBusSubscriber(modid = ModReference.MODID)
 	private static class EventHandler {
 		
 		@SubscribeEvent
 		public static void onConfigChanged(final ConfigChangedEvent.OnConfigChangedEvent event) {
-			if (event.getModID().equals(Reference.MODID)) {
-				ConfigManager.sync(Reference.MODID, Config.Type.INSTANCE);
+			if (event.getModID().equals(ModReference.MODID)) {
+				ConfigManager.sync(ModReference.MODID, Config.Type.INSTANCE);
 				
 				RecipeOutput.setOreDictionaryPreference(ModConfig.recipe.oreDictionaryPreference);
 			}

@@ -2,6 +2,7 @@ package jaminv.advancedmachines.machine.instance.stabilizer;
 
 import java.util.List;
 
+import jaminv.advancedmachines.ModReference;
 import jaminv.advancedmachines.lib.parser.DataParser;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe.IngredientType;
@@ -17,7 +18,7 @@ public class StabilizerManager {
 	public static List<RecipeImpl> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {
-		DataParser.parseFolder("data/recipes/stabilizer", new FileHandlerRecipe("stabilizer", (recipe) -> {
+		DataParser.parseFolder(ModReference.MODID, "data/recipes/stabilizer", new FileHandlerRecipe("stabilizer", (recipe) -> {
 			manager.addRecipe(recipe);
 		}).setLimit(RecipeSection.INPUT, IngredientType.FLUID, 1).setLimit(RecipeSection.OUTPUT, IngredientType.ITEM, 1));
 	}

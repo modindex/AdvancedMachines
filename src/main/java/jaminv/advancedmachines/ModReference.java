@@ -1,6 +1,6 @@
 package jaminv.advancedmachines;
 
-public class Reference {
+public class ModReference {
 	public static final String MODID = "advancedmachines";
 	public static final String FILENAME = "advancedmachines";
 	public static final String NAME = "Advanced Machines";

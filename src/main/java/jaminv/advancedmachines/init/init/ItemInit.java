@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.init.init;
 
-import jaminv.advancedmachines.Reference;
+import jaminv.advancedmachines.ModReference;
 import jaminv.advancedmachines.lib.util.Variant;
 import jaminv.advancedmachines.lib.util.registry.RegistryHelper;
 import jaminv.advancedmachines.objects.tools.ToolAxe;
@@ -27,7 +27,7 @@ import net.minecraftforge.common.util.EnumHelper;
 public class ItemInit {
 	
 	public static final ToolMaterial TOOL_TITANIUM = EnumHelper.addToolMaterial("tool_titanium", 2, 1561, 4.0f, 1.0f, 10);
-	public static final ArmorMaterial ARMOR_TITANIUM = EnumHelper.addArmorMaterial("armor_titanium", Reference.MODID + ":titanium", 33, new int[]{3,6,8,3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 2.0f);
+	public static final ArmorMaterial ARMOR_TITANIUM = EnumHelper.addArmorMaterial("armor_titanium", ModReference.MODID + ":titanium", 33, new int[]{3,6,8,3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 2.0f);
 
 	protected static String getVariantName(String name, Variant variant) { return name + "_" + variant.getName(); }	
 	

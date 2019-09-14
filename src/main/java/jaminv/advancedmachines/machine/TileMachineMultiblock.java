@@ -12,11 +12,12 @@ import jaminv.advancedmachines.machine.expansion.MachineUpgradeTile;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBuilder;
 import jaminv.advancedmachines.machine.multiblock.MultiblockState;
-import jaminv.advancedmachines.machine.multiblock.MultiblockUpdateMessage;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFaceBuilder;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFaceTile;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
+import jaminv.advancedmachines.machine.multiblock.network.MultiblockDestroyMessage;
+import jaminv.advancedmachines.machine.multiblock.network.MultiblockUpdateMessage;
 import jaminv.advancedmachines.util.network.ProcessingStateMessage;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
@@ -83,36 +84,35 @@ public abstract class TileMachineMultiblock extends TileMachine implements Machi
 		return multiblockState.getMessage().toString(); 
 	}
 	
-	protected void redrawMultiblock() {
-		if (multiblockState.getMultiblockMin() == null ||
-				multiblockState.getMultiblockMax() == null) { return; }
-		world.markBlockRangeForRenderUpdate(multiblockState.getMultiblockMin(), 
-				multiblockState.getMultiblockMax());		
-	}
-	
 	public void scanMultiblock(@Nullable BlockPos blockDestroyed) {
+		BlockPos min = multiblockState.getMultiblockMin(), max = multiblockState.getMultiblockMax();
+		
 		this.controller.wake();
 		markDirty();
 		
 		// breakBlock() doesn't get called on the client
 		if (blockDestroyed != null && !world.isRemote) {
-			AdvancedMachines.NETWORK.sendToAll(new MultiblockUpdateMessage(pos, blockDestroyed));
+			if (blockDestroyed.equals(pos)) {
+				if (min != null && max != null) {
+					AdvancedMachines.NETWORK.sendToAll(new MultiblockDestroyMessage(min, max));
+				}
+			} else {
+				AdvancedMachines.NETWORK.sendToAll(new MultiblockUpdateMessage(pos, blockDestroyed));
+			}
 		}
 		
-		if (multiblockState.getMultiblockMin() != null && multiblockState.getMultiblockMax() != null) {
-			MultiblockBuilder.setMultiblock(multiblockState.getMultiblockMin(), multiblockState.getMultiblockMax(), false, world);
+		if (min != null && max != null) {
+			MultiblockBuilder.setMultiblock(min, max, false, world);
 		}
 		
 		facemin = null; facemax = null;
-		this.redrawMultiblock();
 		
 		multiblockState = MultiblockBuilder.scanMultiblock(world, pos, blockDestroyed);
 		if (multiblockState.isValid()) {
 			this.addSubcontrollers();
 			Pair<BlockPos, BlockPos> face = MachineFaceBuilder.scanFace(world, pos, facing);
-			if (face != null) { facemin = face.getLeft(); face.getRight(); }
+			if (face != null) { facemin = face.getLeft(); facemax = face.getRight(); }
 		}
-		this.redrawMultiblock();
 	}
 	
 	@Override

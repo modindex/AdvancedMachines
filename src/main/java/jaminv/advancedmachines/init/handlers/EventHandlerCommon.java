@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.init.handlers;
 
-import jaminv.advancedmachines.Reference;
+import jaminv.advancedmachines.ModReference;
 import jaminv.advancedmachines.init.init.BlockInit;
 import jaminv.advancedmachines.init.init.FluidInit;
 import jaminv.advancedmachines.init.init.ItemInit;
@@ -11,7 +11,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-@EventBusSubscriber(modid = Reference.MODID)
+@EventBusSubscriber(modid = ModReference.MODID)
 public class EventHandlerCommon {
 
 	@SubscribeEvent

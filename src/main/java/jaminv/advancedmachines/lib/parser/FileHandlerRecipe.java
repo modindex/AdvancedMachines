@@ -11,7 +11,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import jaminv.advancedmachines.ModConfig;
-import jaminv.advancedmachines.Reference;
+import jaminv.advancedmachines.ModReference;
 import jaminv.advancedmachines.lib.recipe.RecipeImpl;
 import jaminv.advancedmachines.lib.recipe.RecipeInput;
 import jaminv.advancedmachines.lib.recipe.RecipeOutput;
@@ -290,7 +290,7 @@ public class FileHandlerRecipe implements FileHandler {
 				throw new DataParserException("Condition '" + value + "' not found.");
 			}
 			
-			JsonContext context = new JsonContext(Reference.MODID);
+			JsonContext context = new JsonContext(ModReference.MODID);
 			BooleanSupplier func = factory.parse(context, ob);  
 			if (!func.getAsBoolean()) { logger.info("Condition '" + value + "' not met."); return false; }
 			logger.info("Condition '" + value + "' met.");

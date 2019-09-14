@@ -48,7 +48,6 @@ public abstract class BlockMachineMultiblock extends BlockMachine implements Mac
 		scanMultiblock(worldIn, pos, false);
 	}
 
-	// FIXME: Breaking machine doesn't update multiblock
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
 		TileEntity te = worldIn.getTileEntity(pos);

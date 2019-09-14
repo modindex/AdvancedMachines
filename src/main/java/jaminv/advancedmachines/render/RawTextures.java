@@ -3,7 +3,7 @@ package jaminv.advancedmachines.render;
 import com.google.common.collect.ImmutableMap;
 
 import jaminv.advancedmachines.AdvancedMachines;
-import jaminv.advancedmachines.Reference;
+import jaminv.advancedmachines.ModReference;
 import jaminv.advancedmachines.lib.render.TextureHelper;
 import jaminv.advancedmachines.lib.render.quad.Texture;
 import jaminv.advancedmachines.lib.util.helper.StringHelper;
@@ -43,7 +43,7 @@ public class RawTextures {
 	private static TextureMap textureMap;
 	
 	public static TextureAtlasSprite register(String sprite) {
-		return textureMap.registerSprite(new ResourceLocation(Reference.MODID, sprite));
+		return textureMap.registerSprite(new ResourceLocation(ModReference.MODID, sprite));
 	}
 	
 	public static void registerTextures(TextureMap textureMap, String path) {
@@ -53,7 +53,7 @@ public class RawTextures {
 		
 		ImmutableMap.Builder<String, Texture> map = ImmutableMap.<String, Texture>builder();
 		
-		ModContainer mod = FMLCommonHandler.instance().findContainerFor(Reference.MODID);
+		ModContainer mod = FMLCommonHandler.instance().findContainerFor(ModReference.MODID);
 		
 		for (String base : bases) {
 			for (String variant : variants) {
