@@ -69,7 +69,7 @@ public class MachineFaceBuilder {
 				TileEntity te = world.getTileEntity(pos.offset(dir, x).offset(EnumFacing.UP, y));
 				
 				if (te instanceof MachineFaceTile) {
-					((MachineFaceTile)te).setMachineFace(MachineFace.build(count, -x, -y), type, facing, pos);
+					((MachineFaceTile)te).setMachineFace(MachineFace.build(count, -x, -y), type, facing, parent);
 				}
 			}
 		}

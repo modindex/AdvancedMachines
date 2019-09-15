@@ -23,6 +23,7 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+// TODO: Light entire face
 public class BlockMachineMultiply extends BlockMachineExpansion {
 	
 	public BlockMachineMultiply(VariantExpansion variant) {
@@ -68,8 +69,6 @@ public class BlockMachineMultiply extends BlockMachineExpansion {
         	.withProperty(Properties.FACING, facing).withProperty(Properties.ACTIVE, active);
 	}
 	
-	// FIXME: Activating multiply expansion with face doesn't work
-	// FIXME: (Probably related) Face state not saving/loading 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
 			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
