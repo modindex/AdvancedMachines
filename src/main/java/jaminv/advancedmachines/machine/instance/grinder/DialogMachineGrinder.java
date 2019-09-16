@@ -7,9 +7,9 @@ import jaminv.advancedmachines.lib.jei.JeiDialog;
 import jaminv.advancedmachines.lib.jei.element.JeiEnergyBar;
 import jaminv.advancedmachines.lib.jei.element.JeiProgressIndicator;
 import jaminv.advancedmachines.lib.jei.element.JeiSecondaryChance;
-import jaminv.advancedmachines.lib.machine.IRedstoneControlled;
+import jaminv.advancedmachines.lib.machine.RedstoneControlled;
 import jaminv.advancedmachines.lib.util.coord.CoordRect;
-import jaminv.advancedmachines.machine.TileMachineMultiblock;
+import jaminv.advancedmachines.machine.TileMachine;
 import jaminv.advancedmachines.machine.dialog.DialogEnergyBar;
 import jaminv.advancedmachines.machine.dialog.DialogMultiblockQuantity;
 import jaminv.advancedmachines.machine.dialog.DialogProcessBar;
@@ -32,12 +32,12 @@ public class DialogMachineGrinder extends JeiDialog {
 		addJeiElement(new JeiSecondaryChance.Left(getLayout()));
 	}
 	
-	public DialogMachineGrinder(ContainerMachine container, TileMachineMultiblock te) {
+	public DialogMachineGrinder(ContainerMachine container, TileMachine te) {
 		this(container);
 		
 		this.addElement(new DialogProcessBar(te.getController(), 74, 27, 24, 17, 200, 50));
 		this.addElement(new DialogEnergyBar(te.getEnergy(), 9, 20, 14, 50, 200, 0));
-		this.addElement(new RedstoneToggleButton((IRedstoneControlled)te));
+		this.addElement(new RedstoneToggleButton((RedstoneControlled)te));
 		
 		this.addTooltip(new DialogTooltipMultiblock(158, 7, 11, 11, te));
 		

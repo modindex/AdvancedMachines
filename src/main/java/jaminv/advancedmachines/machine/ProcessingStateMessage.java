@@ -2,7 +2,7 @@ package jaminv.advancedmachines.machine;
 
 import io.netty.buffer.ByteBuf;
 import jaminv.advancedmachines.AdvancedMachines;
-import jaminv.advancedmachines.lib.machine.ICanProcess;
+import jaminv.advancedmachines.lib.machine.CanProcess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -48,8 +48,8 @@ public class ProcessingStateMessage implements IMessage {
 				  
 			Minecraft.getMinecraft().addScheduledTask(() -> {
 				TileEntity te = world.getTileEntity(pos);
-				if (te instanceof ICanProcess) {
-					((ICanProcess)te).setProcessingState(state);
+				if (te instanceof CanProcess) {
+					((CanProcess)te).setProcessingState(state);
 				}
 			});
 			return null;

@@ -16,7 +16,7 @@ import jaminv.advancedmachines.lib.recipe.RecipeManager;
  * observers should not be able.  
  */
 public interface IMachineController extends IMachineProcess {
-	public interface ISubController {
+	public interface SubController {
 		public void setController(@Nullable IMachineController controller);
 		public default boolean preProcess(IMachineController controller) { return false; }
 		public default boolean postProcess(IMachineController controller) { return false; }

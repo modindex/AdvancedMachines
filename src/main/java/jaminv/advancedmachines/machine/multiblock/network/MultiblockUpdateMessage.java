@@ -2,7 +2,7 @@ package jaminv.advancedmachines.machine.multiblock.network;
 
 import io.netty.buffer.ByteBuf;
 import jaminv.advancedmachines.AdvancedMachines;
-import jaminv.advancedmachines.machine.TileMachineMultiblock;
+import jaminv.advancedmachines.machine.TileMachine;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -51,10 +51,10 @@ public class MultiblockUpdateMessage implements IMessage {
 			  
 			  if (!world.isBlockLoaded(machine)) { return null; }
 			  TileEntity te = world.getTileEntity(machine);
-			  if (!(te instanceof TileMachineMultiblock)) { return null; }			  
+			  if (!(te instanceof TileMachine)) { return null; }			  
 			  
 			  Minecraft.getMinecraft().addScheduledTask(() -> {
-				  ((TileMachineMultiblock)te).scanMultiblock(blockDestroyed);
+				  ((TileMachine)te).scanMultiblock(blockDestroyed);
 			  });
 			  return null;
 		  }

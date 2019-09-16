@@ -16,10 +16,10 @@ public class ContainerMachine extends Container implements ILayoutUser {
 
 	IItemHandlerMachine inventory;
 	IInventory playerInventory;
-	ISyncManager sync;
+	SyncManager sync;
 	ILayoutManager layout;
 	
-	public ContainerMachine(ILayoutManager layout, IItemHandlerMachine inventory, IInventory playerInventory, ISyncManager sync) {
+	public ContainerMachine(ILayoutManager layout, IItemHandlerMachine inventory, IInventory playerInventory, SyncManager sync) {
 		this.inventory = inventory;
 		this.playerInventory = playerInventory;
 		this.sync = sync;

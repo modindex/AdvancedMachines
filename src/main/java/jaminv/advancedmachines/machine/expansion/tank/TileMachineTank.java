@@ -40,7 +40,7 @@ import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 public class TileMachineTank extends TileMachineExpansion implements ITickable, HasGui, HasFacing, HasItemNBT,
-		IMachineController.ISubController, IItemObservable.IObserver, IFluidObservable.IObserver, DialogIOToggle.ISwitchableIO,
+		IMachineController.SubController, IItemObservable.IObserver, IFluidObservable.IObserver, DialogIOToggle.ISwitchableIO,
 		DialogBucketToggle.Provider {
 	
 	public static final ILayoutManager layout = new LayoutManager()

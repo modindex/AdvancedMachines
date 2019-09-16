@@ -1,22 +1,22 @@
 package jaminv.advancedmachines.machine.instance.purifier;
 
 import jaminv.advancedmachines.lib.container.ContainerMachine;
-import jaminv.advancedmachines.lib.container.ISyncManager;
+import jaminv.advancedmachines.lib.container.SyncManager;
 import jaminv.advancedmachines.lib.container.layout.ILayoutManager;
 import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.HotbarLayout;
 import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.InventoryLayout;
 import jaminv.advancedmachines.lib.container.layout.JeiLayoutManager;
 import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
-import jaminv.advancedmachines.machine.TileMachineMultiblock;
+import jaminv.advancedmachines.machine.TileMachine;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import net.minecraft.inventory.IInventory;
 
-public class TileMachinePurifier extends TileMachineMultiblock {
+public class TileMachinePurifier extends TileMachine {
 	
 	/** Discrete Container class required by JEI */
 	public static class ContainerPurifier extends ContainerMachine {
 		public ContainerPurifier(ILayoutManager layout, IItemHandlerMachine inventory, IInventory playerInventory,
-				ISyncManager sync) {
+				SyncManager sync) {
 			super(layout, inventory, playerInventory, sync);
 		}
 	}

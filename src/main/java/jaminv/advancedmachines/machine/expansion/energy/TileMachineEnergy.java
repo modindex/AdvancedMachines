@@ -19,7 +19,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
-public class TileMachineEnergy extends TileMachineExpansion implements HasGui, IContainerUpdate, IMachineController.ISubController, HasFacing, IEnergyObservable.IObserver {
+public class TileMachineEnergy extends TileMachineExpansion implements HasGui, IContainerUpdate, IMachineController.SubController, HasFacing, IEnergyObservable.IObserver {
 	
 	protected EnumFacing facing = EnumFacing.NORTH;
 	protected IMachineController controller;

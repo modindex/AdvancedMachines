@@ -6,7 +6,7 @@ import jaminv.advancedmachines.lib.render.quad.LayeredTextureList;
 import jaminv.advancedmachines.lib.render.quad.QuadBuilder;
 import jaminv.advancedmachines.lib.render.quad.QuadBuilderLayeredBlock;
 import jaminv.advancedmachines.lib.render.quad.Texture;
-import jaminv.advancedmachines.machine.BlockMachineMultiblock;
+import jaminv.advancedmachines.machine.BlockMachine;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.render.RawTextures;
 import net.minecraft.block.Block;
@@ -45,8 +45,8 @@ public class QuadBuilderMultiblockItem implements QuadBuilder {
 			if (block instanceof VariantExpansion.HasVariant) {
 				variant = ((VariantExpansion.HasVariant)block).getVariant();
 			}
-			if (block instanceof BlockMachineMultiblock) {
-				BlockMachineMultiblock machine = ((BlockMachineMultiblock)block);
+			if (block instanceof BlockMachine) {
+				BlockMachine machine = ((BlockMachine)block);
 				face = RawTextures.get(machine.getMachineType().getName(), "inactive");
 			}
 		}

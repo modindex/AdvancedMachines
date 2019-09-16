@@ -22,7 +22,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 
-public class TileMachineInventory extends TileMachineExpansion implements HasGui, IMachineController.ISubController, HasFacing, HasItemNBT, DialogIOToggle.ISwitchableIO, IItemObservable.IObserver {
+public class TileMachineInventory extends TileMachineExpansion implements HasGui, IMachineController.SubController, HasFacing, HasItemNBT, DialogIOToggle.ISwitchableIO, IItemObservable.IObserver {
 
 	public static final ILayoutManager layout = new LayoutManager()
 		.addLayout(new ItemLayoutGrid.InventoryLayout(8, 38))

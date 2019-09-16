@@ -1,22 +1,22 @@
 package jaminv.advancedmachines.machine.instance.stabilizer;
 
 import jaminv.advancedmachines.lib.container.ContainerMachine;
-import jaminv.advancedmachines.lib.container.ISyncManager;
+import jaminv.advancedmachines.lib.container.SyncManager;
 import jaminv.advancedmachines.lib.container.layout.ILayoutManager;
 import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.HotbarLayout;
 import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.InventoryLayout;
 import jaminv.advancedmachines.lib.container.layout.JeiLayoutManager;
 import jaminv.advancedmachines.lib.container.layout.impl.BucketLayout;
 import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
-import jaminv.advancedmachines.machine.TileMachineMultiblock;
+import jaminv.advancedmachines.machine.TileMachine;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import net.minecraft.inventory.IInventory;
 
-public class TileMachineStabilizer extends TileMachineMultiblock {
+public class TileMachineStabilizer extends TileMachine {
 	
 	public static class ContainerStabilizer extends ContainerMachine {
 		public ContainerStabilizer(ILayoutManager layout, IItemHandlerMachine inventory, IInventory playerInventory,
-				ISyncManager sync) {
+				SyncManager sync) {
 			super(layout, inventory, playerInventory, sync);
 		}
 	}

@@ -1,9 +1,9 @@
 package jaminv.advancedmachines.lib.machine;
 
 import jaminv.advancedmachines.lib.dialog.control.DialogToggleButton.IEnumIterable;
-import jaminv.advancedmachines.lib.machine.IRedstoneControlled.RedstoneState;
+import jaminv.advancedmachines.lib.machine.RedstoneControlled.RedstoneState;
 
-public interface IRedstoneControlled {
+public interface RedstoneControlled {
 	public static enum RedstoneState implements IEnumIterable<RedstoneState> {
 		IGNORE(0, "dialog.common.redstone.ignore"), ACTIVE(1, "dialog.common.redstone.active"), INACTIVE(2, "dialog.common.redstone.inactive");
 		private static RedstoneState[] vals = values();

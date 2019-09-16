@@ -7,7 +7,7 @@ import jaminv.advancedmachines.lib.dialog.control.DialogTextureElement;
 import jaminv.advancedmachines.lib.jei.JeiDialog;
 import jaminv.advancedmachines.lib.jei.element.JeiEnergyBar;
 import jaminv.advancedmachines.lib.jei.element.JeiProgressIndicator;
-import jaminv.advancedmachines.lib.machine.IRedstoneControlled;
+import jaminv.advancedmachines.lib.machine.RedstoneControlled;
 import jaminv.advancedmachines.lib.util.coord.CoordRect;
 import jaminv.advancedmachines.machine.dialog.DialogEnergyBar;
 import jaminv.advancedmachines.machine.dialog.DialogMultiblockQuantity;
@@ -37,7 +37,7 @@ public class DialogMachinePress extends JeiDialog {
 
 		this.addElement(new DialogProcessBar(te.getController(), 79, 38, 24, 17, 200, 50));
 		this.addElement(new DialogEnergyBar(te.getEnergy(), 9, 20, 14, 50, 200, 0));
-		this.addElement(new RedstoneToggleButton((IRedstoneControlled)te));
+		this.addElement(new RedstoneToggleButton((RedstoneControlled)te));
 		
 		this.addTooltip(new DialogTooltipMultiblock(158, 7, 11, 11, te));
 		

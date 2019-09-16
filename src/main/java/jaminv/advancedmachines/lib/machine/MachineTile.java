@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.lib.machine;
 
-public interface IMachineTE extends ICanProcess, IRedstoneControlled {
+public interface MachineTile extends CanProcess, RedstoneControlled {
 	public boolean isClient();
 	
 	/** Allows the machine to process more than one item at a time. 
