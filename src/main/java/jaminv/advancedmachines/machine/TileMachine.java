@@ -23,7 +23,6 @@ import jaminv.advancedmachines.lib.machine.MachineStorageCapability;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
 import jaminv.advancedmachines.lib.util.helper.HasFacing;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
-import jaminv.advancedmachines.util.network.ProcessingStateMessage;
 import jaminv.advancedmachines.util.network.RedstoneStateMessage;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
@@ -38,7 +37,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 public abstract class TileMachine extends TileEntity implements ITickable, HasGui, IMachineTE, HasFacing, ISyncSubject {
@@ -103,12 +101,8 @@ public abstract class TileMachine extends TileEntity implements ITickable, HasGu
 		if (world != null) { world.checkLightFor(EnumSkyBlock.BLOCK, pos); }
 		
 		if (world != null && !world.isRemote) {
-			AdvancedMachines.NETWORK.sendToAll(getProcessingStateMessage(state));
+			AdvancedMachines.NETWORK.sendToAll(new ProcessingStateMessage(this.getPos(), state));
 		}
-	}
-
-	protected IMessage getProcessingStateMessage(boolean state) {
-		return new ProcessingStateMessage(this.getPos(), this.getPos(), state);
 	}
 	
 	/* IRedstoneControlled */

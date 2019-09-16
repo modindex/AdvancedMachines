@@ -1,13 +1,14 @@
 package jaminv.advancedmachines.util.network;
 
 import jaminv.advancedmachines.AdvancedMachines;
+import jaminv.advancedmachines.machine.ProcessingStateMessage;
+import jaminv.advancedmachines.machine.ProcessingStateMessage.ProcessingStateMessageHandler;
 import jaminv.advancedmachines.machine.multiblock.network.MultiblockDestroyMessage;
 import jaminv.advancedmachines.machine.multiblock.network.MultiblockDestroyMessage.MultiblockDestroyMessageHandler;
 import jaminv.advancedmachines.machine.multiblock.network.MultiblockUpdateMessage;
 import jaminv.advancedmachines.machine.multiblock.network.MultiblockUpdateMessage.MultiblockUpdateMessageHandler;
 import jaminv.advancedmachines.util.network.BucketStateMessage.BucketStateMessageHandler;
 import jaminv.advancedmachines.util.network.IOStateMessage.IOMessageHandler;
-import jaminv.advancedmachines.util.network.ProcessingStateMessage.ProcessingStateMessageHandler;
 import jaminv.advancedmachines.util.network.RedstoneStateMessage.RedstoneStateMessageHandler;
 import net.minecraftforge.fml.relauncher.Side;
 

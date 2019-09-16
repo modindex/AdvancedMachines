@@ -321,7 +321,7 @@ public class MachineController implements IMachineController, IItemObservable.IO
 		this.totalProcessTime = nbt.getInteger("totalProcessTime");
 		this.qtyProcessing = nbt.getInteger("qtyProcessing");
 		
-		if (processTimeRemaining > 0) {
+		if (processTimeRemaining > 0 && !te.isProcessing()) {
 			te.setProcessingState(true);
 		}
 	}

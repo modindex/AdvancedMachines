@@ -23,7 +23,6 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-// TODO: Light entire face
 public class BlockMachineMultiply extends BlockMachineExpansion {
 	
 	public BlockMachineMultiply(VariantExpansion variant) {
@@ -71,7 +70,7 @@ public class BlockMachineMultiply extends BlockMachineExpansion {
 	
 	@Override
 	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
-		TileEntity te = BlockHelper.getTileEntity(world, pos);
+ 		TileEntity te = BlockHelper.getTileEntity(world, pos);
 		if (te instanceof TileMachineMultiply) {
 			return ((TileMachineMultiply)te).isActive() ? 15 : 0;
 		}

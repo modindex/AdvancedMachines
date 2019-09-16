@@ -7,6 +7,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import jaminv.advancedmachines.AdvancedMachines;
 import jaminv.advancedmachines.lib.machine.IMachineController.ISubController;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
+import jaminv.advancedmachines.lib.util.helper.BlockIterator;
 import jaminv.advancedmachines.machine.expansion.MachineUpgrade.UpgradeType;
 import jaminv.advancedmachines.machine.expansion.MachineUpgradeTile;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
@@ -18,15 +19,12 @@ import jaminv.advancedmachines.machine.multiblock.face.MachineFaceTile;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.machine.multiblock.network.MultiblockDestroyMessage;
 import jaminv.advancedmachines.machine.multiblock.network.MultiblockUpdateMessage;
-import jaminv.advancedmachines.util.network.ProcessingStateMessage;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
-// FIXME: Machine Face Active not set properly
 public abstract class TileMachineMultiblock extends TileMachine implements MachineUpgradeTile, MachineFaceTile {
 
 	public TileMachineMultiblock(RecipeManager recipeManager) {
@@ -112,19 +110,29 @@ public abstract class TileMachineMultiblock extends TileMachine implements Machi
 		if (multiblockState.isValid()) {
 			this.addSubcontrollers();
 			Pair<BlockPos, BlockPos> face = MachineFaceBuilder.scanFace(world, pos, facing);
-			if (face != null) { facemin = face.getLeft(); facemax = face.getRight(); }
+			if (face != null) { 
+				facemin = face.getLeft(); facemax = face.getRight();
+				setFaceActive(this.processingState);
+			}
 		}
 	}
 	
+	protected void setFaceActive(boolean state) {
+		BlockIterator.iterateBlocks(world, facemin, facemax, (world, pos) -> {
+			TileEntity te = world.getTileEntity(pos);
+			if (te instanceof MachineFaceTile) {
+				((MachineFaceTile)te).setActive(state);
+			}
+		});
+	}
+	
 	@Override
-	protected IMessage getProcessingStateMessage(boolean state) {
+	public void setProcessingState(boolean state) {
+		super.setProcessingState(state);
+		
 		if (facemin != null && facemax != null) {
-			return new ProcessingStateMessage(facemin, facemax, state);
-		} else {
-			super.getProcessingStateMessage(state);
+			setFaceActive(state);
 		}
-
-		return super.getProcessingStateMessage(state);
 	}
 
 	@Override

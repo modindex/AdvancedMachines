@@ -1,10 +1,8 @@
-package jaminv.advancedmachines.util.network;
+package jaminv.advancedmachines.machine;
 
 import io.netty.buffer.ByteBuf;
 import jaminv.advancedmachines.AdvancedMachines;
 import jaminv.advancedmachines.lib.machine.ICanProcess;
-import jaminv.advancedmachines.lib.util.helper.BlockIterator;
-import jaminv.advancedmachines.machine.multiblock.face.MachineFaceTile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -17,25 +15,23 @@ public class ProcessingStateMessage implements IMessage {
 	
 	public ProcessingStateMessage() {}
 	
-	private BlockPos min, max;
+	private BlockPos pos;
 	private boolean state;
 	 
-	public ProcessingStateMessage(BlockPos min, BlockPos max, boolean state) {
-		this.min = min; this.max = max;
+	public ProcessingStateMessage(BlockPos pos, boolean state) {
+		this.pos = pos;
 		this.state = state;
 	}
 	
 	@Override 
 	public void toBytes(ByteBuf buf) {
-		buf.writeLong(min.toLong());
-		buf.writeLong(max.toLong());
+		buf.writeLong(pos.toLong());
 		buf.writeBoolean(state);
 	}
 	
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		min = BlockPos.fromLong(buf.readLong());
-		max = BlockPos.fromLong(buf.readLong());
+		pos = BlockPos.fromLong(buf.readLong());
 		state = buf.readBoolean();
 	}
 	  
@@ -45,23 +41,16 @@ public class ProcessingStateMessage implements IMessage {
 		public IMessage onMessage(ProcessingStateMessage message, MessageContext ctx) {
 			World world = AdvancedMachines.proxy.getMessageWorld(ctx);
 			  
-			BlockPos min = message.min;
-			BlockPos max = message.max;
+			BlockPos pos = message.pos;
 			boolean state = message.state;
 				  
-			if (!world.isBlockLoaded(min) && !world.isBlockLoaded(max)) { return null; }
+			if (!world.isBlockLoaded(pos)) { return null; }
 				  
 			Minecraft.getMinecraft().addScheduledTask(() -> {
-				BlockIterator.iterateBlocks(world, min, max, (worldIn, pos) -> {
-					TileEntity te = worldIn.getTileEntity(pos);
-					if (te instanceof ICanProcess) {
-						((ICanProcess)te).setProcessingState(state);
-					}
-					if (te instanceof MachineFaceTile) {
-						((MachineFaceTile)te).setActive(state);
-					}					
-				});
-				world.markBlockRangeForRenderUpdate(min, max);
+				TileEntity te = world.getTileEntity(pos);
+				if (te instanceof ICanProcess) {
+					((ICanProcess)te).setProcessingState(state);
+				}
 			});
 			return null;
 		}
