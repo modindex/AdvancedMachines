@@ -26,6 +26,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
+// FIXME: Machine Face Active not set properly
 public abstract class TileMachineMultiblock extends TileMachine implements MachineUpgradeTile, MachineFaceTile {
 
 	public TileMachineMultiblock(RecipeManager recipeManager) {

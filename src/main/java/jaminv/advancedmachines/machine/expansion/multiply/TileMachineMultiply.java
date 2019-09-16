@@ -3,8 +3,8 @@ package jaminv.advancedmachines.machine.expansion.multiply;
 import javax.annotation.Nullable;
 
 import jaminv.advancedmachines.machine.expansion.TileMachineExpansion;
-import jaminv.advancedmachines.machine.multiblock.face.MachineFaceTile;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
+import jaminv.advancedmachines.machine.multiblock.face.MachineFaceTile;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
@@ -29,7 +29,8 @@ public class TileMachineMultiply extends TileMachineExpansion implements Machine
 	
 	@Override
 	public void setActive(boolean active) {
-		this.active = active;		
+		//if (world != null) { world.checkLightFor(EnumSkyBlock.BLOCK, pos); }
+		this.active = active;
 	}
 	
 	public boolean isActive() { return active; }
