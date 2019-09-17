@@ -20,14 +20,14 @@ public class InventoryHelper {
 	/** Push item stack (if possible) into input slots of an inventory.
 	 * Convenience method of `pushStack`.
 	 * @return ItemStack with remaining items. */
-	public static ItemStack pushStackToInput(ItemStack stack, IItemHandlerMachine inv, boolean simulate) {
+	public static ItemStack pushStackToInput(ItemStack stack, ItemHandlerSeparated inv, boolean simulate) {
 		return pushStack(stack, inv, inv.getFirstInputSlot(), inv.getLastInputSlot(), simulate);
 	}
 	
 	/** Push item stack (if possible) into additional slots of an inventory.
 	 * Convenience method of `pushStack`.
 	 * @return ItemStack with remaining items. */
-	public static ItemStack pushStackToAdditional(ItemStack stack, IItemHandlerMachine inv, boolean simulate) {
+	public static ItemStack pushStackToAdditional(ItemStack stack, ItemHandlerSeparated inv, boolean simulate) {
 		return pushStack(stack, inv, inv.getFirstAdditionalSlot(), inv.getLastAdditionalSlot(), simulate);
 	}
 	
@@ -70,7 +70,7 @@ public class InventoryHelper {
 	 * Source inventory items are extracted.
 	 * Convenience method of `moveAll`. 
 	 * @return true if any items were moved */
-	public static boolean moveAllToInput(IItemHandler source, IItemHandlerMachine dest) {
+	public static boolean moveAllToInput(IItemHandler source, ItemHandlerSeparated dest) {
 		return moveAll(source, 0, source.getSlots()-1, dest, dest.getFirstInputSlot(), dest.getLastInputSlot());
 	}
 	
@@ -78,7 +78,7 @@ public class InventoryHelper {
 	 * Source inventory items are extracted.
 	 * Convenience method of `moveAll`. 
 	 * @return true if any items were moved */
-	public static boolean moveOutputToAll(IItemHandlerMachine source, IItemHandler dest) {
+	public static boolean moveOutputToAll(ItemHandlerSeparated source, IItemHandler dest) {
 		return moveAll(source, source.getFirstOutputSlot(), source.getLastOutputSlot(), dest, 0, dest.getSlots()-1);
 	}
 }

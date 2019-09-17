@@ -7,7 +7,7 @@ import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.HotbarLayout;
 import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.InventoryLayout;
 import jaminv.advancedmachines.lib.container.layout.JeiLayoutManager;
 import jaminv.advancedmachines.lib.container.layout.impl.BucketLayout;
-import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
+import jaminv.advancedmachines.lib.inventory.ItemHandlerSeparated;
 import jaminv.advancedmachines.machine.TileMachine;
 import jaminv.advancedmachines.machine.instance.grinder.GrinderManager;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
@@ -17,7 +17,7 @@ public class TileMachineMelter extends TileMachine {
 	
 	/** Discrete Container class required for JEI */
 	public static class ContainerMelter extends ContainerMachine {
-		public ContainerMelter(ILayoutManager layout, IItemHandlerMachine inventory, IInventory playerInventory,
+		public ContainerMelter(ILayoutManager layout, ItemHandlerSeparated inventory, IInventory playerInventory,
 				SyncManager sync) {
 			super(layout, inventory, playerInventory, sync);
 		}

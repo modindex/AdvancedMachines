@@ -7,16 +7,16 @@ import jaminv.advancedmachines.lib.parser.DataParser;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe.IngredientType;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe.RecipeSection;
-import jaminv.advancedmachines.lib.recipe.RecipeImpl;
+import jaminv.advancedmachines.lib.recipe.MachineRecipe;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
-import jaminv.advancedmachines.lib.recipe.RecipeManagerImpl;
+import jaminv.advancedmachines.lib.recipe.MachineRecipeManager;
 
 public class InjectorManager {
 	
-	protected static RecipeManagerImpl<RecipeImpl> manager = new RecipeManagerImpl<>();
+	protected static MachineRecipeManager<MachineRecipe> manager = new MachineRecipeManager<>();
 	
 	public static RecipeManager getRecipeManager() { return manager; }
-	public static List<RecipeImpl> getRecipeList() { return manager.getRecipeList(); }
+	public static List<MachineRecipe> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {
 		DataParser.parseFolder(ModReference.MODID, "data/recipes/injector", new FileHandlerRecipe("injector", (recipe) -> { 

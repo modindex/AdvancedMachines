@@ -6,10 +6,10 @@ import jaminv.advancedmachines.lib.container.ContainerInventory;
 import jaminv.advancedmachines.lib.container.layout.ILayoutManager;
 import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid;
 import jaminv.advancedmachines.lib.container.layout.LayoutManager;
-import jaminv.advancedmachines.lib.inventory.IItemObservable;
+import jaminv.advancedmachines.lib.inventory.ItemObservable;
 import jaminv.advancedmachines.lib.inventory.InventoryHelper;
 import jaminv.advancedmachines.lib.inventory.ItemStackHandlerObservable;
-import jaminv.advancedmachines.lib.machine.IMachineController;
+import jaminv.advancedmachines.lib.machine.MachineController;
 import jaminv.advancedmachines.lib.util.blocks.HasItemNBT;
 import jaminv.advancedmachines.lib.util.helper.HasFacing;
 import jaminv.advancedmachines.machine.dialog.DialogIOToggle;
@@ -22,7 +22,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 
-public class TileMachineInventory extends TileMachineExpansion implements HasGui, IMachineController.SubController, HasFacing, HasItemNBT, DialogIOToggle.ISwitchableIO, IItemObservable.IObserver {
+public class TileMachineInventory extends TileMachineExpansion implements HasGui, MachineController.SubController, HasFacing, HasItemNBT, DialogIOToggle.ISwitchableIO, ItemObservable.IObserver {
 
 	public static final ILayoutManager layout = new LayoutManager()
 		.addLayout(new ItemLayoutGrid.InventoryLayout(8, 38))
@@ -34,7 +34,7 @@ public class TileMachineInventory extends TileMachineExpansion implements HasGui
 	protected EnumFacing facing = EnumFacing.NORTH;
 	protected boolean inputState = true;
 	protected int priority = 0;
-	protected IMachineController controller;
+	protected MachineController controller;
 	
 	public TileMachineInventory() {
 		super();
@@ -85,7 +85,7 @@ public class TileMachineInventory extends TileMachineExpansion implements HasGui
 	@Override public boolean hasController() { return controller == null; }
 
 	@Override
-	public void setController(IMachineController controller) {
+	public void setController(MachineController controller) {
 		this.controller = controller;
 		if (controller != null) {
 			// TODO: Machine Input/Output determination
@@ -113,7 +113,7 @@ public class TileMachineInventory extends TileMachineExpansion implements HasGui
 	}
 
 	@Override
-	public boolean preProcess(IMachineController controller) {
+	public boolean preProcess(MachineController controller) {
 		if (inputState) {
 			return InventoryHelper.moveAllToInput(inventory, controller.getInventory());
 		} else {

@@ -12,7 +12,7 @@ import com.google.gson.JsonSyntaxException;
 
 import jaminv.advancedmachines.ModConfig;
 import jaminv.advancedmachines.ModReference;
-import jaminv.advancedmachines.lib.recipe.RecipeImpl;
+import jaminv.advancedmachines.lib.recipe.MachineRecipe;
 import jaminv.advancedmachines.lib.recipe.RecipeInput;
 import jaminv.advancedmachines.lib.recipe.RecipeOutput;
 import jaminv.advancedmachines.lib.util.logger.Logger;
@@ -51,7 +51,7 @@ public class FileHandlerRecipe implements FileHandler {
 	
 	/** Functional Interface */
 	public static interface RecipeHandler {
-		public void addRecipe(RecipeImpl recipe);
+		public void addRecipe(MachineRecipe recipe);
 	}
 	
 	protected final String logname;
@@ -110,7 +110,7 @@ public class FileHandlerRecipe implements FileHandler {
 
 		int energy = getEnergy(json, ModConfig.general.defaultGrinderEnergyCost);
 		int time = getTime(json, ModConfig.general.processTimeBasic);
-		RecipeImpl recipe = new RecipeImpl(filename + "." + path, energy, time);
+		MachineRecipe recipe = new MachineRecipe(filename + "." + path, energy, time);
 		recipe.setXp(JsonUtils.getFloat(json, "xp", 0.0f));
 		
 		for (RecipeInput input : parseInputs(json, RecipeSection.INPUT)) {

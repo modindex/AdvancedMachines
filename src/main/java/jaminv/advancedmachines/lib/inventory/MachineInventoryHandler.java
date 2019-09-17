@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 
-public class MachineInventoryHandler extends ItemStackHandlerObservable implements IItemHandlerMachine {
+public class MachineInventoryHandler extends ItemStackHandlerObservable implements ItemHandlerSeparated {
 	
 	int inputSlots = 0, outputSlots = 0, secondarySlots = 0, additionalSlots = 0;
 	List<ISlotHandler> additionalHandlers = new ArrayList<ISlotHandler>(); 

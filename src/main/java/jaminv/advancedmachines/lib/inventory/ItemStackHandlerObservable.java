@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class ItemStackHandlerObservable extends ItemStackHandler implements IItemObservable {
+public class ItemStackHandlerObservable extends ItemStackHandler implements ItemObservable {
 	
 	private List<IObserver> observers = new ArrayList<>();
 	public ItemStackHandlerObservable addObserver(IObserver obv) { observers.add(obv); return this; }

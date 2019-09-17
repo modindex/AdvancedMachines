@@ -13,13 +13,13 @@ import jaminv.advancedmachines.lib.container.SyncSubject;
 import jaminv.advancedmachines.lib.energy.EnergyStorageAdvanced;
 import jaminv.advancedmachines.lib.energy.IEnergyStorageInternal;
 import jaminv.advancedmachines.lib.fluid.BucketHandler;
-import jaminv.advancedmachines.lib.fluid.FluidHandler;
-import jaminv.advancedmachines.lib.fluid.IFluidHandlerAdvanced;
-import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
+import jaminv.advancedmachines.lib.fluid.FluidTanksHandler;
+import jaminv.advancedmachines.lib.fluid.FluidHandlerAdditional;
+import jaminv.advancedmachines.lib.inventory.ItemHandlerSeparated;
 import jaminv.advancedmachines.lib.inventory.MachineInventoryHandler;
-import jaminv.advancedmachines.lib.machine.IMachineController;
-import jaminv.advancedmachines.lib.machine.IMachineController.SubController;
 import jaminv.advancedmachines.lib.machine.MachineController;
+import jaminv.advancedmachines.lib.machine.MachineController.SubController;
+import jaminv.advancedmachines.lib.machine.MachineControllerDefault;
 import jaminv.advancedmachines.lib.machine.MachineStorage;
 import jaminv.advancedmachines.lib.machine.MachineStorageCapability;
 import jaminv.advancedmachines.lib.machine.MachineTile;
@@ -62,13 +62,13 @@ public abstract class TileMachine extends TileEntity implements ITickable, HasGu
 		MachineUpgradeTile, MachineFaceTile {
 	
 	protected final MachineStorage storage;
-	protected final MachineController controller;
+	protected final MachineControllerDefault controller;
 	protected final SyncManagerStandard sync = new SyncManagerStandard();
 	
 	protected final MachineInventoryHandler inventory = new MachineInventoryHandler();
-	protected final FluidHandler inputTanks = new FluidHandler(ModConfig.general.defaultMachineFluidCapacity * VariantExpansion.maxMultiplier,
+	protected final FluidTanksHandler inputTanks = new FluidTanksHandler(ModConfig.general.defaultMachineFluidCapacity * VariantExpansion.maxMultiplier,
 		ModConfig.general.defaultMachineFluidTransfer * VariantExpansion.maxMultiplier);
-	protected final FluidHandler outputTanks = new FluidHandler(ModConfig.general.defaultMachineFluidCapacity * VariantExpansion.maxMultiplier,
+	protected final FluidTanksHandler outputTanks = new FluidTanksHandler(ModConfig.general.defaultMachineFluidCapacity * VariantExpansion.maxMultiplier,
 			ModConfig.general.defaultMachineFluidTransfer * VariantExpansion.maxMultiplier);
 	protected final EnergyStorageAdvanced energy = new EnergyStorageAdvanced(ModConfig.general.defaultMachineEnergyCapacity * VariantExpansion.maxMultiplier);
 	
@@ -76,16 +76,16 @@ public abstract class TileMachine extends TileEntity implements ITickable, HasGu
 		super();
 		
 		storage = new MachineStorage(inventory, inputTanks, outputTanks, energy, recipeManager);
-		controller = new MachineController(storage, recipeManager, this);
+		controller = new MachineControllerDefault(storage, recipeManager, this);
 		
 		sync.addSubject(this);
 		sync.addSubject(controller);
 	}
 	
-	public IMachineController getController() { return controller; }
-	public IItemHandlerMachine getInventory() { return inventory; }
-	public IFluidHandlerAdvanced getInputTanks() { return inputTanks; }
-	public IFluidHandlerAdvanced getOutputTanks() { return outputTanks; }
+	public MachineController getController() { return controller; }
+	public ItemHandlerSeparated getInventory() { return inventory; }
+	public FluidHandlerAdditional getInputTanks() { return inputTanks; }
+	public FluidHandlerAdditional getOutputTanks() { return outputTanks; }
 	public IEnergyStorageInternal getEnergy() { return energy; }
 	public RecipeManager getRecipeManager() { return storage.getRecipeManager(); }
 	

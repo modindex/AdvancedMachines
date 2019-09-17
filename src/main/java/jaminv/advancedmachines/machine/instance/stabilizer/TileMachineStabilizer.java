@@ -7,7 +7,7 @@ import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.HotbarLayout;
 import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.InventoryLayout;
 import jaminv.advancedmachines.lib.container.layout.JeiLayoutManager;
 import jaminv.advancedmachines.lib.container.layout.impl.BucketLayout;
-import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
+import jaminv.advancedmachines.lib.inventory.ItemHandlerSeparated;
 import jaminv.advancedmachines.machine.TileMachine;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import net.minecraft.inventory.IInventory;
@@ -15,7 +15,7 @@ import net.minecraft.inventory.IInventory;
 public class TileMachineStabilizer extends TileMachine {
 	
 	public static class ContainerStabilizer extends ContainerMachine {
-		public ContainerStabilizer(ILayoutManager layout, IItemHandlerMachine inventory, IInventory playerInventory,
+		public ContainerStabilizer(ILayoutManager layout, ItemHandlerSeparated inventory, IInventory playerInventory,
 				SyncManager sync) {
 			super(layout, inventory, playerInventory, sync);
 		}

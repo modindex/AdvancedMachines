@@ -6,7 +6,7 @@ import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
-public interface IItemHandlerMachine extends IItemHandler, IItemHandlerModifiable, IItemObservable, INBTSerializable<NBTTagCompound> {
+public interface ItemHandlerSeparated extends IItemHandler, IItemHandlerModifiable, ItemObservable, INBTSerializable<NBTTagCompound> {
 	public boolean isSlotInput(int slotIndex);
 	public boolean isSlotOutput(int slotIndex);
 	public boolean isSlotSecondary(int slotIndex);

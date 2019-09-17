@@ -11,7 +11,7 @@ import jaminv.advancedmachines.lib.container.layout.impl.BucketLayout;
 import jaminv.advancedmachines.lib.container.layout.impl.OutputLayout;
 import jaminv.advancedmachines.lib.dialog.fluid.DialogBucketToggle;
 import jaminv.advancedmachines.lib.fluid.BucketHandler;
-import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
+import jaminv.advancedmachines.lib.inventory.ItemHandlerSeparated;
 import jaminv.advancedmachines.lib.inventory.slot.SlotHandlerFluid;
 import jaminv.advancedmachines.machine.TileMachine;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
@@ -21,7 +21,7 @@ import net.minecraft.inventory.IInventory;
 public class TileMachineInjector extends TileMachine implements DialogBucketToggle.Provider {
 
 	public static class ContainerInjector extends ContainerMachine {
-		public ContainerInjector(ILayoutManager layout, IItemHandlerMachine inventory, IInventory playerInventory,
+		public ContainerInjector(ILayoutManager layout, ItemHandlerSeparated inventory, IInventory playerInventory,
 				SyncManager sync) {
 			super(layout, inventory, playerInventory, sync);
 		}

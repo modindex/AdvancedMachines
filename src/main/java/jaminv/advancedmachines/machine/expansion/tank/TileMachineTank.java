@@ -11,11 +11,11 @@ import jaminv.advancedmachines.lib.container.layout.LayoutManager;
 import jaminv.advancedmachines.lib.container.layout.impl.BucketLayout;
 import jaminv.advancedmachines.lib.dialog.fluid.DialogBucketToggle;
 import jaminv.advancedmachines.lib.fluid.BucketHandler;
-import jaminv.advancedmachines.lib.fluid.FluidTankAdvanced;
-import jaminv.advancedmachines.lib.fluid.IFluidObservable;
-import jaminv.advancedmachines.lib.inventory.IItemObservable;
+import jaminv.advancedmachines.lib.fluid.FluidTankDefault;
+import jaminv.advancedmachines.lib.fluid.FluidObservable;
+import jaminv.advancedmachines.lib.inventory.ItemObservable;
 import jaminv.advancedmachines.lib.inventory.ItemStackHandlerObservable;
-import jaminv.advancedmachines.lib.machine.IMachineController;
+import jaminv.advancedmachines.lib.machine.MachineController;
 import jaminv.advancedmachines.lib.util.blocks.HasItemNBT;
 import jaminv.advancedmachines.lib.util.helper.HasFacing;
 import jaminv.advancedmachines.machine.dialog.DialogIOToggle;
@@ -40,7 +40,7 @@ import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 public class TileMachineTank extends TileMachineExpansion implements ITickable, HasGui, HasFacing, HasItemNBT,
-		IMachineController.SubController, IItemObservable.IObserver, IFluidObservable.IObserver, DialogIOToggle.ISwitchableIO,
+		MachineController.SubController, ItemObservable.IObserver, FluidObservable.IObserver, DialogIOToggle.ISwitchableIO,
 		DialogBucketToggle.Provider {
 	
 	public static final ILayoutManager layout = new LayoutManager()
@@ -51,7 +51,7 @@ public class TileMachineTank extends TileMachineExpansion implements ITickable, 
 	protected EnumFacing facing = EnumFacing.NORTH;
 	protected boolean inputState = true;
 	protected int priority = 0;
-	protected IMachineController controller;
+	protected MachineController controller;
 	protected BucketHandler bucketHandler = new BucketHandler().setCallback(state -> {
 		if (controller != null) { controller.wake(); }		
 		if (world.isRemote) {
@@ -68,7 +68,7 @@ public class TileMachineTank extends TileMachineExpansion implements ITickable, 
 		}
 	};
 	
-	protected FluidTankAdvanced tank = new FluidTankAdvanced(ModConfig.general.defaultMachineFluidCapacity * VariantExpansion.maxMultiplier,
+	protected FluidTankDefault tank = new FluidTankDefault(ModConfig.general.defaultMachineFluidCapacity * VariantExpansion.maxMultiplier,
 		ModConfig.general.defaultMachineFluidTransfer * VariantExpansion.maxMultiplier);
 	public IFluidTank getTank() { return tank; }
 	
@@ -150,7 +150,7 @@ public class TileMachineTank extends TileMachineExpansion implements ITickable, 
 	@Override public boolean hasController() { return controller != null; }
 
 	@Override
-	public void setController(IMachineController controller) {
+	public void setController(MachineController controller) {
 		this.controller = controller;
 		if (controller != null) {
 			// TODO: Machine Input/Output determination
@@ -186,7 +186,7 @@ public class TileMachineTank extends TileMachineExpansion implements ITickable, 
 	}
 	
 	@Override
-	public boolean preProcess(IMachineController controller) {
+	public boolean preProcess(MachineController controller) {
 		boolean didSomething = bucketHandler.handleBucket(inventory, 0, tank);
 		
 		if (inputState) {
@@ -196,7 +196,7 @@ public class TileMachineTank extends TileMachineExpansion implements ITickable, 
 		}
 	}
 	
-	protected int moveInput(IMachineController controller) {
+	protected int moveInput(MachineController controller) {
 		FluidStack stack = tank.drain(Integer.MAX_VALUE, false);
 		int amount = controller.getFluidTank().fill(stack, false);
 		
@@ -208,7 +208,7 @@ public class TileMachineTank extends TileMachineExpansion implements ITickable, 
 		return 0;
 	}
 	
-	protected int moveOutput(IMachineController controller) {
+	protected int moveOutput(MachineController controller) {
 		FluidStack stack = controller.getFluidTank().drain(Integer.MAX_VALUE, false);
 		int amount = tank.fill(stack, false);
 		

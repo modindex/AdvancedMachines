@@ -9,10 +9,10 @@ import jaminv.advancedmachines.lib.parser.DataParser;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe.IngredientType;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe.RecipeSection;
-import jaminv.advancedmachines.lib.recipe.RecipeImpl;
+import jaminv.advancedmachines.lib.recipe.MachineRecipe;
 import jaminv.advancedmachines.lib.recipe.RecipeInput;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
-import jaminv.advancedmachines.lib.recipe.RecipeManagerImpl;
+import jaminv.advancedmachines.lib.recipe.MachineRecipeManager;
 import jaminv.advancedmachines.lib.recipe.RecipeOutput;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
@@ -21,10 +21,10 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class FurnaceManager {
-	protected static RecipeManagerImpl<RecipeImpl> manager = new RecipeManagerImpl<>();
+	protected static MachineRecipeManager<MachineRecipe> manager = new MachineRecipeManager<>();
 	
 	public static RecipeManager getRecipeManager() { return manager; }
-	public static List<RecipeImpl> getRecipeList() { return manager.getRecipeList(); }
+	public static List<MachineRecipe> getRecipeList() { return manager.getRecipeList(); }
 	
 	protected static String getOreName(ItemStack stack) {
 		int[] ids = OreDictionary.getOreIDs(stack);
@@ -53,7 +53,7 @@ public class FurnaceManager {
 				energy *= 14/20.0f;
 			}
 			
-			manager.addRecipe(new RecipeImpl("smelting_list." + key.getItem().getUnlocalizedName(), energy, ModConfig.general.processTimeBasic)
+			manager.addRecipe(new MachineRecipe("smelting_list." + key.getItem().getUnlocalizedName(), energy, ModConfig.general.processTimeBasic)
 				.addInput(new RecipeInput(key)).addOutput(new RecipeOutput(output)));
 		}
 

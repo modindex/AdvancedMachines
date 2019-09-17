@@ -11,13 +11,13 @@ import javax.annotation.Nullable;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 
-import jaminv.advancedmachines.lib.fluid.IFluidTankInternal;
+import jaminv.advancedmachines.lib.fluid.FluidTank;
 import net.minecraft.block.BlockShulkerBox;
 import net.minecraft.item.ItemShulkerBox;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-public class RecipeImpl implements RecipeJei, RecipeInternal {
+public class MachineRecipe implements RecipeJei, RecipeInternal {
 	
 	protected static class InputImpl implements Input {
 		protected List<Ingredient> items = new ArrayList<Ingredient>();
@@ -50,7 +50,7 @@ public class RecipeImpl implements RecipeJei, RecipeInternal {
 	private int processTime;
 	private float xp = 0.0f;
 	
-	public RecipeImpl(String id, int energy, int processTime) {
+	public MachineRecipe(String id, int energy, int processTime) {
 		this.recipeid = id;
 		this.energy = energy;
 		this.processTime = processTime;
@@ -144,12 +144,12 @@ public class RecipeImpl implements RecipeJei, RecipeInternal {
 
 	public String getRecipeId() { return recipeid; }
 	
-	public RecipeImpl addInput(RecipeInput input) {
+	public MachineRecipe addInput(RecipeInput input) {
 		this.input.add(input);
 		return this;
 	}
 	
-	public RecipeImpl addOutput(RecipeOutput output) {
+	public MachineRecipe addOutput(RecipeOutput output) {
 		this.output.add(output);
 		return this;
 	}
@@ -215,7 +215,7 @@ public class RecipeImpl implements RecipeJei, RecipeInternal {
 		return min;
 	}
 	
-	public int getOutputQty(ItemStack[] inventory, @Nullable IFluidTankInternal[] tanks) {
+	public int getOutputQty(ItemStack[] inventory, @Nullable FluidTank[] tanks) {
 		int slot = 0, tank = 0;
 		int min = -1;
 		for (RecipeOutput out : this.output) {
@@ -250,7 +250,7 @@ public class RecipeImpl implements RecipeJei, RecipeInternal {
 		return min;
 	}
 	
-	public int getRecipeQty(ItemStack[] items, FluidStack[] fluids, ItemStack[] inventory, IFluidTankInternal[] tanks) {
+	public int getRecipeQty(ItemStack[] items, FluidStack[] fluids, ItemStack[] inventory, FluidTank[] tanks) {
 		return Math.min(getInputQty(items, fluids), getOutputQty(inventory, tanks));
 	}
 	

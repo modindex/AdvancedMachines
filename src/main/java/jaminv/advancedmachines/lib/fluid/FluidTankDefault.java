@@ -7,13 +7,15 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class FluidTankAdvanced implements IFluidTankAdvanced {
+public class FluidTankDefault implements FluidTank, IFluidHandler, FluidObservable, INBTSerializable<NBTTagCompound> {
 	
     @Nullable
     protected FluidStack fluid;
@@ -22,16 +24,16 @@ public class FluidTankAdvanced implements IFluidTankAdvanced {
     protected int maxFill, maxDrain;
     protected IFluidTankProperties[] tankProperties;
 
-    public FluidTankAdvanced(@Nullable FluidStack fluidStack, int capacity, int maxFill, int maxDrain) {
+    public FluidTankDefault(@Nullable FluidStack fluidStack, int capacity, int maxFill, int maxDrain) {
         this.fluid = fluidStack;
         this.capacity = capacity;
         this.maxFill = maxFill;
         this.maxDrain = maxDrain;
     }
 
-    public FluidTankAdvanced(FluidStack fluidStack, int capacity, int maxTransfer) { this(null, capacity, maxTransfer, maxTransfer); }
-    public FluidTankAdvanced(int capacity, int maxTransfer) { this(null, capacity, maxTransfer, maxTransfer); }
-    public FluidTankAdvanced(int capacity, int maxFill, int maxDrain) { this(null, capacity, maxFill, maxDrain); }
+    public FluidTankDefault(FluidStack fluidStack, int capacity, int maxTransfer) { this(null, capacity, maxTransfer, maxTransfer); }
+    public FluidTankDefault(int capacity, int maxTransfer) { this(null, capacity, maxTransfer, maxTransfer); }
+    public FluidTankDefault(int capacity, int maxFill, int maxDrain) { this(null, capacity, maxFill, maxDrain); }
     
     @Override // IFluidTankAdvanced
 	public boolean isEmpty() { return fluid == null; } 
@@ -43,7 +45,9 @@ public class FluidTankAdvanced implements IFluidTankAdvanced {
 	public void setMaxFill(int maxFill) { this.maxFill = maxFill; }	
 	public void setMaxDrain(int maxDrain) { this.maxDrain = maxDrain; }    
 
+	@Override // FluidTank
     public boolean canFill() { return canFill; }
+	@Override // FluidTank
     public boolean canDrain() { return canDrain; }
     public void setCanFill(boolean canFill) { this.canFill = canFill; }
     public void setCanDrain(boolean canDrain) { this.canDrain = canDrain; }
@@ -61,7 +65,6 @@ public class FluidTankAdvanced implements IFluidTankAdvanced {
     @Nullable
     public FluidStack getFluid() { return fluid; }
 
-    @Override // IFluidTankAdvanced
     public void setFluid(@Nullable FluidStack fluid) { this.fluid = fluid; }    
 
     @Override // IFluidTank
@@ -73,7 +76,6 @@ public class FluidTankAdvanced implements IFluidTankAdvanced {
     @Override // IFluidTank
     public int getCapacity() { return capacity; }
 
-    @Override // IFluidTankAdvanced
     public void setCapacity(int capacity) { this.capacity = capacity; }
 
     @Override
@@ -93,7 +95,7 @@ public class FluidTankAdvanced implements IFluidTankAdvanced {
         return fillInternal(new FluidStack(resource, Math.min(resource.amount, maxFill)), doFill);
     }
     
-    @Override // IFluidTankInternal
+    @Override // FluidTank
     public int fillInternal(FluidStack resource, boolean doFill) {
         if (resource == null || resource.amount <= 0) { return 0; }
 
@@ -135,14 +137,14 @@ public class FluidTankAdvanced implements IFluidTankAdvanced {
         return drainInternal(Math.min(maxDrain, this.maxDrain), doDrain);
     }
 
-    @Override // IFluidTankInternal
+    @Override // FluidTank
     @Nullable
     public FluidStack drainInternal(FluidStack resource, boolean doDrain) {
         if (resource == null || !resource.isFluidEqual(getFluid())) { return null; }
         return drainInternal(resource.amount, doDrain);
     }
 
-    @Override // IFluidTankInternal
+    @Override // FluidTank
     @Nullable
     public FluidStack drainInternal(int maxDrain, boolean doDrain)   {
         if (fluid == null || maxDrain <= 0) { return null; }
@@ -160,8 +162,8 @@ public class FluidTankAdvanced implements IFluidTankAdvanced {
     }
 
 	@Override
-	public FluidTankAdvanced copy() {
-		FluidTankAdvanced ret = new FluidTankAdvanced(fluid, capacity, maxFill, maxDrain);
+	public FluidTankDefault copy() {
+		FluidTankDefault ret = new FluidTankDefault(fluid, capacity, maxFill, maxDrain);
 		ret.canFill = canFill; ret.canDrain = canDrain;
 		return ret;
 	}

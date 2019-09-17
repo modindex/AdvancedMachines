@@ -8,19 +8,19 @@ import jaminv.advancedmachines.lib.parser.DataParser;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe.IngredientType;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe.RecipeSection;
-import jaminv.advancedmachines.lib.recipe.RecipeImpl;
+import jaminv.advancedmachines.lib.recipe.MachineRecipe;
 import jaminv.advancedmachines.lib.recipe.RecipeInput;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
-import jaminv.advancedmachines.lib.recipe.RecipeManagerImpl;
+import jaminv.advancedmachines.lib.recipe.MachineRecipeManager;
 import jaminv.advancedmachines.lib.recipe.RecipeOutput;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class GrinderManager {
 
-	protected static RecipeManagerImpl<RecipeImpl> manager = new RecipeManagerImpl<>();
+	protected static MachineRecipeManager<MachineRecipe> manager = new MachineRecipeManager<>();
 	
 	public static RecipeManager getRecipeManager() { return manager; }
-	public static List<RecipeImpl> getRecipeList() { return manager.getRecipeList(); }
+	public static List<MachineRecipe> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {
 		DataParser.parseFolder(ModReference.MODID, "data/recipes/grinder", new FileHandlerRecipe("grinder", (recipe) -> {
@@ -69,7 +69,7 @@ public class GrinderManager {
 	}
 	
 	protected static void addRecipe(int energy, String oreInput, String oreOutput, int count, int time) {
-		RecipeImpl recipe = new RecipeImpl("auto." + oreInput, energy, time);
+		MachineRecipe recipe = new MachineRecipe("auto." + oreInput, energy, time);
 		recipe.addInput(new RecipeInput(oreInput));
 		recipe.addOutput(new RecipeOutput(oreOutput, count));
 		manager.addRecipe(recipe);

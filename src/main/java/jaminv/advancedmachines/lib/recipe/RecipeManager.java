@@ -8,9 +8,9 @@ import net.minecraftforge.fluids.FluidStack;
 /**
  * Recipe Manager Interface Definition
  * 
- * `RecipeManager` is the de facto implementation of this interface, and should work for most purposes.
+ * `MachineRecipeManager` is the de facto implementation of this interface, and should work for most purposes.
  * This still exists as a generic interface, however, in case there is something that it can't handle.
- * Auto-crafting machines, for example, can't be handled by `RecipeManager`.
+ * Auto-crafting machines, for example, can't be handled by `MachineRecipeManager`.
  * 
  * External code should use `IRecipeManger` as the variable type rather than a specific implementation.
  * 

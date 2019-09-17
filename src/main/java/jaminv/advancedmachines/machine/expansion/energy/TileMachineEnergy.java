@@ -7,7 +7,7 @@ import jaminv.advancedmachines.lib.dialog.container.IContainerUpdate;
 import jaminv.advancedmachines.lib.energy.EnergyStorageAdvanced;
 import jaminv.advancedmachines.lib.energy.IEnergyObservable;
 import jaminv.advancedmachines.lib.energy.IEnergyStorageInternal;
-import jaminv.advancedmachines.lib.machine.IMachineController;
+import jaminv.advancedmachines.lib.machine.MachineController;
 import jaminv.advancedmachines.lib.util.helper.HasFacing;
 import jaminv.advancedmachines.machine.expansion.TileMachineExpansion;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
@@ -19,10 +19,10 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
-public class TileMachineEnergy extends TileMachineExpansion implements HasGui, IContainerUpdate, IMachineController.SubController, HasFacing, IEnergyObservable.IObserver {
+public class TileMachineEnergy extends TileMachineExpansion implements HasGui, IContainerUpdate, MachineController.SubController, HasFacing, IEnergyObservable.IObserver {
 	
 	protected EnumFacing facing = EnumFacing.NORTH;
-	protected IMachineController controller;
+	protected MachineController controller;
 	
 	public void setFacing(EnumFacing facing) {
 		this.facing = facing;
@@ -58,12 +58,12 @@ public class TileMachineEnergy extends TileMachineExpansion implements HasGui, I
 	}
 
 	@Override
-	public void setController(IMachineController controller) {
+	public void setController(MachineController controller) {
 		this.controller = controller;
 	}
 	
 	@Override
-	public boolean preProcess(IMachineController controller) {
+	public boolean preProcess(MachineController controller) {
 		return transferEnergy(controller.getEnergy()) > 0;
 	}
 	
