@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.items.IItemHandler;
 
+// TODO (Low Priority) Convert directional to its own class
 public class BlockHelper {
 	
 	public static EnumFacing getXZFacing(EntityLivingBase living) {

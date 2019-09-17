@@ -12,6 +12,7 @@ import jaminv.advancedmachines.lib.container.SyncManagerStandard;
 import jaminv.advancedmachines.lib.container.SyncSubject;
 import jaminv.advancedmachines.lib.energy.EnergyStorageAdvanced;
 import jaminv.advancedmachines.lib.energy.IEnergyStorageInternal;
+import jaminv.advancedmachines.lib.fluid.BucketHandler;
 import jaminv.advancedmachines.lib.fluid.FluidHandler;
 import jaminv.advancedmachines.lib.fluid.IFluidHandlerAdvanced;
 import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
@@ -40,12 +41,14 @@ import jaminv.advancedmachines.machine.multiblock.network.MultiblockUpdateMessag
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.util.network.RedstoneStateMessage;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
@@ -121,6 +124,14 @@ public abstract class TileMachine extends TileEntity implements ITickable, HasGu
 	protected BlockPos facemin, facemax;
 
 	public abstract MachineType getMachineType();
+	
+	/* Machine */
+	
+	BucketHandler bucketHandler = new BucketHandler();
+	
+	public boolean onBlockActivated(EntityPlayer player, EnumHand hand) {
+		return bucketHandler.onBlockActivate(player, hand, storage);
+	}
 
 	/* CanProcess */
 	

@@ -61,6 +61,13 @@ public abstract class BlockMachine extends Block implements VariantExpansion.Has
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
 			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		
+		TileEntity te = worldIn.getTileEntity(pos);
+		if (te instanceof TileMachine) {
+			if (((TileMachine)te).onBlockActivated(playerIn, hand)) {
+				return true;
+			}
+		}
+		
 		return BlockHelper.openGui(AdvancedMachines.instance, worldIn, pos, playerIn, getGuiId());
 	}
 	

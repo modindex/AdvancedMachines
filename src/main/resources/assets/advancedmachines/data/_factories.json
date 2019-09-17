@@ -1,6 +1,7 @@
 {
     "conditions": {
         "config": "jaminv.advancedmachines.util.conditions.ConfigConditionFactory",
-        "oredictionary": "jaminv.advancedmachines.util.conditions.OreDictionaryConditionFactory"
+        "oredictionary": "jaminv.advancedmachines.util.conditions.OreDictionaryConditionFactory",
+        "fluid": "jaminv.advancedmachines.util.conditions.FluidConditionFactory"
     }
 }       

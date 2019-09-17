@@ -1,6 +1,16 @@
 {
     "coal": {
         "input": { "ore": "logWood" },
-        "output": { "fluid": "coal", "amount": 100 }
+        "output": { "fluid": "coal", "amount": 100 },
+        "conditions": [
+            { "type": "advancedmachines:fluid", "property": "exists", "key": "coal" }
+        ] 
+    },
+    "coal_tar": {
+        "input": { "ore": "logWood" },
+        "output": { "fluid": "coal_tar", "amount": 100 },
+        "conditions": [
+            { "type": "advancedmachines:fluid", "property": "notexists", "key": "coal" }
+        ] 
     }
 }

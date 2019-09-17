@@ -23,7 +23,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-// TODO: Buckets on machines
 // TODO: Regular tank
 
 @Mod(modid = ModReference.MODID, name = ModReference.NAME, version = ModReference.VERSION, dependencies = "required-after:forge@[14.23.2.2638,)", useMetadata = true)
