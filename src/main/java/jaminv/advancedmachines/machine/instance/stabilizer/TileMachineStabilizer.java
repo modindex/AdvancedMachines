@@ -7,6 +7,7 @@ import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.HotbarLayout;
 import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.InventoryLayout;
 import jaminv.advancedmachines.lib.container.layout.JeiLayoutManager;
 import jaminv.advancedmachines.lib.container.layout.impl.BucketLayout;
+import jaminv.advancedmachines.lib.fluid.FluidTank;
 import jaminv.advancedmachines.lib.inventory.ItemHandlerSeparated;
 import jaminv.advancedmachines.machine.TileMachine;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
@@ -34,6 +35,8 @@ public class TileMachineStabilizer extends TileMachine {
 		inventory.addAdditionalSlots(1);
 		inputTanks.addTanks(1);
 	}
+	
+	FluidTank getInputTank() { return inputTanks.getTank(0); }
 
 	@Override
 	public MachineType getMachineType() {

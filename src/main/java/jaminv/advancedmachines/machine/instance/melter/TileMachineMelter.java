@@ -7,6 +7,7 @@ import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.HotbarLayout;
 import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid.InventoryLayout;
 import jaminv.advancedmachines.lib.container.layout.JeiLayoutManager;
 import jaminv.advancedmachines.lib.container.layout.impl.BucketLayout;
+import jaminv.advancedmachines.lib.fluid.FluidTank;
 import jaminv.advancedmachines.lib.inventory.ItemHandlerSeparated;
 import jaminv.advancedmachines.machine.TileMachine;
 import jaminv.advancedmachines.machine.instance.grinder.GrinderManager;
@@ -36,7 +37,9 @@ public class TileMachineMelter extends TileMachine {
 		inventory.addAdditionalSlots(1);
 		outputTanks.addTanks(1);
 	}
-
+	
+	FluidTank getOutputTank() { return outputTanks.getTank(0); }
+	
 	@Override
 	public MachineType getMachineType() {
 		return MachineType.MELTER;

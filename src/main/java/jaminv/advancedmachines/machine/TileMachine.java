@@ -13,8 +13,8 @@ import jaminv.advancedmachines.lib.container.SyncSubject;
 import jaminv.advancedmachines.lib.energy.EnergyStorageAdvanced;
 import jaminv.advancedmachines.lib.energy.IEnergyStorageInternal;
 import jaminv.advancedmachines.lib.fluid.BucketHandler;
+import jaminv.advancedmachines.lib.fluid.FluidHandler;
 import jaminv.advancedmachines.lib.fluid.FluidTanksHandler;
-import jaminv.advancedmachines.lib.fluid.FluidHandlerAdditional;
 import jaminv.advancedmachines.lib.inventory.ItemHandlerSeparated;
 import jaminv.advancedmachines.lib.inventory.MachineInventoryHandler;
 import jaminv.advancedmachines.lib.machine.MachineController;
@@ -84,8 +84,8 @@ public abstract class TileMachine extends TileEntity implements ITickable, HasGu
 	
 	public MachineController getController() { return controller; }
 	public ItemHandlerSeparated getInventory() { return inventory; }
-	public FluidHandlerAdditional getInputTanks() { return inputTanks; }
-	public FluidHandlerAdditional getOutputTanks() { return outputTanks; }
+	public FluidHandler getInputTanks() { return inputTanks; }
+	public FluidHandler getOutputTanks() { return outputTanks; }
 	public IEnergyStorageInternal getEnergy() { return energy; }
 	public RecipeManager getRecipeManager() { return storage.getRecipeManager(); }
 	

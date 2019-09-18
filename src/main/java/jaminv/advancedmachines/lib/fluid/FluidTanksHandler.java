@@ -30,7 +30,7 @@ public class FluidTanksHandler implements FluidHandler {
 	
 	protected List<FluidTankDefault> tanks = new ArrayList<FluidTankDefault>();
 	private int defaultCapacity, maxFill, maxDrain;
-	private boolean canFill, canDrain;
+	private boolean canFill = true, canDrain = true;
 	
 	public FluidTanksHandler(int defaultCapacity, int maxFill, int maxDrain) {
 		this.defaultCapacity = defaultCapacity;
@@ -107,6 +107,19 @@ public class FluidTanksHandler implements FluidHandler {
 		
 		if (doFill && resource.amount - res.amount > 0) { onTankContentsChanged(); } 
 		return resource.amount - res.amount;
+	}
+
+	@Override
+	public int fillSame(FluidStack resource, boolean doFill) {
+		int filled = 0;
+		
+		for (int i = 0; i < tanks.size(); i++) {
+			FluidTank tank = tanks.get(i);
+			if (resource.isFluidEqual(tank.getFluid())) {
+				filled += tank.fill(new FluidStack(resource, resource.amount - filled), doFill);
+			}
+		}
+		return filled;
 	}
 
 	@Override
@@ -203,8 +216,8 @@ public class FluidTanksHandler implements FluidHandler {
 		return ret;
 	}
 	
-	@Override public boolean canFill() { return canFill; }
-	@Override public boolean canDrain() { return canDrain; }	
+	@Override public boolean canFill() { return tanks.size() > 0 && canFill; }
+	@Override public boolean canDrain() { return tanks.size() > 0 && canDrain; }	
 	
 	/* Additional Methods */
 

@@ -38,7 +38,7 @@ public class DialogMachineMelter extends JeiDialog {
 		this.addElement(new DialogEnergyBar(te.getEnergy(), 9, 20, 14, 50, 200, 0));
 		this.addElement(new RedstoneToggleButton((RedstoneControlled)te));
 		
-		this.addElement(new DialogFluid(107, 21, 16, 48, te.getOutputTanks().getTank(0)));
+		this.addElement(new DialogFluid(107, 21, 16, 48, te.getOutputTank()));
 		
 		this.addTooltip(new DialogTooltipMultiblock(158, 7, 11, 11, te));
 		

@@ -3,7 +3,6 @@ package jaminv.advancedmachines.lib.fluid;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 /**
@@ -22,6 +21,8 @@ public interface FluidHandler extends IFluidHandler, FluidObservable, INBTSerial
 	
 	/**
 	 * Fill internal tanks only if a matching fluid already exists.
+	 * 
+	 * TODO: Find a better way to handle recipe filters than fillSame()
 	 * @param resource 
 	 * @param doFill If false, fill will be simulated
 	 * @return 
@@ -34,5 +35,5 @@ public interface FluidHandler extends IFluidHandler, FluidObservable, INBTSerial
 	/** Return copies of the fluids in tanks */
 	public FluidStack[] getStacks();
 	/** Returns copies of the tanks. */
-	public IFluidTank[] getTanks();	
+	public FluidTank[] getTanks();	
 }

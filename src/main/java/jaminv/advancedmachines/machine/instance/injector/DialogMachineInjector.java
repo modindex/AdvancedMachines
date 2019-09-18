@@ -43,7 +43,7 @@ public class DialogMachineInjector extends JeiDialog {
 			.addTexture(IOState.INPUT, 200, 81)
 			.addTexture(IOState.OUTPUT, 207, 81));
 		
-		this.addElement(new DialogFluid(53, 21, 16, 48, te.getInputTanks().getTank(0)));
+		this.addElement(new DialogFluid(53, 21, 16, 48, te.getInputTank()));
 		
 		this.addTooltip(new DialogTooltipMultiblock(158, 7, 11, 11, te));
 		

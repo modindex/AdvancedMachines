@@ -38,7 +38,7 @@ public class DialogMachineStabilizer extends JeiDialog {
 		this.addElement(new DialogEnergyBar(te.getEnergy(), 9, 20, 14, 50, 200, 0));
 		this.addElement(new RedstoneToggleButton((RedstoneControlled)te));
 		
-		this.addElement(new DialogFluid(53, 21, 16, 48, te.getInputTanks().getTank(0)));
+		this.addElement(new DialogFluid(53, 21, 16, 48, te.getInputTank()));
 		
 		this.addTooltip(new DialogTooltipMultiblock(158, 7, 11, 11, te));
 		

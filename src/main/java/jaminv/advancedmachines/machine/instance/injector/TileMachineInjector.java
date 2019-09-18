@@ -11,6 +11,7 @@ import jaminv.advancedmachines.lib.container.layout.impl.BucketLayout;
 import jaminv.advancedmachines.lib.container.layout.impl.OutputLayout;
 import jaminv.advancedmachines.lib.dialog.fluid.DialogBucketToggle;
 import jaminv.advancedmachines.lib.fluid.BucketHandler;
+import jaminv.advancedmachines.lib.fluid.FluidTank;
 import jaminv.advancedmachines.lib.inventory.ItemHandlerSeparated;
 import jaminv.advancedmachines.lib.inventory.slot.SlotHandlerFluid;
 import jaminv.advancedmachines.machine.TileMachine;
@@ -51,6 +52,8 @@ public class TileMachineInjector extends TileMachine implements DialogBucketTogg
 		inventory.addAdditionalSlots(1, new SlotHandlerFluid());
 		inputTanks.addTanks(1);
 	}
+	
+	FluidTank getInputTank() { return inputTanks.getTank(0); }
 	
 	@Override
 	public MachineType getMachineType() {

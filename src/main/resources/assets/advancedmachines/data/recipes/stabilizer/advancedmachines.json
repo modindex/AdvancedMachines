@@ -1,6 +1,30 @@
 {
     "coal": {
-        "input": { "fluid": "coal", "amount": 100 },
-        "output": { "ore": "dustCoal" }
+        "input": { "fluid": "coal", "amount": 1000 },
+        "output": { "ore": "ballTar" },
+        "conditions": [
+            { "type": "advancedmachines:fluid", "property": "exists", "key": "coal" }
+        ]        
+    },
+    "coal_tar": {
+        "input": { "fluid": "coal_tar", "amount": 1000 },
+        "output": { "ore": "ballTar" },
+        "conditions": [
+            { "type": "advancedmachines:fluid", "property": "notexists", "key": "coal" }
+        ]        
+    },
+    "rosin": {
+        "input": { "fluid": "resin", "amount": 1000 },
+        "output": { "ore": "ballRosin" },
+        "conditions": [
+            { "type": "advancedmachines:fluid", "property": "exists", "key": "resin" }
+        ]        
+    },
+    "tree_resin": {
+        "input": { "fluid": "tree_resin", "amount": 1000 },
+        "output": { "ore": "ballRosin" },
+        "conditions": [
+            { "type": "advancedmachines:fluid", "property": "notexists", "key": "resin" }
+        ]        
     }
 }

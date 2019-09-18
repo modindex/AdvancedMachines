@@ -14,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -104,38 +103,39 @@ public class MachineStorage implements StorageCombined, INBTSerializable<NBTTagC
 		return ArrayUtils.addAll(inputTanks.getTankProperties(), outputTanks.getTankProperties()); 
 	}
 
+	// TODO: CHECK Fluid fill check for valid recipe
 	@Override
 	public int fill(FluidStack resource, boolean doFill) {
 		if (resource == null) { return 0; }
-		// FIXME: Is iterating through tanks externally really necessary?
-		if (!recipeManager.isFluidValid(resource, inventory.getItemInput(), inputTanks.getStacks())) {
-			int filled = 0;
-			
-			for (int i = 0; i < inputTanks.getTankCount(); i++) {
-				FluidTank tank = inputTanks.getTank(i);
-				if (resource.isFluidEqual(tank.getFluid())) {
-					filled += tank.fill(new FluidStack(resource, resource.amount - filled), doFill);
-				}
-			}
-			return filled;
+		int drained = inputTanks.fillSame(resource, doFill);
+		if (drained >= resource.amount) { return drained; }
+		
+		if (recipeManager.isFluidValid(new FluidStack(resource, resource.amount - drained),
+				inventory.getItemInput(), inputTanks.getStacks())) {
+			return drained + inputTanks.fill(resource, doFill);
 		}
-		return inputTanks.fill(resource, doFill); 
+		return drained;
 	}
 
 	@Override public FluidStack drain(FluidStack resource, boolean doDrain) { return outputTanks.drain(resource, doDrain); }
 	@Override public FluidStack drain(int maxDrain, boolean doDrain) { return outputTanks.drain(maxDrain, doDrain); }
 	
-	/* IFluidHandlerInternal */
+	/* FluidHandler */
 	
 	@Override public int fillInternal(FluidStack resource, boolean doFill) { return outputTanks.fillInternal(resource, doFill); }
 	@Override public FluidStack drainInternal(FluidStack resource, boolean doDrain) { return inputTanks.drainInternal(resource, doDrain); }
 	@Override public FluidStack drainInternal(int maxDrain, boolean doDrain) { return inputTanks.drainInternal(maxDrain, doDrain); }
 
 	@Override public FluidStack[] getStacks() { return inputTanks.getStacks(); }
-	@Override public IFluidTank[] getTanks() { return outputTanks.getTanks(); }
+	@Override public FluidTank[] getTanks() { return outputTanks.getTanks(); }
+	
+	@Override public int fillSame(FluidStack resource, boolean doFill) { return inputTanks.fillSame(resource, doFill); }
+
+	@Override public boolean canFill() { return inputTanks.canFill(); }
+	@Override public boolean canDrain() { return outputTanks.canDrain(); }
 
 	/* IFluidObservable */
-	
+
 	@Override public void addObserver(FluidObservable.IObserver observer) { 
 		inputTanks.addObserver(observer);
 		outputTanks.addObserver(observer);
