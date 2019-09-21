@@ -22,7 +22,7 @@ public interface FluidHandler extends IFluidHandler, FluidObservable, INBTSerial
 	/**
 	 * Fill internal tanks only if a matching fluid already exists.
 	 * 
-	 * TODO: Find a better way to handle recipe filters than fillSame()
+	 * TODO: (Low Priority) Find a better way to handle recipe filters than fillSame()
 	 * @param resource 
 	 * @param doFill If false, fill will be simulated
 	 * @return 

@@ -82,6 +82,11 @@ public class MachineStorage implements StorageCombined, INBTSerializable<NBTTagC
 	@Override public boolean isSlotOutput(int slotIndex) { return inventory.isSlotOutput(slotIndex); }
 	@Override public boolean isSlotSecondary(int slotIndex) { return inventory.isSlotSecondary(slotIndex); }
 	@Override public boolean isSlotAdditional(int slotIndex) { return inventory.isSlotAdditional(slotIndex); }
+	
+	@Override public int getInputSlotCount() { return inventory.getInputSlotCount(); }
+	@Override public int getOutputSlotCount() { return inventory.getOutputSlotCount(); }
+	@Override public int getSecondarySlotCount() { return inventory.getSecondarySlotCount(); }
+	@Override public int getAdditionalSlotCount() { return inventory.getAdditionalSlotCount(); }
 
 	@Override public int getFirstInputSlot() { return inventory.getFirstInputSlot(); }
 	@Override public int getFirstOutputSlot() { return inventory.getFirstOutputSlot(); }

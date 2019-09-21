@@ -47,6 +47,11 @@ public class TileMachineStabilizer extends TileMachine {
 	public ContainerMachine createContainer(IInventory playerInventory) {
 		return new ContainerStabilizer(layout, storage, playerInventory, this.getSyncManager());
 	}
+
+	@Override
+	protected boolean preProcess() {
+		return this.bucketHandler.handleBucket(this.inventory, 1, this.storage);
+	}
 	
 	/*
 	 * TODO: Stabilizer output into and out of bucket 

@@ -11,8 +11,8 @@ import jaminv.advancedmachines.lib.container.layout.LayoutManager;
 import jaminv.advancedmachines.lib.container.layout.impl.BucketLayout;
 import jaminv.advancedmachines.lib.dialog.fluid.DialogBucketToggle;
 import jaminv.advancedmachines.lib.fluid.BucketHandler;
-import jaminv.advancedmachines.lib.fluid.FluidTankDefault;
 import jaminv.advancedmachines.lib.fluid.FluidObservable;
+import jaminv.advancedmachines.lib.fluid.FluidTankDefault;
 import jaminv.advancedmachines.lib.inventory.ItemObservable;
 import jaminv.advancedmachines.lib.inventory.ItemStackHandlerObservable;
 import jaminv.advancedmachines.lib.machine.MachineControllerInterface;
@@ -153,9 +153,8 @@ public class TileMachineTank extends TileMachineExpansion implements ITickable, 
 	public void setController(MachineControllerInterface controller) {
 		this.controller = controller;
 		if (controller != null) {
-			// TODO: Machine Input/Output determination
-			allowInput = true; //inv.canInsert();
-			allowOutput = true; //inv.canExtract();
+			allowInput = controller.getFluidTank().canFill();
+			allowOutput = controller.getFluidTank().canDrain();
 			
 			if (allowInput && !allowOutput) { this.setInputState(true); }
 			if (allowOutput && !allowInput) { this.setInputState(false); }

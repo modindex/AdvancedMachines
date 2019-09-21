@@ -25,6 +25,11 @@ public class MachineInventoryHandler extends ItemStackHandlerObservable implemen
 	public boolean isSlotSecondary(int slotIndex) { return slotIndex >= getFirstSecondarySlot() && slotIndex <= getLastSecondarySlot(); }
 	public boolean isSlotAdditional(int slotIndex) { return slotIndex >= getFirstAdditionalSlot(); }
 	
+	public int getInputSlotCount() { return inputSlots; }
+	public int getOutputSlotCount() { return outputSlots; }
+	public int getSecondarySlotCount() { return secondarySlots; }
+	public int getAdditionalSlotCount() { return additionalSlots; }
+	
 	public int getFirstInputSlot() { return 0; }
 	public int getFirstOutputSlot() { return inputSlots; }
 	public int getFirstSecondarySlot() { return inputSlots + outputSlots; }

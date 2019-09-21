@@ -6,8 +6,8 @@ import jaminv.advancedmachines.lib.container.ContainerInventory;
 import jaminv.advancedmachines.lib.container.layout.ILayoutManager;
 import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid;
 import jaminv.advancedmachines.lib.container.layout.LayoutManager;
-import jaminv.advancedmachines.lib.inventory.ItemObservable;
 import jaminv.advancedmachines.lib.inventory.InventoryHelper;
+import jaminv.advancedmachines.lib.inventory.ItemObservable;
 import jaminv.advancedmachines.lib.inventory.ItemStackHandlerObservable;
 import jaminv.advancedmachines.lib.machine.MachineControllerInterface;
 import jaminv.advancedmachines.lib.util.blocks.HasItemNBT;
@@ -88,11 +88,8 @@ public class TileMachineInventory extends TileMachineExpansion implements HasGui
 	public void setController(MachineControllerInterface controller) {
 		this.controller = controller;
 		if (controller != null) {
-			// TODO: Machine Input/Output determination
-			//TileEntityMachineMultiblock te = MultiblockHelper.getParent(world, pos);
-			//ItemStackHandlerObservable inv = te.getInventory();
-			allowInput = true; //inv.canInsert();
-			allowOutput = true; //inv.canExtract();
+			allowInput = controller.getInventory().getInputSlotCount() > 0;
+			allowOutput = controller.getInventory().getOutputSlotCount() > 0;
 			
 			if (allowInput && !allowOutput) { this.setInputState(true); }
 			if (allowOutput && !allowInput) { this.setInputState(false); }

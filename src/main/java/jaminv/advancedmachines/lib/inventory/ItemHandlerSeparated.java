@@ -12,6 +12,11 @@ public interface ItemHandlerSeparated extends IItemHandler, IItemHandlerModifiab
 	public boolean isSlotSecondary(int slotIndex);
 	public boolean isSlotAdditional(int slotIndex);
 	
+	public int getInputSlotCount();
+	public int getOutputSlotCount();
+	public int getSecondarySlotCount();
+	public int getAdditionalSlotCount();	
+	
 	public int getFirstInputSlot();
 	public int getFirstOutputSlot();
 	public int getFirstSecondarySlot();

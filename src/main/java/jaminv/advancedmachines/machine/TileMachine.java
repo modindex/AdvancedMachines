@@ -10,16 +10,18 @@ import jaminv.advancedmachines.init.HasGui;
 import jaminv.advancedmachines.lib.container.SyncManager;
 import jaminv.advancedmachines.lib.container.SyncManagerStandard;
 import jaminv.advancedmachines.lib.container.SyncSubject;
-import jaminv.advancedmachines.lib.energy.EnergyStorageAdvanced;
+import jaminv.advancedmachines.lib.dialog.fluid.DialogBucketToggle;
+import jaminv.advancedmachines.lib.dialog.fluid.DialogBucketToggle.Toggle;
 import jaminv.advancedmachines.lib.energy.EnergyStorage;
+import jaminv.advancedmachines.lib.energy.EnergyStorageAdvanced;
 import jaminv.advancedmachines.lib.fluid.BucketHandler;
 import jaminv.advancedmachines.lib.fluid.FluidHandler;
 import jaminv.advancedmachines.lib.fluid.FluidTanksHandler;
 import jaminv.advancedmachines.lib.inventory.ItemHandlerSeparated;
 import jaminv.advancedmachines.lib.inventory.MachineInventoryHandler;
+import jaminv.advancedmachines.lib.machine.MachineController;
 import jaminv.advancedmachines.lib.machine.MachineControllerInterface;
 import jaminv.advancedmachines.lib.machine.MachineControllerInterface.SubController;
-import jaminv.advancedmachines.lib.machine.MachineController;
 import jaminv.advancedmachines.lib.machine.MachineStorage;
 import jaminv.advancedmachines.lib.machine.MachineStorageCapability;
 import jaminv.advancedmachines.lib.machine.MachineTile;
@@ -59,7 +61,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 public abstract class TileMachine extends TileEntity implements ITickable, HasGui, MachineTile, HasFacing, SyncSubject,
-		MachineUpgradeTile, MachineFaceTile {
+		MachineUpgradeTile, MachineFaceTile, DialogBucketToggle.Provider {
 	
 	protected final MachineStorage storage;
 	protected final MachineController controller;
@@ -125,9 +127,11 @@ public abstract class TileMachine extends TileEntity implements ITickable, HasGu
 
 	public abstract MachineType getMachineType();
 	
-	/* Machine */
+	@Override public Toggle getBucketToggle() { return this.bucketHandler; }
 	
-	BucketHandler bucketHandler = new BucketHandler();
+	/* Machine */
+
+	protected BucketHandler bucketHandler = new BucketHandler();
 	
 	public boolean onBlockActivated(EntityPlayer player, EnumHand hand) {
 		return bucketHandler.onBlockActivate(player, hand, storage);
