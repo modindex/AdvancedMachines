@@ -2,8 +2,8 @@ package jaminv.advancedmachines.lib.machine;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import jaminv.advancedmachines.lib.energy.IEnergyObservable;
-import jaminv.advancedmachines.lib.energy.IEnergyStorageAdvanced;
+import jaminv.advancedmachines.lib.energy.EnergyObservable;
+import jaminv.advancedmachines.lib.energy.EnergyStorage;
 import jaminv.advancedmachines.lib.fluid.FluidHandler;
 import jaminv.advancedmachines.lib.fluid.FluidObservable;
 import jaminv.advancedmachines.lib.fluid.FluidTank;
@@ -30,11 +30,11 @@ public class MachineStorage implements StorageCombined, INBTSerializable<NBTTagC
 	protected final ItemHandlerSeparated inventory;
 	protected final FluidHandler inputTanks;
 	protected final FluidHandler outputTanks;
-	protected final IEnergyStorageAdvanced energy;
+	protected final EnergyStorage energy;
 	protected final RecipeManager recipeManager;
 	
 	public MachineStorage(ItemHandlerSeparated inventory, FluidHandler inputTanks, FluidHandler outputTanks, 
-			IEnergyStorageAdvanced energy, RecipeManager recipeManager) {
+			EnergyStorage energy, RecipeManager recipeManager) {
 		
 		this.inventory = inventory;
 		this.inputTanks = inputTanks;
@@ -46,7 +46,7 @@ public class MachineStorage implements StorageCombined, INBTSerializable<NBTTagC
 	public ItemHandlerSeparated getInventory() { return inventory; }
 	public FluidHandler getInputTanks() { return inputTanks; }
 	public FluidHandler getOutputTanks() { return outputTanks; }
-	public IEnergyStorageAdvanced getEnergy() { return energy; }
+	public EnergyStorage getEnergy() { return energy; }
 	public RecipeManager getRecipeManager() { return recipeManager; }
 	
 	/* IItemHandler */
@@ -150,19 +150,14 @@ public class MachineStorage implements StorageCombined, INBTSerializable<NBTTagC
 	@Override public boolean canExtract() { return energy.canExtract(); }
 	@Override public boolean canReceive() { return energy.canReceive(); }
 	
-	/* IEnergyStorageInternal */
+	/* EnergyStorage */
 	
 	@Override public int receiveEnergyInternal(int maxReceive, boolean simulate) { return energy.receiveEnergyInternal(maxReceive, simulate); }
 	@Override public int extractEnergyInternal(int maxExtract, boolean simulate) { return energy.extractEnergyInternal(maxExtract, simulate); }
 
 	/* IEnergyObservable */
 	
-	@Override public void addObserver(IEnergyObservable.IObserver observer) { energy.addObserver(observer); }
-
-	/* IEnergyStorageAdvanced */
-	
-	@Override public void setEnergyCapacity(int capacity) { energy.setEnergyCapacity(capacity); }
-	@Override public void setEnergy(int capacity) { energy.setEnergy(capacity); }	
+	@Override public void addObserver(EnergyObservable.IObserver observer) { energy.addObserver(observer); }
 
 	/* INBTSerializable */
 

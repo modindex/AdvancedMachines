@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public class EnergyStorageAdvanced implements IEnergyStorageAdvanced {
+public class EnergyStorageAdvanced implements EnergyStorage {
 
 	private List<IObserver> observers = new ArrayList<>();
 	public void addObserver(IObserver obv) { observers.add(obv); }

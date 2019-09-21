@@ -2,7 +2,7 @@ package jaminv.advancedmachines.machine.multiblock;
 
 import javax.annotation.Nullable;
 
-import jaminv.advancedmachines.lib.machine.MachineController.SubController;
+import jaminv.advancedmachines.lib.machine.MachineControllerInterface.SubController;
 import jaminv.advancedmachines.lib.util.helper.BlockIterator;
 import jaminv.advancedmachines.lib.util.helper.BlockIterator.BlockChecker;
 import jaminv.advancedmachines.lib.util.helper.BlockIterator.ScanResult;

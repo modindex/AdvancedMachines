@@ -15,7 +15,7 @@ import jaminv.advancedmachines.lib.fluid.FluidTankDefault;
 import jaminv.advancedmachines.lib.fluid.FluidObservable;
 import jaminv.advancedmachines.lib.inventory.ItemObservable;
 import jaminv.advancedmachines.lib.inventory.ItemStackHandlerObservable;
-import jaminv.advancedmachines.lib.machine.MachineController;
+import jaminv.advancedmachines.lib.machine.MachineControllerInterface;
 import jaminv.advancedmachines.lib.util.blocks.HasItemNBT;
 import jaminv.advancedmachines.lib.util.helper.HasFacing;
 import jaminv.advancedmachines.machine.dialog.DialogIOToggle;
@@ -40,7 +40,7 @@ import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 public class TileMachineTank extends TileMachineExpansion implements ITickable, HasGui, HasFacing, HasItemNBT,
-		MachineController.SubController, ItemObservable.IObserver, FluidObservable.IObserver, DialogIOToggle.ISwitchableIO,
+		MachineControllerInterface.SubController, ItemObservable.IObserver, FluidObservable.IObserver, DialogIOToggle.ISwitchableIO,
 		DialogBucketToggle.Provider {
 	
 	public static final ILayoutManager layout = new LayoutManager()
@@ -51,7 +51,7 @@ public class TileMachineTank extends TileMachineExpansion implements ITickable, 
 	protected EnumFacing facing = EnumFacing.NORTH;
 	protected boolean inputState = true;
 	protected int priority = 0;
-	protected MachineController controller;
+	protected MachineControllerInterface controller;
 	protected BucketHandler bucketHandler = new BucketHandler().setCallback(state -> {
 		if (controller != null) { controller.wake(); }		
 		if (world.isRemote) {
@@ -150,7 +150,7 @@ public class TileMachineTank extends TileMachineExpansion implements ITickable, 
 	@Override public boolean hasController() { return controller != null; }
 
 	@Override
-	public void setController(MachineController controller) {
+	public void setController(MachineControllerInterface controller) {
 		this.controller = controller;
 		if (controller != null) {
 			// TODO: Machine Input/Output determination
@@ -186,7 +186,7 @@ public class TileMachineTank extends TileMachineExpansion implements ITickable, 
 	}
 	
 	@Override
-	public boolean preProcess(MachineController controller) {
+	public boolean preProcess(MachineControllerInterface controller) {
 		boolean didSomething = bucketHandler.handleBucket(inventory, 0, tank);
 		
 		if (inputState) {
@@ -196,7 +196,7 @@ public class TileMachineTank extends TileMachineExpansion implements ITickable, 
 		}
 	}
 	
-	protected int moveInput(MachineController controller) {
+	protected int moveInput(MachineControllerInterface controller) {
 		FluidStack stack = tank.drain(Integer.MAX_VALUE, false);
 		int amount = controller.getFluidTank().fill(stack, false);
 		
@@ -208,7 +208,7 @@ public class TileMachineTank extends TileMachineExpansion implements ITickable, 
 		return 0;
 	}
 	
-	protected int moveOutput(MachineController controller) {
+	protected int moveOutput(MachineControllerInterface controller) {
 		FluidStack stack = controller.getFluidTank().drain(Integer.MAX_VALUE, false);
 		int amount = tank.fill(stack, false);
 		

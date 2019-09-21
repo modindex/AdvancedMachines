@@ -11,15 +11,15 @@ import jaminv.advancedmachines.lib.container.SyncManager;
 import jaminv.advancedmachines.lib.container.SyncManagerStandard;
 import jaminv.advancedmachines.lib.container.SyncSubject;
 import jaminv.advancedmachines.lib.energy.EnergyStorageAdvanced;
-import jaminv.advancedmachines.lib.energy.IEnergyStorageInternal;
+import jaminv.advancedmachines.lib.energy.EnergyStorage;
 import jaminv.advancedmachines.lib.fluid.BucketHandler;
 import jaminv.advancedmachines.lib.fluid.FluidHandler;
 import jaminv.advancedmachines.lib.fluid.FluidTanksHandler;
 import jaminv.advancedmachines.lib.inventory.ItemHandlerSeparated;
 import jaminv.advancedmachines.lib.inventory.MachineInventoryHandler;
+import jaminv.advancedmachines.lib.machine.MachineControllerInterface;
+import jaminv.advancedmachines.lib.machine.MachineControllerInterface.SubController;
 import jaminv.advancedmachines.lib.machine.MachineController;
-import jaminv.advancedmachines.lib.machine.MachineController.SubController;
-import jaminv.advancedmachines.lib.machine.MachineControllerDefault;
 import jaminv.advancedmachines.lib.machine.MachineStorage;
 import jaminv.advancedmachines.lib.machine.MachineStorageCapability;
 import jaminv.advancedmachines.lib.machine.MachineTile;
@@ -62,7 +62,7 @@ public abstract class TileMachine extends TileEntity implements ITickable, HasGu
 		MachineUpgradeTile, MachineFaceTile {
 	
 	protected final MachineStorage storage;
-	protected final MachineControllerDefault controller;
+	protected final MachineController controller;
 	protected final SyncManagerStandard sync = new SyncManagerStandard();
 	
 	protected final MachineInventoryHandler inventory = new MachineInventoryHandler();
@@ -76,17 +76,17 @@ public abstract class TileMachine extends TileEntity implements ITickable, HasGu
 		super();
 		
 		storage = new MachineStorage(inventory, inputTanks, outputTanks, energy, recipeManager);
-		controller = new MachineControllerDefault(storage, recipeManager, this);
+		controller = new MachineController(storage, recipeManager, this);
 		
 		sync.addSubject(this);
 		sync.addSubject(controller);
 	}
 	
-	public MachineController getController() { return controller; }
+	public MachineControllerInterface getController() { return controller; }
 	public ItemHandlerSeparated getInventory() { return inventory; }
 	public FluidHandler getInputTanks() { return inputTanks; }
 	public FluidHandler getOutputTanks() { return outputTanks; }
-	public IEnergyStorageInternal getEnergy() { return energy; }
+	public EnergyStorage getEnergy() { return energy; }
 	public RecipeManager getRecipeManager() { return storage.getRecipeManager(); }
 	
 	public SyncManager getSyncManager() {

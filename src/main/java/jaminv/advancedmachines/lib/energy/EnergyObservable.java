@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.lib.energy;
 
-public interface IEnergyObservable {
+public interface EnergyObservable {
 	public static interface IObserver {
 		public void onEnergyChanged();
 	}

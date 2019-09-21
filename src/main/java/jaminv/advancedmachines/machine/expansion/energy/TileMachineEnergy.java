@@ -5,9 +5,9 @@ import jaminv.advancedmachines.init.HasGui;
 import jaminv.advancedmachines.lib.dialog.container.EmptyContainer;
 import jaminv.advancedmachines.lib.dialog.container.IContainerUpdate;
 import jaminv.advancedmachines.lib.energy.EnergyStorageAdvanced;
-import jaminv.advancedmachines.lib.energy.IEnergyObservable;
-import jaminv.advancedmachines.lib.energy.IEnergyStorageInternal;
-import jaminv.advancedmachines.lib.machine.MachineController;
+import jaminv.advancedmachines.lib.energy.EnergyObservable;
+import jaminv.advancedmachines.lib.energy.EnergyStorage;
+import jaminv.advancedmachines.lib.machine.MachineControllerInterface;
 import jaminv.advancedmachines.lib.util.helper.HasFacing;
 import jaminv.advancedmachines.machine.expansion.TileMachineExpansion;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
@@ -19,10 +19,10 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
-public class TileMachineEnergy extends TileMachineExpansion implements HasGui, IContainerUpdate, MachineController.SubController, HasFacing, IEnergyObservable.IObserver {
+public class TileMachineEnergy extends TileMachineExpansion implements HasGui, IContainerUpdate, MachineControllerInterface.SubController, HasFacing, EnergyObservable.IObserver {
 	
 	protected EnumFacing facing = EnumFacing.NORTH;
-	protected MachineController controller;
+	protected MachineControllerInterface controller;
 	
 	public void setFacing(EnumFacing facing) {
 		this.facing = facing;
@@ -58,16 +58,16 @@ public class TileMachineEnergy extends TileMachineExpansion implements HasGui, I
 	}
 
 	@Override
-	public void setController(MachineController controller) {
+	public void setController(MachineControllerInterface controller) {
 		this.controller = controller;
 	}
 	
 	@Override
-	public boolean preProcess(MachineController controller) {
+	public boolean preProcess(MachineControllerInterface controller) {
 		return transferEnergy(controller.getEnergy()) > 0;
 	}
 	
-	public int transferEnergy(IEnergyStorageInternal storage) {
+	public int transferEnergy(EnergyStorage storage) {
 		int transfer;
 		
 		transfer = energy.extractEnergyInternal(Integer.MAX_VALUE, true);
