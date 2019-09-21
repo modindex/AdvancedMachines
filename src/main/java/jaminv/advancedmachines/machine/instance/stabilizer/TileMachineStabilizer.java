@@ -50,7 +50,7 @@ public class TileMachineStabilizer extends TileMachine {
 
 	@Override
 	protected boolean preProcess() {
-		return this.bucketHandler.handleBucket(this.inventory, 1, this.storage);
+		return this.bucketHandler.handleBucket(this.inventory, 1, this.inputTanks);
 	}
 	
 	/*

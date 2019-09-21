@@ -32,7 +32,7 @@ public class BucketHandler implements DialogBucketToggle.Toggle {
 	
 	public boolean handleBucket(IItemHandler inventory, int slotIndex, IFluidHandler tank) {
 		ItemStack stack = inventory.getStackInSlot(slotIndex);
-		if (stack == null) { return false; }
+		if (stack == null || stack.isEmpty()) { return false; }
 
 		FluidActionResult result = null;
 		if (bucketState == IOState.INPUT) {

@@ -41,6 +41,7 @@ import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import jaminv.advancedmachines.machine.multiblock.network.MultiblockDestroyMessage;
 import jaminv.advancedmachines.machine.multiblock.network.MultiblockUpdateMessage;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
+import jaminv.advancedmachines.util.network.BucketStateMessage;
 import jaminv.advancedmachines.util.network.RedstoneStateMessage;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -63,8 +64,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 public abstract class TileMachine extends TileEntity implements ITickable, HasGui, MachineTile, HasFacing, SyncSubject,
 		MachineUpgradeTile, MachineFaceTile, DialogBucketToggle.Provider {
 	
-	protected final MachineStorage storage;
-	protected final MachineController controller;
 	protected final SyncManagerStandard sync = new SyncManagerStandard();
 	
 	protected final MachineInventoryHandler inventory = new MachineInventoryHandler();
@@ -73,6 +72,9 @@ public abstract class TileMachine extends TileEntity implements ITickable, HasGu
 	protected final FluidTanksHandler outputTanks = new FluidTanksHandler(ModConfig.general.defaultMachineFluidCapacity * VariantExpansion.maxMultiplier,
 			ModConfig.general.defaultMachineFluidTransfer * VariantExpansion.maxMultiplier);
 	protected final EnergyStorageAdvanced energy = new EnergyStorageAdvanced(ModConfig.general.defaultMachineEnergyCapacity * VariantExpansion.maxMultiplier);
+
+	protected final MachineStorage storage;
+	protected MachineController controller;	
 	
 	public TileMachine(RecipeManager recipeManager) {
 		super();
@@ -131,7 +133,13 @@ public abstract class TileMachine extends TileEntity implements ITickable, HasGu
 	
 	/* Machine */
 
-	protected BucketHandler bucketHandler = new BucketHandler();
+	@SuppressWarnings("all")
+	protected BucketHandler bucketHandler = new BucketHandler().setCallback(state -> {
+		controller.wake();
+		if (world.isRemote) {
+			AdvancedMachines.NETWORK.sendToServer(new BucketStateMessage(this.getPos(), state));
+		}
+	});
 	
 	public boolean onBlockActivated(EntityPlayer player, EnumHand hand) {
 		return bucketHandler.onBlockActivate(player, hand, storage);
