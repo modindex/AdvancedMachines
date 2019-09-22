@@ -74,13 +74,20 @@ public abstract class TileMachine extends TileEntity implements ITickable, HasGu
 	protected final EnergyStorageAdvanced energy = new EnergyStorageAdvanced(ModConfig.general.defaultMachineEnergyCapacity * VariantExpansion.maxMultiplier);
 
 	protected final MachineStorage storage;
-	protected MachineController controller;	
+	protected final MachineController controller;	
 	
 	public TileMachine(RecipeManager recipeManager) {
 		super();
 		
 		storage = new MachineStorage(inventory, inputTanks, outputTanks, energy, recipeManager);
 		controller = new MachineController(storage, recipeManager, this);
+		
+		bucketHandler.setCallback(state -> {
+			controller.wake();
+			if (world.isRemote) {
+				AdvancedMachines.NETWORK.sendToServer(new BucketStateMessage(this.getPos(), state));
+			}
+		});		
 		
 		sync.addSubject(this);
 		sync.addSubject(controller);
@@ -133,13 +140,7 @@ public abstract class TileMachine extends TileEntity implements ITickable, HasGu
 	
 	/* Machine */
 
-	@SuppressWarnings("all")
-	protected BucketHandler bucketHandler = new BucketHandler().setCallback(state -> {
-		controller.wake();
-		if (world.isRemote) {
-			AdvancedMachines.NETWORK.sendToServer(new BucketStateMessage(this.getPos(), state));
-		}
-	});
+	protected BucketHandler bucketHandler = new BucketHandler();
 	
 	public boolean onBlockActivated(EntityPlayer player, EnumHand hand) {
 		return bucketHandler.onBlockActivate(player, hand, storage);
