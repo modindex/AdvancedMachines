@@ -67,7 +67,7 @@ public class TileMachineInjector extends TileMachine implements DialogBucketTogg
 
 	@Override
 	protected boolean preProcess() {
-		return super.preProcess() || 
-			bucketHandler.handleBucket(inventory, inventory.getFirstAdditionalSlot(), inputTanks);
+		boolean didSomething = super.preProcess(); 
+		return bucketHandler.handleBucket(inventory, inventory.getFirstAdditionalSlot(), inputTanks) || didSomething;
 	}
 }

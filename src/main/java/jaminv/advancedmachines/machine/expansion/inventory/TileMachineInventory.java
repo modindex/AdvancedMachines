@@ -109,7 +109,6 @@ public class TileMachineInventory extends TileMachineExpansion implements HasGui
 		if (controller != null) { controller.wake(); }
 	}
 
-	// FIXME: Not moving inventory on load from NBT
 	@Override
 	public boolean preProcess(MachineControllerInterface controller) {
 		if (inputState) {
