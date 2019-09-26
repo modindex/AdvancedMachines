@@ -55,6 +55,9 @@ public class RawTextures {
 		
 		ModContainer mod = FMLCommonHandler.instance().findContainerFor(ModReference.MODID);
 		
+		map.put("tank.side", new Texture(register("blocks/tank_side")));
+		map.put("tank.top", new Texture(register("blocks/tank_top")));
+		
 		for (String base : bases) {
 			for (String variant : variants) {
 				for (String file : files) {

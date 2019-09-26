@@ -38,6 +38,7 @@ import jaminv.advancedmachines.machine.instance.stabilizer.TileMachineStabilizer
 import jaminv.advancedmachines.objects.blocks.BlockPropertiesMod;
 import jaminv.advancedmachines.objects.blocks.render.BlockLayeredBaked;
 import jaminv.advancedmachines.objects.blocks.render.ModelBakeryProviderMachineFrame;
+import jaminv.advancedmachines.objects.blocks.tank.BlockTank;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.objects.variant.VariantResource;
 import net.minecraft.block.Block;
@@ -69,6 +70,8 @@ public class BlockInit {
 		for (VariantResource var : VariantResource.values()) {
 			RegistryHelper.addBlockWithItem(new BlockProperties.Block(BlockProperties.STORAGE), getVariantName("storage", var));
 		}
+		
+		RegistryHelper.addBlockWithBakedModel(new BlockTank(), "tank");
 		
 		for (VariantExpansion var : VariantExpansion.values()) {
 			RegistryHelper.addBlockWithBakedModel(new BlockLayeredBaked(BlockPropertiesMod.MACHINE),

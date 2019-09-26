@@ -53,27 +53,4 @@ public class TileMachineStabilizer extends TileMachine {
 		boolean didSomething = super.preProcess();
 		return this.bucketHandler.handleBucket(this.inventory, 1, this.inputTanks) || didSomething;
 	}
-	
-	/*
-	 * TODO: Stabilizer output into and out of bucket 
-	@Override
-	protected boolean preProcess() {
-		boolean didSomething = super.preProcess();
-		
-		int i = this.getFirstOutputSlot();
-		ItemStack stack = this.getInventory().getStackInSlot(i);
-		if (stack != null) {
-			FluidActionResult result = null;
-			result = FluidUtil.tryFillContainer(stack, this.getTank(), 1000, null, true);
-			
-			if (result != null && result.success) {
-				this.getInventory().extractItem(i, stack.getCount(), false);
-				this.getInventory().insertItem(i, result.getResult(), false);
-				didSomething = true;
-			}
-		}
-		
-		return didSomething;
-	}
-	*/
 }
