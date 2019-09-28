@@ -22,7 +22,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 
-public class MachineController implements MachineControllerInterface, ItemObservable.IObserver, FluidObservable.IObserver, EnergyObservable.IObserver, 
+public class MachineController implements MachineControllerInterface, ItemObservable.IObserver, FluidObservable.Observer, EnergyObservable.IObserver, 
 		INBTSerializable<NBTTagCompound>, SyncSubject {
 	
 	protected final ItemHandlerSeparated inventory;

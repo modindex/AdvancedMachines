@@ -141,7 +141,7 @@ public class MachineStorage implements StorageCombined, INBTSerializable<NBTTagC
 
 	/* IFluidObservable */
 
-	@Override public void addObserver(FluidObservable.IObserver observer) { 
+	@Override public void addObserver(FluidObservable.Observer observer) { 
 		inputTanks.addObserver(observer);
 		outputTanks.addObserver(observer);
 	}

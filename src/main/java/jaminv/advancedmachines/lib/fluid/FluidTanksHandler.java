@@ -19,11 +19,11 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
  */
 public class FluidTanksHandler implements FluidHandler {
 
-	private List<IObserver> observers = new ArrayList<>();
-	public void addObserver(IObserver obv) { observers.add(obv); }
+	private List<Observer> observers = new ArrayList<>();
+	public void addObserver(Observer obv) { observers.add(obv); }
 	
 	public void onTankContentsChanged() {
-		for (IObserver obv : observers) {
+		for (Observer obv : observers) {
 			obv.onTankContentsChanged();
 		}
 	}	

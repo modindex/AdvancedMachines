@@ -52,11 +52,11 @@ public class FluidTankDefault implements FluidTank, IFluidHandler, FluidObservab
     public void setCanFill(boolean canFill) { this.canFill = canFill; }
     public void setCanDrain(boolean canDrain) { this.canDrain = canDrain; }
 	
-	private List<IObserver> observers = new ArrayList<>();
-	public void addObserver(IObserver obv) { observers.add(obv); }
+	private List<Observer> observers = new ArrayList<>();
+	public void addObserver(Observer obv) { observers.add(obv); }
 	
 	protected void onContentsChanged() {
-		for (IObserver obv : observers) {
+		for (Observer obv : observers) {
 			obv.onTankContentsChanged();
 		}
 	}    
