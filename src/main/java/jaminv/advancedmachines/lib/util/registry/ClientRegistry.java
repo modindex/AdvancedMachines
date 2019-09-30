@@ -11,6 +11,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.BlockFluidClassic;
 
@@ -46,6 +47,12 @@ public class ClientRegistry  extends CommonRegistry {
 	@Override
 	public void addBlockWithBakedModel(Block block, ModelBakeryProvider provider, String registryName) {
 		super.addBlockWithBakedModel(block, provider, registryName);
+		bakedModelRegistry.add(Pair.of(block, provider));
+	}
+	
+	@Override
+	public void addBlockWithBakedModel(Block block, ItemBlock item, ModelBakeryProvider provider, String registryName) {
+		super.addBlockWithBakedModel(block, item, provider, registryName);
 		bakedModelRegistry.add(Pair.of(block, provider));
 	}
 

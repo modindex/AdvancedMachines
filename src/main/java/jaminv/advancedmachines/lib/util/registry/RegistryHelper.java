@@ -5,6 +5,7 @@ import jaminv.advancedmachines.lib.render.ModelBakeryProvider;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -36,8 +37,16 @@ public class RegistryHelper {
 		proxy.addBlockWithItem(block, registryName);
 	}
 	
+	public static void addBlockWithItem(Block block, ItemBlock item, String registryName) {
+		proxy.addBlockWithItem(block, item, registryName);
+	}
+	
 	public static void addBlockWithBakedModel(Block block, ModelBakeryProvider provider, String registryName) {
 		proxy.addBlockWithBakedModel(block, provider, registryName);
+	}
+	
+	public static void addBlockWithBakedModel(Block block, ItemBlock item, ModelBakeryProvider provider, String registryName) {
+		proxy.addBlockWithBakedModel(block, item, provider, registryName);
 	}
 	
 	public static <T extends Block & ModelBakeryProvider>void addBlockWithBakedModel(T block, String registryName) {

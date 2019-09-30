@@ -60,9 +60,18 @@ public class CommonRegistry {
 		addBlock(block, registryName);
 		addItem(new ItemBlock(block), registryName);
 	}
+	
+	public void addBlockWithItem(Block block, ItemBlock item, String registryName) {
+		addBlock(block, registryName);
+		addItem(item, registryName);
+	}
 		
 	public void addBlockWithBakedModel(Block block, ModelBakeryProvider provider, String registryName) {
 		addBlockWithItem(block, registryName);
+	}
+	
+	public void addBlockWithBakedModel(Block block, ItemBlock item, ModelBakeryProvider provider, String registryName) {
+		addBlockWithItem(block, item, registryName);
 	}
 
 	public void addItem(Item item, String registryName) {
