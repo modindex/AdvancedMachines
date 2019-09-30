@@ -66,7 +66,7 @@ public class FluidTanksHandler implements FluidHandler {
 		
 		int i = 0;
 		for (FluidTankDefault tank : tanks) {
-			props[i] = new FluidTankProperties(tank, true, false); i++;
+			props[i] = new FluidTankProperties(tank); i++;
 		}
 		return props;
 	}

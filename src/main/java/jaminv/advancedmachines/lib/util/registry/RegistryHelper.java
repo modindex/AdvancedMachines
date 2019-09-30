@@ -53,6 +53,10 @@ public class RegistryHelper {
 		proxy.addBlockWithBakedModel(block, block, registryName);	
 	}
 	
+	public static <T extends Block & ModelBakeryProvider>void addBlockWithBakedModel(T block, ItemBlock item, String registryName) {
+		proxy.addBlockWithBakedModel(block, item, block, registryName);
+	}
+	
 	public static void addItem(Item item, String registryName) {
 		proxy.addItem(item, registryName);
 	}

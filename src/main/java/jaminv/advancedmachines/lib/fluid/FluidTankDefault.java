@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -15,7 +14,7 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class FluidTankDefault implements FluidTank, IFluidHandler, FluidObservable, INBTSerializable<NBTTagCompound> {
+public class FluidTankDefault implements FluidTank, IFluidHandler {
 	
     @Nullable
     protected FluidStack fluid;
@@ -84,7 +83,7 @@ public class FluidTankDefault implements FluidTank, IFluidHandler, FluidObservab
     @Override // IFluidHandler
     public IFluidTankProperties[] getTankProperties() {
         if (this.tankProperties == null) {
-            this.tankProperties = new IFluidTankProperties[] { new FluidTankProperties(this, canFill, canDrain) };
+            this.tankProperties = new IFluidTankProperties[] { new FluidTankProperties(this) };
         }
         return this.tankProperties;
     }

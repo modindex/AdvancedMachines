@@ -39,6 +39,7 @@ import jaminv.advancedmachines.objects.blocks.BlockPropertiesMod;
 import jaminv.advancedmachines.objects.blocks.render.BlockLayeredBaked;
 import jaminv.advancedmachines.objects.blocks.render.ModelBakeryProviderMachineFrame;
 import jaminv.advancedmachines.objects.blocks.tank.BlockTank;
+import jaminv.advancedmachines.objects.blocks.tank.ItemBlockTank;
 import jaminv.advancedmachines.objects.blocks.tank.TileTank;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.objects.variant.VariantResource;
@@ -72,7 +73,8 @@ public class BlockInit {
 			RegistryHelper.addBlockWithItem(new BlockProperties.Block(BlockProperties.STORAGE), getVariantName("storage", var));
 		}
 		
-		RegistryHelper.addBlockWithBakedModel(new BlockTank(), "tank");
+		BlockTank tank = new BlockTank();
+		RegistryHelper.addBlockWithBakedModel(tank, new ItemBlockTank(tank), "tank");
 		
 		for (VariantExpansion var : VariantExpansion.values()) {
 			RegistryHelper.addBlockWithBakedModel(new BlockLayeredBaked(BlockPropertiesMod.MACHINE),

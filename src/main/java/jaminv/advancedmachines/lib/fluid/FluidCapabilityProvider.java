@@ -13,6 +13,14 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 public class FluidCapabilityProvider implements ICapabilityProvider {
+	
+	final ItemStack stack;
+	final FluidContainerItem container;
+	
+	public FluidCapabilityProvider(ItemStack stack, FluidContainerItem container) {
+		this.stack = stack;
+		this.container = container;
+	}
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
@@ -25,40 +33,31 @@ public class FluidCapabilityProvider implements ICapabilityProvider {
 
 			@Override
 			public IFluidTankProperties[] getTankProperties() {
-
-				return new IFluidTankProperties[] { new FluidTankProperties(container.getFluid(stack), container.getCapacity(stack), canFill, canDrain) };
+				return container.getTankProperties(stack);
 			}
 
 			@Override
 			public int fill(FluidStack resource, boolean doFill) {
-
 				return container.fill(stack, resource, doFill);
 			}
 
 			@Nullable
 			@Override
 			public FluidStack drain(FluidStack resource, boolean doDrain) {
-
-				if (FluidHelper.isFluidEqual(resource, container.getFluid(stack))) {
-					return container.drain(stack, resource.amount, doDrain);
-				}
-				return null;
+				return container.drain(stack, resource, doDrain);
 			}
 
 			@Nullable
 			@Override
 			public FluidStack drain(int maxDrain, boolean doDrain) {
-
 				return container.drain(stack, maxDrain, doDrain);
 			}
 
 			@Nonnull
 			@Override
 			public ItemStack getContainer() {
-
 				return stack;
 			}
-
 		});
 	}
 

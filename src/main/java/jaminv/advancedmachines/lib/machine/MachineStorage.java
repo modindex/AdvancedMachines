@@ -108,7 +108,6 @@ public class MachineStorage implements StorageCombined, INBTSerializable<NBTTagC
 		return ArrayUtils.addAll(inputTanks.getTankProperties(), outputTanks.getTankProperties()); 
 	}
 
-	// TODO: CHECK Fluid fill check for valid recipe
 	@Override
 	public int fill(FluidStack resource, boolean doFill) {
 		if (resource == null) { return 0; }
