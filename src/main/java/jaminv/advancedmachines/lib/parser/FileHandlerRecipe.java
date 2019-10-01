@@ -54,16 +54,16 @@ public class FileHandlerRecipe implements FileHandler {
 		public void addRecipe(MachineRecipe recipe);
 	}
 	
+	int defaultEnergy;
+	
 	protected final String logname;
 	protected int limit[][] = new int[RecipeSection.values().length][IngredientType.values().length];
 	protected RecipeHandler handler;
 	protected int count[][] = new int[RecipeSection.values().length][IngredientType.values().length];
 	
-	public FileHandlerRecipe(String logname, RecipeHandler handler) {
-		//addConditionFactory(Reference.MODID + ":config", new ConfigConditionFactory());
-		//addConditionFactory(Reference.MODID + ":oredictionary", new OreDictionaryConditionFactory());
-		
+	public FileHandlerRecipe(String logname, int defaultEnergy, RecipeHandler handler) {
 		this.logname = logname;
+		this.defaultEnergy = defaultEnergy;
 		this.handler = handler;
 		for (RecipeSection section : RecipeSection.values()) {
 			Arrays.fill(limit[section.ordinal()], 0);
@@ -108,7 +108,7 @@ public class FileHandlerRecipe implements FileHandler {
 			Arrays.fill(count[section.ordinal()], 0);
 		}
 
-		int energy = getEnergy(json, ModConfig.general.defaultGrinderEnergyCost);
+		int energy = getEnergy(json, defaultEnergy);
 		int time = getTime(json, ModConfig.general.processTimeBasic);
 		MachineRecipe recipe = new MachineRecipe(filename + "." + path, energy, time);
 		recipe.setXp(JsonUtils.getFloat(json, "xp", 0.0f));

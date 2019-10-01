@@ -13,5 +13,53 @@
         "input": { "item": "advancedmachines:ore_silver" },
         "output": { "ore": "ingotSilver" },
         "xp": 0.5
+    },
+    "iron_dust": {
+        "input": { "item": "advancedmachines:dust_iron" },
+        "output": { "ore": "ingotIron" },
+        "energy_percent": 75, 
+        "xp": 0.35
+    },
+    "gold_dust": {
+        "input": { "item": "advancedmachines:dust_gold" },
+        "output": { "ore": "ingotGold" },
+        "energy_perecent": 75,
+        "xp": 0.5
+    },
+    "titanium_dust": {
+        "input": { "item": "advancedmachines:dust_titanium" },
+        "output": { "ore": "ingotTitanium" },
+        "energy_percent": 75,
+        "xp": 0.35
+    },
+    "copper_dust": {
+        "input": { "item": "advancedmachines:dust_copper" },
+        "output": { "ore": "ingotCopper" },
+        "energy_percent": 75,
+        "xp": 0.25
+    },
+    "silver_dust": {
+        "input": { "item": "advancedmachines:dust_silver" },
+        "output": { "ore" : "ingotSilver" },
+        "energy_percent": 75,
+        "xp": 0.25
+    },
+    "pure_gold_dust": {
+        "input": { "ore": "dustGoldPure" },
+        "output": { "ore": "ingotGoldPure" },
+        "energy_percent": 75,
+        "xp": 1.0
+    },
+    "pure_copper_dust": {
+        "input": { "ore": "dustCopperPure" },
+        "output": { "ore": "ingotCopperPure" },
+        "energy_percent": 75,
+        "xp": 0.5
+    },
+    "pure_silver_dust": {
+        "input": { "ore": "dustSilverPure" },
+        "output": { "ore": "ingotSilverPure" },
+        "energy_perecent": 75,
+        "xp": 0.5
     }
 }

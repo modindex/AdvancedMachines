@@ -22,6 +22,7 @@ public class ModelBakeryMachineRedstone extends ModelBakeryMachineExpansion {
 		super(MultiblockTextureBase.MULTIPLY, variant);
 	}
 
+	// TODO: Redstone face not showing
 	@Override
 	public List<BakedQuad> bakeModel(IBlockState state) {
 		return new QuadBuilderMultiblock(state, base)

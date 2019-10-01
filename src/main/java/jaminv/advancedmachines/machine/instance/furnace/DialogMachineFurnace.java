@@ -4,6 +4,8 @@ import jaminv.advancedmachines.lib.container.ContainerMachine;
 import jaminv.advancedmachines.lib.container.layout.IJeiLayoutManager;
 import jaminv.advancedmachines.lib.dialog.Color;
 import jaminv.advancedmachines.lib.jei.JeiDialog;
+import jaminv.advancedmachines.lib.jei.element.JeiEnergyBar;
+import jaminv.advancedmachines.lib.jei.element.JeiProgressIndicator;
 import jaminv.advancedmachines.lib.machine.RedstoneControlled;
 import jaminv.advancedmachines.lib.util.coord.CoordRect;
 import jaminv.advancedmachines.machine.dialog.DialogEnergyBar;
@@ -23,6 +25,9 @@ public class DialogMachineFurnace extends JeiDialog {
 		
 		this.addText(8, 8, 160, "dialog.furnace.title", Color.DIALOG_TEXT);
 		this.addText(8, 73, "dialog.common.inventory", Color.DIALOG_TEXT);
+		
+		addJeiElement(new JeiEnergyBar(9, 20, 14, 50, 200, 0));
+		addJeiElement(new JeiProgressIndicator(74, 37, 24, 17, 200, 50));
 	}
 	
 

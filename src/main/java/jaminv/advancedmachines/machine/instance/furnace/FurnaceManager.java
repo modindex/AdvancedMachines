@@ -10,9 +10,9 @@ import jaminv.advancedmachines.lib.parser.FileHandlerRecipe;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe.IngredientType;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe.RecipeSection;
 import jaminv.advancedmachines.lib.recipe.MachineRecipe;
+import jaminv.advancedmachines.lib.recipe.MachineRecipeManager;
 import jaminv.advancedmachines.lib.recipe.RecipeInput;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
-import jaminv.advancedmachines.lib.recipe.MachineRecipeManager;
 import jaminv.advancedmachines.lib.recipe.RecipeOutput;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
@@ -50,19 +50,19 @@ public class FurnaceManager {
 				energy /= 2;
 			}
 			if (getOreName(key).startsWith("dust") && getOreName(output).startsWith("ingot")) {
-				energy *= 14/20.0f;
+				energy *= 0.75;
 			}
 			
 			manager.addRecipe(new MachineRecipe("smelting_list." + key.getItem().getUnlocalizedName(), energy, ModConfig.general.processTimeBasic)
 				.addInput(new RecipeInput(key)).addOutput(new RecipeOutput(output)));
 		}
 
-		DataParser.parseFolder(ModReference.MODID, "data/recipes/furnace", new FileHandlerRecipe("furnace", recipe -> {
+		DataParser.parseFolder(ModReference.MODID, "data/recipes/furnace", new FileHandlerRecipe("furnace", ModConfig.general.defaultFurnaceEnergyCost, recipe -> {
 			FurnaceManager.manager.addRecipe(recipe);
 			
 			for (ItemStack stack : recipe.getInput(0).getItems()) {
 				GameRegistry.addSmelting(stack, recipe.getOutput(0).toItemStack(), recipe.getXp());
 			}			
 		}).setLimit(RecipeSection.INPUT, IngredientType.ITEM, 1).setLimit(RecipeSection.OUTPUT, IngredientType.ITEM, 1));	
-	}
+	}	
 }

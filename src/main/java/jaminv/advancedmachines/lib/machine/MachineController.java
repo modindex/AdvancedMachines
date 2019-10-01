@@ -22,6 +22,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 
+// TODO: Inactive when redstone is inactive
 public class MachineController implements MachineControllerInterface, ItemObservable.IObserver, FluidObservable.Observer, EnergyObservable.IObserver, 
 		INBTSerializable<NBTTagCompound>, SyncSubject {
 	
@@ -56,7 +57,9 @@ public class MachineController implements MachineControllerInterface, ItemObserv
 	public ItemHandlerSeparated getInventory() { return inventory; }
 	public FluidHandler getFluidTank() { return fluidtank; }
 	public EnergyStorage getEnergy() { return energy; }
-	public RecipeManager getRecipeManager() { return recipemanager; }	
+	public RecipeManager getRecipeManager() { return recipemanager; }
+	
+	public MachineTile getMachine() { return te; }
 	
 	private List<SubController> subcontrollers = new ArrayList<SubController>();
 	public void addSubController(SubController sub) { 

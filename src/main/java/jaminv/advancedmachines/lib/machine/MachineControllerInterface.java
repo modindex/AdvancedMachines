@@ -36,4 +36,6 @@ public interface MachineControllerInterface extends DoesProcess {
 	public FluidHandler getFluidTank();
 	public EnergyStorage getEnergy();
 	public RecipeManager getRecipeManager();
+	
+	public MachineTile getMachine();
 }

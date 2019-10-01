@@ -24,6 +24,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 // TODO: Push/Pull
+// TODO: Emit light from entire multiblock
 @Mod(modid = ModReference.MODID, name = ModReference.NAME, version = ModReference.VERSION, dependencies = "required-after:forge@[14.23.2.2638,)", useMetadata = true)
 public class AdvancedMachines {
 	
@@ -75,7 +76,6 @@ public class AdvancedMachines {
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent e) {
-		logger.info("Recipe Initialization");
 		RecipeInit.init();    	
     	
         proxy.postInit(e);

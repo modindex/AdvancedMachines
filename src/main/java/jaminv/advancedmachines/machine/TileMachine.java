@@ -177,10 +177,15 @@ public abstract class TileMachine extends TileEntity implements ITickable, HasGu
 	}
 	
 	public boolean isRedstoneActive() {
-		return RedstoneControlled.isRedstoneActive(redstoneState, world.isBlockPowered(pos));
+		return RedstoneControlled.isRedstoneActive(redstoneState, this.redstone || world.isBlockPowered(pos));
 	}
 	
 	/* MachineTile */
+	
+	boolean redstone;
+	public void setRedstone(boolean active) {
+		if (active) { this.redstone = active; }
+	}
 
 	@Override
 	public int getProcessingMultiplier() {
@@ -200,6 +205,7 @@ public abstract class TileMachine extends TileEntity implements ITickable, HasGu
 		tick++;
 		if (tick < ModConfig.general.tickUpdate) { return; }
 		tick = 0;
+		redstone = false;
 		
 		if (preProcess()) { controller.wake(); }
 		

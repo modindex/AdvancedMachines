@@ -42,7 +42,7 @@ public final class ModConfig {
 		
 		@Config.Comment("Default energy cost for standard furnace recipes")
 		@RangeInt(min = 0, max = 1000000)
-		public int defaultFurnaceEnergyCost = 1400;
+		public int defaultFurnaceEnergyCost = 2000;
 		
 		@Config.Comment("Default energy cost for standard grinder recipes")
 		@RangeInt(min = 0, max = 1000000)
@@ -55,6 +55,22 @@ public final class ModConfig {
 		@Config.Comment("Default energy cost for standard alloy furnace recipes")
 		@RangeInt(min = 0, max = 1000000)
 		public int defaultAlloyEnergyCost = 4000;
+		
+		@Config.Comment("Default energy cost for standard metler recipes")
+		@RangeInt(min = 0, max = 1000000)
+		public int defaultMelterEnergyCost = 4000;
+		
+		@Config.Comment("Default energy cost for standard fluid stabilizer recipes")
+		@RangeInt(min = 0, max = 1000000)
+		public int defaultStabilizerEnergyCost = 4000;
+		
+		@Config.Comment("Default energy cost for standard fluid injector recipes")
+		@RangeInt(min = 0, max = 1000000)
+		public int defaultInjectorEnergyCost = 10000;
+		
+		@Config.Comment("Default energy cost for circuit press recipes")
+		@RangeInt(min = 0, max = 1000000)
+		public int defaultPressEnergyCost = 50000;
 	}
 	
 	@Config.Comment({ "Crafting Configuration", "Allows disabling of some common crafting recipes that may conflict with other mods." })

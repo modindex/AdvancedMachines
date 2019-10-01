@@ -1,5 +1,6 @@
 package jaminv.advancedmachines.init.init;
 
+import jaminv.advancedmachines.AdvancedMachines;
 import jaminv.advancedmachines.machine.instance.alloy.AlloyManager;
 import jaminv.advancedmachines.machine.instance.furnace.FurnaceManager;
 import jaminv.advancedmachines.machine.instance.grinder.GrinderManager;
@@ -12,6 +13,7 @@ import jaminv.advancedmachines.machine.instance.stabilizer.StabilizerManager;
 public class RecipeInit {
 
 	public static void init() {
+		AdvancedMachines.logger.info("Recipe Initialization");
 		FurnaceManager.init();
 		PurifierManager.init();
 		GrinderManager.init();

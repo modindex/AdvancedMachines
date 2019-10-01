@@ -7,6 +7,7 @@ import jaminv.advancedmachines.init.init.ItemInit;
 import jaminv.advancedmachines.lib.util.registry.RegistryHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -25,5 +26,10 @@ public class EventHandlerCommon {
 		BlockInit.init();
 		FluidInit.init();		
 		RegistryHelper.registerBlocks(event);
+	}
+	
+	@SubscribeEvent
+	public static void onRecipeRegister(RegistryEvent.Register<IRecipe> event) {
+		//RecipeInit.init();
 	}
 }
