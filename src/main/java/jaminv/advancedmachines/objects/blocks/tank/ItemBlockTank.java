@@ -21,7 +21,7 @@ public class ItemBlockTank extends ItemBlock implements FluidContainerItem {
 	}
 	
 	protected FluidTankDefault getTank(ItemStack stack) { 
-		FluidTankDefault tank = new FluidTankDefault(ModConfig.general.defaultMachineFluidCapacity, ModConfig.general.defaultMachineFluidTransfer);
+		FluidTankDefault tank = new FluidTankDefault(ModConfig.general.defaultMachineFluidCapacity, Integer.MAX_VALUE);
 		if (stack != null && stack.hasTagCompound()) {
 			tank.deserializeNBT(stack.getTagCompound().getCompoundTag("tank"));
 		}

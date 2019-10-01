@@ -70,7 +70,7 @@ public class MachineController implements MachineControllerInterface, ItemObserv
 	private static class SubControllerCompare implements Comparator<SubController> {
 		@Override 
 		public int compare(SubController sub1, SubController sub2) {
-			return sub1.getPriority() - sub2.getPriority();
+			return sub2.getPriority() - sub1.getPriority();
 		}		
 	}
 	
