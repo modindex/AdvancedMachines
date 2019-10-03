@@ -11,7 +11,7 @@
         "input": [
             { "ore": "ingotSilverPure" },
             { "item": "advancedmachines:copper_wire" },
-            { "ore": "itemPCB" }
+            { "ore": "itemPcb" }
         ],
         "output": { "item": "advancedmachines:circuit_basic" }
     },
@@ -19,7 +19,7 @@
         "input": [
             { "ore": "ingotGoldPure" },
             { "ore": "blockRedstone" },
-            { "item": "advancedmachine:circuit_basic" }
+            { "item": "advancedmachines:circuit_basic" }
         ],
         "output": { "item": "advancedmachines:circuit_advanced" }
     },
@@ -27,7 +27,7 @@
         "input": [
             { "ore": "dustEnderPure" },
             { "item": "advancedmachines:gold_wire" },
-            { "ore": "itemPCB" }
+            { "ore": "itemPcb" }
         ],
         "output": { "item": "advancedmachines:circuit_ender" }
     }

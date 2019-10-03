@@ -8,7 +8,7 @@ public enum VariantPure implements Variant, ItemGlint.CanGlint {
 	COPPER("copper", true),
 	SILVER("silver", true),
 	DIAMOND("diamond", false),
-	ENDER("ender", false),
+	ENDER("ender", false, true),
 	NETHER_STAR("nether_star", false, true);
 
 	String name;

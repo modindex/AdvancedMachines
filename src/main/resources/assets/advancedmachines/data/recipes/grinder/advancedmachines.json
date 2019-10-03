@@ -28,6 +28,10 @@
         "input": { "ore": "paneGlass" },
         "output": { "ore": "dustGlass" }
     }
+    , "dustNetherStar": {
+        "input": { "item": "minecraft:nether_star" },
+        "output": { "ore": "dustNetherStar" }
+    }
     , "goldPure": {
         "input": { "ore": "ingotGoldPure" },
         "output": { "ore": "dustGoldPure" },

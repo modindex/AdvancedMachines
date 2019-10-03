@@ -58,7 +58,7 @@ public class ItemInit {
 			RegistryHelper.addItem(new Item().setCreativeTab(CreativeTabs.MATERIALS), getVariantName("gear", var));
 		}
 		for (VariantCircuit var : VariantCircuit.values()) {
-			RegistryHelper.addItem(new Item().setCreativeTab(CreativeTabs.MATERIALS), getVariantName("circuit", var));
+			RegistryHelper.addItem(new ItemGlint(var).setCreativeTab(CreativeTabs.MATERIALS), getVariantName("circuit", var));
 		}
 		for (VariantIngredient var : VariantIngredient.values()) {
 			RegistryHelper.addItem(new Item().setCreativeTab(CreativeTabs.MATERIALS), var.getName());

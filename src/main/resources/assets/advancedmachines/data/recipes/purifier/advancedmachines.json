@@ -32,5 +32,16 @@
             { "ore": "dustCoal", "chance": 40 }
         ],
         "energy_percent": 150
+    },
+    "dustEnderPure": {
+        "input": { "ore": "dustEnder", "count": 2 },
+        "output": { "ore": "dustEnderPure" },
+        "energy_percent": 200
+    },
+    "dustNetherStarPure": {
+        "input": { "ore": "dustNetherStar" },
+        "output": { "ore": "dustNetherStarPure" },
+        "energy_percent": 400,
+        "time_percent": 200
     }
 }
