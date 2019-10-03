@@ -6,7 +6,8 @@ public enum VariantPure implements Variant {
 	GOLD("gold"),
 	COPPER("copper"),
 	SILVER("silver"),
-	DIAMOND("diamond");
+	DIAMOND("diamond"),
+	ENDER("ender");
 
 	String name;
 	

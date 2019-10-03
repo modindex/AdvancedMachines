@@ -25,7 +25,9 @@
         { "item": "advancedmachines:dust_pure_silver", "ore": "dustSilverPure" },
         { "item": "advancedmachines:dust_pure_copper", "ore": "dustCopperPure" },
         { "item": "advancedmachines:dust_pure_diamond", "ore": "dustDiamondPure" },
+        { "item": "advancedmachines:dust_pure_ender", "ore": "dustEnderPure" },
         { "item": "advancedmachines:plastic", "ore": "itemPlastic" },
+        { "item": "advancedmachines:pcb", "ore": "itemPCB" },
         { "item": "advancedmachines:tar", "ore": "ballTar" },
         { "item": "advancedmachines:rosin", "ore": "ballRosin" }
     ]

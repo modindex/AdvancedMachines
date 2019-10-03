@@ -36,7 +36,7 @@ public class ItemInit {
 			RegistryHelper.addItem(new Item().setCreativeTab(CreativeTabs.MATERIALS), getVariantName("ingot", var));
 		}
 		for (VariantPure var : VariantPure.values()) {
-			if (var == VariantPure.DIAMOND) { continue; }
+			if (var == VariantPure.DIAMOND || var == VariantPure.ENDER) { continue; }
 			RegistryHelper.addItem(new Item().setCreativeTab(CreativeTabs.MATERIALS), getVariantName("ingot_pure", var));
 		}
 		for (VariantAlloy var : VariantAlloy.values()) {

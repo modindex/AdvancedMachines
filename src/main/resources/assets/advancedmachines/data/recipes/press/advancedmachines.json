@@ -6,5 +6,29 @@
             { "ore": "itemPlastic" }
         ],
         "output": { "item": "advancedmachines:circuit_pcb" }
+    },
+    "basic": {
+        "input": [
+            { "ore": "ingotSilverPure" },
+            { "item": "advancedmachines:copper_wire" },
+            { "ore": "itemPCB" }
+        ],
+        "output": { "item": "advancedmachines:circuit_basic" }
+    },
+    "advanced": {
+        "input": [
+            { "ore": "ingotGoldPure" },
+            { "ore": "blockRedstone" },
+            { "item": "advancedmachine:circuit_basic" }
+        ],
+        "output": { "item": "advancedmachines:circuit_advanced" }
+    },
+    "ender": {
+        "input": [
+            { "ore": "dustEnderPure" },
+            { "item": "advancedmachines:gold_wire" },
+            { "ore": "itemPCB" }
+        ],
+        "output": { "item": "advancedmachines:circuit_ender" }
     }
 }
