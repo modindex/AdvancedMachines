@@ -3,6 +3,7 @@ package jaminv.advancedmachines.init.init;
 import jaminv.advancedmachines.ModReference;
 import jaminv.advancedmachines.lib.util.Variant;
 import jaminv.advancedmachines.lib.util.registry.RegistryHelper;
+import jaminv.advancedmachines.objects.ItemGlint;
 import jaminv.advancedmachines.objects.tools.ToolAxe;
 import jaminv.advancedmachines.objects.tools.ToolPickaxe;
 import jaminv.advancedmachines.objects.variant.VariantAlloy;
@@ -36,18 +37,18 @@ public class ItemInit {
 			RegistryHelper.addItem(new Item().setCreativeTab(CreativeTabs.MATERIALS), getVariantName("ingot", var));
 		}
 		for (VariantPure var : VariantPure.values()) {
-			if (var == VariantPure.DIAMOND || var == VariantPure.ENDER) { continue; }
-			RegistryHelper.addItem(new Item().setCreativeTab(CreativeTabs.MATERIALS), getVariantName("ingot_pure", var));
+			if (!var.hasIngot()) { continue; }
+			RegistryHelper.addItem(new ItemGlint(var).setCreativeTab(CreativeTabs.MATERIALS), getVariantName("ingot_pure", var));
 		}
 		for (VariantAlloy var : VariantAlloy.values()) {
 			RegistryHelper.addItem(new Item().setCreativeTab(CreativeTabs.MATERIALS), getVariantName("alloy", var));
 		}
 
 		for (VariantDust var : VariantDust.values()) {
-			RegistryHelper.addItem(new Item().setCreativeTab(CreativeTabs.MATERIALS), getVariantName("dust", var));
+			RegistryHelper.addItem(new ItemGlint(var).setCreativeTab(CreativeTabs.MATERIALS), getVariantName("dust", var));
 		}
 		for (VariantPure var : VariantPure.values()) {
-			RegistryHelper.addItem(new Item().setCreativeTab(CreativeTabs.MATERIALS), getVariantName("dust_pure", var));
+			RegistryHelper.addItem(new ItemGlint(var).setCreativeTab(CreativeTabs.MATERIALS), getVariantName("dust_pure", var));
 		}
 		for (VariantAlloy var : VariantAlloy.values()) {
 			//RegistryHelper.addItem(new Item().setCreativeTab(CreativeTabs.MATERIALS), getVariantName("alloy_dust", var));
