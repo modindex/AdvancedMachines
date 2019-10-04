@@ -29,7 +29,7 @@
         { "item": "advancedmachines:dust_pure_ender", "ore": "dustEnderPure" },
         { "item": "advancedmachines:dust_pure_nether_star", "ore": "dustNetherStarPure" },
         { "item": "advancedmachines:plastic", "ore": "itemPlastic" },
-        { "item": "advancedmachines:circuit_pcb", "ore": "itemPcb" },
+        { "item": "advancedmachines:circuit_pcb", "ore": "pcb" },
         { "item": "advancedmachines:tar", "ore": "ballTar" },
         { "item": "advancedmachines:rosin", "ore": "ballRosin" }
     ]

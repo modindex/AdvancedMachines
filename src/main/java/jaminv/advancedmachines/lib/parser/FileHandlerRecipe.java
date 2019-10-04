@@ -219,6 +219,7 @@ public class FileHandlerRecipe implements FileHandler {
 				int count = JsonUtils.getInt(inputob, "count", 1);
 				String ore = JsonUtils.getString(inputob, "ore");
 				ret = new RecipeInput(ore, count);
+				if (ret == null || ret.hasError()) { throw new DataParserException("Ore dictionary entry '" + ore + "' does not exist."); }
 			}
 
 			ret.setExtract(JsonUtils.getBoolean(inputob, "extract", true));
@@ -251,6 +252,7 @@ public class FileHandlerRecipe implements FileHandler {
 				int count = JsonUtils.getInt(outputob, "count", 1);
 				String ore = JsonUtils.getString(outputob, "ore");
 				ret =  new RecipeOutput(ore, count);
+				if (ret == null || ret.hasError()) { throw new DataParserException("Ore dictionary entry '" + ore + "' does not exist."); }
 			}
 			
 			if (withChance) {
