@@ -111,6 +111,7 @@ public final class ModConfig {
 		public boolean craftSilverArmor = true;		
 	}
 	
+	// FIXME: Not picking Thermal Foundation tar and rosin for recipe outputs
 	@Config.Comment({ "Recipe Configuration" })
 	public static Recipe recipe = new Recipe();
 	public static class Recipe {

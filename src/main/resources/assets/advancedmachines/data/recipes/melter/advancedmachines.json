@@ -1,16 +1,30 @@
 {
     "coal": {
-        "input": { "ore": "logWood" },
+        "input": { "ore": "dustCoal" },
         "output": { "fluid": "coal", "amount": 100 },
         "conditions": [
             { "type": "advancedmachines:fluid", "property": "exists", "key": "coal" }
         ] 
     },
     "coal_tar": {
-        "input": { "ore": "logWood" },
+        "input": { "ore": "dustCoal" },
         "output": { "fluid": "coal_tar", "amount": 100 },
         "conditions": [
             { "type": "advancedmachines:fluid", "property": "notexists", "key": "coal" }
         ] 
-    }
+    },
+    "resin": {
+        "input": { "ore": "logWood" },
+        "output": { "fluid": "resin", "amount": 100 },
+        "conditions": [
+            { "type": "advancedmachines:fluid", "property": "exists", "key": "resin" }
+        ]
+    },
+    "tree_resin": {
+        "input": { "ore": "logWood" },
+        "output": { "fluid": "tree_resin", "amount": 100 },
+        "conditions": [
+            { "type": "advancedmachines:fluid", "property": "notexists", "key": "resin" }
+        ]
+   }
 }

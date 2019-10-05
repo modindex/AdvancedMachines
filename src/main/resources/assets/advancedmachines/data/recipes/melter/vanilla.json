@@ -1,0 +1,42 @@
+{
+    "ice": {
+        "input": { "item": "minecraft:ice" },
+        "output": { "fluid": "water", "amount": 1000 },
+        "energy_percent": 40
+    },
+    "snow": {
+        "input": { "item": "minecraft:snow" },
+        "output": { "fluid": "water", "amount": 500 },
+        "energy_percent": 20
+    },
+    "snowball": {
+        "input": { "item": "minecraft:snowball" },
+        "output": { "fluid": "water", "amount": 125 },
+        "energy_percent": 5
+    },
+    "netherrack": {
+        "input": { "item": "minecraft:netherrack" },
+        "output": { "fluid": "lava", "amount": 1000 },
+        "energy_percent": 1500
+    },
+    "magma": {
+        "input": { "item": "minecraft:magma" },
+        "output": { "fluid": "lava", "amount": 1000 },
+        "energy_percent": 1000
+    },
+    "cobblestone": {
+        "input": { "item": "minecraft:cobblestone" },
+        "output": { "fluid": "lava", "amount": 1000 },
+        "energy_percent": 7500
+    },
+    "stone": {
+        "input": { "item": "minecraft:stone", "data": "*" },
+        "output": { "fluid": "lava", "amount": 1000 },
+        "energy_percent": 7500
+    },
+    "obsidian": {
+        "input": { "item": "minecraft:obsidian" },
+        "output": { "fluid": "lava", "amount": 1000 },
+        "energy_percent": 7500
+    }
+}

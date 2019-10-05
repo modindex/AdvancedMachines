@@ -28,6 +28,8 @@
         { "item": "advancedmachines:dust_pure_diamond", "ore": "dustDiamondPure" },
         { "item": "advancedmachines:dust_pure_ender", "ore": "dustEnderPure" },
         { "item": "advancedmachines:dust_pure_nether_star", "ore": "dustNetherStarPure" },
+        { "item": "advancedmachines:gear_iron", "ore": "gearIron" },
+        { "item": "advancedmachines:gear_titanium", "ore": "gearTitanium" },
         { "item": "advancedmachines:plastic", "ore": "itemPlastic" },
         { "item": "advancedmachines:circuit_pcb", "ore": "pcb" },
         { "item": "advancedmachines:tar", "ore": "ballTar" },

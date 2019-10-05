@@ -1,0 +1,12 @@
+{
+    "ice": {
+        "input": { "fluid": "water", "amount": 1000 },
+        "output": { "item": "minecraft:ice" },
+        "energy_percent": 50
+    },
+    "magma": {
+        "input": { "fluid": "lava", "amount": 1000 },
+        "output": { "item": "minecraft:magma" },
+        "energy_percent": 500
+    }
+}
