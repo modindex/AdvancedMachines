@@ -19,7 +19,7 @@ public class PurifierManager {
 	public static List<MachineRecipe> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {
-		DataParser.parseFolder(ModReference.MODID, "data/recipes/purifier", new FileHandlerRecipe("purifier", ModConfig.general.defaultPurifierEnergyCost, (recipe) -> {
+		DataParser.parseJarFolder(ModReference.MODID, "data/recipes/purifier", new FileHandlerRecipe("purifier", ModConfig.general.defaultPurifierEnergyCost, (recipe) -> {
 			manager.addRecipe(recipe);
 		}).setLimit(RecipeSection.INPUT, IngredientType.ITEM, 1).setLimit(RecipeSection.OUTPUT, IngredientType.ITEM, 1)
 			.setLimit(RecipeSection.SECONDARY, IngredientType.ITEM, 6)

@@ -20,7 +20,7 @@ public class MelterManager {
 	public static List<MachineRecipe> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {
-		DataParser.parseFolder(ModReference.MODID, "data/recipes/melter", new FileHandlerRecipe("melter", ModConfig.general.defaultMelterEnergyCost, (recipe) -> {
+		DataParser.parseJarFolder(ModReference.MODID, "data/recipes/melter", new FileHandlerRecipe("melter", ModConfig.general.defaultMelterEnergyCost, (recipe) -> {
 			manager.addRecipe(recipe);
 		}).setLimit(RecipeSection.INPUT, IngredientType.ITEM, 1).setLimit(RecipeSection.OUTPUT, IngredientType.FLUID, 1));
 	}

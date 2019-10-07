@@ -19,7 +19,7 @@ public class StabilizerManager {
 	public static List<MachineRecipe> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {
-		DataParser.parseFolder(ModReference.MODID, "data/recipes/stabilizer", new FileHandlerRecipe("stabilizer", ModConfig.general.defaultStabilizerEnergyCost, (recipe) -> {
+		DataParser.parseJarFolder(ModReference.MODID, "data/recipes/stabilizer", new FileHandlerRecipe("stabilizer", ModConfig.general.defaultStabilizerEnergyCost, (recipe) -> {
 			manager.addRecipe(recipe);
 		}).setLimit(RecipeSection.INPUT, IngredientType.FLUID, 1).setLimit(RecipeSection.OUTPUT, IngredientType.ITEM, 1));
 	}

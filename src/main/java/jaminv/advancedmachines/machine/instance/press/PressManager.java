@@ -19,7 +19,7 @@ public class PressManager {
 	public static List<MachineRecipe> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {
-		DataParser.parseFolder(ModReference.MODID, "data/recipes/press", new FileHandlerRecipe("press", ModConfig.general.defaultPressEnergyCost, (recipe) -> {
+		DataParser.parseJarFolder(ModReference.MODID, "data/recipes/press", new FileHandlerRecipe("press", ModConfig.general.defaultPressEnergyCost, (recipe) -> {
 			manager.addRecipe(recipe);
 		}).setLimit(RecipeSection.INPUT, IngredientType.ITEM, 3).setLimit(RecipeSection.CATALYST, IngredientType.ITEM, 2)
 			.setLimit(RecipeSection.OUTPUT, IngredientType.ITEM, 1)

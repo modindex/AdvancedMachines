@@ -57,7 +57,7 @@ public class FurnaceManager {
 				.addInput(new RecipeInput(key)).addOutput(new RecipeOutput(output)));
 		}
 
-		DataParser.parseFolder(ModReference.MODID, "data/recipes/furnace", new FileHandlerRecipe("furnace", ModConfig.general.defaultFurnaceEnergyCost, recipe -> {
+		DataParser.parseJarFolder(ModReference.MODID, "data/recipes/furnace", new FileHandlerRecipe("furnace", ModConfig.general.defaultFurnaceEnergyCost, recipe -> {
 			FurnaceManager.manager.addRecipe(recipe);
 			
 			for (ItemStack stack : recipe.getInput(0).getItems()) {

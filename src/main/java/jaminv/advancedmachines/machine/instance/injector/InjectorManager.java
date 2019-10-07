@@ -20,7 +20,7 @@ public class InjectorManager {
 	public static List<MachineRecipe> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {
-		DataParser.parseFolder(ModReference.MODID, "data/recipes/injector", new FileHandlerRecipe("injector", ModConfig.general.defaultInjectorEnergyCost, (recipe) -> { 
+		DataParser.parseJarFolder(ModReference.MODID, "data/recipes/injector", new FileHandlerRecipe("injector", ModConfig.general.defaultInjectorEnergyCost, (recipe) -> { 
 			manager.addRecipe(recipe);
 		}).setLimit(RecipeSection.INPUT, IngredientType.ITEM, 1).setLimit(RecipeSection.INPUT, IngredientType.FLUID, 1)
 			.setLimit(RecipeSection.OUTPUT, IngredientType.ITEM, 1)

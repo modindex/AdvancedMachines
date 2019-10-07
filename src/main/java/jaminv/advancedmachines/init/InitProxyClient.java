@@ -30,7 +30,7 @@ public class InitProxyClient implements InitProxy {
 	@Override
 	public void postInit(FMLPostInitializationEvent e) {
 		AdvancedMachines.logger.info("Loading Texture Sets");
-		DataParser.parseFolder(ModReference.MODID, "data/texturesets", new FileHandlerTextureSet());		
+		DataParser.parseJarFolder(ModReference.MODID, "data/texturesets", new FileHandlerTextureSet());		
 	}
 
 	@Override
