@@ -106,18 +106,19 @@ public class MachineRecipe implements RecipeJei, RecipeInternal {
 	@Override
 	public Output getOutput() { 
 		if (outputcache != null) { return outputcache; }
-		return outputcache = getOutput(this.output, false); 
+		return outputcache = getOutput(this.output, false, 1); 
 	}
 	
 	@Override
-	public OutputImpl getSecondary() { return getOutput(this.secondary, true); }
+	public OutputImpl getSecondary(float productivity) { return getOutput(this.secondary, true, productivity); }
 	
-	protected OutputImpl getOutput(List<RecipeOutput> outputs, boolean doRandom) {
+	protected OutputImpl getOutput(List<RecipeOutput> outputs, boolean doRandom, float productivity) {
 		OutputImpl ret = new OutputImpl();
 		Random rand = new Random();
 		
 		for (RecipeOutput out : outputs) {
-			if (doRandom && rand.nextInt(100) > out.getChance()) { continue; }
+			int chance = Math.min((int)Math.floor(out.getChance() * productivity), 50);
+			if (doRandom && rand.nextInt(100) > chance) { continue; }
 			if (out.isFluid()) {
 				ret.fluids.add(out.toFluidStack());
 			} else {

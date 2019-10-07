@@ -191,11 +191,23 @@ public abstract class TileMachine extends TileEntity implements ITickable, HasGu
 	public int getProcessingMultiplier() {
 		return Math.max(multiblockState.getUpgrades().get(UpgradeType.MULTIPLY), getMultiplier());
 	}
+	
+	@Override
+	public float getSpeedMultiplier() {
+		return 1 + Math.min(multiblockState.getUpgrades().get(UpgradeType.SPEED) / 
+				(float)multiblockState.getUpgrades().get(UpgradeType.MULTIPLY), 4.0f);
+	}
+
+	@Override
+	public float getProductivityMultiplier() {
+		return 1 + Math.min(multiblockState.getUpgrades().get(UpgradeType.PRODUCTIVITY) / 
+				(float)multiblockState.getUpgrades().get(UpgradeType.MULTIPLY), 4.0f);
+	}
 
 	/* ============ *
 	 *  Processing  *
 	 * ============ */
-	
+
 	@Override public boolean isClient() { return world.isRemote; }	
 	
 	private int tick;

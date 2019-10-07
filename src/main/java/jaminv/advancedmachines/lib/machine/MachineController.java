@@ -98,6 +98,9 @@ public class MachineController implements MachineControllerInterface, ItemObserv
 	private int qtyProcessing = 0;
 	private int processTimeRemaining = -1;
 	private int totalProcessTime = 0;
+	private float speed = 1.0f;
+	private float productivity = 1.0f;
+	private int rftick = 0;
 	
 	public boolean isProcessing() {
 		return te.isClient() ? te.isProcessing() : processTimeRemaining > 0;
@@ -164,7 +167,7 @@ public class MachineController implements MachineControllerInterface, ItemObserv
 		}
 
 		if (!extractEnergy(lastRecipe, ticks)) { return; }
-		processTimeRemaining -= ticks;
+		processTimeRemaining -= ticks * speed;
 		
 		if (processTimeRemaining <= 0) {
 			endProcess(lastRecipe);			
@@ -184,6 +187,11 @@ public class MachineController implements MachineControllerInterface, ItemObserv
 		
 		processTimeRemaining = totalProcessTime = recipe.getProcessTime();
 		lastRecipe = recipe;
+		speed = te.getSpeedMultiplier();
+		productivity = te.getProductivityMultiplier();
+		
+		float mod = 1 + (speed / 10f + productivity / 5f);
+		int rftick = (int)Math.ceil((lastRecipe.getEnergy() / totalProcessTime) * mod);
 		wake();
 	}
 	
@@ -193,7 +201,7 @@ public class MachineController implements MachineControllerInterface, ItemObserv
 	}	
 	
 	protected boolean extractEnergy(Recipe lastRecipe, int ticks) {
-		int amount = (lastRecipe.getEnergy() / totalProcessTime) * ticks;
+		int amount = rftick * ticks;
 		
 		int extract = energy.extractEnergyInternal(amount, true);
 		if (extract < amount) { return false; }
@@ -216,7 +224,7 @@ public class MachineController implements MachineControllerInterface, ItemObserv
 		
 		// Secondary
 		for (int i = 0; i < qtyProcessing; i++) {
-			Recipe.Output secondary = recipe.getSecondary();
+			Recipe.Output secondary = recipe.getSecondary(this.productivity);
 			for (ItemStack item : secondary.getItems()) { outputItem(item, 
 				inventory.getFirstSecondarySlot(), inventory.getLastSecondarySlot()); }
 			for (FluidStack fluid : secondary.getFluids()) { outputFluid(fluid); }
@@ -314,6 +322,8 @@ public class MachineController implements MachineControllerInterface, ItemObserv
 		nbt.setInteger("processTimeRemaining", this.processTimeRemaining);
 		nbt.setInteger("totalProcessTime", this.totalProcessTime);
 		nbt.setInteger("qtyProcessing", this.qtyProcessing);
+		nbt.setFloat("speed", this.speed);
+		nbt.setFloat("productivity", this.productivity);
 		return nbt;
 	}
 
@@ -322,6 +332,8 @@ public class MachineController implements MachineControllerInterface, ItemObserv
 		this.processTimeRemaining = nbt.getInteger("processTimeRemaining");
 		this.totalProcessTime = nbt.getInteger("totalProcessTime");
 		this.qtyProcessing = nbt.getInteger("qtyProcessing");
+		if (nbt.hasKey("speed")) { this.speed = nbt.getFloat("speed"); }
+		if (nbt.hasKey("producitivy")) { this.productivity = nbt.getFloat("productivity"); }
 		
 		if (processTimeRemaining > 0 && !te.isProcessing()) {
 			te.setProcessingState(true);

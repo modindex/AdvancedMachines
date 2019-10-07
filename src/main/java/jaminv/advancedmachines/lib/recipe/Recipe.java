@@ -32,7 +32,7 @@ public interface Recipe {
 	 * This method is not deterministic (there is a random component applied).
 	 * If you need multiple secondary outputs, you should call this method multiple times.
 	 */
-	public Output getSecondary();
+	public Output getSecondary(float productivity);
 	
 	public int getEnergy();
 	public int getProcessTime();
