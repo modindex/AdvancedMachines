@@ -3,14 +3,15 @@ package jaminv.advancedmachines.machine.expansion.multiply;
 import javax.annotation.Nullable;
 
 import jaminv.advancedmachines.machine.expansion.TileMachineExpansion;
-import jaminv.advancedmachines.machine.multiblock.face.MachineFaceTile;
 import jaminv.advancedmachines.machine.multiblock.face.MachineFace;
+import jaminv.advancedmachines.machine.multiblock.face.MachineFaceTile;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.EnumSkyBlock;
 
 public class TileMachineMultiply extends TileMachineExpansion implements MachineFaceTile {
 
@@ -29,7 +30,8 @@ public class TileMachineMultiply extends TileMachineExpansion implements Machine
 	
 	@Override
 	public void setActive(boolean active) {
-		this.active = active;		
+		this.active = active;
+		if (world != null) { world.checkLightFor(EnumSkyBlock.BLOCK, this.getPos()); }
 	}
 	
 	public boolean isActive() { return active; }
@@ -44,7 +46,8 @@ public class TileMachineMultiply extends TileMachineExpansion implements Machine
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		
-    	if (compound.hasKey("face")) {
+    	active = compound.getBoolean("active");
+		if (compound.hasKey("face")) {
     		face = MachineFace.lookup(compound.getString("face"));
     	}
     	if (compound.hasKey("parent")) {
@@ -62,9 +65,10 @@ public class TileMachineMultiply extends TileMachineExpansion implements Machine
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 
+		compound.setBoolean("active", active);
 		compound.setString("face", face.getName());
 		compound.setString("parent", parent.getName());
-		compound.setString("facing", facing.getName());    			
+		compound.setString("facing", facing.getName());
 		if (parentpos != null) {
 			compound.setTag("parentpos", NBTUtil.createPosTag(parentpos));
 		}

@@ -6,7 +6,7 @@ import jaminv.advancedmachines.lib.util.helper.BlockHelper;
 import jaminv.advancedmachines.lib.util.helper.BlockIterator;
 import jaminv.advancedmachines.lib.util.helper.BlockIterator.ScanResult;
 import jaminv.advancedmachines.machine.MachineHelper;
-import jaminv.advancedmachines.machine.TileMachineMultiblock;
+import jaminv.advancedmachines.machine.TileMachine;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBorders;
 import jaminv.advancedmachines.machine.multiblock.MultiblockBuilder;
 import jaminv.advancedmachines.objects.blocks.BlockPropertiesMod;
@@ -90,8 +90,8 @@ public abstract class BlockMachineExpansion extends Block implements VariantExpa
 		if (end == null) { return; }
 		
 		TileEntity te = world.getTileEntity(end);
-		if (te instanceof TileMachineMultiblock) {
-			((TileMachineMultiblock)te).scanMultiblock(destroy ? pos : null);
+		if (te instanceof TileMachine) {
+			((TileMachine)te).scanMultiblock(destroy ? pos : null);
 		}
 	}
 

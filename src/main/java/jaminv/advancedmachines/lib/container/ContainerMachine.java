@@ -2,7 +2,7 @@ package jaminv.advancedmachines.lib.container;
 
 import jaminv.advancedmachines.lib.container.layout.ILayoutManager;
 import jaminv.advancedmachines.lib.container.layout.ILayoutUser;
-import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
+import jaminv.advancedmachines.lib.inventory.ItemHandlerSeparated;
 import jaminv.advancedmachines.lib.inventory.InventoryHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -14,12 +14,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerMachine extends Container implements ILayoutUser {
 
-	IItemHandlerMachine inventory;
+	ItemHandlerSeparated inventory;
 	IInventory playerInventory;
-	ISyncManager sync;
+	SyncManager sync;
 	ILayoutManager layout;
 	
-	public ContainerMachine(ILayoutManager layout, IItemHandlerMachine inventory, IInventory playerInventory, ISyncManager sync) {
+	public ContainerMachine(ILayoutManager layout, ItemHandlerSeparated inventory, IInventory playerInventory, SyncManager sync) {
 		this.inventory = inventory;
 		this.playerInventory = playerInventory;
 		this.sync = sync;

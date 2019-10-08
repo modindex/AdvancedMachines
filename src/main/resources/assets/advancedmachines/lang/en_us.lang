@@ -26,7 +26,7 @@ item.dust_pure_gold.name=Pure Gold Dust
 item.dust_pure_silver.name=Pure Silver Dust
 item.dust_pure_copper.name=Pure Copper Dust
 item.dust_pure_diamond.name=Refined Carbon
-item.dust_pure_ender.name=Purified End
+item.dust_pure_ender.name=Purified Ender
 item.dust_pure_nether_star.name=Improbability Catalyst
 
 item.gear_iron.name=Iron Gear
@@ -70,6 +70,8 @@ tile.machine_frame_basic.name=Titanium Machine Frame
 tile.machine_frame_compressed.name=Compressed Machine Frame
 tile.machine_frame_quadratic.name=Quadratic Machine Frame
 tile.machine_frame_improbable.name=Improbable Machine Frame
+
+tile.tank.name=Fluid Tank
 
 tile.machine_furnace_basic.name=Advanced Furnace
 tile.machine_furnace_compressed.name=Compressed Furnace

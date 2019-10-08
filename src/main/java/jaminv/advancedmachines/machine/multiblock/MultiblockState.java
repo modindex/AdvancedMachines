@@ -13,7 +13,7 @@ public class MultiblockState implements INBTSerializable<NBTTagCompound> {
 	
 	protected MultiblockMessage message = null;
 	protected BlockPos multiblockMin = null, multiblockMax = null;
-	protected MultiblockUpgrades upgrades = MultiblockUpgrades.EMPTY;
+	protected MultiblockUpgrades upgrades = MultiblockUpgrades.createEmpty();
 	protected boolean valid = false;	
 	
 	public boolean isValid() { return valid; }
@@ -52,6 +52,7 @@ public class MultiblockState implements INBTSerializable<NBTTagCompound> {
 	@Override
 	public NBTTagCompound serializeNBT() {
 		NBTTagCompound compound = new NBTTagCompound();
+		compound.setBoolean("valid", valid);
 		compound.setTag("upgrades",  upgrades.serializeNBT());
         if (multiblockMin != null) { compound.setTag("multiblockMin", NBTUtil.createPosTag(multiblockMin)); }
         if (multiblockMax != null) { compound.setTag("multiblockMax", NBTUtil.createPosTag(multiblockMax)); }
@@ -61,6 +62,7 @@ public class MultiblockState implements INBTSerializable<NBTTagCompound> {
 
 	@Override
 	public void deserializeNBT(NBTTagCompound compound) {
+		valid = compound.getBoolean("valid");
 		if (compound.hasKey("upgrades")) {
 			upgrades.deserializeNBT(compound.getCompoundTag("upgrades"));
 		}

@@ -2,13 +2,13 @@ package jaminv.advancedmachines.lib.machine;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import jaminv.advancedmachines.lib.energy.IEnergyObservable;
-import jaminv.advancedmachines.lib.energy.IEnergyStorageAdvanced;
-import jaminv.advancedmachines.lib.fluid.IFluidHandlerAdvanced;
-import jaminv.advancedmachines.lib.fluid.IFluidObservable;
-import jaminv.advancedmachines.lib.fluid.IFluidTankInternal;
-import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
-import jaminv.advancedmachines.lib.inventory.IItemObservable;
+import jaminv.advancedmachines.lib.energy.EnergyObservable;
+import jaminv.advancedmachines.lib.energy.EnergyStorage;
+import jaminv.advancedmachines.lib.fluid.FluidHandler;
+import jaminv.advancedmachines.lib.fluid.FluidObservable;
+import jaminv.advancedmachines.lib.fluid.FluidTank;
+import jaminv.advancedmachines.lib.inventory.ItemHandlerSeparated;
+import jaminv.advancedmachines.lib.inventory.ItemObservable;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,16 +25,16 @@ import net.minecraftforge.items.ItemHandlerHelper;
  * 
  * @author Jamin VanderBerg
  */
-public class MachineStorage implements IMachineStorage, INBTSerializable<NBTTagCompound> {
+public class MachineStorage implements StorageCombined, INBTSerializable<NBTTagCompound> {
 	
-	protected final IItemHandlerMachine inventory;
-	protected final IFluidHandlerAdvanced inputTanks;
-	protected final IFluidHandlerAdvanced outputTanks;
-	protected final IEnergyStorageAdvanced energy;
+	protected final ItemHandlerSeparated inventory;
+	protected final FluidHandler inputTanks;
+	protected final FluidHandler outputTanks;
+	protected final EnergyStorage energy;
 	protected final RecipeManager recipeManager;
 	
-	public MachineStorage(IItemHandlerMachine inventory, IFluidHandlerAdvanced inputTanks, IFluidHandlerAdvanced outputTanks, 
-			IEnergyStorageAdvanced energy, RecipeManager recipeManager) {
+	public MachineStorage(ItemHandlerSeparated inventory, FluidHandler inputTanks, FluidHandler outputTanks, 
+			EnergyStorage energy, RecipeManager recipeManager) {
 		
 		this.inventory = inventory;
 		this.inputTanks = inputTanks;
@@ -43,10 +43,10 @@ public class MachineStorage implements IMachineStorage, INBTSerializable<NBTTagC
 		this.recipeManager = recipeManager;
 	}
 	
-	public IItemHandlerMachine getInventory() { return inventory; }
-	public IFluidHandlerAdvanced getInputTanks() { return inputTanks; }
-	public IFluidHandlerAdvanced getOutputTanks() { return outputTanks; }
-	public IEnergyStorageAdvanced getEnergy() { return energy; }
+	public ItemHandlerSeparated getInventory() { return inventory; }
+	public FluidHandler getInputTanks() { return inputTanks; }
+	public FluidHandler getOutputTanks() { return outputTanks; }
+	public EnergyStorage getEnergy() { return energy; }
 	public RecipeManager getRecipeManager() { return recipeManager; }
 	
 	/* IItemHandler */
@@ -74,7 +74,7 @@ public class MachineStorage implements IMachineStorage, INBTSerializable<NBTTagC
 	
 	/* IItemObservable */
 
-	@Override public IItemObservable addObserver(IItemObservable.IObserver observer) { return inventory.addObserver(observer); }
+	@Override public ItemObservable addObserver(ItemObservable.IObserver observer) { return inventory.addObserver(observer); }
 	
 	/* IItemHandlerMachine */
 	
@@ -82,6 +82,11 @@ public class MachineStorage implements IMachineStorage, INBTSerializable<NBTTagC
 	@Override public boolean isSlotOutput(int slotIndex) { return inventory.isSlotOutput(slotIndex); }
 	@Override public boolean isSlotSecondary(int slotIndex) { return inventory.isSlotSecondary(slotIndex); }
 	@Override public boolean isSlotAdditional(int slotIndex) { return inventory.isSlotAdditional(slotIndex); }
+	
+	@Override public int getInputSlotCount() { return inventory.getInputSlotCount(); }
+	@Override public int getOutputSlotCount() { return inventory.getOutputSlotCount(); }
+	@Override public int getSecondarySlotCount() { return inventory.getSecondarySlotCount(); }
+	@Override public int getAdditionalSlotCount() { return inventory.getAdditionalSlotCount(); }
 
 	@Override public int getFirstInputSlot() { return inventory.getFirstInputSlot(); }
 	@Override public int getFirstOutputSlot() { return inventory.getFirstOutputSlot(); }
@@ -106,35 +111,36 @@ public class MachineStorage implements IMachineStorage, INBTSerializable<NBTTagC
 	@Override
 	public int fill(FluidStack resource, boolean doFill) {
 		if (resource == null) { return 0; }
-		if (!recipeManager.isFluidValid(resource, inventory.getItemInput(), inputTanks.getStacks())) {
-			int filled = 0;
-			
-			for (int i = 0; i < inputTanks.getTankCount(); i++) {
-				IFluidTankInternal tank = inputTanks.getTank(i);
-				if (resource.isFluidEqual(tank.getFluid())) {
-					filled += tank.fill(new FluidStack(resource, resource.amount - filled), doFill);
-				}
-			}
-			return filled;
+		int drained = inputTanks.fillSame(resource, doFill);
+		if (drained >= resource.amount) { return drained; }
+		
+		if (recipeManager.isFluidValid(new FluidStack(resource, resource.amount - drained),
+				inventory.getItemInput(), inputTanks.getStacks())) {
+			return drained + inputTanks.fill(resource, doFill);
 		}
-		return inputTanks.fill(resource, doFill); 
+		return drained;
 	}
 
 	@Override public FluidStack drain(FluidStack resource, boolean doDrain) { return outputTanks.drain(resource, doDrain); }
 	@Override public FluidStack drain(int maxDrain, boolean doDrain) { return outputTanks.drain(maxDrain, doDrain); }
 	
-	/* IFluidHandlerInternal */
+	/* FluidHandler */
 	
 	@Override public int fillInternal(FluidStack resource, boolean doFill) { return outputTanks.fillInternal(resource, doFill); }
 	@Override public FluidStack drainInternal(FluidStack resource, boolean doDrain) { return inputTanks.drainInternal(resource, doDrain); }
 	@Override public FluidStack drainInternal(int maxDrain, boolean doDrain) { return inputTanks.drainInternal(maxDrain, doDrain); }
 
 	@Override public FluidStack[] getStacks() { return inputTanks.getStacks(); }
-	@Override public IFluidTankInternal[] getTanks() { return outputTanks.getTanks(); }
+	@Override public FluidTank[] getTanks() { return outputTanks.getTanks(); }
+	
+	@Override public int fillSame(FluidStack resource, boolean doFill) { return inputTanks.fillSame(resource, doFill); }
+
+	@Override public boolean canFill() { return inputTanks.canFill(); }
+	@Override public boolean canDrain() { return outputTanks.canDrain(); }
 
 	/* IFluidObservable */
-	
-	@Override public void addObserver(IFluidObservable.IObserver observer) { 
+
+	@Override public void addObserver(FluidObservable.Observer observer) { 
 		inputTanks.addObserver(observer);
 		outputTanks.addObserver(observer);
 	}
@@ -148,19 +154,14 @@ public class MachineStorage implements IMachineStorage, INBTSerializable<NBTTagC
 	@Override public boolean canExtract() { return energy.canExtract(); }
 	@Override public boolean canReceive() { return energy.canReceive(); }
 	
-	/* IEnergyStorageInternal */
+	/* EnergyStorage */
 	
 	@Override public int receiveEnergyInternal(int maxReceive, boolean simulate) { return energy.receiveEnergyInternal(maxReceive, simulate); }
 	@Override public int extractEnergyInternal(int maxExtract, boolean simulate) { return energy.extractEnergyInternal(maxExtract, simulate); }
 
 	/* IEnergyObservable */
 	
-	@Override public void addObserver(IEnergyObservable.IObserver observer) { energy.addObserver(observer); }
-
-	/* IEnergyStorageAdvanced */
-	
-	@Override public void setEnergyCapacity(int capacity) { energy.setEnergyCapacity(capacity); }
-	@Override public void setEnergy(int capacity) { energy.setEnergy(capacity); }	
+	@Override public void addObserver(EnergyObservable.IObserver observer) { energy.addObserver(observer); }
 
 	/* INBTSerializable */
 

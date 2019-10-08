@@ -1,8 +1,29 @@
 {
-    "plastic": {
+    "plastic_coal": {
         "input": [
             { "fluid": "coal", "amount": 800 },
             { "ore": "ballRosin" }
+        ],
+        "output": { "ore": "itemPlastic" }
+    },
+    "plastic_coal_tar": {
+        "input": [
+            { "fluid": "coal_tar", "amount": 800 },
+            { "ore": "ballRosin" }
+        ],
+        "output": { "ore": "itemPlastic" }
+    },
+    "plastic_resin": {
+        "input": [
+            { "fluid": "resin", "amount": 1000 },
+            { "ore": "ballTar" }
+        ],
+        "output": { "ore": "itemPlastic" }
+    },
+    "plastic_tree_resin": {
+        "input": [
+            { "fluid": "tree_resin", "amount": 1000 },
+            { "ore": "ballTar" }
         ],
         "output": { "ore": "itemPlastic" }
     }

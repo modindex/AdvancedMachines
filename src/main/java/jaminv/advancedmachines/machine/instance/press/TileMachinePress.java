@@ -1,23 +1,23 @@
 package jaminv.advancedmachines.machine.instance.press;
 
 import jaminv.advancedmachines.lib.container.ContainerMachine;
-import jaminv.advancedmachines.lib.container.ISyncManager;
+import jaminv.advancedmachines.lib.container.SyncManager;
 import jaminv.advancedmachines.lib.container.layout.ILayoutManager;
 import jaminv.advancedmachines.lib.container.layout.ItemLayoutGrid;
 import jaminv.advancedmachines.lib.container.layout.JeiLayoutManager;
-import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
+import jaminv.advancedmachines.lib.inventory.ItemHandlerSeparated;
 import jaminv.advancedmachines.lib.inventory.slot.ISlotHandler;
-import jaminv.advancedmachines.machine.TileMachineMultiblock;
+import jaminv.advancedmachines.machine.TileMachine;
 import jaminv.advancedmachines.machine.multiblock.face.MachineType;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
-public class TileMachinePress extends TileMachineMultiblock {
+public class TileMachinePress extends TileMachine {
 	
 	/** Discrete Container class required for JEI */
 	public static class ContainerPress extends ContainerMachine {
-		public ContainerPress(ILayoutManager layout, IItemHandlerMachine inventory, IInventory playerInventory,
-				ISyncManager sync) {
+		public ContainerPress(ILayoutManager layout, ItemHandlerSeparated inventory, IInventory playerInventory,
+				SyncManager sync) {
 			super(layout, inventory, playerInventory, sync);
 		}
 	}

@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.tuple.Pair;
 
 import jaminv.advancedmachines.lib.util.Variant;
-import jaminv.advancedmachines.machine.BlockMachineMultiblock;
+import jaminv.advancedmachines.machine.BlockMachine;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
@@ -61,19 +61,23 @@ public class MachineFaceBuilder {
 	protected static @Nullable Pair<BlockPos, BlockPos> buildFace(World world, BlockPos parent, EnumFacing facing, BlockPos pos, int count, EnumFacing dir) {
 		int i = 0;
 		Block block = world.getBlockState(parent).getBlock();
-		if (!(block instanceof BlockMachineMultiblock)) { return null; }
-		MachineType type = ((BlockMachineMultiblock)block).getMachineType();
+		if (!(block instanceof BlockMachine)) { return null; }
+		MachineType type = ((BlockMachine)block).getMachineType();
 		
 		for (int x = -count+1; x < 1; x++) {
 			for (int y = -count+1; y < 1; y++) {
 				TileEntity te = world.getTileEntity(pos.offset(dir, x).offset(EnumFacing.UP, y));
 				
 				if (te instanceof MachineFaceTile) {
-					((MachineFaceTile)te).setMachineFace(MachineFace.build(count, -x, -y), type, facing, pos);
+					((MachineFaceTile)te).setMachineFace(MachineFace.build(count, -x, -y), type, facing, parent);
 				}
 			}
 		}
-		
-		return Pair.of(pos.offset(dir, -count+1).offset(EnumFacing.UP, -count+1), pos);
+		BlockPos other = pos.offset(dir, -count+1).offset(EnumFacing.UP, -count+1);
+		int minX = Math.min(other.getX(), pos.getX()), maxX = Math.max(other.getX(), pos.getX());
+		int minY = Math.min(other.getY(), pos.getY()), maxY = Math.max(other.getY(), pos.getY());
+		int minZ = Math.min(other.getZ(), pos.getZ()), maxZ = Math.max(other.getZ(), pos.getZ());
+				
+		return Pair.of(new BlockPos(minX, minY, minZ), new BlockPos(maxX, maxY, maxZ));
 	}
 }

@@ -72,6 +72,7 @@ public class JeiRecipeWrapper implements IRecipeWrapper {
 	}
 	
 	public int getSecondaryChance(int index) {
+		if (secondary == null || index >= secondary.getItems().size()) { return 0; }
 		return secondary.getItems().get(index).getChance();
 	}
 	

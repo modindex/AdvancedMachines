@@ -1,6 +1,7 @@
 package jaminv.advancedmachines.machine.expansion.redstone;
 
-import jaminv.advancedmachines.lib.machine.IMachineController;
+import jaminv.advancedmachines.lib.machine.MachineControllerInterface;
+import jaminv.advancedmachines.lib.util.helper.HasFacing;
 import jaminv.advancedmachines.machine.expansion.TileMachineExpansion;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
@@ -8,10 +9,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class TileMachineRedstone extends TileMachineExpansion implements IMachineController.ISubController {
+public class TileMachineRedstone extends TileMachineExpansion implements HasFacing, MachineControllerInterface.SubController {
 	
 	protected EnumFacing facing = EnumFacing.NORTH;
-	protected IMachineController controller;
+	protected MachineControllerInterface controller;
 	
 	public void setFacing(EnumFacing facing) {
 		this.facing = facing;
@@ -30,6 +31,7 @@ public class TileMachineRedstone extends TileMachineExpansion implements IMachin
 		redstone = world.isBlockPowered(pos);
 		if (oldRedstone != redstone) {
 			world.markBlockRangeForRenderUpdate(pos, pos);
+			world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
 			if (controller != null) { controller.wake(); }
 		}
 	}
@@ -44,14 +46,14 @@ public class TileMachineRedstone extends TileMachineExpansion implements IMachin
 	}
 	
 	@Override
-	public boolean preProcess(IMachineController controller) {
+	public boolean preProcess(MachineControllerInterface controller) {
 		// TODO: Redstone
-		//te.setRedstone(redstone);
+		controller.getMachine().setRedstone(redstone);
 		return false;
 	}
 	
 	@Override
-	public void setController(IMachineController controller) {
+	public void setController(MachineControllerInterface controller) {
 		this.controller = controller;
 	}
 	

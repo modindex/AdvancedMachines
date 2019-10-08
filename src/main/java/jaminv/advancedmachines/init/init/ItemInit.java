@@ -1,8 +1,9 @@
 package jaminv.advancedmachines.init.init;
 
-import jaminv.advancedmachines.Reference;
+import jaminv.advancedmachines.ModReference;
 import jaminv.advancedmachines.lib.util.Variant;
 import jaminv.advancedmachines.lib.util.registry.RegistryHelper;
+import jaminv.advancedmachines.objects.ItemGlint;
 import jaminv.advancedmachines.objects.tools.ToolAxe;
 import jaminv.advancedmachines.objects.tools.ToolPickaxe;
 import jaminv.advancedmachines.objects.variant.VariantAlloy;
@@ -27,7 +28,7 @@ import net.minecraftforge.common.util.EnumHelper;
 public class ItemInit {
 	
 	public static final ToolMaterial TOOL_TITANIUM = EnumHelper.addToolMaterial("tool_titanium", 2, 1561, 4.0f, 1.0f, 10);
-	public static final ArmorMaterial ARMOR_TITANIUM = EnumHelper.addArmorMaterial("armor_titanium", Reference.MODID + ":titanium", 33, new int[]{3,6,8,3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 2.0f);
+	public static final ArmorMaterial ARMOR_TITANIUM = EnumHelper.addArmorMaterial("armor_titanium", ModReference.MODID + ":titanium", 33, new int[]{3,6,8,3}, 10, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 2.0f);
 
 	protected static String getVariantName(String name, Variant variant) { return name + "_" + variant.getName(); }	
 	
@@ -36,18 +37,18 @@ public class ItemInit {
 			RegistryHelper.addItem(new Item().setCreativeTab(CreativeTabs.MATERIALS), getVariantName("ingot", var));
 		}
 		for (VariantPure var : VariantPure.values()) {
-			if (var == VariantPure.DIAMOND) { continue; }
-			RegistryHelper.addItem(new Item().setCreativeTab(CreativeTabs.MATERIALS), getVariantName("ingot_pure", var));
+			if (!var.hasIngot()) { continue; }
+			RegistryHelper.addItem(new ItemGlint(var).setCreativeTab(CreativeTabs.MATERIALS), getVariantName("ingot_pure", var));
 		}
 		for (VariantAlloy var : VariantAlloy.values()) {
 			RegistryHelper.addItem(new Item().setCreativeTab(CreativeTabs.MATERIALS), getVariantName("alloy", var));
 		}
 
 		for (VariantDust var : VariantDust.values()) {
-			RegistryHelper.addItem(new Item().setCreativeTab(CreativeTabs.MATERIALS), getVariantName("dust", var));
+			RegistryHelper.addItem(new ItemGlint(var).setCreativeTab(CreativeTabs.MATERIALS), getVariantName("dust", var));
 		}
 		for (VariantPure var : VariantPure.values()) {
-			RegistryHelper.addItem(new Item().setCreativeTab(CreativeTabs.MATERIALS), getVariantName("dust_pure", var));
+			RegistryHelper.addItem(new ItemGlint(var).setCreativeTab(CreativeTabs.MATERIALS), getVariantName("dust_pure", var));
 		}
 		for (VariantAlloy var : VariantAlloy.values()) {
 			//RegistryHelper.addItem(new Item().setCreativeTab(CreativeTabs.MATERIALS), getVariantName("alloy_dust", var));
@@ -57,7 +58,7 @@ public class ItemInit {
 			RegistryHelper.addItem(new Item().setCreativeTab(CreativeTabs.MATERIALS), getVariantName("gear", var));
 		}
 		for (VariantCircuit var : VariantCircuit.values()) {
-			RegistryHelper.addItem(new Item().setCreativeTab(CreativeTabs.MATERIALS), getVariantName("circuit", var));
+			RegistryHelper.addItem(new ItemGlint(var).setCreativeTab(CreativeTabs.MATERIALS), getVariantName("circuit", var));
 		}
 		for (VariantIngredient var : VariantIngredient.values()) {
 			RegistryHelper.addItem(new Item().setCreativeTab(CreativeTabs.MATERIALS), var.getName());

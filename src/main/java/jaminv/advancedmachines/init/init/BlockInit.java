@@ -38,6 +38,9 @@ import jaminv.advancedmachines.machine.instance.stabilizer.TileMachineStabilizer
 import jaminv.advancedmachines.objects.blocks.BlockPropertiesMod;
 import jaminv.advancedmachines.objects.blocks.render.BlockLayeredBaked;
 import jaminv.advancedmachines.objects.blocks.render.ModelBakeryProviderMachineFrame;
+import jaminv.advancedmachines.objects.blocks.tank.BlockTank;
+import jaminv.advancedmachines.objects.blocks.tank.ItemBlockTank;
+import jaminv.advancedmachines.objects.blocks.tank.TileTank;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
 import jaminv.advancedmachines.objects.variant.VariantResource;
 import net.minecraft.block.Block;
@@ -69,6 +72,9 @@ public class BlockInit {
 		for (VariantResource var : VariantResource.values()) {
 			RegistryHelper.addBlockWithItem(new BlockProperties.Block(BlockProperties.STORAGE), getVariantName("storage", var));
 		}
+		
+		BlockTank tank = new BlockTank();
+		RegistryHelper.addBlockWithBakedModel(tank, new ItemBlockTank(tank), "tank");
 		
 		for (VariantExpansion var : VariantExpansion.values()) {
 			RegistryHelper.addBlockWithBakedModel(new BlockLayeredBaked(BlockPropertiesMod.MACHINE),
@@ -109,6 +115,8 @@ public class BlockInit {
 				RegistryHelper.addBlockWithBakedModel(injector, "machine_injector_" + name);
 			}
 		}
+		GameRegistry.registerTileEntity(TileTank.class, new ResourceLocation("tile_tank"));
+		
 		GameRegistry.registerTileEntity(TileMachineMultiply.class, new ResourceLocation("tile_machine_expansion"));
 		GameRegistry.registerTileEntity(TileMachineExpansion.class, new ResourceLocation("tile_machine_expansion_type"));
 		GameRegistry.registerTileEntity(TileMachineInventory.class, new ResourceLocation("tile_machine_inventory"));

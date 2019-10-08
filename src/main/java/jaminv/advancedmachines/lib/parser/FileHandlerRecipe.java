@@ -11,8 +11,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import jaminv.advancedmachines.ModConfig;
-import jaminv.advancedmachines.Reference;
-import jaminv.advancedmachines.lib.recipe.RecipeImpl;
+import jaminv.advancedmachines.ModReference;
+import jaminv.advancedmachines.lib.recipe.MachineRecipe;
 import jaminv.advancedmachines.lib.recipe.RecipeInput;
 import jaminv.advancedmachines.lib.recipe.RecipeOutput;
 import jaminv.advancedmachines.lib.util.logger.Logger;
@@ -51,19 +51,19 @@ public class FileHandlerRecipe implements FileHandler {
 	
 	/** Functional Interface */
 	public static interface RecipeHandler {
-		public void addRecipe(RecipeImpl recipe);
+		public void addRecipe(MachineRecipe recipe);
 	}
+	
+	int defaultEnergy;
 	
 	protected final String logname;
 	protected int limit[][] = new int[RecipeSection.values().length][IngredientType.values().length];
 	protected RecipeHandler handler;
 	protected int count[][] = new int[RecipeSection.values().length][IngredientType.values().length];
 	
-	public FileHandlerRecipe(String logname, RecipeHandler handler) {
-		//addConditionFactory(Reference.MODID + ":config", new ConfigConditionFactory());
-		//addConditionFactory(Reference.MODID + ":oredictionary", new OreDictionaryConditionFactory());
-		
+	public FileHandlerRecipe(String logname, int defaultEnergy, RecipeHandler handler) {
 		this.logname = logname;
+		this.defaultEnergy = defaultEnergy;
 		this.handler = handler;
 		for (RecipeSection section : RecipeSection.values()) {
 			Arrays.fill(limit[section.ordinal()], 0);
@@ -108,9 +108,9 @@ public class FileHandlerRecipe implements FileHandler {
 			Arrays.fill(count[section.ordinal()], 0);
 		}
 
-		int energy = getEnergy(json, ModConfig.general.defaultGrinderEnergyCost);
+		int energy = getEnergy(json, defaultEnergy);
 		int time = getTime(json, ModConfig.general.processTimeBasic);
-		RecipeImpl recipe = new RecipeImpl(filename + "." + path, energy, time);
+		MachineRecipe recipe = new MachineRecipe(filename + "." + path, energy, time);
 		recipe.setXp(JsonUtils.getFloat(json, "xp", 0.0f));
 		
 		for (RecipeInput input : parseInputs(json, RecipeSection.INPUT)) {
@@ -219,6 +219,7 @@ public class FileHandlerRecipe implements FileHandler {
 				int count = JsonUtils.getInt(inputob, "count", 1);
 				String ore = JsonUtils.getString(inputob, "ore");
 				ret = new RecipeInput(ore, count);
+				if (ret == null || ret.hasError()) { throw new DataParserException("Ore dictionary entry '" + ore + "' does not exist."); }
 			}
 
 			ret.setExtract(JsonUtils.getBoolean(inputob, "extract", true));
@@ -251,6 +252,7 @@ public class FileHandlerRecipe implements FileHandler {
 				int count = JsonUtils.getInt(outputob, "count", 1);
 				String ore = JsonUtils.getString(outputob, "ore");
 				ret =  new RecipeOutput(ore, count);
+				if (ret == null || ret.hasError()) { throw new DataParserException("Ore dictionary entry '" + ore + "' does not exist."); }
 			}
 			
 			if (withChance) {
@@ -290,7 +292,7 @@ public class FileHandlerRecipe implements FileHandler {
 				throw new DataParserException("Condition '" + value + "' not found.");
 			}
 			
-			JsonContext context = new JsonContext(Reference.MODID);
+			JsonContext context = new JsonContext(ModReference.MODID);
 			BooleanSupplier func = factory.parse(context, ob);  
 			if (!func.getAsBoolean()) { logger.info("Condition '" + value + "' not met."); return false; }
 			logger.info("Condition '" + value + "' met.");

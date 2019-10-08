@@ -15,8 +15,8 @@ import net.minecraftforge.common.util.INBTSerializable;
 
 public interface MultiblockUpgrades extends INBTSerializable<NBTTagCompound> {
 	
-	public static final MultiblockUpgrades EMPTY = new Writable();
-	
+	public static MultiblockUpgrades createEmpty() { return new Writable(); }
+
 	public boolean isValid();
 
 	public int get(MachineUpgrade.UpgradeType type);

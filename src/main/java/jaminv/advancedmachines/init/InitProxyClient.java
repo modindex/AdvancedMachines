@@ -1,6 +1,7 @@
 package jaminv.advancedmachines.init;
 
 import jaminv.advancedmachines.AdvancedMachines;
+import jaminv.advancedmachines.ModReference;
 import jaminv.advancedmachines.init.handlers.EventHandlerClient;
 import jaminv.advancedmachines.lib.parser.DataParser;
 import jaminv.advancedmachines.lib.render.BakedModelLoader;
@@ -29,7 +30,7 @@ public class InitProxyClient implements InitProxy {
 	@Override
 	public void postInit(FMLPostInitializationEvent e) {
 		AdvancedMachines.logger.info("Loading Texture Sets");
-		DataParser.parseFolder("data/texturesets", new FileHandlerTextureSet());		
+		DataParser.parseJarFolder(ModReference.MODID, "data/texturesets", new FileHandlerTextureSet());		
 	}
 
 	@Override

@@ -21,11 +21,17 @@
         { "item": "advancedmachines:dust_diamond", "ore": "dustDiamond" },
         { "item": "advancedmachines:dust_ender", "ore": "dustEnder" },
         { "item": "advancedmachines:dust_glass", "ore": "dustGlass" },
+        { "item": "advancedmachines:dust_nether_star", "ore": "dustNetherStar" },
         { "item": "advancedmachines:dust_pure_gold", "ore": "dustGoldPure" },
         { "item": "advancedmachines:dust_pure_silver", "ore": "dustSilverPure" },
         { "item": "advancedmachines:dust_pure_copper", "ore": "dustCopperPure" },
         { "item": "advancedmachines:dust_pure_diamond", "ore": "dustDiamondPure" },
+        { "item": "advancedmachines:dust_pure_ender", "ore": "dustEnderPure" },
+        { "item": "advancedmachines:dust_pure_nether_star", "ore": "dustNetherStarPure" },
+        { "item": "advancedmachines:gear_iron", "ore": "gearIron" },
+        { "item": "advancedmachines:gear_titanium", "ore": "gearTitanium" },
         { "item": "advancedmachines:plastic", "ore": "itemPlastic" },
+        { "item": "advancedmachines:circuit_pcb", "ore": "pcb" },
         { "item": "advancedmachines:tar", "ore": "ballTar" },
         { "item": "advancedmachines:rosin", "ore": "ballRosin" }
     ]

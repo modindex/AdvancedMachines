@@ -1,12 +1,16 @@
 package jaminv.advancedmachines.lib.util.logger;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 
 import org.apache.logging.log4j.Level;
 
 import net.minecraft.client.resources.I18n;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.Loader;
 
 public class Logger {
 	private final Writer writer;

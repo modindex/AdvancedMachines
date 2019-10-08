@@ -3,7 +3,7 @@ package jaminv.advancedmachines.lib.jei;
 import java.util.List;
 
 import jaminv.advancedmachines.ModConfig;
-import jaminv.advancedmachines.Reference;
+import jaminv.advancedmachines.ModReference;
 import jaminv.advancedmachines.lib.container.layout.IFluidLayout;
 import jaminv.advancedmachines.lib.container.layout.IItemLayout;
 import jaminv.advancedmachines.lib.util.coord.CoordOffset;
@@ -39,7 +39,7 @@ public abstract class JeiRecipeCategory implements IRecipeCategory<JeiRecipeWrap
 	
 	@Override
 	public String getModName() {
-		return Reference.NAME;
+		return ModReference.NAME;
 	}	
 	
 	@Override

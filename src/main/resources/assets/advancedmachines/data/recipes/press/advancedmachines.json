@@ -5,6 +5,38 @@
             { "ore": "dustCopper" },
             { "ore": "itemPlastic" }
         ],
-        "output": { "item": "advancedmachines:circuit_pcb" }
+        "output": { "ore": "pcb" }
+    },
+    "basic": {
+        "input": [
+            { "ore": "ingotSilverPure" },
+            { "item": "advancedmachines:copper_wire" },
+            { "ore": "pcb" }
+        ],
+        "output": { "item": "advancedmachines:circuit_basic" }
+    },
+    "advanced": {
+        "input": [
+            { "ore": "ingotGoldPure" },
+            { "item": "advancedmachines:silver_wire" },
+            { "ore": "pcb" }
+        ],
+        "output": { "item": "advancedmachines:circuit_advanced" }
+    },
+    "ender": {
+        "input": [
+            { "ore": "dustEnderPure" },
+            { "item": "advancedmachines:gold_wire" },
+            { "ore": "pcb" }
+        ],
+        "output": { "item": "advancedmachines:circuit_ender" }
+    },
+    "improbable": {
+        "input": [
+            { "ore": "dustNetherStarPure" },
+            { "ore": "dustEnderPure" },
+            { "ore": "pcb" }
+        ],
+        "output": { "item": "advancedmachines:circuit_improbable" }
     }
 }

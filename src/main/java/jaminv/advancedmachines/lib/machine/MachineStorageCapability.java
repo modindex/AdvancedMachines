@@ -1,9 +1,5 @@
 package jaminv.advancedmachines.lib.machine;
 
-import jaminv.advancedmachines.lib.energy.IEnergyStorageAdvanced;
-import jaminv.advancedmachines.lib.fluid.IFluidHandlerAdvanced;
-import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
-import jaminv.advancedmachines.lib.recipe.RecipeManager;
 import net.minecraft.item.ItemStack;
 
 /**

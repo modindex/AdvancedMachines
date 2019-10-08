@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 
-public class MachineInventoryHandler extends ItemStackHandlerObservable implements IItemHandlerMachine {
+public class MachineInventoryHandler extends ItemStackHandlerObservable implements ItemHandlerSeparated {
 	
 	int inputSlots = 0, outputSlots = 0, secondarySlots = 0, additionalSlots = 0;
 	List<ISlotHandler> additionalHandlers = new ArrayList<ISlotHandler>(); 
@@ -24,6 +24,11 @@ public class MachineInventoryHandler extends ItemStackHandlerObservable implemen
 	public boolean isSlotOutput(int slotIndex) { return slotIndex >= getFirstOutputSlot() && slotIndex <= getLastOutputSlot(); }
 	public boolean isSlotSecondary(int slotIndex) { return slotIndex >= getFirstSecondarySlot() && slotIndex <= getLastSecondarySlot(); }
 	public boolean isSlotAdditional(int slotIndex) { return slotIndex >= getFirstAdditionalSlot(); }
+	
+	public int getInputSlotCount() { return inputSlots; }
+	public int getOutputSlotCount() { return outputSlots; }
+	public int getSecondarySlotCount() { return secondarySlots; }
+	public int getAdditionalSlotCount() { return additionalSlots; }
 	
 	public int getFirstInputSlot() { return 0; }
 	public int getFirstOutputSlot() { return inputSlots; }

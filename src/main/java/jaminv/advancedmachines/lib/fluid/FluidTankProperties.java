@@ -1,27 +1,37 @@
 package jaminv.advancedmachines.lib.fluid;
 
+import javax.annotation.Nullable;
+
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 public class FluidTankProperties implements IFluidTankProperties {
 	
-	protected final IFluidTank tank;
+	protected final FluidStack fluid;
+	protected final int capacity;
 	protected final boolean canFill, canDrain;
-	public FluidTankProperties(IFluidTank tank, boolean canFill, boolean canDrain) {
-		this.tank = tank;
+	public FluidTankProperties(FluidTank tank) {
+		this.fluid = tank.getFluid();
+		this.capacity = tank.getCapacity();
+		this.canFill = tank.canFill();
+		this.canDrain = tank.canDrain();
+	}
+	
+	public FluidTankProperties(@Nullable FluidStack fluid, int capacity, boolean canFill, boolean canDrain) {
+		this.fluid = fluid;
+		this.capacity = capacity;
 		this.canFill = canFill;
 		this.canDrain = canDrain;
 	}
 	
 	@Override
 	public FluidStack getContents() {
-		return tank.getFluid();
+		return fluid;
 	}
 	
 	@Override
 	public int getCapacity() {
-		return tank.getCapacity();
+		return capacity;
 	}
 	
 	@Override

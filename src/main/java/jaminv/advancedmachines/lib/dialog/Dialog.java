@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.lwjgl.opengl.GL11;
 
-import jaminv.advancedmachines.Reference;
+import jaminv.advancedmachines.ModReference;
 import jaminv.advancedmachines.lib.dialog.control.DialogText;
 import jaminv.advancedmachines.lib.dialog.control.IDialogControl;
 import jaminv.advancedmachines.lib.dialog.control.IDialogControlAdvanced;
@@ -35,7 +35,7 @@ public class Dialog extends GuiContainer implements IDialog {
 	
 	public Dialog(Container container, String background, int xpos, int ypos, int width, int height) {
 		super(container);
-		this.background = new ResourceLocation(Reference.MODID, background);
+		this.background = new ResourceLocation(ModReference.MODID, background);
 		this.dialog = new CoordRect(xpos, ypos, width, height);
 	}
 	

@@ -8,7 +8,7 @@ import jaminv.advancedmachines.lib.dialog.fluid.DialogBucketToggle;
 import jaminv.advancedmachines.lib.jei.JeiDialog;
 import jaminv.advancedmachines.lib.jei.element.JeiEnergyBar;
 import jaminv.advancedmachines.lib.jei.element.JeiProgressIndicator;
-import jaminv.advancedmachines.lib.machine.IRedstoneControlled;
+import jaminv.advancedmachines.lib.machine.RedstoneControlled;
 import jaminv.advancedmachines.lib.util.coord.CoordRect;
 import jaminv.advancedmachines.machine.dialog.DialogEnergyBar;
 import jaminv.advancedmachines.machine.dialog.DialogFluid;
@@ -37,13 +37,13 @@ public class DialogMachineInjector extends JeiDialog {
 		
 		this.addElement(new DialogProcessBar(te.getController(), 76, 22, 24, 17, 200, 50));
 		this.addElement(new DialogEnergyBar(te.getEnergy(), 9, 20, 14, 50, 200, 0));
-		this.addElement(new RedstoneToggleButton((IRedstoneControlled)te));
+		this.addElement(new RedstoneToggleButton((RedstoneControlled)te));
 		
 		this.addElement((new DialogBucketToggle(141, 62, 7, 9, te.getBucketToggle()))
 			.addTexture(IOState.INPUT, 200, 81)
 			.addTexture(IOState.OUTPUT, 207, 81));
 		
-		this.addElement(new DialogFluid(53, 21, 16, 48, te.getInputTanks().getTank(0)));
+		this.addElement(new DialogFluid(53, 21, 16, 48, te.getInputTank()));
 		
 		this.addTooltip(new DialogTooltipMultiblock(158, 7, 11, 11, te));
 		

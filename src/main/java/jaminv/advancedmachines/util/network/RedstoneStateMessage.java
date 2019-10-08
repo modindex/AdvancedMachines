@@ -1,8 +1,8 @@
 package jaminv.advancedmachines.util.network;
 
 import io.netty.buffer.ByteBuf;
-import jaminv.advancedmachines.lib.machine.IRedstoneControlled;
-import jaminv.advancedmachines.lib.machine.IRedstoneControlled.RedstoneState;
+import jaminv.advancedmachines.lib.machine.RedstoneControlled;
+import jaminv.advancedmachines.lib.machine.RedstoneControlled.RedstoneState;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -49,8 +49,8 @@ public class RedstoneStateMessage implements IMessage {
 			  
 			  world.addScheduledTask(() -> {
 				  TileEntity te = world.getTileEntity(pos);
-				  if (te instanceof IRedstoneControlled) {
-					  ((IRedstoneControlled)te).setRedstoneState(state);
+				  if (te instanceof RedstoneControlled) {
+					  ((RedstoneControlled)te).setRedstoneState(state);
 				  }
 			  });
 			  return null;

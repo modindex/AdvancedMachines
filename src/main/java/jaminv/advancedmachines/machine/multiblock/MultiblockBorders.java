@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.machine.multiblock;
 
-import jaminv.advancedmachines.machine.BlockMachineMultiblock;
+import jaminv.advancedmachines.machine.BlockMachine;
 import jaminv.advancedmachines.machine.expansion.MachineUpgrade;
 import jaminv.advancedmachines.objects.blocks.Properties;
 import jaminv.advancedmachines.objects.variant.VariantExpansion;
@@ -51,7 +51,7 @@ public class MultiblockBorders implements INBTSerializable<NBTTagCompound> {
 				Block check = world.getBlockState(pos.offset(facing)).getBlock();
 				
 				// If block isn't a machine or upgrade, there's no chance of a single border.
-				if (!(check instanceof MachineUpgrade) && !(check instanceof BlockMachineMultiblock)) { continue; }
+				if (!(check instanceof MachineUpgrade) && !(check instanceof BlockMachine)) { continue; }
 				// They all should be MaterialType.EXPANSION, but better to make sure.
 				if (!(check instanceof VariantExpansion.HasVariant)) { continue; }
 				

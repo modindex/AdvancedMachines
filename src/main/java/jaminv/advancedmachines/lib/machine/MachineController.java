@@ -6,15 +6,14 @@ import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import jaminv.advancedmachines.lib.container.ISyncSubject;
-import jaminv.advancedmachines.lib.energy.IEnergyObservable;
-import jaminv.advancedmachines.lib.energy.IEnergyStorageAdvanced;
-import jaminv.advancedmachines.lib.energy.IEnergyStorageInternal;
-import jaminv.advancedmachines.lib.fluid.IFluidHandlerInternal;
-import jaminv.advancedmachines.lib.fluid.IFluidObservable;
-import jaminv.advancedmachines.lib.inventory.IItemHandlerMachine;
-import jaminv.advancedmachines.lib.inventory.IItemObservable;
+import jaminv.advancedmachines.lib.container.SyncSubject;
+import jaminv.advancedmachines.lib.energy.EnergyObservable;
+import jaminv.advancedmachines.lib.energy.EnergyStorage;
+import jaminv.advancedmachines.lib.fluid.FluidHandler;
+import jaminv.advancedmachines.lib.fluid.FluidObservable;
 import jaminv.advancedmachines.lib.inventory.InventoryHelper;
+import jaminv.advancedmachines.lib.inventory.ItemHandlerSeparated;
+import jaminv.advancedmachines.lib.inventory.ItemObservable;
 import jaminv.advancedmachines.lib.recipe.Ingredient;
 import jaminv.advancedmachines.lib.recipe.Recipe;
 import jaminv.advancedmachines.lib.recipe.RecipeManager;
@@ -23,17 +22,18 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 
-public class MachineController implements IMachineController, IItemObservable.IObserver, IFluidObservable.IObserver, IEnergyObservable.IObserver, 
-		INBTSerializable<NBTTagCompound>, ISyncSubject {
+// TODO: Inactive when redstone is inactive
+public class MachineController implements MachineControllerInterface, ItemObservable.IObserver, FluidObservable.Observer, EnergyObservable.IObserver, 
+		INBTSerializable<NBTTagCompound>, SyncSubject {
 	
-	protected final IItemHandlerMachine inventory;
-	protected final IFluidHandlerInternal fluidtank;
-	protected final IEnergyStorageAdvanced energy;
+	protected final ItemHandlerSeparated inventory;
+	protected final FluidHandler fluidtank;
+	protected final EnergyStorage energy;
 	protected final RecipeManager recipemanager;
-	protected final IMachineTE te;
+	protected final MachineTile te;
 	protected boolean includeAdditional = false;
 	
-	public MachineController(IItemHandlerMachine inventory, IFluidHandlerInternal fluidtank, IEnergyStorageAdvanced energy, RecipeManager recipemanager, IMachineTE te) {
+	public MachineController(ItemHandlerSeparated inventory, FluidHandler fluidtank, EnergyStorage energy, RecipeManager recipemanager, MachineTile te) {
 		this.inventory = inventory;
 		this.fluidtank = fluidtank;
 		this.energy = energy;
@@ -41,7 +41,7 @@ public class MachineController implements IMachineController, IItemObservable.IO
 		this.te = te;
 	}
 	
-	public MachineController(IMachineStorage storage, RecipeManager recipemanager, IMachineTE te) {
+	public MachineController(StorageCombined storage, RecipeManager recipemanager, MachineTile te) {
 		inventory = storage;
 		fluidtank = storage;
 		energy = storage;
@@ -54,24 +54,26 @@ public class MachineController implements IMachineController, IItemObservable.IO
 		this.te = te;
 	}
 	
-	public IItemHandlerMachine getInventory() { return inventory; }
-	public IFluidHandlerInternal getFluidTank() { return fluidtank; }
-	public IEnergyStorageInternal getEnergy() { return energy; }
-	public RecipeManager getRecipeManager() { return recipemanager; }	
+	public ItemHandlerSeparated getInventory() { return inventory; }
+	public FluidHandler getFluidTank() { return fluidtank; }
+	public EnergyStorage getEnergy() { return energy; }
+	public RecipeManager getRecipeManager() { return recipemanager; }
 	
-	private List<ISubController> subcontrollers = new ArrayList<ISubController>();
-	public void addSubController(ISubController sub) { 
+	public MachineTile getMachine() { return te; }
+	
+	private List<SubController> subcontrollers = new ArrayList<SubController>();
+	public void addSubController(SubController sub) { 
 		subcontrollers.add(sub);
 		sub.setController(this);
 	}
-	public void removeSubController(ISubController sub) { subcontrollers.remove(sub); }
+	public void removeSubController(SubController sub) { subcontrollers.remove(sub); }
 	public void clearSubContollers() { subcontrollers.clear(); }
 	public int getSubControllerCount() { return subcontrollers.size(); }
 	
-	private static class SubControllerCompare implements Comparator<ISubController> {
+	private static class SubControllerCompare implements Comparator<SubController> {
 		@Override 
-		public int compare(ISubController sub1, ISubController sub2) {
-			return sub1.getPriority() - sub2.getPriority();
+		public int compare(SubController sub1, SubController sub2) {
+			return sub2.getPriority() - sub1.getPriority();
 		}		
 	}
 	
@@ -96,6 +98,9 @@ public class MachineController implements IMachineController, IItemObservable.IO
 	private int qtyProcessing = 0;
 	private int processTimeRemaining = -1;
 	private int totalProcessTime = 0;
+	private float speed = 1.0f;
+	private float productivity = 1.0f;
+	private int rftick = 0;
 	
 	public boolean isProcessing() {
 		return te.isClient() ? te.isProcessing() : processTimeRemaining > 0;
@@ -131,15 +136,15 @@ public class MachineController implements IMachineController, IItemObservable.IO
 	/** Send preProcess() message to observers 
 	 * @return */
 	protected void preProcess() {
-		for (ISubController obvserver : subcontrollers) {
-			if (obvserver.preProcess((IMachineController)this)) { wake(); }
+		for (SubController obvserver : subcontrollers) {
+			if (obvserver.preProcess((MachineControllerInterface)this)) { wake(); }
 		}
 	}
 	
 	/** Send postProcess() message to observers */
 	protected void postProcess() {
-		for (ISubController obvserver : subcontrollers) {
-			if (obvserver.postProcess((IMachineController)this)) { wake(); }
+		for (SubController obvserver : subcontrollers) {
+			if (obvserver.postProcess((MachineControllerInterface)this)) { wake(); }
 		}
 	}
 	
@@ -162,7 +167,7 @@ public class MachineController implements IMachineController, IItemObservable.IO
 		}
 
 		if (!extractEnergy(lastRecipe, ticks)) { return; }
-		processTimeRemaining -= ticks;
+		processTimeRemaining -= ticks * speed;
 		
 		if (processTimeRemaining <= 0) {
 			endProcess(lastRecipe);			
@@ -182,6 +187,11 @@ public class MachineController implements IMachineController, IItemObservable.IO
 		
 		processTimeRemaining = totalProcessTime = recipe.getProcessTime();
 		lastRecipe = recipe;
+		speed = te.getSpeedMultiplier();
+		productivity = te.getProductivityMultiplier();
+		
+		float mod = 1 + (speed / 10f + productivity / 5f);
+		int rftick = (int)Math.ceil((lastRecipe.getEnergy() / totalProcessTime) * mod);
 		wake();
 	}
 	
@@ -191,7 +201,7 @@ public class MachineController implements IMachineController, IItemObservable.IO
 	}	
 	
 	protected boolean extractEnergy(Recipe lastRecipe, int ticks) {
-		int amount = (lastRecipe.getEnergy() / totalProcessTime) * ticks;
+		int amount = rftick * ticks;
 		
 		int extract = energy.extractEnergyInternal(amount, true);
 		if (extract < amount) { return false; }
@@ -214,7 +224,7 @@ public class MachineController implements IMachineController, IItemObservable.IO
 		
 		// Secondary
 		for (int i = 0; i < qtyProcessing; i++) {
-			Recipe.Output secondary = recipe.getSecondary();
+			Recipe.Output secondary = recipe.getSecondary(this.productivity);
 			for (ItemStack item : secondary.getItems()) { outputItem(item, 
 				inventory.getFirstSecondarySlot(), inventory.getLastSecondarySlot()); }
 			for (FluidStack fluid : secondary.getFluids()) { outputFluid(fluid); }
@@ -312,6 +322,8 @@ public class MachineController implements IMachineController, IItemObservable.IO
 		nbt.setInteger("processTimeRemaining", this.processTimeRemaining);
 		nbt.setInteger("totalProcessTime", this.totalProcessTime);
 		nbt.setInteger("qtyProcessing", this.qtyProcessing);
+		nbt.setFloat("speed", this.speed);
+		nbt.setFloat("productivity", this.productivity);
 		return nbt;
 	}
 
@@ -320,8 +332,10 @@ public class MachineController implements IMachineController, IItemObservable.IO
 		this.processTimeRemaining = nbt.getInteger("processTimeRemaining");
 		this.totalProcessTime = nbt.getInteger("totalProcessTime");
 		this.qtyProcessing = nbt.getInteger("qtyProcessing");
+		if (nbt.hasKey("speed")) { this.speed = nbt.getFloat("speed"); }
+		if (nbt.hasKey("producitivy")) { this.productivity = nbt.getFloat("productivity"); }
 		
-		if (processTimeRemaining > 0) {
+		if (processTimeRemaining > 0 && !te.isProcessing()) {
 			te.setProcessingState(true);
 		}
 	}

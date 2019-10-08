@@ -2,7 +2,7 @@ package jaminv.advancedmachines.lib.render;
 
 import java.util.HashMap;
 
-import jaminv.advancedmachines.Reference;
+import jaminv.advancedmachines.ModReference;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ICustomModelLoader;
@@ -21,7 +21,7 @@ public class BakedModelLoader implements ICustomModelLoader {
 
 	@Override
 	public boolean accepts(ResourceLocation modelLocation) {
-		return modelLocation.getResourceDomain().equals(Reference.MODID) &&
+		return modelLocation.getResourceDomain().equals(ModReference.MODID) &&
 			resources.containsKey(modelLocation.getResourcePath());
 	}
 

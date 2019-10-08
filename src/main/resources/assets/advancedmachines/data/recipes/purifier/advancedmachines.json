@@ -1,0 +1,47 @@
+{
+    "dustCopperPure" : {
+        "input": { "ore": "dustCopper", "count": 2 },
+        "output": { "ore": "dustCopperPure" },
+        "secondary": [
+            { "ore": "dustIron", "chance": 20 },
+            { "ore": "dustGold", "chance": 5 },
+            { "ore": "dustNickel", "chance": 5 },
+            { "ore": "dustSilver", "chance": 10 }            
+        ]
+    },
+    "dustGoldPure": {
+        "input": { "ore": "dustGold", "count": 2 },
+        "output": { "ore": "dustGoldPure" },
+        "secondary": [
+            { "ore": "dustSilver", "chance": 20 },
+            { "ore": "dustPlatinum", "chance": 5 }
+        ]
+    },
+    "dustSilverPure": {
+        "input": { "ore": "dustSilver", "count": 2 },
+        "output": { "ore": "dustSilverPure" },
+        "secondary": [
+            { "ore": "dustLead", "chance": 10 },
+            { "ore": "dustCopper", "chance": 15 }
+        ]
+    },
+    "dustDiamondPure": {
+        "input": { "ore": "dustDiamond", "count": 2 },
+        "output": { "ore": "dustDiamondPure" },
+        "secondary": [
+            { "ore": "dustCoal", "chance": 40 }
+        ],
+        "energy_percent": 150
+    },
+    "dustEnderPure": {
+        "input": { "ore": "dustEnder", "count": 2 },
+        "output": { "ore": "dustEnderPure" },
+        "energy_percent": 200
+    },
+    "dustNetherStarPure": {
+        "input": { "ore": "dustNetherStar" },
+        "output": { "ore": "dustNetherStarPure" },
+        "energy_percent": 400,
+        "time_percent": 200
+    }
+}

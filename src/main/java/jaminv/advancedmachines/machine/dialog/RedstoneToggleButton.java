@@ -2,8 +2,8 @@ package jaminv.advancedmachines.machine.dialog;
 
 import jaminv.advancedmachines.lib.dialog.Dialog;
 import jaminv.advancedmachines.lib.dialog.control.DialogToggleButton;
-import jaminv.advancedmachines.lib.machine.IRedstoneControlled;
-import jaminv.advancedmachines.lib.machine.IRedstoneControlled.RedstoneState;
+import jaminv.advancedmachines.lib.machine.RedstoneControlled;
+import jaminv.advancedmachines.lib.machine.RedstoneControlled.RedstoneState;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -11,15 +11,15 @@ import net.minecraft.client.resources.I18n;
 public class RedstoneToggleButton extends DialogToggleButton<RedstoneState> {
 
 	
-	protected final IRedstoneControlled te;
+	protected final RedstoneControlled te;
 		
-	public RedstoneToggleButton(IRedstoneControlled te, int x, int y, int w, int h) {
+	public RedstoneToggleButton(RedstoneControlled te, int x, int y, int w, int h) {
 		// This is created before the NBT data for the tile entity is loaded, so the default is largely irrevelent here and is set later.
 		super(x, y, w, h, RedstoneState.IGNORE);
 		this.te = te;
 	}
 	
-	public RedstoneToggleButton(IRedstoneControlled te) {
+	public RedstoneToggleButton(RedstoneControlled te) {
 		this(te, 153, 22, 14, 14);
 		this.addDefaultTextures();
 	}

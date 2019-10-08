@@ -5,7 +5,7 @@ import java.util.List;
 import jaminv.advancedmachines.AdvancedMachines;
 import jaminv.advancedmachines.ModConfig;
 import jaminv.advancedmachines.init.GuiProxy;
-import jaminv.advancedmachines.lib.fluid.FluidTankAdvanced;
+import jaminv.advancedmachines.lib.fluid.FluidTankDefault;
 import jaminv.advancedmachines.lib.render.ModelBakery;
 import jaminv.advancedmachines.lib.util.blocks.HasItemNBT;
 import jaminv.advancedmachines.lib.util.helper.BlockHelper;
@@ -125,7 +125,7 @@ public class BlockMachineTank extends BlockMachineExpansion {
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
 		super.addInformation(stack, player, tooltip, advanced);
 		if (stack.hasTagCompound()) {
-			FluidTankAdvanced tank = new FluidTankAdvanced(
+			FluidTankDefault tank = new FluidTankDefault(
 					ModConfig.general.defaultMachineFluidCapacity * variant.getMultiplier(),
 					ModConfig.general.defaultMachineFluidTransfer * variant.getMultiplier());
 			tank.deserializeNBT(stack.getTagCompound().getCompoundTag("tank"));

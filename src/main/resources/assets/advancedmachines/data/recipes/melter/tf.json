@@ -1,0 +1,112 @@
+{
+    "redstone": {
+        "input": { "ore": "dustRedstone" },
+        "output": { "fluid": "redstone", "amount": 100 },
+        "energy_percent": 200
+    },
+    "block_redstone": {
+        "input": { "ore": "blockRedstone" },
+        "output": { "fluid": "redstone", "amount": 900 },
+        "energy_percent": 1800
+    },
+    "glowstone": {
+        "input": { "ore": "dustGlowstone" },
+        "output": { "fluid": "glowstone", "amount": 250 },
+        "energy_percent": 500
+    },
+    "block_glowstone": {
+        "input": { "ore": "blockGlowstone" },
+        "output": { "fluid": "glowstone", "amount": 1000 },
+        "energy_percent": 2000
+    },
+    "ender_pearl": {
+        "input": { "ore": "enderpearl" },
+        "output": { "fluid": "ender", "amount": 250 },
+        "energy_percent": 500
+    },
+    "clathrate_oil": {
+        "input": { "ore": "clathrateOil" },
+        "output": { "fluid": "crude_oil", "amount": 250 },
+        "energy_percent": 50
+    },
+    "clathrate_redstone": {
+        "input": { "ore": "clathrateRedstone" },
+        "output": { "fluid": "redstone", "amount": 250 },
+        "energy_percent": 50
+    },
+    "clathrate_glowstone": {
+        "input": { "ore": "clathrateGlowstone" },
+        "output": { "fluid": "glowstone", "amount": 250 },
+        "energy_percent": 50
+    },
+    "clathrate_ender": {
+        "input": { "ore": "clathrateEnder" },
+        "output": { "fluid": "ender", "amount": 250 },
+        "energy_percent": 50
+    },
+    "pyrotheum": {
+        "input": { "ore": "dustPyrotheum" },
+        "output": { "fluid": "pyrotheum", "amount": 250 },
+        "energy_percent": 200
+    },
+    "cryotheum": {
+        "input": { "ore": "dustCryotheum" },
+        "output": { "fluid": "cryotheum", "amount": 250 },
+        "energy_percent": 200
+    },
+    "aerotheum": {
+        "input": { "ore": "dustAerotheum" },
+        "output": { "fluid": "aerotheum", "amount": 250 },
+        "energy_percent": 200
+    },
+    "petrotheum": {
+        "input": { "ore": "dustPetrotheum" },
+        "output": { "fluid": "petrotheum", "amount": 250 },
+        "energy_percent": 200
+    },
+    "clathrate_oil_sand": {
+        "input": { "ore": "oreClathrateOilSand" },
+        "output": { "fluid": "crude_oil", "amount": 1000 },
+        "energy_percent": 100
+    },
+    "clathrate_oil_shale": {
+        "input": { "ore": "oreClathrateOilShale" },
+        "output": { "fluid": "crude_oil", "amount": 1000 },
+        "energy_percent": 100
+    },
+    "ore_redstone": { 
+        "input": { "ore": "oreClathrateRedstone" },
+        "output": { "fluid": "redstone", "amount": 1000 },
+        "energy_percent": 100
+    },
+    "ore_glowstone": {
+        "input": { "ore": "oreClathrateGlowstone" },
+        "output": { "fluid": "glowstone", "amount": 1000 },
+        "energy_percent": 100
+    },
+    "ore_ender": {
+        "input": { "ore": "oreClathrateEnder" },
+        "output": { "fluid": "ender", "amount": 1000 },
+        "energy_percent": 100
+    },
+    "biomass": {
+        "input": { "ore": "itemBiomass" },
+        "output": { "fluid": "biocrude", "amount": 100 },
+        "energy_percent": 100
+    },
+    "rich_biomass": {
+        "input": { "ore": "itemBiomassRich" },
+        "output": { "fluid": "biocrude", "amount": 150 },
+        "energy_percent": 100 
+    },
+    "bioblend": {
+        "input": { "ore": "itemBioblend" },
+        "output": { "fluid": "biocrude", "amount": 100 },
+        "energy_percent": 100
+    },
+    "rich_bioblend": {
+        "input": { "ore": "itemBioblendRich" },
+        "output": { "fluid": "biocrude", "amount": 150 },
+        "energy_percent": 100
+    }
+}

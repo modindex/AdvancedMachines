@@ -1,6 +1,18 @@
 {
     "coal": {
-        "input": { "fluid": "coal", "amount": 100 },
-        "output": { "ore": "dustCoal" }
+        "input": { "fluid": "coal", "amount": 200 },
+        "output": { "ore": "ballTar" }
+    },
+    "coal_tar": {
+        "input": { "fluid": "coal_tar", "amount": 200 },
+        "output": { "ore": "ballTar" }
+    },
+    "rosin": {
+        "input": { "fluid": "resin", "amount": 200 },
+        "output": { "ore": "ballRosin" }
+    },
+    "tree_resin": {
+        "input": { "fluid": "tree_resin", "amount": 200 },
+        "output": { "ore": "ballRosin" }
     }
 }

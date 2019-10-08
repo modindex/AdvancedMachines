@@ -23,18 +23,17 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-// TODO: Buckets on machines
-// TODO: Regular tank
-
-@Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION, dependencies = "required-after:forge@[14.23.2.2638,)", useMetadata = true)
+// TODO: Push/Pull
+// TODO: Emit light from entire multiblock
+@Mod(modid = ModReference.MODID, name = ModReference.NAME, version = ModReference.VERSION, dependencies = "required-after:forge@[14.23.2.2638,)", useMetadata = true)
 public class AdvancedMachines {
 	
 	@Instance
 	public static AdvancedMachines instance;
 	
-	public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MODID);
+	public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(ModReference.MODID);
 	
-	@SidedProxy(clientSide = Reference.CLIENT, serverSide = Reference.SERVER)
+	@SidedProxy(clientSide = ModReference.CLIENT, serverSide = ModReference.SERVER)
 	public static InitProxy proxy;
 	// %1.13%:
 	//public static InitProxy proxy = DistExecutor.runForDist(() -> InitProxyClient::new, () -> InitProxyServer::new);
@@ -66,9 +65,10 @@ public class AdvancedMachines {
 		GameRegistry.registerWorldGenerator(new WorldGenCustomOres(), 0);	
     	
     	logger.info("Parse Constants");
-		DataParser.parseConstants();
+		DataParser.parseConstants(ModReference.MODID, "data");
 		logger.info("Ore Dictionary Registry");
-		DataParser.parseFolder("data/ore_dictionary", new FileHandlerOreDictionary());
+		DataParser.parseJarFolder(ModReference.MODID, "data/ore_dictionary", new FileHandlerOreDictionary());
+		DataParser.parseConfigFolder(ModReference.MODID, "data/ore_dictionary", new FileHandlerOreDictionary());
 		
 		NetworkRegistry.INSTANCE.registerGuiHandler(AdvancedMachines.instance, new GuiProxy());
 
@@ -77,7 +77,6 @@ public class AdvancedMachines {
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent e) {
-		logger.info("Recipe Initialization");
 		RecipeInit.init();    	
     	
         proxy.postInit(e);

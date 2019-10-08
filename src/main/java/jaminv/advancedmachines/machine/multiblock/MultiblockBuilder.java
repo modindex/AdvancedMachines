@@ -2,11 +2,11 @@ package jaminv.advancedmachines.machine.multiblock;
 
 import javax.annotation.Nullable;
 
-import jaminv.advancedmachines.lib.machine.IMachineController.ISubController;
+import jaminv.advancedmachines.lib.machine.MachineControllerInterface.SubController;
 import jaminv.advancedmachines.lib.util.helper.BlockIterator;
 import jaminv.advancedmachines.lib.util.helper.BlockIterator.BlockChecker;
 import jaminv.advancedmachines.lib.util.helper.BlockIterator.ScanResult;
-import jaminv.advancedmachines.machine.BlockMachineMultiblock;
+import jaminv.advancedmachines.machine.BlockMachine;
 import jaminv.advancedmachines.machine.expansion.MachineUpgrade;
 import jaminv.advancedmachines.machine.expansion.MachineUpgradeTile;
 import jaminv.advancedmachines.machine.multiblock.MultiblockMessage.MultiblockMessageComplete;
@@ -27,7 +27,7 @@ public class MultiblockBuilder {
 		@Override
 		public Action checkBlock(World world, BlockPos pos) {
 			Block block = world.getBlockState(pos).getBlock();
-			if (block instanceof BlockMachineMultiblock) { return Action.END; }
+			if (block instanceof BlockMachine) { return Action.END; }
 			if (block instanceof MachineUpgrade) { return Action.SCAN; }
 			return Action.SKIP;
 		}
@@ -35,6 +35,9 @@ public class MultiblockBuilder {
 	
 	public static MultiblockState scanMultiblock(World world, BlockPos parent, @Nullable BlockPos blockDestroyed) {
 		ScanResult result = BlockIterator.scanBlocks(world, parent, new MultiblockChecker());
+		
+		// If the machine block was the one that was destroyed, there's no reason to scan, and there's no reason to return a valid MultiblockState
+		if (parent.equals(blockDestroyed)) { return new MultiblockState(); }
 		
 		BlockPos end = result.getEnd();
 		if (end != null) {
@@ -61,7 +64,7 @@ public class MultiblockBuilder {
 						upgrades.add(upgrade.getUpgradeType(), upgrade.getUpgradeQty(world, check));
 
 						TileEntity te = world.getTileEntity(check);
-						if (te instanceof ISubController) {
+						if (te instanceof SubController) {
 							upgrades.addTool(new BlockPos(check));
 						}
 					} else {
@@ -104,5 +107,6 @@ public class MultiblockBuilder {
 				}
 			}
 		}
+		world.markBlockRangeForRenderUpdate(min, max);
 	}
 }

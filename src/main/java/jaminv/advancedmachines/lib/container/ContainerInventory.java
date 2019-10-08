@@ -12,7 +12,7 @@ import net.minecraftforge.items.IItemHandler;
 public class ContainerInventory extends Container implements ILayoutUser {
 
 	IItemHandler inventory;
-	ISyncManager sync;
+	SyncManager sync;
 	
 	public ContainerInventory(ILayoutManager layout, IItemHandler inventory, IInventory playerInventory) {
 		this.inventory = inventory;

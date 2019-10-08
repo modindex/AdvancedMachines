@@ -1,7 +1,5 @@
 package jaminv.advancedmachines.lib.recipe;
 
-import java.util.Arrays;
-
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 
@@ -41,6 +39,7 @@ public class ItemComparable {
 	}
 	
 	public ItemComparable(FluidStack stack) {
+		if (stack == null) { return; }
 		fluid = stack.getFluid();
 		nbt = stack.tag;
 	}

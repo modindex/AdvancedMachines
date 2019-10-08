@@ -68,8 +68,15 @@ public class BlockMachineMultiply extends BlockMachineExpansion {
         	.withProperty(Properties.FACING, facing).withProperty(Properties.ACTIVE, active);
 	}
 	
-	// FIXME: Activating multiply expansion with face doesn't work
-	// FIXME: (probably related) Machine face doesn't enter active state
+	@Override
+	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
+ 		TileEntity te = BlockHelper.getTileEntity(world, pos);
+		if (te instanceof TileMachineMultiply) {
+			return ((TileMachineMultiply)te).isActive() ? 15 : 0;
+		}
+		return 0;
+	}
+	
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
 			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {

@@ -1,5 +1,9 @@
 package jaminv.advancedmachines;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
 import jaminv.advancedmachines.lib.recipe.RecipeOutput;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.RangeInt;
@@ -8,9 +12,34 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-@Config(modid = Reference.MODID, name = "advancedmachines/advancedmachines")
+@Config(modid = ModReference.MODID, name = "advancedmachines/advancedmachines")
 @Config.LangKey("advmach.config.title")
 public final class ModConfig {
+	
+	protected static Map<String, HashSet<String>> exclude = null;
+	
+	public static boolean doExclude(String type, String recipe_id) {
+		if (exclude == null) { loadExcludes(); }
+		HashSet typeset = exclude.get(type);
+		if (typeset == null) { return false; }
+		return typeset.contains(recipe_id);
+	}
+	
+	public static void loadExcludes() {
+		exclude = new HashMap<>();
+		for (String entry : recipe.excludeRecipes) {
+			String[] data = entry.split(":", 2);
+			if (data.length != 2) { continue; }
+			HashSet typeset = exclude.get(data[0]);
+			if (typeset == null) {
+				typeset = new HashSet<String>();
+				typeset.add(data[1]);
+				exclude.put(data[0], typeset);
+			} else {
+				typeset.add(data[1]);
+			}
+		}		
+	}
 	
 	@Config.Comment("General Configuration")
 	@Config.RequiresMcRestart
@@ -42,7 +71,7 @@ public final class ModConfig {
 		
 		@Config.Comment("Default energy cost for standard furnace recipes")
 		@RangeInt(min = 0, max = 1000000)
-		public int defaultFurnaceEnergyCost = 1400;
+		public int defaultFurnaceEnergyCost = 2000;
 		
 		@Config.Comment("Default energy cost for standard grinder recipes")
 		@RangeInt(min = 0, max = 1000000)
@@ -55,6 +84,22 @@ public final class ModConfig {
 		@Config.Comment("Default energy cost for standard alloy furnace recipes")
 		@RangeInt(min = 0, max = 1000000)
 		public int defaultAlloyEnergyCost = 4000;
+		
+		@Config.Comment("Default energy cost for standard metler recipes")
+		@RangeInt(min = 0, max = 1000000)
+		public int defaultMelterEnergyCost = 4000;
+		
+		@Config.Comment("Default energy cost for standard fluid stabilizer recipes")
+		@RangeInt(min = 0, max = 1000000)
+		public int defaultStabilizerEnergyCost = 4000;
+		
+		@Config.Comment("Default energy cost for standard fluid injector recipes")
+		@RangeInt(min = 0, max = 1000000)
+		public int defaultInjectorEnergyCost = 10000;
+		
+		@Config.Comment("Default energy cost for circuit press recipes")
+		@RangeInt(min = 0, max = 1000000)
+		public int defaultPressEnergyCost = 50000;
 	}
 	
 	@Config.Comment({ "Crafting Configuration", "Allows disabling of some common crafting recipes that may conflict with other mods." })
@@ -95,6 +140,7 @@ public final class ModConfig {
 		public boolean craftSilverArmor = true;		
 	}
 	
+	// FIXME: Not picking Thermal Foundation tar and rosin for recipe outputs
 	@Config.Comment({ "Recipe Configuration" })
 	public static Recipe recipe = new Recipe();
 	public static class Recipe {
@@ -109,8 +155,11 @@ public final class ModConfig {
 		})
 		public boolean scanGrinderOre = true;
 		
-		@Config.Comment("Exclude specific grinder recipes by recipe id.")
-		public String[] excludeGrinderRecipes = {};
+		@Config.Comment({
+			"Exclude specific recipes by recipe id. Format is [type]:[recipe_id]",
+			"Recipe IDs can be found by setting 'showRecipeIds' to true and uing JEI."
+		})
+		public String[] excludeRecipes = {};
 		
 		@Config.Comment({
 			"Order of preference for ore dictionary outputs. Can be used for consistant machine outputs across mods."
@@ -157,18 +206,18 @@ public final class ModConfig {
 		public int titaniumChance = 2; 
 	}
 	
-	@Mod.EventBusSubscriber(modid = Reference.MODID)
+	@Mod.EventBusSubscriber(modid = ModReference.MODID)
 	private static class EventHandler {
 		
 		@SubscribeEvent
 		public static void onConfigChanged(final ConfigChangedEvent.OnConfigChangedEvent event) {
-			if (event.getModID().equals(Reference.MODID)) {
-				ConfigManager.sync(Reference.MODID, Config.Type.INSTANCE);
+			if (event.getModID().equals(ModReference.MODID)) {
+				ConfigManager.sync(ModReference.MODID, Config.Type.INSTANCE);
 				
 				RecipeOutput.setOreDictionaryPreference(ModConfig.recipe.oreDictionaryPreference);
 			}
 		}
-	}	
+	}
 	
 /*	
 	private static void initDependentConfigs() {

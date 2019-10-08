@@ -5,7 +5,7 @@ import java.util.function.BooleanSupplier;
 import com.google.gson.JsonObject;
 
 import jaminv.advancedmachines.ModConfig;
-import jaminv.advancedmachines.Reference;
+import jaminv.advancedmachines.ModReference;
 import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.crafting.IConditionFactory;
 import net.minecraftforge.common.crafting.JsonContext;
@@ -17,7 +17,7 @@ public class OreDictionaryConditionFactory implements IConditionFactory {
 	public BooleanSupplier parse(JsonContext context, JsonObject json) {
 		String type = JsonUtils.getString(json, "type");
 		
-		if (type.equals(Reference.MODID + ":oredictionary")) {
+		if (type.equals(ModReference.MODID + ":oredictionary")) {
 			String prop = JsonUtils.getString(json, "property");
 			String key = JsonUtils.getString(json, "key");
 			switch (prop) {

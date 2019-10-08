@@ -1,6 +1,6 @@
 package jaminv.advancedmachines.integration.jei;
 
-import jaminv.advancedmachines.Reference;
+import jaminv.advancedmachines.ModReference;
 import jaminv.advancedmachines.init.init.BlockInit;
 import jaminv.advancedmachines.lib.dialog.container.EmptyContainer;
 import jaminv.advancedmachines.lib.jei.IJeiDialog;
@@ -42,14 +42,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class JEI implements IModPlugin {
 	
 	public static class RecipeUids {
-		public static final String FURNACE = Reference.MODID + ".furnace";
-		public static final String GRINDER = Reference.MODID + ".grinder";
-		public static final String PURIFIER = Reference.MODID + ".purifier";
-		public static final String ALLOY = Reference.MODID + ".alloy";
-		public static final String PRESS = Reference.MODID + ".press";
-		public static final String MELTER = Reference.MODID + ".melter";
-		public static final String STABILIZER = Reference.MODID + ".stabilizer";
-		public static final String INJECTOR = Reference.MODID + ".injector";
+		public static final String FURNACE = ModReference.MODID + ".furnace";
+		public static final String GRINDER = ModReference.MODID + ".grinder";
+		public static final String PURIFIER = ModReference.MODID + ".purifier";
+		public static final String ALLOY = ModReference.MODID + ".alloy";
+		public static final String PRESS = ModReference.MODID + ".press";
+		public static final String MELTER = ModReference.MODID + ".melter";
+		public static final String STABILIZER = ModReference.MODID + ".stabilizer";
+		public static final String INJECTOR = ModReference.MODID + ".injector";
 	}	
 	
 	IJeiDialog dialogFurnace = new DialogMachineFurnace(new EmptyContainer());
