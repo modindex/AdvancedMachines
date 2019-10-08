@@ -6,6 +6,7 @@ import java.util.Map;
 import jaminv.advancedmachines.ModConfig;
 import jaminv.advancedmachines.ModReference;
 import jaminv.advancedmachines.lib.parser.DataParser;
+import jaminv.advancedmachines.lib.parser.FileHandler;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe.IngredientType;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe.RecipeSection;
@@ -57,12 +58,16 @@ public class FurnaceManager {
 				.addInput(new RecipeInput(key)).addOutput(new RecipeOutput(output)));
 		}
 
-		DataParser.parseJarFolder(ModReference.MODID, "data/recipes/furnace", new FileHandlerRecipe("furnace", ModConfig.general.defaultFurnaceEnergyCost, recipe -> {
+		FileHandler handler = new FileHandlerRecipe("furnace", ModConfig.general.defaultFurnaceEnergyCost, recipe -> {
+			if (ModConfig.doExclude("furnace", recipe.getRecipeId())) {	return;	}
 			FurnaceManager.manager.addRecipe(recipe);
 			
 			for (ItemStack stack : recipe.getInput(0).getItems()) {
 				GameRegistry.addSmelting(stack, recipe.getOutput(0).toItemStack(), recipe.getXp());
 			}			
-		}).setLimit(RecipeSection.INPUT, IngredientType.ITEM, 1).setLimit(RecipeSection.OUTPUT, IngredientType.ITEM, 1));	
+		}).setLimit(RecipeSection.INPUT, IngredientType.ITEM, 1).setLimit(RecipeSection.OUTPUT, IngredientType.ITEM, 1);
+		
+		DataParser.parseJarFolder(ModReference.MODID, "data/recipes/furnace", handler);
+		DataParser.parseConfigFolder(ModReference.MODID, "data/furnace", handler);
 	}	
 }

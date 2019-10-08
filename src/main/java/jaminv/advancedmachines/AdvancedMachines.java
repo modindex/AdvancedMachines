@@ -68,6 +68,7 @@ public class AdvancedMachines {
 		DataParser.parseConstants(ModReference.MODID, "data");
 		logger.info("Ore Dictionary Registry");
 		DataParser.parseJarFolder(ModReference.MODID, "data/ore_dictionary", new FileHandlerOreDictionary());
+		DataParser.parseConfigFolder(ModReference.MODID, "data/ore_dictionary", new FileHandlerOreDictionary());
 		
 		NetworkRegistry.INSTANCE.registerGuiHandler(AdvancedMachines.instance, new GuiProxy());
 

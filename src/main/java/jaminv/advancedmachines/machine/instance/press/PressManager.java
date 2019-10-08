@@ -5,6 +5,7 @@ import java.util.List;
 import jaminv.advancedmachines.ModConfig;
 import jaminv.advancedmachines.ModReference;
 import jaminv.advancedmachines.lib.parser.DataParser;
+import jaminv.advancedmachines.lib.parser.FileHandler;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe.IngredientType;
 import jaminv.advancedmachines.lib.parser.FileHandlerRecipe.RecipeSection;
@@ -19,10 +20,12 @@ public class PressManager {
 	public static List<MachineRecipe> getRecipeList() { return manager.getRecipeList(); }
 
 	public static void init() {
-		DataParser.parseJarFolder(ModReference.MODID, "data/recipes/press", new FileHandlerRecipe("press", ModConfig.general.defaultPressEnergyCost, (recipe) -> {
+		FileHandler handler = new FileHandlerRecipe("press", ModConfig.general.defaultPressEnergyCost, (recipe) -> {
 			manager.addRecipe(recipe);
 		}).setLimit(RecipeSection.INPUT, IngredientType.ITEM, 3).setLimit(RecipeSection.CATALYST, IngredientType.ITEM, 2)
-			.setLimit(RecipeSection.OUTPUT, IngredientType.ITEM, 1)
-		);
+			.setLimit(RecipeSection.OUTPUT, IngredientType.ITEM, 1);
+		
+		DataParser.parseJarFolder(ModReference.MODID, "data/recipes/press", handler);
+		DataParser.parseConfigFolder(ModReference.MODID, "data/press", handler);
 	}
 }

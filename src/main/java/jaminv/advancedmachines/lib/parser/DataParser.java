@@ -104,7 +104,7 @@ public class DataParser {
     			|| file.isDirectory()
     		)
 		);
-		if (filelist.length == 0) { return; }
+		if (filelist == null || filelist.length == 0) { return; }
 		
 		for (File file : filelist) {
 			if (file.isDirectory()) { 

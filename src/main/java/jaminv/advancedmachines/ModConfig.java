@@ -1,5 +1,9 @@
 package jaminv.advancedmachines;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
 import jaminv.advancedmachines.lib.recipe.RecipeOutput;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.RangeInt;
@@ -11,6 +15,31 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @Config(modid = ModReference.MODID, name = "advancedmachines/advancedmachines")
 @Config.LangKey("advmach.config.title")
 public final class ModConfig {
+	
+	protected static Map<String, HashSet<String>> exclude = null;
+	
+	public static boolean doExclude(String type, String recipe_id) {
+		if (exclude == null) { loadExcludes(); }
+		HashSet typeset = exclude.get(type);
+		if (typeset == null) { return false; }
+		return typeset.contains(recipe_id);
+	}
+	
+	public static void loadExcludes() {
+		exclude = new HashMap<>();
+		for (String entry : recipe.excludeRecipes) {
+			String[] data = entry.split(":", 2);
+			if (data.length != 2) { continue; }
+			HashSet typeset = exclude.get(data[0]);
+			if (typeset == null) {
+				typeset = new HashSet<String>();
+				typeset.add(data[1]);
+				exclude.put(data[0], typeset);
+			} else {
+				typeset.add(data[1]);
+			}
+		}		
+	}
 	
 	@Config.Comment("General Configuration")
 	@Config.RequiresMcRestart
@@ -126,8 +155,11 @@ public final class ModConfig {
 		})
 		public boolean scanGrinderOre = true;
 		
-		@Config.Comment("Exclude specific grinder recipes by recipe id.")
-		public String[] excludeGrinderRecipes = {};
+		@Config.Comment({
+			"Exclude specific recipes by recipe id. Format is [type]:[recipe_id]",
+			"Recipe IDs can be found by setting 'showRecipeIds' to true and uing JEI."
+		})
+		public String[] excludeRecipes = {};
 		
 		@Config.Comment({
 			"Order of preference for ore dictionary outputs. Can be used for consistant machine outputs across mods."
@@ -185,7 +217,7 @@ public final class ModConfig {
 				RecipeOutput.setOreDictionaryPreference(ModConfig.recipe.oreDictionaryPreference);
 			}
 		}
-	}	
+	}
 	
 /*	
 	private static void initDependentConfigs() {
